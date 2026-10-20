@@ -1,0 +1,17 @@
+{
+  "name": "dark-music-android",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dark Music Android app wrapper for the existing HTML app",
+  "scripts": {
+    "android:sync": "cap sync android",
+    "android:open": "cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/core": "^8.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.0.0"
+  }
+}
