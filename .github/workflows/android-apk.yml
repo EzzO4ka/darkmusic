@@ -9,6 +9,7 @@ on:
       - "package-lock.json"
       - "capacitor.config.json"
       - ".github/workflows/android-apk.yml"
+      - "Глянцевая музыкальная нота в кольце.png"
 
 permissions:
   contents: read
@@ -42,49 +43,30 @@ jobs:
       - name: Install JavaScript dependencies
         run: npm install
 
-      - name: Prepare local web app and app icon
+      - name: Prepare local web app
         run: |
-          mkdir -p www android-icon
+          mkdir -p www
           cp index.html www/index.html
-          cat > android-icon/icon.svg <<'SVG'
-          <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-            <defs>
-              <radialGradient id="bg" cx="50%" cy="35%" r="75%">
-                <stop offset="0" stop-color="#111111"/>
-                <stop offset="1" stop-color="#000000"/>
-              </radialGradient>
-              <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#66676b"/>
-                <stop offset="0.18" stop-color="#242528"/>
-                <stop offset="0.52" stop-color="#050506"/>
-                <stop offset="0.78" stop-color="#17181a"/>
-                <stop offset="1" stop-color="#000000"/>
-              </linearGradient>
-            </defs>
-            <rect width="1024" height="1024" rx="220" fill="url(#bg)"/>
-            <g fill="none" stroke="url(#metal)" stroke-width="42" stroke-linecap="round">
-              <path d="M500 126 C320 130 178 264 150 430 C120 612 224 786 392 843"/>
-              <path d="M678 158 C802 254 870 387 868 528 C866 684 775 806 640 847"/>
-            </g>
-            <path d="M540 150 C540 132 556 124 571 138 L735 287 C790 337 815 388 800 443 C788 488 755 522 722 551 L722 394 C722 371 709 351 686 335 L595 277 L595 690 C595 786 525 855 428 855 C341 855 282 798 282 719 C282 636 345 572 427 572 C467 572 504 588 540 617 Z" fill="url(#metal)" stroke="#303034" stroke-width="5" stroke-linejoin="round"/>
-          </svg>
-          SVG
+
       - name: Create Android project
         run: npx cap add android
 
-      - name: Generate launcher icon resources
+      - name: Generate launcher icon resources from the original PNG
         run: |
-          python -m pip install --quiet pillow cairosvg
+          python -m pip install --quiet pillow
           python - <<'PY'
           import os
-          import cairosvg
-          from PIL import Image
-          cairosvg.svg2png(url="android-icon/icon.svg", write_to="/tmp/icon.png", output_width=512, output_height=512)
-          im = Image.open("/tmp/icon.png").convert("RGBA")
+          from PIL import Image, ImageOps
+          source = "Глянцевая музыкальная нота в кольце.png"
+          im = Image.open(source).convert("RGBA")
+          # Preserve the supplied artwork; fit it to a square canvas without redrawing it.
+          side = max(im.width, im.height)
+          canvas = Image.new("RGBA", (side, side), (0, 0, 0, 255))
+          canvas.alpha_composite(im, ((side-im.width)//2, (side-im.height)//2))
           for name, size in [("mdpi",48),("hdpi",72),("xhdpi",96),("xxhdpi",144),("xxxhdpi",192)]:
               folder=f"android/app/src/main/res/mipmap-{name}"
               os.makedirs(folder, exist_ok=True)
-              im.resize((size,size), Image.Resampling.LANCZOS).save(os.path.join(folder,"ic_launcher.png"))
+              canvas.resize((size,size), Image.Resampling.LANCZOS).save(os.path.join(folder,"ic_launcher.png"))
           PY
 
       - name: Sync web app into Android project
