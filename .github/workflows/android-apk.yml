@@ -69,17 +69,18 @@ jobs:
             <path d="M540 150 C540 132 556 124 571 138 L735 287 C790 337 815 388 800 443 C788 488 755 522 722 551 L722 394 C722 371 709 351 686 335 L595 277 L595 690 C595 786 525 855 428 855 C341 855 282 798 282 719 C282 636 345 572 427 572 C467 572 504 588 540 617 Z" fill="url(#metal)" stroke="#303034" stroke-width="5" stroke-linejoin="round"/>
           </svg>
           SVG
+      - name: Create Android project
+        run: npx cap add android
+
+      - name: Generate launcher icon resources
+        run: |
+          python -m pip install --quiet pillow cairosvg
           python - <<'PY'
-          import os, subprocess
+          import os
+          import cairosvg
           from PIL import Image
-          os.makedirs("android/app/src/main/res", exist_ok=True)
-          subprocess.run(["python", "-c", "import cairosvg"], check=False)
-          try:
-              import cairosvg
-              cairosvg.svg2png(url="android-icon/icon.svg", write_to="/tmp/icon.png", output_width=512, output_height=512)
-              im = Image.open("/tmp/icon.png").convert("RGBA")
-          except Exception:
-              im = Image.new("RGBA", (512, 512), (0, 0, 0, 255))
+          cairosvg.svg2png(url="android-icon/icon.svg", write_to="/tmp/icon.png", output_width=512, output_height=512)
+          im = Image.open("/tmp/icon.png").convert("RGBA")
           for name, size in [("mdpi",48),("hdpi",72),("xhdpi",96),("xxhdpi",144),("xxxhdpi",192)]:
               folder=f"android/app/src/main/res/mipmap-{name}"
               os.makedirs(folder, exist_ok=True)
