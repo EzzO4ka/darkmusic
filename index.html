@@ -1,0 +1,2671 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dark Music — Android Music App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        input, textarea, select {
+            user-select: text;
+        }
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Пружинящий отклик кнопок */
+        .spring-btn {
+            transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, opacity 0.2s ease, box-shadow 0.25s ease;
+        }
+        .spring-btn:active {
+            transform: scale(0.93);
+        }
+
+        /* Каскадное появление элементов списка */
+        @keyframes staggerFadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(14px) scale(0.98);
+                filter: blur(4px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+        .stagger-item {
+            animation: staggerFadeUp 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            opacity: 0;
+        }
+
+        /* Плавный переход между вкладками */
+        @keyframes viewSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .view-animate {
+            animation: viewSlideIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        /* Открытие и закрытие шторки полноэкранного плеера */
+        @keyframes playerSheetOpen {
+            0% {
+                opacity: 0;
+                transform: translateY(100%) scale(0.96);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        @keyframes playerSheetClose {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100%) scale(0.96);
+            }
+        }
+        .player-sheet-enter {
+            animation: playerSheetOpen 0.44s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .player-sheet-exit {
+            animation: playerSheetClose 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
+        }
+
+        /* Плавающая обложка в плеере */
+        @keyframes floatGlow {
+            0%, 100% {
+                transform: translateY(0px) scale(1);
+            }
+            50% {
+                transform: translateY(-5px) scale(1.015);
+            }
+        }
+        .cover-playing {
+            animation: floatGlow 5s ease-in-out infinite;
+        }
+        .cover-paused {
+            transform: scale(0.94);
+            opacity: 0.85;
+            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* Эквалайзер */
+        @keyframes eqBar1 { 0%, 100% { height: 4px; } 50% { height: 14px; } }
+        @keyframes eqBar2 { 0%, 100% { height: 13px; } 35% { height: 4px; } 75% { height: 15px; } }
+        @keyframes eqBar3 { 0%, 100% { height: 6px; } 45% { height: 15px; } 85% { height: 5px; } }
+        @keyframes eqBar4 { 0%, 100% { height: 11px; } 25% { height: 5px; } 65% { height: 14px; } }
+
+        .eq-bar-1 { animation: eqBar1 0.7s ease-in-out infinite; }
+        .eq-bar-2 { animation: eqBar2 0.65s ease-in-out infinite; }
+        .eq-bar-3 { animation: eqBar3 0.8s ease-in-out infinite; }
+        .eq-bar-4 { animation: eqBar4 0.6s ease-in-out infinite; }
+        .eq-paused span {
+            animation-play-state: paused !important;
+            height: 4px !important;
+            transition: height 0.2s ease;
+        }
+
+        /* Сердечко лайка */
+        @keyframes heartBounce {
+            0% { transform: scale(1); }
+            35% { transform: scale(1.38); }
+            70% { transform: scale(0.88); }
+            100% { transform: scale(1); }
+        }
+        .heart-pop {
+            animation: heartBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Ошибка пин-кода */
+        @keyframes shakePin {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .shake-error {
+            animation: shakePin 0.38s ease-in-out;
+        }
+
+        /* Плавная смена факта */
+        @keyframes factFade {
+            0% { opacity: 0; transform: translateY(6px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .fact-animate {
+            animation: factFade 0.32s ease-out forwards;
+        }
+
+        /* Стилизация ползунка времени */
+        input[type=range].dark-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        input[type=range].dark-slider::-webkit-slider-runnable-track {
+            height: 5px;
+            border-radius: 999px;
+            background: #27272a;
+        }
+        input[type=range].dark-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #a855f7;
+            margin-top: -4.5px;
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.9);
+        }
+    </style>
+</head>
+<body class="bg-black text-white antialiased selection:bg-purple-600 selection:text-white">
+
+    <div class="max-w-[430px] mx-auto min-h-screen bg-black border-x border-zinc-900/80 relative flex flex-col pb-36 shadow-2xl shadow-purple-950/20">
+
+        <!-- ВЕРХНИЙ СТАТУС-БАР ANDROID -->
+        <div class="sticky top-0 z-30 bg-black/90 backdrop-blur-md px-4 pt-2 pb-1 flex items-center justify-between text-[11px] text-zinc-400 font-semibold">
+            <span id="statusClock">21:00</span>
+            <div class="flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
+                <span class="text-[10px] tracking-widest uppercase text-zinc-400 font-bold">DARK • AMOLED OS</span>
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+                <i class="fa-solid fa-wifi text-[10px]"></i>
+                <i class="fa-solid fa-signal text-[10px]"></i>
+                <i class="fa-solid fa-battery-full text-emerald-400"></i>
+            </div>
+        </div>
+
+        <!-- ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ (ТОСТ) -->
+        <div id="toastBanner" class="fixed top-10 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-[390px] pointer-events-none opacity-0 -translate-y-3 transition-all duration-300">
+            <div class="bg-zinc-900/95 backdrop-blur-xl border border-purple-500/40 rounded-2xl px-4 py-3 shadow-2xl shadow-purple-950/60 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-xl bg-purple-600/20 border border-purple-500/40 flex items-center justify-center text-purple-400 shrink-0">
+                    <i class="fa-solid fa-compact-disc fa-spin text-sm"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div id="toastTag" class="text-[9px] font-black uppercase tracking-widest text-purple-400">СЕЙЧАС ИГРАЕТ</div>
+                    <div id="toastMessage" class="text-xs font-bold text-white truncate">Трек запущен</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ШАПКА ПРИЛОЖЕНИЯ -->
+        <header class="sticky top-7 z-20 bg-black/85 backdrop-blur-xl px-4 py-3 flex items-center justify-between border-b border-zinc-900/80">
+            <button onclick="switchTab('home')" class="flex items-center gap-2.5 text-left spring-btn">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-600 via-fuchsia-600 to-indigo-900 flex items-center justify-center shadow-lg shadow-purple-600/30 border border-purple-400/30">
+                    <i class="fa-solid fa-compact-disc text-white text-sm"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-base font-black tracking-tight text-white">DARK MUSIC</span>
+                        <i class="fa-solid fa-circle-check text-purple-400 text-[11px]"></i>
+                    </div>
+                    <p class="text-[10px] text-zinc-500 font-medium -mt-0.5">Эксклюзивный каталог</p>
+                </div>
+            </button>
+
+            <div class="flex items-center gap-2">
+                <button onclick="toggleSearchBar()" class="w-9 h-9 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-800 flex items-center justify-center text-zinc-300 spring-btn" title="Поиск">
+                    <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                </button>
+                <button onclick="openOwnerTab()" id="headerOwnerBtn" class="w-9 h-9 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-800 flex items-center justify-center text-zinc-400 spring-btn" title="Панель управления">
+                    <i id="headerLockIcon" class="fa-solid fa-lock text-xs"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- СТРОКА ПОИСКА -->
+        <div id="searchBarContainer" class="hidden px-4 pt-3 pb-1 bg-black">
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 text-xs"></i>
+                <input id="searchInput" type="text" oninput="handleSearchInput(this.value)" placeholder="Поиск по трекам, артистам или альбомам..." class="w-full bg-zinc-950 border border-zinc-800 focus:border-purple-500 rounded-2xl pl-9 pr-9 py-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none">
+                <button onclick="clearSearchInput()" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <main class="flex-1 px-4 pt-3 space-y-6">
+
+            <!-- ВКЛАДКА: ГЛАВНАЯ -->
+            <section id="view-home" class="space-y-6 view-animate">
+                <!-- ГЛАВНЫЙ БАННЕР: МОЯ ВОЛНА -->
+                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-950/90 via-zinc-950 to-black border border-purple-500/30 p-5 shadow-2xl shadow-purple-950/30">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-purple-600/20 blur-3xl pointer-events-none"></div>
+                    <div class="absolute -left-8 -bottom-8 w-32 h-32 rounded-full bg-fuchsia-600/15 blur-2xl pointer-events-none"></div>
+
+                    <div class="relative z-10 space-y-3">
+                        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-purple-500/15 border border-purple-400/30">
+                            <div id="heroEq" class="inline-flex items-end gap-0.5 h-3 eq-paused">
+                                <span class="w-0.5 bg-purple-400 rounded-full eq-bar-1"></span>
+                                <span class="w-0.5 bg-fuchsia-400 rounded-full eq-bar-2"></span>
+                                <span class="w-0.5 bg-purple-400 rounded-full eq-bar-3"></span>
+                                <span class="w-0.5 bg-fuchsia-400 rounded-full eq-bar-4"></span>
+                            </div>
+                            <span class="text-[9px] font-extrabold tracking-widest uppercase text-purple-300">PERSONAL AUDIO • ONLINE</span>
+                        </div>
+
+                        <div>
+                            <h1 class="text-2xl font-black tracking-tight text-white">Моя волна</h1>
+                            <p class="text-xs text-zinc-400 mt-0.5">Только эксклюзивные треки. Без цензуры.</p>
+                        </div>
+
+                        <div class="pt-1">
+                            <button onclick="playShuffleAll()" class="w-full py-3 px-4 rounded-2xl bg-white hover:bg-zinc-100 text-black font-extrabold text-xs flex items-center justify-between shadow-lg shadow-white/10 spring-btn">
+                                <span class="flex items-center gap-2">
+                                    <i class="fa-solid fa-shuffle text-purple-600 text-sm"></i>
+                                    <span>Вперемешку все треки</span>
+                                </span>
+                                <span class="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center text-[10px]">
+                                    <i class="fa-solid fa-play ml-0.5"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- АРТИСТЫ ЛЕЙБЛА (2x2) -->
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-sm font-black tracking-tight text-white">Артисты лейбла</h2>
+                            <p class="text-[10px] text-zinc-500">Эксклюзивный состав Dark Music</p>
+                        </div>
+                        <button onclick="switchTab('artists')" class="text-[11px] font-bold text-purple-400 hover:text-purple-300 spring-btn">
+                            Все 4 <i class="fa-solid fa-arrow-right text-[9px] ml-0.5"></i>
+                        </button>
+                    </div>
+                    <div id="homeArtistsGrid" class="grid grid-cols-2 gap-2.5"></div>
+                </div>
+
+                <!-- ЧАРТ DARK MUSIC -->
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-lg bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 text-xs">
+                                <i class="fa-solid fa-fire"></i>
+                            </span>
+                            <div>
+                                <h2 class="text-sm font-black tracking-tight text-white">Чарт Dark Music</h2>
+                            </div>
+                        </div>
+                        <button onclick="switchTab('charts')" class="text-[11px] font-bold text-purple-400 hover:text-purple-300 spring-btn">
+                            Весь чарт <i class="fa-solid fa-arrow-right text-[9px] ml-0.5"></i>
+                        </button>
+                    </div>
+                    <div id="homeChartList" class="space-y-2"></div>
+                </div>
+
+                <!-- НОВЫЕ РЕЛИЗЫ И АЛЬБОМЫ -->
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-sm font-black tracking-tight text-white">Новые релизы и альбомы</h2>
+                            <p class="text-[10px] text-zinc-500">Альбомы, EP и синглы</p>
+                        </div>
+                    </div>
+                    <div id="homeAlbumsCarousel" class="flex gap-3 overflow-x-auto no-scrollbar pb-1"></div>
+                </div>
+
+                <!-- ВЕСЬ СПИСОК ТРЕКОВ -->
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-sm font-black tracking-tight text-white">Весь список треков</h2>
+                        <span id="totalTracksBadge" class="px-2.5 py-0.5 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] font-bold text-zinc-400">0 шт.</span>
+                    </div>
+
+                    <!-- Фильтр по артистам -->
+                    <div id="artistFilterPills" class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1"></div>
+
+                    <!-- Список треков -->
+                    <div id="homeAllTracksList" class="space-y-2"></div>
+                </div>
+            </section>
+
+            <!-- ВКЛАДКА: ОФИЦИАЛЬНЫЙ ЧАРТ -->
+            <section id="view-charts" class="hidden space-y-4 view-animate">
+                <div class="rounded-3xl bg-gradient-to-br from-rose-950/60 via-zinc-950 to-black border border-rose-500/30 p-5 flex items-center justify-between">
+                    <div class="space-y-1">
+                        <span class="px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-400 text-[9px] font-black uppercase tracking-widest">ГЛАВНЫЙ ТОП</span>
+                        <h1 class="text-xl font-black text-white">Официальный Чарт</h1>
+                        <p class="text-[11px] text-zinc-400">Топ релизов каталога Dark Music</p>
+                    </div>
+                    <button onclick="playShuffleAll()" class="w-12 h-12 rounded-2xl bg-rose-500 hover:bg-rose-400 text-white flex items-center justify-center shadow-lg shadow-rose-600/30 spring-btn">
+                        <i class="fa-solid fa-play text-base ml-0.5"></i>
+                    </button>
+                </div>
+                <div id="fullChartsList" class="space-y-2"></div>
+            </section>
+
+            <!-- ВКЛАДКА: ВСЕ АРТИСТЫ -->
+            <section id="view-artists" class="hidden space-y-4 view-animate">
+                <div>
+                    <h1 class="text-xl font-black text-white">Артисты</h1>
+                    <p class="text-xs text-zinc-400">Нажмите на карточку исполнителя, чтобы открыть его профиль, альбомы и биографию</p>
+                </div>
+                <div id="fullArtistsList" class="space-y-3"></div>
+            </section>
+
+            <!-- ВКЛАДКА: ПРОФИЛЬ АРТИСТА -->
+            <section id="view-artist-profile" class="hidden space-y-5 view-animate">
+                <button onclick="switchTab('artists')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-bold text-zinc-300 spring-btn">
+                    <i class="fa-solid fa-arrow-left text-[10px]"></i>
+                    <span>К артистам</span>
+                </button>
+                <div id="artistProfileContent" class="space-y-5"></div>
+            </section>
+
+            <!-- ВКЛАДКА: СТРАНИЦА АЛЬБОМА -->
+            <section id="view-album-detail" class="hidden space-y-5 view-animate">
+                <button onclick="switchTab('home')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-bold text-zinc-300 spring-btn">
+                    <i class="fa-solid fa-arrow-left text-[10px]"></i>
+                    <span>Назад</span>
+                </button>
+                <div id="albumDetailContent" class="space-y-5"></div>
+            </section>
+
+            <!-- ВКЛАДКА: ПАНЕЛЬ ВЛАДЕЛЬЦА -->
+            <section id="view-owner-panel" class="hidden space-y-4 view-animate">
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-emerald-500/30 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+                                <i class="fa-solid fa-unlock-keyhole text-sm"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xs font-black text-white">Режим владельца активен</h2>
+                                <p id="cloudSyncStatusText" class="text-[10px] text-emerald-400 font-semibold">Тройная защита сохранения активна</p>
+                            </div>
+                        </div>
+                        <button onclick="lockOwnerMode()" class="px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-[11px] text-rose-400 font-bold spring-btn">
+                            Выйти
+                        </button>
+                    </div>
+                    <button onclick="forcePushAllToCloud()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-[11px] flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/25 spring-btn">
+                        <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
+                        <span>Принудительно сохранить всё в облако для всех устройств</span>
+                    </button>
+                </div>
+
+                <!-- 1. Настройка хранилища файлов -->
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 space-y-3">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-purple-400">1. Подключение к облачному хранилищу</h3>
+                    <div class="space-y-2">
+                        <div>
+                            <label class="text-[10px] text-zinc-400 font-semibold block mb-1">Хранилище (логин/репозиторий)</label>
+                            <input id="repoPathInput" type="text" placeholder="например: darkuser/dark-music-vault" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-zinc-400 font-semibold block mb-1">Ветка (branch)</label>
+                            <input id="repoBranchInput" type="text" value="main" placeholder="main" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                        </div>
+                        <button onclick="saveRepoSettings()" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs spring-btn">
+                            Сохранить и синхронизировать хранилище
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. Создание нового альбома / EP -->
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 space-y-3">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-fuchsia-400">2. Создать новый альбом / EP</h3>
+                    <div class="space-y-2.5">
+                        <input id="newAlbumTitleInput" type="text" placeholder="Название альбома (например: ЗАГЕЕВ)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-fuchsia-500">
+                        <div class="grid grid-cols-3 gap-2">
+                            <select id="newAlbumArtistSelect" class="bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
+                                <option value="mc_geich">МС ГЕИЧ</option>
+                                <option value="mc_makaka">МС МАКАКА</option>
+                                <option value="mc_ezdit">МС ЕЗДИТЬ</option>
+                                <option value="mc_oparysh">МС ОПАРЫШ</option>
+                            </select>
+                            <select id="newAlbumTypeSelect" class="bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
+                                <option value="АЛЬБОМ">АЛЬБОМ</option>
+                                <option value="EP">EP</option>
+                                <option value="СИНГЛ">СИНГЛ</option>
+                            </select>
+                            <input id="newAlbumYearInput" type="number" value="2025" placeholder="Год" class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                        </div>
+                        <input id="newAlbumCoverInput" type="text" placeholder="Путь к обложке (например: covers/alb_zageev.jpg)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-fuchsia-500">
+                        <button onclick="createNewOwnerAlbum()" class="w-full py-2.5 rounded-xl bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold text-xs spring-btn">
+                            + Создать альбом
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. Добавление нового трека -->
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 space-y-3">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-emerald-400">3. Опубликовать новый трек</h3>
+                    <div class="space-y-2.5">
+                        <input id="newTrackTitle" type="text" placeholder="Название трека (можно по-русски)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[10px] text-zinc-400 block mb-1">Артист</label>
+                                <select id="newTrackArtist" onchange="populateAlbumSelectForArtist()" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
+                                    <option value="mc_geich">МС ГЕИЧ</option>
+                                    <option value="mc_makaka">МС МАКАКА</option>
+                                    <option value="mc_ezdit">МС ЕЗДИТЬ</option>
+                                    <option value="mc_oparysh">МС ОПАРЫШ</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-zinc-400 block mb-1">Альбом</label>
+                                <select id="newTrackAlbum" onchange="handleAlbumSelectChange()" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none"></select>
+                            </div>
+                        </div>
+
+                        <!-- Быстрое создание альбома прямо при добавлении трека -->
+                        <div id="inlineNewAlbumBox" class="hidden p-3 rounded-xl bg-zinc-900/90 border border-fuchsia-500/40 space-y-2">
+                            <div class="text-[10px] font-bold text-fuchsia-400">Новый альбом для этого трека:</div>
+                            <input id="inlineAlbumTitle" type="text" placeholder="Название нового альбома (например: ЗАГЕЕВ)" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white">
+                            <div class="grid grid-cols-2 gap-2">
+                                <input id="inlineAlbumCover" type="text" placeholder="covers/alb_zageev.jpg" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white">
+                                <input id="inlineAlbumYear" type="number" value="2025" placeholder="Год (2025)" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white">
+                            </div>
+                        </div>
+
+                        <input id="newTrackFile" type="text" placeholder="Путь к MP3 (например: tracks/Черный сервер.mp3)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        <input id="newTrackCover" type="text" placeholder="Обложка трека (необязательно: covers/my_cover.jpg)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+
+                        <div class="grid grid-cols-3 gap-2 items-center">
+                            <input id="newTrackDuration" type="text" value="2:45" placeholder="Длит. (2:45)" class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            <input id="newTrackYear" type="number" value="2025" placeholder="Год (2025)" class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            <label class="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer justify-center">
+                                <input id="newTrackIsNew" type="checkbox" checked class="accent-purple-500 rounded">
+                                <span class="text-[11px] font-bold">NEW релиз</span>
+                            </label>
+                        </div>
+
+                        <button onclick="addOwnerTrack()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs spring-btn">
+                            Опубликовать трек в каталог
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. Фотографии артистов -->
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 space-y-3">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-sky-400">4. Фотографии артистов</h3>
+                    <div class="grid grid-cols-1 gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] font-bold w-24 text-zinc-300 shrink-0">МС ГЕИЧ:</span>
+                            <input id="avatar_mc_geich" type="text" value="avatars/mc_geich.jpg" class="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] font-bold w-24 text-zinc-300 shrink-0">МС МАКАКА:</span>
+                            <input id="avatar_mc_makaka" type="text" value="avatars/mc_makaka.jpg" class="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] font-bold w-24 text-zinc-300 shrink-0">МС ЕЗДИТЬ:</span>
+                            <input id="avatar_mc_ezdit" type="text" value="avatars/mc_ezdit.jpg" class="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] font-bold w-24 text-zinc-300 shrink-0">МС ОПАРЫШ:</span>
+                            <input id="avatar_mc_oparysh" type="text" value="avatars/mc_oparysh.jpg" class="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white">
+                        </div>
+                    </div>
+                    <button onclick="saveArtistAvatars()" class="w-full py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-bold text-xs spring-btn">
+                        Обновить фотографии артистов
+                    </button>
+                </div>
+
+                <!-- 5. Редактор биографии и интересных фактов артиста -->
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 space-y-3">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-amber-400">5. Биография и факты артиста</h3>
+                    <div class="space-y-2.5">
+                        <div>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Выберите артиста для редактирования</label>
+                            <select id="bioEditorArtistSelect" onchange="loadArtistBioAndFactsForm()" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500">
+                                <option value="mc_geich">МС ГЕИЧ</option>
+                                <option value="mc_makaka">МС МАКАКА</option>
+                                <option value="mc_ezdit">МС ЕЗДИТЬ</option>
+                                <option value="mc_oparysh">МС ОПАРЫШ</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Жанр / статус под именем</label>
+                            <input id="bioEditorRoleInput" type="text" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Биография артиста</label>
+                            <textarea id="bioEditorTextInput" rows="3" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"></textarea>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <label class="text-[10px] text-zinc-400 font-semibold">Интересные факты (в плеере):</label>
+                                <button onclick="addFactInputRow()" type="button" class="px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-400 text-[10px] font-bold spring-btn">
+                                    + Добавить факт
+                                </button>
+                            </div>
+                            <div id="bioEditorFactsList" class="space-y-2"></div>
+                        </div>
+                        <button onclick="saveArtistBioAndFacts()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs spring-btn">
+                            Сохранить биографию и факты
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 6. Редактирование и управление альбомами -->
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 space-y-3">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-rose-400">6. Редактирование альбомов</h3>
+                    <div id="ownerAlbumsManageList" class="space-y-2 max-h-60 overflow-y-auto no-scrollbar"></div>
+                </div>
+
+                <!-- 7. Редактирование и управление треками -->
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 space-y-3">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-purple-400">7. Редактирование треков</h3>
+                    <div id="ownerTracksManageList" class="space-y-2.5 max-h-60 overflow-y-auto no-scrollbar"></div>
+                </div>
+
+                <!-- 8. Резервная копия каталога (Экспорт / Импорт) -->
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 space-y-3">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-amber-400">8. Независимая резервная копия (JSON)</h3>
+                    <p class="text-[10px] text-zinc-400 leading-relaxed">
+                        Вы можете в любой момент скопировать код всего вашего каталога (треки, альбомы, биографии, факты) или вставить его для мгновенного восстановления.
+                    </p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="exportCatalogBackup()" class="py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-amber-400 font-bold text-[11px] flex items-center justify-center gap-1.5 spring-btn">
+                            <i class="fa-solid fa-copy text-xs"></i>
+                            <span>Скопировать базу</span>
+                        </button>
+                        <button onclick="importCatalogBackup()" class="py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-sky-400 font-bold text-[11px] flex items-center justify-center gap-1.5 spring-btn">
+                            <i class="fa-solid fa-file-import text-xs"></i>
+                            <span>Загрузить из кода</span>
+                        </button>
+                    </div>
+                    <textarea id="backupJsonTextarea" rows="2" placeholder="Код резервной копии появится здесь (или вставьте свой код сюда для восстановления)..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-[10px] text-zinc-300 font-mono focus:outline-none focus:border-amber-500"></textarea>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- МИНИ-ПЛЕЕР + НИЖНЯЯ НАВИГАЦИЯ -->
+        <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-30 bg-black/95 backdrop-blur-2xl border-t border-zinc-900 px-3 pt-1.5 pb-2 space-y-1.5">
+            <!-- Неоновая полоса прогресса мини-плеера -->
+            <div class="w-full h-0.5 bg-zinc-900 rounded-full overflow-hidden">
+                <div id="miniProgressBar" class="h-full bg-gradient-to-r from-purple-500 via-fuchsia-500 to-rose-500 w-0 transition-all duration-200"></div>
+            </div>
+
+            <!-- Карточка мини-плеера -->
+            <div class="flex items-center justify-between gap-2 bg-zinc-950/90 border border-zinc-800/90 rounded-2xl px-2.5 py-2 shadow-lg">
+                <div onclick="openFullPlayer()" class="flex items-center gap-2.5 min-w-0 flex-1 cursor-pointer">
+                    <div id="miniCover" class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-950 flex items-center justify-center shrink-0 overflow-hidden border border-white/10">
+                        <i class="fa-solid fa-music text-xs text-white/80"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-1.5">
+                            <p id="miniTitle" class="text-xs font-extrabold text-white truncate">Выберите трек</p>
+                        </div>
+                        <p id="miniArtist" class="text-[10px] text-zinc-400 truncate">Dark Music</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1.5 shrink-0">
+                    <button onclick="togglePlay()" class="w-9 h-9 rounded-xl bg-white text-black flex items-center justify-center spring-btn">
+                        <i id="miniPlayIcon" class="fa-solid fa-play text-xs ml-0.5"></i>
+                    </button>
+                    <button onclick="nextTrack()" class="w-8 h-8 rounded-xl bg-zinc-900 text-zinc-300 hover:text-white flex items-center justify-center spring-btn">
+                        <i class="fa-solid fa-forward-step text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Нижнее меню (5 кнопок с центральной кнопкой-шаффлом) -->
+            <nav class="grid grid-cols-5 items-center pt-0.5">
+                <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center gap-0.5 py-1 text-purple-400 spring-btn">
+                    <i class="fa-solid fa-house text-sm"></i>
+                    <span class="text-[10px] font-bold">Главная</span>
+                </button>
+                <button onclick="switchTab('charts')" id="nav-charts" class="flex flex-col items-center gap-0.5 py-1 text-zinc-500 hover:text-zinc-300 spring-btn">
+                    <i class="fa-solid fa-chart-simple text-sm"></i>
+                    <span class="text-[10px] font-bold">Чарты</span>
+                </button>
+                <div class="flex justify-center">
+                    <button onclick="playShuffleAll()" class="w-11 h-11 -mt-3 rounded-2xl bg-gradient-to-br from-purple-600 via-fuchsia-600 to-indigo-700 text-white flex items-center justify-center shadow-lg shadow-purple-600/40 border border-purple-400/40 spring-btn" title="Моя волна — Вперемешку">
+                        <i class="fa-solid fa-shuffle text-sm"></i>
+                    </button>
+                </div>
+                <button onclick="switchTab('artists')" id="nav-artists" class="flex flex-col items-center gap-0.5 py-1 text-zinc-500 hover:text-zinc-300 spring-btn">
+                    <i class="fa-solid fa-users text-sm"></i>
+                    <span class="text-[10px] font-bold">Артисты</span>
+                </button>
+                <button onclick="openOwnerTab()" id="nav-owner" class="flex flex-col items-center gap-0.5 py-1 text-zinc-500 hover:text-zinc-300 spring-btn">
+                    <i class="fa-solid fa-key text-sm"></i>
+                    <span class="text-[10px] font-bold">Владелец</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- ПОЛНОЭКРАНЫЙ ПЛЕЕР -->
+        <div id="playerModal" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-3xl flex-col justify-between max-w-[430px] mx-auto px-5 py-5 overflow-y-auto no-scrollbar">
+            <!-- Верхняя панель плеера -->
+            <div class="flex items-center justify-between">
+                <button onclick="closeFullPlayer()" class="w-9 h-9 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-center text-zinc-300 spring-btn">
+                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                </button>
+                <div class="text-center min-w-0 px-2">
+                    <div class="text-[9px] font-black uppercase tracking-widest text-zinc-500">СЕЙЧАС ИГРАЕТ</div>
+                    <button id="playerAlbumTopBtn" onclick="openCurrentTrackAlbum()" class="text-xs font-extrabold text-purple-400 hover:underline truncate max-w-[210px] block mx-auto">
+                        АЛЬБОМ
+                    </button>
+                </div>
+                <div class="w-9 h-9 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-center text-amber-400">
+                    <i class="fa-solid fa-bolt text-xs"></i>
+                </div>
+            </div>
+
+            <!-- Квадратная обложка трека/альбома -->
+            <div class="my-3 flex justify-center">
+                <div id="playerCoverCard" class="w-64 h-64 sm:w-72 sm:h-72 rounded-3xl bg-gradient-to-br from-purple-700 via-indigo-950 to-black border border-white/15 shadow-2xl shadow-purple-950/60 relative overflow-hidden flex items-center justify-center cover-playing">
+                    <span class="absolute top-3 left-3 z-20 px-2.5 py-1 rounded-lg bg-black/65 backdrop-blur-md border border-white/10 text-[9px] font-black uppercase tracking-widest text-zinc-200">
+                        ALBUM TRACK
+                    </span>
+                    <div id="playerCoverInner" class="w-full h-full flex items-center justify-center">
+                        <i class="fa-solid fa-compact-disc text-6xl text-white/30"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Название трека, артист и лайк -->
+            <div class="flex items-center justify-between gap-3">
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-2">
+                        <h2 id="playerTitle" class="text-lg font-black text-white truncate">Название трека</h2>
+                        <span id="playerNewBadge" class="hidden px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[9px] font-black uppercase">NEW</span>
+                    </div>
+                    <button id="playerArtistBtn" onclick="openCurrentTrackArtist()" class="flex items-center gap-1.5 text-xs font-bold text-zinc-400 hover:text-white mt-0.5">
+                        <span id="playerArtist">МС ГЕИЧ</span>
+                        <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
+                    </button>
+                </div>
+                <button id="playerLikeBtn" onclick="toggleLikeCurrent()" class="w-10 h-10 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 spring-btn">
+                    <i class="fa-solid fa-heart text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Таймлайн и полоса перемотки -->
+            <div class="space-y-1.5 my-2">
+                <input id="playerSeek" type="range" min="0" max="100" value="0" oninput="seekAudio(this.value)" class="w-full dark-slider">
+                <div class="flex items-center justify-between text-[10px] font-bold text-zinc-500">
+                    <span id="playerCurrentTime">0:00</span>
+                    <span id="playerEngineBadge" class="px-2 py-0.5 rounded-md bg-zinc-900 border border-zinc-800 text-[9px] text-zinc-400 font-extrabold tracking-widest">DARK ENGINE • HZ</span>
+                    <span id="playerDuration">2:45</span>
+                </div>
+            </div>
+
+            <!-- Кнопки управления воспроизведением -->
+            <div class="flex items-center justify-between px-2 my-1">
+                <button id="shuffleBtn" onclick="toggleShuffleMode()" class="w-9 h-9 rounded-xl flex items-center justify-center text-purple-400 spring-btn">
+                    <i class="fa-solid fa-shuffle text-sm"></i>
+                </button>
+                <button onclick="prevTrack()" class="w-11 h-11 rounded-2xl bg-zinc-900/80 border border-zinc-800 flex items-center justify-center text-white spring-btn">
+                    <i class="fa-solid fa-backward-step text-base"></i>
+                </button>
+                <button onclick="togglePlay()" class="w-16 h-16 rounded-full bg-white text-black flex items-center justify-center shadow-xl shadow-white/20 spring-btn">
+                    <i id="playerPlayIcon" class="fa-solid fa-play text-xl ml-0.5"></i>
+                </button>
+                <button onclick="nextTrack()" class="w-11 h-11 rounded-2xl bg-zinc-900/80 border border-zinc-800 flex items-center justify-center text-white spring-btn">
+                    <i class="fa-solid fa-forward-step text-base"></i>
+                </button>
+                <button id="repeatBtn" onclick="toggleRepeatMode()" class="w-9 h-9 rounded-xl flex items-center justify-center text-zinc-500 spring-btn">
+                    <i class="fa-solid fa-repeat text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Карточка с интересным фактом об артисте -->
+            <div class="mt-2 p-3.5 rounded-2xl bg-zinc-950/95 border border-purple-500/30 space-y-1.5">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-5 h-5 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400 text-[10px]">
+                            <i class="fa-solid fa-lightbulb"></i>
+                        </span>
+                        <span id="playerFactHeader" class="text-[9px] font-black uppercase tracking-widest text-purple-400">ИНТЕРЕСНЫЙ ФАКТ • МС ГЕИЧ</span>
+                    </div>
+                    <button onclick="cycleArtistFact()" class="text-[10px] font-bold text-zinc-400 hover:text-white spring-btn">
+                        Ещё факт ↻
+                    </button>
+                </div>
+                <p id="playerFactText" class="text-xs text-zinc-300 leading-relaxed fact-animate">
+                    Загрузка интересного факта об исполнителе...
+                </p>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО ВВОДА КОДА ВЛАДЕЛЬЦА -->
+        <div id="pinModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-2xl items-center justify-center p-5">
+            <div id="pinCard" class="w-full max-w-[330px] rounded-3xl bg-zinc-950 border border-zinc-800 p-6 text-center space-y-5 shadow-2xl">
+                <div class="w-12 h-12 rounded-2xl bg-purple-600/20 border border-purple-500/40 mx-auto flex items-center justify-center text-purple-400">
+                    <i class="fa-solid fa-shield-halved text-lg"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-black text-white">Доступ владельца</h3>
+                    <p class="text-xs text-zinc-400 mt-1">Введите секретный 4-значный пин-код для управления каталогом</p>
+                </div>
+
+                <!-- Индикаторы 4 цифр -->
+                <div id="pinDots" class="flex justify-center gap-3 py-1">
+                    <span class="w-3.5 h-3.5 rounded-full border border-zinc-700 bg-zinc-900 transition-all"></span>
+                    <span class="w-3.5 h-3.5 rounded-full border border-zinc-700 bg-zinc-900 transition-all"></span>
+                    <span class="w-3.5 h-3.5 rounded-full border border-zinc-700 bg-zinc-900 transition-all"></span>
+                    <span class="w-3.5 h-3.5 rounded-full border border-zinc-700 bg-zinc-900 transition-all"></span>
+                </div>
+
+                <!-- Цифровая клавиатура -->
+                <div class="grid grid-cols-3 gap-2.5">
+                    <button onclick="pressPinDigit('1')" class="py-3 rounded-2xl bg-zinc-900 hover:bg-zinc-800 text-base font-black text-white spring-btn">1</button>
+                    <button onclick="pressPinDigit('2')" class="py-3 rounded-2xl bg-zinc-900 hover:bg-zinc-800 text-base font-black text-white spring-btn">2</button>
+                    <button onclick="pressPinDigit('3')" class="py-3 rounded-2xl bg-zinc-900 hover:bg-zinc-800 text-base font-black text-white spring-btn">3</button>
+                    <button onclick="pressPinDigit('4')" class="py-3 rounded-2xl bg-zinc-900 hover:bg-zinc-800 text-base font-black text-white spring-btn">4</button>
+                    <button onclick="pressPinDigit('5')" class="py-3 rounded-2xl bg-zinc-900 hover:bg-zinc-800 text-base font-black text-white spring-btn">5</button>
+                    <button onclick="pressPinDigit('6')" class="py-3 rounded-2xl bg-zinc-900 hover:bg-zinc-800 text-base font-black text-white spring-btn">6</button>
+                    <button onclick="pressPinDigit('7')" class="py-3 rounded-2xl bg-zinc-900 hover:bg-zinc-800 text-base font-black text-white spring-btn">7</button>
+                    <button onclick="pressPinDigit('8')" class="py-3 rounded-2xl bg-zinc-900 hover:bg-zinc-800 text-base font-black text-white spring-btn">8</button>
+                    <button onclick="pressPinDigit('9')" class="py-3 rounded-2xl bg-zinc-900 hover:bg-zinc-800 text-base font-black text-white spring-btn">9</button>
+                    <button onclick="closePinModal()" class="py-3 rounded-2xl bg-zinc-900/50 text-xs font-bold text-zinc-400 spring-btn">Отмена</button>
+                    <button onclick="pressPinDigit('0')" class="py-3 rounded-2xl bg-zinc-900 hover:bg-zinc-800 text-base font-black text-white spring-btn">0</button>
+                    <button onclick="clearPinDigits()" class="py-3 rounded-2xl bg-zinc-900/50 text-xs font-bold text-rose-400 spring-btn">
+                        <i class="fa-solid fa-delete-left"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО РЕДАКТИРОВАНИЯ ТРЕКА / АЛЬБОМА -->
+        <div id="editModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-xl items-center justify-center p-4">
+            <div class="w-full max-w-[380px] rounded-3xl bg-zinc-950 border border-zinc-800 p-5 space-y-4 shadow-2xl">
+                <div class="flex items-center justify-between">
+                    <h3 id="editModalHeader" class="text-sm font-black text-white">Редактировать</h3>
+                    <button onclick="closeEditModal()" class="w-8 h-8 rounded-xl bg-zinc-900 text-zinc-400 flex items-center justify-center">
+                        <i class="fa-solid fa-xmark text-xs"></i>
+                    </button>
+                </div>
+                <div id="editModalBody" class="space-y-3"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- АУДИО-ЭЛЕМЕНТ -->
+    <audio id="audioElement" preload="metadata" crossorigin="anonymous"></audio>
+
+    <script>
+        // Секретный код владельца (скрыт от интерфейса)
+        const OWNER_SECRET_PIN = "4681";
+        let isOwnerUnlocked = false;
+        let enteredPin = "";
+
+        // Параметры репозитория
+        let githubRepoPath = "dark-music/vault";
+        let githubBranch = "main";
+
+        // 4 Эксклюзивных артиста лейбла Dark Music
+        const ARTISTS = {
+            mc_geich: {
+                id: "mc_geich",
+                name: "МС ГЕИЧ",
+                role: "Основатель лейбла • Dark Synth / Кибер-Рэп",
+                gradient: "from-purple-600 via-indigo-900 to-zinc-950",
+                icon: "fa-user-astronaut",
+                avatarFile: "avatars/mc_geich.jpg",
+                bio: "МС ГЕИЧ — главный архитектор тёмного звучания Dark Music. Записывает свои куплеты в закрытой серверной студии, совмещая глубокий аналоговый саб-бас и бескомпромиссный речитатив.",
+                facts: [
+                    "Первые биты МС ГЕИЧ собирал на кастомном синтезаторе в ночную смену.",
+                    "Никогда не использует стандартные пресеты сведения — каждый трек проходит через ламповый перегруз.",
+                    "Все релизы артиста выходят без предварительных анонсов ровно в полночь."
+                ]
+            },
+            mc_makaka: {
+                id: "mc_makaka",
+                name: "МС МАКАКА",
+                role: "Король дикого 808 баса • Jungle Trap",
+                gradient: "from-emerald-600 via-teal-900 to-zinc-950",
+                icon: "fa-crown",
+                avatarFile: "avatars/mc_makaka.jpg",
+                bio: "МС МАКАКА — самая взрывная энергия объединения Dark Music. Его стиль сочетает первобытный ритм бетонных джунглей, перегруженные 808-е бочки и мгновенно запоминающиеся хуки.",
+                facts: [
+                    "Записывает вокал с одного дубля, чтобы сохранить максимальную живую подачу.",
+                    "Его басовые партии проверяются на сабвуферах мощностью 3 киловатта.",
+                    "Один из куплетов был записан прямо во время ночного шторма."
+                ]
+            },
+            mc_ezdit: {
+                id: "mc_ezdit",
+                name: "МС ЕЗДИТЬ",
+                role: "Ночной дрифт • Phonk / High-Speed Bass",
+                gradient: "from-rose-600 via-red-900 to-zinc-950",
+                icon: "fa-gauge-high",
+                avatarFile: "avatars/mc_ezdit.jpg",
+                bio: "МС ЕЗДИТЬ — голос ночных магистралей и красной зоны тахометра. Его треки созданы для пустых трасс, неоновых тоннелей и мощных аудиосистем.",
+                facts: [
+                    "В треках МС ЕЗДИТЬ используются реальные звуки выхлопа и переключения передач на 7500 об/мин.",
+                    "Сводит свои демо-записи прямо на ноутбуке в салоне автомобиля.",
+                    "Темп большинства его треков синхронизирован с пульсом ночного хайвея."
+                ]
+            },
+            mc_oparysh: {
+                id: "mc_oparysh",
+                name: "МС ОПАРЫШ",
+                role: "Андеграунд бункер • Raw Industrial / Dark Bass",
+                gradient: "from-amber-600 via-orange-950 to-zinc-950",
+                icon: "fa-biohazard",
+                avatarFile: "avatars/mc_oparysh.jpg",
+                bio: "МС ОПАРЫШ — самый мрачный и бескомпромиссный представитель андеграунд-сцены Dark Music. Индустриальные текстуры, тяжёлый шаг ритм-секции и гипнотическая атмосфера подземелья.",
+                facts: [
+                    "Использует сэмплы настоящих индустриальных механизмов и эхо бетонных бункеров.",
+                    "Принципиально выпускает музыку только в закрытом каталоге без цензуры.",
+                    "Его саб-частоты опускаются ниже 28 Гц."
+                ]
+            }
+        };
+
+        // Список старых демо-ID для полной очистки, чтобы они никогда не появлялись вновь
+        const LEGACY_MOCK_ALBUM_IDS = new Set([
+            "alb_terminal", "alb_kody", "alb_liany", "alb_banana_bass",
+            "alb_magistral", "alb_turbo", "alb_glubina", "alb_kapsula"
+        ]);
+        const LEGACY_MOCK_TRACK_IDS = new Set([
+            "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10"
+        ]);
+
+        let ALBUMS = {};
+        let TRACKS = [];
+        let customTracksFromCloud = [];
+        let customAlbumsFromCloud = [];
+        let deletedCustomIds = new Set();
+        let localUpdatedAt = 0;
+
+        const ARTIST_ALBUM_GRADIENTS = {
+            mc_makaka: "from-emerald-600 via-teal-900 to-zinc-950",
+            mc_geich: "from-purple-600 via-indigo-900 to-zinc-950",
+            mc_ezdit: "from-rose-600 via-red-900 to-zinc-950",
+            mc_oparysh: "from-amber-600 via-orange-950 to-zinc-950"
+        };
+
+        const LOCAL_STORAGE_KEY = "dark_music_persistent_vault_v3";
+        const LEGACY_STORAGE_KEYS = [
+            "dark_music_persistent_vault_v3",
+            "dark_music_persistent_vault_v2",
+            "dark_music_persistent_vault_v1",
+            "dark_music_vault_v1",
+            "dark_music_state"
+        ];
+
+        function updateSyncStatusBadge(text, isSuccess = true) {
+            const el = document.getElementById("cloudSyncStatusText");
+            if (!el) return;
+            el.textContent = text;
+            el.className = isSuccess
+                ? "text-[10px] text-emerald-400 font-semibold"
+                : "text-[10px] text-amber-400 font-semibold";
+        }
+
+        function cleanValidAlbums(albumsArr) {
+            if (!Array.isArray(albumsArr)) return [];
+            const seen = new Set();
+            return albumsArr.filter(a => {
+                if (!a || !a.id || !a.title || LEGACY_MOCK_ALBUM_IDS.has(a.id) || deletedCustomIds.has(a.id)) return false;
+                if (seen.has(a.id)) return false;
+                seen.add(a.id);
+                return true;
+            });
+        }
+
+        function cleanValidTracks(tracksArr) {
+            if (!Array.isArray(tracksArr)) return [];
+            const seen = new Set();
+            return tracksArr.filter(t => {
+                if (!t || !t.id || !t.title || LEGACY_MOCK_TRACK_IDS.has(t.id) || deletedCustomIds.has(t.id)) return false;
+                if (seen.has(t.id)) return false;
+                seen.add(t.id);
+                return true;
+            });
+        }
+
+        function buildFullSyncPayload() {
+            const artistBios = {};
+            const artistRoles = {};
+            const artistFacts = {};
+            const avatars = {};
+            Object.keys(ARTISTS).forEach(k => {
+                artistBios[k] = ARTISTS[k].bio;
+                artistRoles[k] = ARTISTS[k].role;
+                artistFacts[k] = ARTISTS[k].facts;
+                avatars[k] = ARTISTS[k].avatarFile;
+            });
+
+            return {
+                githubRepoPath,
+                githubBranch,
+                avatars,
+                artistBios,
+                artistRoles,
+                artistFacts,
+                customAlbums: cleanValidAlbums(customAlbumsFromCloud),
+                customTracks: cleanValidTracks(customTracksFromCloud),
+                deletedCustomIds: Array.from(deletedCustomIds),
+                updatedAt: localUpdatedAt || Date.now()
+            };
+        }
+
+        function applySyncDataToMemory(data, mergeMode = true) {
+            if (!data) return;
+
+            if (Array.isArray(data.deletedCustomIds)) {
+                data.deletedCustomIds.forEach(id => deletedCustomIds.add(id));
+            }
+
+            if (data.githubRepoPath && (data.githubRepoPath !== "dark-music/vault" || githubRepoPath === "dark-music/vault")) {
+                githubRepoPath = data.githubRepoPath;
+            }
+            if (data.githubBranch) githubBranch = data.githubBranch;
+
+            if (data.avatars) {
+                Object.keys(data.avatars).forEach(k => {
+                    if (ARTISTS[k] && data.avatars[k]) ARTISTS[k].avatarFile = data.avatars[k];
+                });
+            }
+            if (data.artistBios) {
+                Object.keys(data.artistBios).forEach(k => {
+                    if (ARTISTS[k] && typeof data.artistBios[k] === "string" && data.artistBios[k].trim() !== "") {
+                        ARTISTS[k].bio = data.artistBios[k];
+                    }
+                });
+            }
+            if (data.artistRoles) {
+                Object.keys(data.artistRoles).forEach(k => {
+                    if (ARTISTS[k] && typeof data.artistRoles[k] === "string" && data.artistRoles[k].trim() !== "") {
+                        ARTISTS[k].role = data.artistRoles[k];
+                    }
+                });
+            }
+            if (data.artistFacts) {
+                Object.keys(data.artistFacts).forEach(k => {
+                    if (ARTISTS[k] && Array.isArray(data.artistFacts[k]) && data.artistFacts[k].length > 0) {
+                        ARTISTS[k].facts = data.artistFacts[k];
+                    }
+                });
+            }
+
+            if (Array.isArray(data.customAlbums)) {
+                const incomingAlbums = cleanValidAlbums(data.customAlbums);
+                if (mergeMode) {
+                    const albumMap = new Map();
+                    customAlbumsFromCloud.forEach(a => { if (!deletedCustomIds.has(a.id)) albumMap.set(a.id, a); });
+                    incomingAlbums.forEach(a => { if (!deletedCustomIds.has(a.id)) albumMap.set(a.id, a); });
+                    customAlbumsFromCloud = cleanValidAlbums(Array.from(albumMap.values()));
+                } else {
+                    customAlbumsFromCloud = incomingAlbums;
+                }
+            }
+
+            if (Array.isArray(data.customTracks)) {
+                const incomingTracks = cleanValidTracks(data.customTracks);
+                if (mergeMode) {
+                    const trackMap = new Map();
+                    customTracksFromCloud.forEach(t => { if (!deletedCustomIds.has(t.id)) trackMap.set(t.id, t); });
+                    incomingTracks.forEach(t => { if (!deletedCustomIds.has(t.id)) trackMap.set(t.id, t); });
+                    customTracksFromCloud = cleanValidTracks(
+                        Array.from(trackMap.values()).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
+                    );
+                } else {
+                    customTracksFromCloud = incomingTracks;
+                }
+            }
+
+            if (data.updatedAt && data.updatedAt > localUpdatedAt) {
+                localUpdatedAt = data.updatedAt;
+            }
+        }
+
+        function saveToIndexedDB(payload) {
+            try {
+                const req = indexedDB.open("DarkMusicPersistentDB", 1);
+                req.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains("vault")) {
+                        db.createObjectStore("vault");
+                    }
+                };
+                req.onsuccess = (e) => {
+                    const db = e.target.result;
+                    const tx = db.transaction("vault", "readwrite");
+                    tx.objectStore("vault").put(payload, "main_catalog");
+                };
+            } catch (e) {}
+        }
+
+        function loadFromIndexedDB(callback) {
+            try {
+                const req = indexedDB.open("DarkMusicPersistentDB", 1);
+                req.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains("vault")) {
+                        db.createObjectStore("vault");
+                    }
+                };
+                req.onsuccess = (e) => {
+                    const db = e.target.result;
+                    const tx = db.transaction("vault", "readonly");
+                    const getReq = tx.objectStore("vault").get("main_catalog");
+                    getReq.onsuccess = () => {
+                        if (getReq.result) callback(getReq.result);
+                    };
+                };
+            } catch (e) {}
+        }
+
+        function saveStateToLocalStorage(bumpTimestamp = true) {
+            try {
+                if (bumpTimestamp) {
+                    localUpdatedAt = Date.now();
+                }
+                const payload = buildFullSyncPayload();
+                const serialized = JSON.stringify(payload);
+                localStorage.setItem(LOCAL_STORAGE_KEY, serialized);
+                localStorage.setItem("dark_music_persistent_vault_v2", serialized);
+                saveToIndexedDB(payload);
+
+                const backupArea = document.getElementById("backupJsonTextarea");
+                if (backupArea) backupArea.value = serialized;
+            } catch (e) {
+                console.warn("Local storage save error:", e);
+            }
+        }
+
+        function loadStateFromLocalStorage() {
+            try {
+                const keysToScan = new Set(LEGACY_STORAGE_KEYS);
+                for (let i = 0; i < localStorage.length; i++) {
+                    const k = localStorage.key(i);
+                    if (k && k.startsWith("dark_music")) keysToScan.add(k);
+                }
+
+                const foundSnapshots = [];
+                keysToScan.forEach(k => {
+                    try {
+                        const raw = localStorage.getItem(k);
+                        if (raw) {
+                            const parsed = JSON.parse(raw);
+                            if (parsed && typeof parsed === "object") {
+                                foundSnapshots.push(parsed);
+                            }
+                        }
+                    } catch (err) {}
+                });
+
+                foundSnapshots.sort((a, b) => (a.updatedAt || 0) - (b.updatedAt || 0));
+                foundSnapshots.forEach(snap => applySyncDataToMemory(snap, true));
+
+                loadFromIndexedDB((idbData) => {
+                    if (idbData) {
+                        applySyncDataToMemory(idbData, true);
+                        renderAllViews();
+                    }
+                });
+            } catch (e) {
+                console.warn("Local storage load error:", e);
+            }
+        }
+
+        function exportCatalogBackup() {
+            const payload = buildFullSyncPayload();
+            const jsonStr = JSON.stringify(payload);
+            const area = document.getElementById("backupJsonTextarea");
+            if (area) {
+                area.value = jsonStr;
+                area.select();
+                try { document.execCommand("copy"); } catch (e) {}
+            }
+            showToast("Код базы скопирован!", "РЕЗЕРВНАЯ КОПИЯ");
+        }
+
+        async function importCatalogBackup() {
+            const area = document.getElementById("backupJsonTextarea");
+            if (!area || !area.value.trim()) {
+                showToast("Вставьте код резервной копии в поле", "ВНИМАНИЕ");
+                return;
+            }
+            try {
+                const parsed = JSON.parse(area.value.trim());
+                applySyncDataToMemory(parsed, true);
+                saveStateToLocalStorage(true);
+                renderAllViews();
+                populateAlbumSelectForArtist();
+                loadArtistBioAndFactsForm();
+                await persistSettingsToCloud();
+                showToast("Каталог, биографии и треки восстановлены!", "УСПЕШНО");
+            } catch (e) {
+                showToast("Неверный формат кода резервной копии", "ОШИБКА");
+            }
+        }
+
+        function rebuildCatalogInMemory() {
+            ALBUMS = {};
+            customAlbumsFromCloud = cleanValidAlbums(customAlbumsFromCloud);
+            customAlbumsFromCloud.forEach(alb => {
+                ALBUMS[alb.id] = {
+                    ...alb,
+                    gradient: alb.gradient || ARTIST_ALBUM_GRADIENTS[alb.artistId] || "from-purple-600 via-indigo-900 to-zinc-950"
+                };
+            });
+
+            customTracksFromCloud = cleanValidTracks(customTracksFromCloud);
+            TRACKS = [...customTracksFromCloud];
+        }
+
+        function getRawUrl(relativePath) {
+            if (!relativePath) return "";
+            const trimmed = relativePath.trim();
+            if (trimmed.startsWith("http://") || trimmed.startsWith("https://") || trimmed.startsWith("data:")) {
+                return trimmed;
+            }
+            const cleanRepo = githubRepoPath.replace(/^\/+|\/+$/g, "");
+            const cleanBranch = githubBranch.replace(/^\/+|\/+$/g, "") || "main";
+            const cleanFile = trimmed.replace(/^\/+/g, "");
+            const encodedPath = cleanFile.split("/").map(part => encodeURIComponent(part)).join("/");
+            return `https://raw.githubusercontent.com/${cleanRepo}/${cleanBranch}/${encodedPath}`;
+        }
+
+        function renderAvatarBox(artist, sizeClasses = "w-11 h-11 rounded-xl", iconSize = "text-sm") {
+            const url = getRawUrl(artist.avatarFile);
+            return `
+                <div class="${sizeClasses} bg-gradient-to-br ${artist.gradient} flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
+                    <i class="fa-solid ${artist.icon} ${iconSize} text-white/85"></i>
+                    <img src="${url}" alt="${artist.name}" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                </div>
+            `;
+        }
+
+        function renderCoverBox(trackOrAlbum, sizeClasses = "w-11 h-11 rounded-xl", iconSize = "text-sm") {
+            const album = trackOrAlbum.albumId ? ALBUMS[trackOrAlbum.albumId] : trackOrAlbum;
+            const artist = ARTISTS[trackOrAlbum.artistId] || ARTISTS.mc_geich;
+            const gradient = (album && album.gradient) ? album.gradient : artist.gradient;
+            const coverPath = trackOrAlbum.coverFile || (album && album.coverFile) || "";
+            const url = coverPath ? getRawUrl(coverPath) : "";
+
+            return `
+                <div class="${sizeClasses} bg-gradient-to-br ${gradient} flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
+                    <i class="fa-solid fa-compact-disc ${iconSize} text-white/75"></i>
+                    ${url ? `<img src="${url}" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">` : ""}
+                </div>
+            `;
+        }
+
+        // Состояние плеера
+        let currentTrackId = null;
+        let isPlaying = false;
+        let isShuffle = true;
+        let isRepeat = false;
+        let activeArtistFilter = "all";
+        let searchQuery = "";
+        let likedTrackIds = new Set();
+        let factIndexMap = { mc_geich: 0, mc_makaka: 0, mc_ezdit: 0, mc_oparysh: 0 };
+
+        // Синтезатор баса (резервный звук, если файл в репозитории ещё не загружен)
+        let audioCtx = null;
+        let synthTimer = null;
+        let synthProgressTimer = null;
+        let usingSynthFallback = false;
+        let synthElapsed = 0;
+        let synthDuration = 165;
+
+        const audioEl = document.getElementById("audioElement");
+
+        function renderAllViews() {
+            rebuildCatalogInMemory();
+            renderHomeArtists();
+            renderHomeChart();
+            renderHomeAlbums();
+            renderArtistFilterPills();
+            renderHomeTracks();
+            renderFullCharts();
+            renderFullArtists();
+            renderOwnerManageLists();
+            updatePlayerUI();
+
+            const repoInput = document.getElementById("repoPathInput");
+            const branchInput = document.getElementById("repoBranchInput");
+            if (repoInput && document.activeElement !== repoInput) repoInput.value = githubRepoPath;
+            if (branchInput && document.activeElement !== branchInput) branchInput.value = githubBranch;
+
+            Object.keys(ARTISTS).forEach(k => {
+                const inp = document.getElementById(`avatar_${k}`);
+                if (inp && document.activeElement !== inp) inp.value = ARTISTS[k].avatarFile;
+            });
+        }
+
+        function renderHomeArtists() {
+            const container = document.getElementById("homeArtistsGrid");
+            if (!container) return;
+            container.innerHTML = Object.values(ARTISTS).map((artist, idx) => `
+                <div onclick="openArtistProfile('${artist.id}')" style="animation-delay: ${idx * 45}ms" class="stagger-item p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 flex items-center gap-2.5 cursor-pointer spring-btn">
+                    ${renderAvatarBox(artist, "w-11 h-11 rounded-xl", "text-sm")}
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-1">
+                            <span class="text-xs font-extrabold text-white truncate">${artist.name}</span>
+                            <i class="fa-solid fa-circle-check text-sky-400 text-[10px] shrink-0"></i>
+                        </div>
+                        <p class="text-[10px] text-zinc-500 truncate">Эксклюзивный артист</p>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        function renderTrackRow(track, idx, rankNumber = null) {
+            const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
+            const album = ALBUMS[track.albumId];
+            const isCurrent = currentTrackId === track.id;
+            const albumLabel = album ? album.title : "Сингл";
+            const yearLabel = track.year || (album && album.year) || "";
+
+            let rankBadge = "";
+            if (rankNumber !== null) {
+                const rankColors = {
+                    1: "bg-amber-500/20 text-amber-400 border-amber-500/40",
+                    2: "bg-zinc-400/20 text-zinc-300 border-zinc-400/40",
+                    3: "bg-orange-500/20 text-orange-400 border-orange-500/40"
+                };
+                const cls = rankColors[rankNumber] || "bg-zinc-900 text-zinc-500 border-zinc-800";
+                rankBadge = `<div class="w-6 h-6 rounded-lg border ${cls} flex items-center justify-center text-[10px] font-black shrink-0">#${rankNumber}</div>`;
+            }
+
+            return `
+                <div onclick="playTrackById('${track.id}')" style="animation-delay: ${Math.min(idx * 35, 280)}ms" class="stagger-item p-2.5 rounded-2xl ${isCurrent ? 'bg-purple-950/35 border-purple-500/50' : 'bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900'} border flex items-center gap-2.5 cursor-pointer spring-btn">
+                    ${rankBadge}
+                    ${renderCoverBox(track, "w-11 h-11 rounded-xl", "text-xs")}
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xs font-extrabold ${isCurrent ? 'text-purple-300' : 'text-white'} truncate">${track.title}</span>
+                            ${track.isNew ? `<span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">NEW</span>` : ''}
+                        </div>
+                        <p class="text-[10px] text-zinc-400 truncate">${artist.name} • ${albumLabel}${yearLabel ? ` (${yearLabel})` : ''}</p>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <span class="text-[10px] font-semibold text-zinc-500">${track.duration || '2:45'}</span>
+                        <div class="w-7 h-7 rounded-xl ${isCurrent && isPlaying ? 'bg-purple-600 text-white' : 'bg-zinc-900 text-zinc-400'} flex items-center justify-center">
+                            <i class="fa-solid ${isCurrent && isPlaying ? 'fa-pause' : 'fa-play ml-0.5'} text-[10px]"></i>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderHomeChart() {
+            const container = document.getElementById("homeChartList");
+            if (!container) return;
+            if (TRACKS.length === 0) {
+                container.innerHTML = `
+                    <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-center text-xs text-zinc-500">
+                        В каталоге пока нет загруженных треков. Добавьте первый трек в панели владельца.
+                    </div>
+                `;
+                return;
+            }
+            const top4 = TRACKS.slice(0, 4);
+            container.innerHTML = top4.map((t, i) => renderTrackRow(t, i, i + 1)).join("");
+        }
+
+        function renderHomeAlbums() {
+            const container = document.getElementById("homeAlbumsCarousel");
+            if (!container) return;
+            const albumsList = Object.values(ALBUMS);
+            if (albumsList.length === 0) {
+                container.innerHTML = `
+                    <div class="w-full p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-center text-xs text-zinc-500">
+                        Альбомы пока не созданы. Вы можете создать альбом в панели владельца.
+                    </div>
+                `;
+                return;
+            }
+            container.innerHTML = albumsList.map((alb, idx) => {
+                const artist = ARTISTS[alb.artistId] || ARTISTS.mc_geich;
+                return `
+                    <div onclick="openAlbumDetail('${alb.id}')" style="animation-delay: ${idx * 45}ms" class="stagger-item w-36 shrink-0 p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2 spring-btn">
+                        <div class="relative">
+                            ${renderCoverBox(alb, "w-full h-32 rounded-xl", "text-2xl")}
+                            <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-md text-[8px] font-black uppercase tracking-wider text-purple-300 border border-white/10">
+                                ${alb.type || 'АЛЬБОМ'}
+                            </span>
+                        </div>
+                        <div>
+                            <h3 class="text-xs font-extrabold text-white truncate">${alb.title}</h3>
+                            <p class="text-[10px] text-zinc-400 truncate">${artist.name} • ${alb.year || 2025}</p>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function renderArtistFilterPills() {
+            const container = document.getElementById("artistFilterPills");
+            if (!container) return;
+            const items = [
+                { id: "all", label: "Все треки" },
+                ...Object.values(ARTISTS).map(a => ({ id: a.id, label: a.name }))
+            ];
+            container.innerHTML = items.map(item => {
+                const active = activeArtistFilter === item.id;
+                return `
+                    <button onclick="setArtistFilter('${item.id}')" class="px-3 py-1.5 rounded-xl text-[11px] font-extrabold shrink-0 transition-all spring-btn ${active ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30' : 'bg-zinc-950 text-zinc-400 border border-zinc-900 hover:text-white'}">
+                        ${item.label}
+                    </button>
+                `;
+            }).join("");
+        }
+
+        function setArtistFilter(artistId) {
+            activeArtistFilter = artistId;
+            renderArtistFilterPills();
+            renderHomeTracks();
+        }
+
+        function renderHomeTracks() {
+            const container = document.getElementById("homeAllTracksList");
+            const badge = document.getElementById("totalTracksBadge");
+            if (!container) return;
+
+            let filtered = TRACKS;
+            if (activeArtistFilter !== "all") {
+                filtered = filtered.filter(t => t.artistId === activeArtistFilter);
+            }
+            if (searchQuery.trim() !== "") {
+                const q = searchQuery.trim().toLowerCase();
+                filtered = filtered.filter(t => {
+                    const art = ARTISTS[t.artistId]?.name.toLowerCase() || "";
+                    const alb = ALBUMS[t.albumId]?.title.toLowerCase() || "";
+                    return t.title.toLowerCase().includes(q) || art.includes(q) || alb.includes(q);
+                });
+            }
+
+            if (badge) badge.textContent = `${filtered.length} шт.`;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="p-6 rounded-2xl bg-zinc-950 border border-zinc-900 text-center space-y-1">
+                        <p class="text-xs font-bold text-zinc-400">Треки не найдены</p>
+                        <p class="text-[10px] text-zinc-600">Добавьте свои треки через панель владельца</p>
+                    </div>
+                `;
+                return;
+            }
+            container.innerHTML = filtered.map((t, idx) => renderTrackRow(t, idx)).join("");
+        }
+
+        function renderFullCharts() {
+            const container = document.getElementById("fullChartsList");
+            if (!container) return;
+            if (TRACKS.length === 0) {
+                container.innerHTML = `<div class="p-6 rounded-2xl bg-zinc-950 border border-zinc-900 text-center text-xs text-zinc-500">Чарт пуст — добавьте треки в каталог</div>`;
+                return;
+            }
+            container.innerHTML = TRACKS.map((t, idx) => renderTrackRow(t, idx, idx + 1)).join("");
+        }
+
+        function renderFullArtists() {
+            const container = document.getElementById("fullArtistsList");
+            if (!container) return;
+            container.innerHTML = Object.values(ARTISTS).map((artist, idx) => {
+                const artistTracks = TRACKS.filter(t => t.artistId === artist.id).length;
+                const artistAlbums = Object.values(ALBUMS).filter(a => a.artistId === artist.id).length;
+                return `
+                    <div onclick="openArtistProfile('${artist.id}')" style="animation-delay: ${idx * 50}ms" class="stagger-item p-3.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 flex items-center gap-3.5 cursor-pointer spring-btn">
+                        ${renderAvatarBox(artist, "w-14 h-14 rounded-2xl", "text-lg")}
+                        <div class="min-w-0 flex-1 space-y-1">
+                            <div class="flex items-center gap-1.5">
+                                <h3 class="text-sm font-black text-white truncate">${artist.name}</h3>
+                                <i class="fa-solid fa-circle-check text-sky-400 text-xs"></i>
+                            </div>
+                            <p class="text-[11px] text-zinc-400 truncate">${artist.role}</p>
+                            <div class="flex items-center gap-2 text-[10px] text-zinc-500 font-bold">
+                                <span><i class="fa-solid fa-music text-purple-400 mr-1"></i>${artistTracks} треков</span>
+                                <span>•</span>
+                                <span><i class="fa-solid fa-compact-disc text-fuchsia-400 mr-1"></i>${artistAlbums} альбомов</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-zinc-600 text-xs"></i>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function openArtistProfile(artistId) {
+            const artist = ARTISTS[artistId];
+            if (!artist) return;
+
+            const artistTracks = TRACKS.filter(t => t.artistId === artistId);
+            const newReleases = artistTracks.filter(t => t.isNew);
+            const artistAlbums = Object.values(ALBUMS).filter(a => a.artistId === artistId);
+
+            const content = document.getElementById("artistProfileContent");
+            content.innerHTML = `
+                <!-- Шапка артиста -->
+                <div class="rounded-3xl bg-gradient-to-br ${artist.gradient} p-5 border border-white/10 shadow-2xl space-y-4">
+                    <div class="flex items-center gap-4">
+                        ${renderAvatarBox(artist, "w-20 h-20 rounded-2xl shadow-xl", "text-2xl")}
+                        <div class="min-w-0 flex-1">
+                            <span class="px-2 py-0.5 rounded-md bg-black/40 text-[9px] font-black uppercase tracking-widest text-purple-300">АРТИСТ DARK MUSIC</span>
+                            <div class="flex items-center gap-1.5 mt-1">
+                                <h1 class="text-xl font-black text-white truncate">${artist.name}</h1>
+                                <i class="fa-solid fa-circle-check text-sky-400 text-sm"></i>
+                            </div>
+                            <p class="text-[11px] text-zinc-200/80 mt-0.5">${artist.role}</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <button onclick="playArtistTracks('${artist.id}', false)" class="py-2.5 px-3 rounded-xl bg-white text-black font-extrabold text-xs flex items-center justify-center gap-2 spring-btn">
+                            <i class="fa-solid fa-play text-[10px]"></i>
+                            <span>Слушать все треки</span>
+                        </button>
+                        <button onclick="playArtistTracks('${artist.id}', true)" class="py-2.5 px-3 rounded-xl bg-black/50 hover:bg-black/70 border border-white/15 text-white font-bold text-xs flex items-center justify-center gap-2 spring-btn">
+                            <i class="fa-solid fa-shuffle text-[10px] text-purple-400"></i>
+                            <span>Вперемешку</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Новые релизы артиста -->
+                ${newReleases.length > 0 ? `
+                <div class="space-y-2.5">
+                    <h2 class="text-xs font-black uppercase tracking-wider text-rose-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>НОВЫЕ РЕЛИЗЫ (${newReleases.length})</span>
+                    </h2>
+                    <div class="space-y-2">
+                        ${newReleases.map((t, i) => renderTrackRow(t, i)).join("")}
+                    </div>
+                </div>
+                ` : ''}
+
+                <!-- Альбомы артиста -->
+                <div class="space-y-2.5">
+                    <h2 class="text-xs font-black uppercase tracking-wider text-purple-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-compact-disc"></i>
+                        <span>АЛЬБОМЫ И EP (${artistAlbums.length})</span>
+                    </h2>
+                    ${artistAlbums.length > 0 ? `
+                        <div class="grid grid-cols-2 gap-2.5">
+                            ${artistAlbums.map((alb, idx) => `
+                                <div onclick="openAlbumDetail('${alb.id}')" class="p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2 spring-btn">
+                                    ${renderCoverBox(alb, "w-full h-28 rounded-xl", "text-xl")}
+                                    <div>
+                                        <span class="text-[9px] font-black uppercase text-purple-400">${alb.type || 'АЛЬБОМ'} • ${alb.year || 2025}</span>
+                                        <h3 class="text-xs font-extrabold text-white truncate">${alb.title}</h3>
+                                    </div>
+                                </div>
+                            `).join("")}
+                        </div>
+                    ` : `<div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-xs text-zinc-500">У артиста пока нет альбомов</div>`}
+                </div>
+
+                <!-- Все треки артиста -->
+                <div class="space-y-2.5">
+                    <h2 class="text-xs font-black uppercase tracking-wider text-zinc-400">ВСЕ ТРЕКИ (${artistTracks.length})</h2>
+                    ${artistTracks.length > 0 ? `
+                        <div class="space-y-2">
+                            ${artistTracks.map((t, i) => renderTrackRow(t, i)).join("")}
+                        </div>
+                    ` : `<div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-xs text-zinc-500">У артиста пока нет добавленных треков</div>`}
+                </div>
+
+                <!-- Биография артиста -->
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 space-y-2">
+                    <div class="flex items-center gap-2 text-xs font-black text-white">
+                        <i class="fa-solid fa-book-open text-purple-400"></i>
+                        <span>Биография артиста</span>
+                    </div>
+                    <p class="text-xs text-zinc-400 leading-relaxed">${artist.bio}</p>
+                </div>
+            `;
+
+            hideAllSections();
+            document.getElementById("view-artist-profile").classList.remove("hidden");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function openAlbumDetail(albumId) {
+            const album = ALBUMS[albumId];
+            if (!album) return;
+            const artist = ARTISTS[album.artistId] || ARTISTS.mc_geich;
+            const albumTracks = TRACKS.filter(t => t.albumId === albumId);
+
+            const content = document.getElementById("albumDetailContent");
+            content.innerHTML = `
+                <div class="rounded-3xl bg-zinc-950 border border-zinc-900 p-5 space-y-4">
+                    <div class="flex items-center gap-4">
+                        ${renderCoverBox(album, "w-24 h-24 rounded-2xl shadow-xl", "text-2xl")}
+                        <div class="min-w-0 flex-1 space-y-1">
+                            <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[9px] font-black uppercase">${album.type || 'АЛЬБОМ'} • ${album.year || 2025}</span>
+                            <h1 class="text-lg font-black text-white truncate">${album.title}</h1>
+                            <button onclick="openArtistProfile('${artist.id}')" class="text-xs font-bold text-zinc-400 hover:text-white flex items-center gap-1">
+                                <span>${artist.name}</span>
+                                <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button onclick="playAlbumTracks('${album.id}')" class="w-full py-2.5 rounded-xl bg-white text-black font-extrabold text-xs flex items-center justify-center gap-2 spring-btn">
+                        <i class="fa-solid fa-play text-[10px]"></i>
+                        <span>Слушать альбом (${albumTracks.length})</span>
+                    </button>
+                </div>
+                <div class="space-y-2">
+                    <h2 class="text-xs font-black uppercase tracking-wider text-zinc-400">ТРЕКЛИСТ АЛЬБОМА</h2>
+                    ${albumTracks.length > 0
+                        ? albumTracks.map((t, i) => renderTrackRow(t, i, i + 1)).join("")
+                        : `<div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-xs text-zinc-500">В этом альбоме пока нет треков</div>`
+                    }
+                </div>
+            `;
+
+            hideAllSections();
+            document.getElementById("view-album-detail").classList.remove("hidden");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function playTrackById(trackId) {
+            const track = TRACKS.find(t => t.id === trackId);
+            if (!track) return;
+
+            if (currentTrackId === trackId) {
+                togglePlay();
+                return;
+            }
+
+            currentTrackId = trackId;
+            isPlaying = true;
+            stopSynthFallback();
+
+            const rawUrl = getRawUrl(track.filePath);
+            audioEl.src = rawUrl;
+            audioEl.currentTime = 0;
+
+            const playPromise = audioEl.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    usingSynthFallback = false;
+                    updatePlayerUI();
+                    renderAllViews();
+                }).catch(() => {
+                    startSynthFallback(track);
+                });
+            }
+
+            const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
+            showToast(`${artist.name} — ${track.title}`, "СЕЙЧАС ИГРАЕТ");
+            updatePlayerUI();
+            renderAllViews();
+        }
+
+        audioEl.addEventListener("error", () => {
+            const track = TRACKS.find(t => t.id === currentTrackId);
+            if (track && isPlaying && !usingSynthFallback) {
+                startSynthFallback(track);
+            }
+        });
+
+        audioEl.addEventListener("timeupdate", () => {
+            if (usingSynthFallback) return;
+            const cur = audioEl.currentTime || 0;
+            const dur = audioEl.duration || 165;
+            updateProgressUI(cur, dur);
+        });
+
+        audioEl.addEventListener("ended", () => {
+            if (isRepeat) {
+                playTrackById(currentTrackId);
+            } else {
+                nextTrack();
+            }
+        });
+
+        function startSynthFallback(track) {
+            usingSynthFallback = true;
+            stopSynthFallback();
+
+            const parts = (track.duration || "2:45").split(":");
+            synthDuration = (parseInt(parts[0] || 2, 10) * 60) + parseInt(parts[1] || 45, 10);
+            synthElapsed = 0;
+
+            try {
+                if (!audioCtx) {
+                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                    audioCtx = new AudioContextClass();
+                }
+                if (audioCtx.state === "suspended") audioCtx.resume();
+
+                let step = 0;
+                const notes = [41.2, 41.2, 49.0, 36.7, 41.2, 55.0, 36.7, 32.7];
+                synthTimer = setInterval(() => {
+                    if (!isPlaying) return;
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = "sawtooth";
+                    osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.36);
+                    step++;
+                }, 420);
+            } catch (e) {}
+
+            synthProgressTimer = setInterval(() => {
+                if (!isPlaying) return;
+                synthElapsed += 0.25;
+                if (synthElapsed >= synthDuration) {
+                    if (isRepeat) {
+                        synthElapsed = 0;
+                    } else {
+                        nextTrack();
+                    }
+                } else {
+                    updateProgressUI(synthElapsed, synthDuration);
+                }
+            }, 250);
+
+            updatePlayerUI();
+        }
+
+        function stopSynthFallback() {
+            if (synthTimer) { clearInterval(synthTimer); synthTimer = null; }
+            if (synthProgressTimer) { clearInterval(synthProgressTimer); synthProgressTimer = null; }
+        }
+
+        function togglePlay() {
+            if (!currentTrackId) {
+                if (TRACKS.length > 0) {
+                    playTrackById(TRACKS[0].id);
+                } else {
+                    showToast("Сначала добавьте трек в панели владельца", "КАТАЛОГ ПУСТ");
+                }
+                return;
+            }
+
+            isPlaying = !isPlaying;
+            if (usingSynthFallback) {
+                if (isPlaying && audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+            } else {
+                if (isPlaying) {
+                    audioEl.play().catch(() => {
+                        const tr = TRACKS.find(t => t.id === currentTrackId);
+                        if (tr) startSynthFallback(tr);
+                    });
+                } else {
+                    audioEl.pause();
+                }
+            }
+            updatePlayerUI();
+            renderAllViews();
+        }
+
+        function nextTrack() {
+            if (TRACKS.length === 0) return;
+            if (isShuffle && TRACKS.length > 1) {
+                const others = TRACKS.filter(t => t.id !== currentTrackId);
+                const pick = others[Math.floor(Math.random() * others.length)];
+                if (pick) playTrackById(pick.id);
+                return;
+            }
+            const idx = TRACKS.findIndex(t => t.id === currentTrackId);
+            const nextIdx = (idx + 1) % TRACKS.length;
+            playTrackById(TRACKS[nextIdx].id);
+        }
+
+        function prevTrack() {
+            if (TRACKS.length === 0) return;
+            const idx = TRACKS.findIndex(t => t.id === currentTrackId);
+            const prevIdx = (idx - 1 + TRACKS.length) % TRACKS.length;
+            playTrackById(TRACKS[prevIdx].id);
+        }
+
+        function playShuffleAll() {
+            if (TRACKS.length === 0) {
+                showToast("Добавьте треки в панели владельца", "КАТАЛОГ ПУСТ");
+                return;
+            }
+            isShuffle = true;
+            const randomTrack = TRACKS[Math.floor(Math.random() * TRACKS.length)];
+            currentTrackId = null;
+            playTrackById(randomTrack.id);
+        }
+
+        function playArtistTracks(artistId, shuffle = false) {
+            const list = TRACKS.filter(t => t.artistId === artistId);
+            if (list.length === 0) {
+                showToast("У этого артиста пока нет треков", "КАТАЛОГ");
+                return;
+            }
+            isShuffle = shuffle;
+            const chosen = shuffle ? list[Math.floor(Math.random() * list.length)] : list[0];
+            currentTrackId = null;
+            playTrackById(chosen.id);
+        }
+
+        function playAlbumTracks(albumId) {
+            const list = TRACKS.filter(t => t.albumId === albumId);
+            if (list.length === 0) {
+                showToast("В этом альбоме пока нет треков", "АЛЬБОМ");
+                return;
+            }
+            currentTrackId = null;
+            playTrackById(list[0].id);
+        }
+
+        function seekAudio(val) {
+            const pct = parseFloat(val) / 100;
+            if (usingSynthFallback) {
+                synthElapsed = synthDuration * pct;
+                updateProgressUI(synthElapsed, synthDuration);
+            } else if (audioEl.duration) {
+                audioEl.currentTime = audioEl.duration * pct;
+                updateProgressUI(audioEl.currentTime, audioEl.duration);
+            }
+        }
+
+        function formatTime(sec) {
+            if (!sec || isNaN(sec)) return "0:00";
+            const m = Math.floor(sec / 60);
+            const s = Math.floor(sec % 60);
+            return `${m}:${s < 10 ? "0" : ""}${s}`;
+        }
+
+        function updateProgressUI(cur, dur) {
+            const pct = dur > 0 ? Math.min(100, (cur / dur) * 100) : 0;
+            const miniBar = document.getElementById("miniProgressBar");
+            const seek = document.getElementById("playerSeek");
+            const curEl = document.getElementById("playerCurrentTime");
+            const durEl = document.getElementById("playerDuration");
+
+            if (miniBar) miniBar.style.width = `${pct}%`;
+            if (seek) seek.value = pct;
+            if (curEl) curEl.textContent = formatTime(cur);
+            if (durEl) durEl.textContent = formatTime(dur);
+        }
+
+        function updatePlayerUI() {
+            const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0] || null;
+            const miniPlayIcon = document.getElementById("miniPlayIcon");
+            const playerPlayIcon = document.getElementById("playerPlayIcon");
+            const heroEq = document.getElementById("heroEq");
+            const coverCard = document.getElementById("playerCoverCard");
+
+            if (miniPlayIcon) miniPlayIcon.className = `fa-solid ${isPlaying ? 'fa-pause' : 'fa-play ml-0.5'} text-xs`;
+            if (playerPlayIcon) playerPlayIcon.className = `fa-solid ${isPlaying ? 'fa-pause' : 'fa-play ml-0.5'} text-xl`;
+
+            if (heroEq) {
+                if (isPlaying) heroEq.classList.remove("eq-paused");
+                else heroEq.classList.add("eq-paused");
+            }
+            if (coverCard) {
+                if (isPlaying) {
+                    coverCard.classList.add("cover-playing");
+                    coverCard.classList.remove("cover-paused");
+                } else {
+                    coverCard.classList.remove("cover-playing");
+                    coverCard.classList.add("cover-paused");
+                }
+            }
+
+            if (!track) return;
+
+            const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
+            const album = ALBUMS[track.albumId];
+
+            document.getElementById("miniTitle").textContent = track.title;
+            document.getElementById("miniArtist").textContent = artist.name;
+            document.getElementById("miniCover").innerHTML = renderCoverBox(track, "w-10 h-10 rounded-xl", "text-xs");
+
+            document.getElementById("playerTitle").textContent = track.title;
+            document.getElementById("playerArtist").textContent = artist.name;
+            document.getElementById("playerAlbumTopBtn").textContent = album ? album.title : "СИНГЛ";
+
+            const newBadge = document.getElementById("playerNewBadge");
+            if (newBadge) {
+                if (track.isNew) newBadge.classList.remove("hidden");
+                else newBadge.classList.add("hidden");
+            }
+
+            const coverInner = document.getElementById("playerCoverInner");
+            if (coverInner) {
+                coverInner.innerHTML = renderCoverBox(track, "w-full h-full", "text-6xl");
+            }
+
+            const likeBtn = document.getElementById("playerLikeBtn");
+            if (likeBtn) {
+                const liked = likedTrackIds.has(track.id);
+                likeBtn.className = `w-10 h-10 rounded-2xl border flex items-center justify-center spring-btn ${liked ? 'bg-rose-500/20 border-rose-500/40 text-rose-400' : 'bg-zinc-900 border-zinc-800 text-zinc-400'}`;
+            }
+
+            renderArtistFactInPlayer(artist);
+        }
+
+        function renderArtistFactInPlayer(artist) {
+            const headerEl = document.getElementById("playerFactHeader");
+            const textEl = document.getElementById("playerFactText");
+            if (!headerEl || !textEl || !artist) return;
+
+            headerEl.textContent = `ИНТЕРЕСНЫЙ ФАКТ • ${artist.name}`;
+            const facts = Array.isArray(artist.facts) && artist.facts.length > 0
+                ? artist.facts
+                : ["Эксклюзивный исполнитель закрытого каталога Dark Music."];
+            const idx = (factIndexMap[artist.id] || 0) % facts.length;
+
+            textEl.classList.remove("fact-animate");
+            void textEl.offsetWidth;
+            textEl.textContent = facts[idx];
+            textEl.classList.add("fact-animate");
+        }
+
+        function cycleArtistFact() {
+            const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0];
+            const artist = track ? ARTISTS[track.artistId] : ARTISTS.mc_geich;
+            if (!artist) return;
+            factIndexMap[artist.id] = ((factIndexMap[artist.id] || 0) + 1) % Math.max(1, artist.facts.length);
+            renderArtistFactInPlayer(artist);
+        }
+
+        function toggleLikeCurrent() {
+            if (!currentTrackId) return;
+            const btn = document.getElementById("playerLikeBtn");
+            if (likedTrackIds.has(currentTrackId)) {
+                likedTrackIds.delete(currentTrackId);
+            } else {
+                likedTrackIds.add(currentTrackId);
+                if (btn) {
+                    btn.classList.remove("heart-pop");
+                    void btn.offsetWidth;
+                    btn.classList.add("heart-pop");
+                }
+            }
+            updatePlayerUI();
+        }
+
+        function toggleShuffleMode() {
+            isShuffle = !isShuffle;
+            const btn = document.getElementById("shuffleBtn");
+            if (btn) btn.className = `w-9 h-9 rounded-xl flex items-center justify-center spring-btn ${isShuffle ? 'text-purple-400' : 'text-zinc-500'}`;
+        }
+
+        function toggleRepeatMode() {
+            isRepeat = !isRepeat;
+            const btn = document.getElementById("repeatBtn");
+            if (btn) btn.className = `w-9 h-9 rounded-xl flex items-center justify-center spring-btn ${isRepeat ? 'text-purple-400' : 'text-zinc-500'}`;
+        }
+
+        function openFullPlayer() {
+            if (!currentTrackId && TRACKS.length > 0) {
+                currentTrackId = TRACKS[0].id;
+            }
+            updatePlayerUI();
+            const modal = document.getElementById("playerModal");
+            modal.classList.remove("hidden", "player-sheet-exit");
+            modal.classList.add("flex", "player-sheet-enter");
+        }
+
+        function closeFullPlayer() {
+            const modal = document.getElementById("playerModal");
+            modal.classList.remove("player-sheet-enter");
+            modal.classList.add("player-sheet-exit");
+            setTimeout(() => {
+                modal.classList.add("hidden");
+                modal.classList.remove("flex", "player-sheet-exit");
+            }, 280);
+        }
+
+        function openCurrentTrackArtist() {
+            const track = TRACKS.find(t => t.id === currentTrackId);
+            closeFullPlayer();
+            if (track) openArtistProfile(track.artistId);
+        }
+
+        function openCurrentTrackAlbum() {
+            const track = TRACKS.find(t => t.id === currentTrackId);
+            if (track && track.albumId && ALBUMS[track.albumId]) {
+                closeFullPlayer();
+                openAlbumDetail(track.albumId);
+            }
+        }
+
+        function hideAllSections() {
+            ["view-home", "view-charts", "view-artists", "view-artist-profile", "view-album-detail", "view-owner-panel"].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add("hidden");
+            });
+        }
+
+        function switchTab(tab) {
+            hideAllSections();
+            ["home", "charts", "artists", "owner"].forEach(k => {
+                const btn = document.getElementById(`nav-${k}`);
+                if (btn) {
+                    btn.className = `flex flex-col items-center gap-0.5 py-1 ${k === tab ? 'text-purple-400' : 'text-zinc-500 hover:text-zinc-300'} spring-btn`;
+                }
+            });
+
+            const target = document.getElementById(`view-${tab}`);
+            if (target) target.classList.remove("hidden");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function openOwnerTab() {
+            if (isOwnerUnlocked) {
+                hideAllSections();
+                document.getElementById("view-owner-panel").classList.remove("hidden");
+                populateAlbumSelectForArtist();
+                loadArtistBioAndFactsForm();
+                renderOwnerManageLists();
+                return;
+            }
+            enteredPin = "";
+            updatePinDotsUI();
+            const modal = document.getElementById("pinModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        function closePinModal() {
+            const modal = document.getElementById("pinModal");
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+            enteredPin = "";
+        }
+
+        function pressPinDigit(digit) {
+            if (enteredPin.length >= 4) return;
+            enteredPin += digit;
+            updatePinDotsUI();
+
+            if (enteredPin.length === 4) {
+                if (enteredPin === OWNER_SECRET_PIN) {
+                    unlockOwnerMode();
+                } else {
+                    const card = document.getElementById("pinCard");
+                    card.classList.remove("shake-error");
+                    void card.offsetWidth;
+                    card.classList.add("shake-error");
+                    setTimeout(() => {
+                        enteredPin = "";
+                        updatePinDotsUI();
+                    }, 380);
+                }
+            }
+        }
+
+        function clearPinDigits() {
+            enteredPin = enteredPin.slice(0, -1);
+            updatePinDotsUI();
+        }
+
+        function updatePinDotsUI() {
+            const dots = document.querySelectorAll("#pinDots span");
+            dots.forEach((dot, idx) => {
+                if (idx < enteredPin.length) {
+                    dot.className = "w-3.5 h-3.5 rounded-full bg-purple-500 border border-purple-400 shadow-md shadow-purple-500/50 transition-all scale-110";
+                } else {
+                    dot.className = "w-3.5 h-3.5 rounded-full border border-zinc-700 bg-zinc-900 transition-all";
+                }
+            });
+        }
+
+        function unlockOwnerMode() {
+            isOwnerUnlocked = true;
+            closePinModal();
+            const lockIcon = document.getElementById("headerLockIcon");
+            if (lockIcon) lockIcon.className = "fa-solid fa-lock-open text-xs text-emerald-400";
+            openOwnerTab();
+            showToast("Панель владельца разблокирована", "ДОСТУП ОТКРЫТ");
+        }
+
+        function lockOwnerMode() {
+            isOwnerUnlocked = false;
+            const lockIcon = document.getElementById("headerLockIcon");
+            if (lockIcon) lockIcon.className = "fa-solid fa-lock text-xs";
+            switchTab("home");
+            showToast("Режим владельца заблокирован", "ЗАЩИТА");
+        }
+
+        function toggleSearchBar() {
+            const bar = document.getElementById("searchBarContainer");
+            bar.classList.toggle("hidden");
+            if (!bar.classList.contains("hidden")) {
+                document.getElementById("searchInput").focus();
+                switchTab("home");
+            }
+        }
+
+        function handleSearchInput(val) {
+            searchQuery = val;
+            renderHomeTracks();
+        }
+
+        function clearSearchInput() {
+            searchQuery = "";
+            document.getElementById("searchInput").value = "";
+            renderHomeTracks();
+        }
+
+        function showToast(message, tag = "DARK MUSIC") {
+            const banner = document.getElementById("toastBanner");
+            document.getElementById("toastTag").textContent = tag;
+            document.getElementById("toastMessage").textContent = message;
+            banner.classList.remove("opacity-0", "-translate-y-3");
+            banner.classList.add("opacity-100", "translate-y-0");
+            clearTimeout(window._toastTimer);
+            window._toastTimer = setTimeout(() => {
+                banner.classList.remove("opacity-100", "translate-y-0");
+                banner.classList.add("opacity-0", "-translate-y-3");
+            }, 2600);
+        }
+
+        async function saveRepoSettings() {
+            const pathVal = document.getElementById("repoPathInput").value.trim();
+            const branchVal = document.getElementById("repoBranchInput").value.trim() || "main";
+            if (!pathVal) {
+                showToast("Укажите путь к хранилищу", "ВНИМАНИЕ");
+                return;
+            }
+            githubRepoPath = pathVal;
+            githubBranch = branchVal;
+            saveStateToLocalStorage(true);
+            renderAllViews();
+            await persistSettingsToCloud();
+            showToast("Хранилище синхронизировано и сохранено!", "СИНХРОНИЗАЦИЯ");
+        }
+
+        async function saveArtistAvatars() {
+            Object.keys(ARTISTS).forEach(k => {
+                const val = document.getElementById(`avatar_${k}`)?.value.trim();
+                if (val) ARTISTS[k].avatarFile = val;
+            });
+            saveStateToLocalStorage(true);
+            renderAllViews();
+            await persistSettingsToCloud();
+            showToast("Фотографии артистов сохранены!", "КАТАЛОГ");
+        }
+
+        function populateAlbumSelectForArtist() {
+            const artistId = document.getElementById("newTrackArtist")?.value || "mc_geich";
+            const select = document.getElementById("newTrackAlbum");
+            if (!select) return;
+
+            const artistAlbums = Object.values(ALBUMS).filter(a => a.artistId === artistId);
+            let html = artistAlbums.map(a => `<option value="${a.id}">${a.title} (${a.year || 2025})</option>`).join("");
+            html += `<option value="__create_new__">+ Создать новый альбом...</option>`;
+            html += `<option value="">Без альбома (Сингл)</option>`;
+            select.innerHTML = html;
+            handleAlbumSelectChange();
+        }
+
+        function handleAlbumSelectChange() {
+            const val = document.getElementById("newTrackAlbum")?.value;
+            const box = document.getElementById("inlineNewAlbumBox");
+            if (!box) return;
+            if (val === "__create_new__") box.classList.remove("hidden");
+            else box.classList.add("hidden");
+        }
+
+        async function createNewOwnerAlbum() {
+            const title = document.getElementById("newAlbumTitleInput").value.trim();
+            const artistId = document.getElementById("newAlbumArtistSelect").value;
+            const type = document.getElementById("newAlbumTypeSelect").value;
+            const year = parseInt(document.getElementById("newAlbumYearInput").value, 10) || 2025;
+            const coverFile = document.getElementById("newAlbumCoverInput").value.trim();
+
+            if (!title) {
+                showToast("Введите название альбома", "ВНИМАНИЕ");
+                return;
+            }
+
+            const newId = "alb_" + Date.now();
+            const newAlb = {
+                id: newId,
+                title,
+                artistId,
+                type,
+                year,
+                coverFile: coverFile || `covers/${newId}.jpg`,
+                gradient: ARTIST_ALBUM_GRADIENTS[artistId] || "from-purple-600 via-indigo-900 to-zinc-950"
+            };
+
+            customAlbumsFromCloud.push(newAlb);
+            saveStateToLocalStorage(true);
+            renderAllViews();
+            populateAlbumSelectForArtist();
+            document.getElementById("newAlbumTitleInput").value = "";
+            document.getElementById("newAlbumCoverInput").value = "";
+            await persistSettingsToCloud();
+            showToast(`Альбом «${title}» создан и сохранён!`, "НОВЫЙ АЛЬБОМ");
+        }
+
+        async function addOwnerTrack() {
+            const title = document.getElementById("newTrackTitle").value.trim();
+            const artistId = document.getElementById("newTrackArtist").value;
+            let albumId = document.getElementById("newTrackAlbum").value;
+            const filePath = document.getElementById("newTrackFile").value.trim();
+            const coverFile = document.getElementById("newTrackCover").value.trim();
+            const duration = document.getElementById("newTrackDuration").value.trim() || "2:45";
+            const year = parseInt(document.getElementById("newTrackYear").value, 10) || 2025;
+            const isNew = document.getElementById("newTrackIsNew").checked;
+
+            if (!title || !filePath) {
+                showToast("Введите название трека и путь к MP3", "ВНИМАНИЕ");
+                return;
+            }
+
+            if (albumId === "__create_new__") {
+                const inlineTitle = document.getElementById("inlineAlbumTitle").value.trim();
+                const inlineCover = document.getElementById("inlineAlbumCover").value.trim();
+                const inlineYear = parseInt(document.getElementById("inlineAlbumYear").value, 10) || year;
+                if (!inlineTitle) {
+                    showToast("Введите название нового альбома", "ВНИМАНИЕ");
+                    return;
+                }
+                albumId = "alb_" + Date.now();
+                customAlbumsFromCloud.push({
+                    id: albumId,
+                    title: inlineTitle,
+                    artistId,
+                    type: "АЛЬБОМ",
+                    year: inlineYear,
+                    coverFile: inlineCover || coverFile || `covers/${albumId}.jpg`,
+                    gradient: ARTIST_ALBUM_GRADIENTS[artistId]
+                });
+            }
+
+            const newTrack = {
+                id: "trk_" + Date.now(),
+                title,
+                artistId,
+                albumId: albumId || "",
+                filePath,
+                coverFile,
+                duration,
+                year,
+                isNew,
+                createdAt: Date.now()
+            };
+
+            customTracksFromCloud.unshift(newTrack);
+            saveStateToLocalStorage(true);
+            renderAllViews();
+            populateAlbumSelectForArtist();
+
+            document.getElementById("newTrackTitle").value = "";
+            document.getElementById("newTrackFile").value = "";
+            document.getElementById("newTrackCover").value = "";
+
+            await saveCustomTrackToCloud(newTrack);
+            await persistSettingsToCloud();
+            showToast(`Трек «${title}» опубликован в каталог!`, " КАТАЛОГ ОБНОВЛЁН");
+        }
+
+        function loadArtistBioAndFactsForm() {
+            const artistId = document.getElementById("bioEditorArtistSelect")?.value || "mc_geich";
+            const artist = ARTISTS[artistId];
+            if (!artist) return;
+
+            const roleInp = document.getElementById("bioEditorRoleInput");
+            const bioInp = document.getElementById("bioEditorTextInput");
+            if (roleInp) roleInp.value = artist.role || "";
+            if (bioInp) bioInp.value = artist.bio || "";
+
+            const factsContainer = document.getElementById("bioEditorFactsList");
+            if (!factsContainer) return;
+            factsContainer.innerHTML = "";
+            (artist.facts || []).forEach((factText, idx) => {
+                addFactInputRow(factText, idx + 1);
+            });
+        }
+
+        function addFactInputRow(existingText = "", num = null) {
+            const container = document.getElementById("bioEditorFactsList");
+            if (!container) return;
+            const count = num || (container.children.length + 1);
+            const row = document.createElement("div");
+            row.className = "flex items-center gap-2";
+            row.innerHTML = `
+                <span class="text-[10px] font-bold text-amber-400 w-5 shrink-0">#${count}</span>
+                <input type="text" value="${existingText.replace(/"/g, '&quot;')}" placeholder="Введите интересный факт об артисте..." class="fact-input-row flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500">
+                <button type="button" onclick="this.parentElement.remove()" class="w-7 h-7 rounded-lg bg-zinc-900 text-rose-400 hover:bg-rose-500/20 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            `;
+            container.appendChild(row);
+        }
+
+        async function saveArtistBioAndFacts() {
+            const artistId = document.getElementById("bioEditorArtistSelect").value;
+            const artist = ARTISTS[artistId];
+            if (!artist) return;
+
+            const newRole = document.getElementById("bioEditorRoleInput").value.trim();
+            const newBio = document.getElementById("bioEditorTextInput").value.trim();
+            const factInputs = document.querySelectorAll("#bioEditorFactsList .fact-input-row");
+            const newFacts = [];
+            factInputs.forEach(inp => {
+                if (inp.value.trim()) newFacts.push(inp.value.trim());
+            });
+
+            if (newRole) artist.role = newRole;
+            if (newBio) artist.bio = newBio;
+            if (newFacts.length > 0) artist.facts = newFacts;
+
+            saveStateToLocalStorage(true);
+            renderAllViews();
+            await persistSettingsToCloud();
+            showToast(`Биография и факты ${artist.name} сохранены!`, "СОХРАНЕНО");
+        }
+
+        function renderOwnerManageLists() {
+            const albumsContainer = document.getElementById("ownerAlbumsManageList");
+            if (albumsContainer) {
+                const albumsArr = Object.values(ALBUMS);
+                if (albumsArr.length === 0) {
+                    albumsContainer.innerHTML = `<p class="text-[11px] text-zinc-500">Альбомов пока нет</p>`;
+                } else {
+                    albumsContainer.innerHTML = albumsArr.map(alb => {
+                        const art = ARTISTS[alb.artistId]?.name || "";
+                        return `
+                            <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-2">
+                                <div class="min-w-0 flex-1">
+                                    <div class="text-xs font-bold text-white truncate">${alb.title} <span class="text-[10px] text-purple-400">(${alb.year || 2025})</span></div>
+                                    <div class="text-[10px] text-zinc-400 truncate">${art} • ${alb.coverFile || ''}</div>
+                                </div>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <button onclick="openEditAlbumModal('${alb.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-amber-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-pen text-[10px]"></i>
+                                    </button>
+                                    <button onclick="removeAlbumFromCatalog('${alb.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-rose-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-trash text-[10px]"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join("");
+                }
+            }
+
+            const tracksContainer = document.getElementById("ownerTracksManageList");
+            if (tracksContainer) {
+                if (TRACKS.length === 0) {
+                    tracksContainer.innerHTML = `<p class="text-[11px] text-zinc-500">Треков пока нет</p>`;
+                } else {
+                    tracksContainer.innerHTML = TRACKS.map(trk => {
+                        const art = ARTISTS[trk.artistId]?.name || "";
+                        return `
+                            <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-2">
+                                <div class="min-w-0 flex-1">
+                                    <div class="text-xs font-bold text-white truncate">${trk.title} <span class="text-[10px] text-emerald-400">(${trk.year || 2025})</span></div>
+                                    <div class="text-[10px] text-zinc-400 truncate">${art} • ${trk.filePath}</div>
+                                </div>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <button onclick="openEditTrackModal('${trk.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-purple-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-pen text-[10px]"></i>
+                                    </button>
+                                    <button onclick="removeTrackFromCatalog('${trk.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-rose-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-trash text-[10px]"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join("");
+                }
+            }
+        }
+
+        function openEditAlbumModal(albumId) {
+            const alb = ALBUMS[albumId];
+            if (!alb) return;
+            document.getElementById("editModalHeader").textContent = "Редактировать альбом";
+            document.getElementById("editModalBody").innerHTML = `
+                <div class="space-y-2.5">
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Название альбома</label>
+                        <input id="editAlbTitle" type="text" value="${alb.title.replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Год релиза</label>
+                            <input id="editAlbYear" type="number" value="${alb.year || 2025}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Тип</label>
+                            <select id="editAlbType" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                                <option value="АЛЬБОМ" ${alb.type === 'АЛЬБОМ' ? 'selected' : ''}>АЛЬБОМ</option>
+                                <option value="EP" ${alb.type === 'EP' ? 'selected' : ''}>EP</option>
+                                <option value="СИНГЛ" ${alb.type === 'СИНГЛ' ? 'selected' : ''}>СИНГЛ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Путь к обложке</label>
+                        <input id="editAlbCover" type="text" value="${(alb.coverFile || '').replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                    </div>
+                    <button onclick="saveEditedAlbum('${alb.id}')" class="w-full py-2.5 rounded-xl bg-amber-500 text-black font-extrabold text-xs spring-btn">
+                        Сохранить изменения альбома
+                    </button>
+                </div>
+            `;
+            const modal = document.getElementById("editModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        async function saveEditedAlbum(albumId) {
+            const idx = customAlbumsFromCloud.findIndex(a => a.id === albumId);
+            if (idx === -1) return;
+            customAlbumsFromCloud[idx].title = document.getElementById("editAlbTitle").value.trim() || customAlbumsFromCloud[idx].title;
+            customAlbumsFromCloud[idx].year = parseInt(document.getElementById("editAlbYear").value, 10) || 2025;
+            customAlbumsFromCloud[idx].type = document.getElementById("editAlbType").value;
+            customAlbumsFromCloud[idx].coverFile = document.getElementById("editAlbCover").value.trim();
+
+            closeEditModal();
+            saveStateToLocalStorage(true);
+            renderAllViews();
+            populateAlbumSelectForArtist();
+            await persistSettingsToCloud();
+            showToast("Альбом обновлён!", "СОХРАНЕНО");
+        }
+
+        function openEditTrackModal(trackId) {
+            const trk = customTracksFromCloud.find(t => t.id === trackId);
+            if (!trk) return;
+            const albumsOptions = Object.values(ALBUMS).map(a =>
+                `<option value="${a.id}" ${trk.albumId === a.id ? 'selected' : ''}>${a.title} (${a.year || 2025})</option>`
+            ).join("") + `<option value="" ${!trk.albumId ? 'selected' : ''}>Без альбома (Сингл)</option>`;
+
+            document.getElementById("editModalHeader").textContent = "Редактировать трек";
+            document.getElementById("editModalBody").innerHTML = `
+                <div class="space-y-2.5">
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Название трека</label>
+                        <input id="editTrkTitle" type="text" value="${trk.title.replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Артист</label>
+                            <select id="editTrkArtist" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
+                                <option value="mc_geich" ${trk.artistId === 'mc_geich' ? 'selected' : ''}>МС ГЕИЧ</option>
+                                <option value="mc_makaka" ${trk.artistId === 'mc_makaka' ? 'selected' : ''}>МС МАКАКА</option>
+                                <option value="mc_ezdit" ${trk.artistId === 'mc_ezdit' ? 'selected' : ''}>МС ЕЗДИТЬ</option>
+                                <option value="mc_oparysh" ${trk.artistId === 'mc_oparysh' ? 'selected' : ''}>МС ОПАРЫШ</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Год релиза</label>
+                            <input id="editTrkYear" type="number" value="${trk.year || 2025}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Альбом</label>
+                        <select id="editTrkAlbum" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
+                            ${albumsOptions}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Путь к MP3 файлу</label>
+                        <input id="editTrkFile" type="text" value="${(trk.filePath || '').replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Путь к обложке трека</label>
+                        <input id="editTrkCover" type="text" value="${(trk.coverFile || '').replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                    </div>
+                    <button onclick="saveEditedTrack('${trk.id}')" class="w-full py-2.5 rounded-xl bg-purple-600 text-white font-extrabold text-xs spring-btn">
+                        Сохранить изменения трека
+                    </button>
+                </div>
+            `;
+            const modal = document.getElementById("editModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        async function saveEditedTrack(trackId) {
+            const idx = customTracksFromCloud.findIndex(t => t.id === trackId);
+            if (idx === -1) return;
+            customTracksFromCloud[idx].title = document.getElementById("editTrkTitle").value.trim() || customTracksFromCloud[idx].title;
+            customTracksFromCloud[idx].artistId = document.getElementById("editTrkArtist").value;
+            customTracksFromCloud[idx].year = parseInt(document.getElementById("editTrkYear").value, 10) || 2025;
+            customTracksFromCloud[idx].albumId = document.getElementById("editTrkAlbum").value;
+            customTracksFromCloud[idx].filePath = document.getElementById("editTrkFile").value.trim();
+            customTracksFromCloud[idx].coverFile = document.getElementById("editTrkCover").value.trim();
+
+            closeEditModal();
+            saveStateToLocalStorage(true);
+            renderAllViews();
+            await saveCustomTrackToCloud(customTracksFromCloud[idx]);
+            await persistSettingsToCloud();
+            showToast("Трек обновлён!", "СОХРАНЕНО");
+        }
+
+        function closeEditModal() {
+            const modal = document.getElementById("editModal");
+            modal.classList.add("hidden");
+            modal.classList.remove("flex");
+        }
+
+        async function removeTrackFromCatalog(trackId) {
+            deletedCustomIds.add(trackId);
+            customTracksFromCloud = customTracksFromCloud.filter(t => t.id !== trackId);
+            saveStateToLocalStorage(true);
+            renderAllViews();
+            await deleteCustomTrackFromCloud(trackId);
+            await persistSettingsToCloud();
+            showToast("Трек удалён на всех устройствах", "КАТАЛОГ");
+        }
+
+        async function removeAlbumFromCatalog(albumId) {
+            deletedCustomIds.add(albumId);
+            delete ALBUMS[albumId];
+            customAlbumsFromCloud = customAlbumsFromCloud.filter(a => a.id !== albumId);
+            saveStateToLocalStorage(true);
+            renderAllViews();
+            await persistSettingsToCloud();
+            showToast("Альбом удалён на всех устройствах", "КАТАЛОГ");
+        }
+
+        let pendingCloudSyncQueue = false;
+
+        async function persistSettingsToCloud() {
+            saveStateToLocalStorage(true);
+            updateSyncStatusBadge("Сохранение в облако...", false);
+            if (typeof window.cloudSaveSettings === "function") {
+                try {
+                    const fullPayload = buildFullSyncPayload();
+                    await window.cloudSaveSettings(fullPayload);
+                    updateSyncStatusBadge("Сохранено на устройстве и в облаке ✓", true);
+                } catch (e) {
+                    pendingCloudSyncQueue = true;
+                    updateSyncStatusBadge("Сохранено локально (ожидание сети)", false);
+                }
+            } else {
+                pendingCloudSyncQueue = true;
+                updateSyncStatusBadge("Сохранено в памяти устройства ✓", true);
+            }
+        }
+
+        async function forcePushAllToCloud() {
+            await persistSettingsToCloud();
+            for (const track of customTracksFromCloud) {
+                await saveCustomTrackToCloud(track);
+            }
+            showToast("Все треки, фото и альбомы выгружены в облако для всех устройств!", "СИНХРОНИЗАЦИЯ");
+        }
+
+        async function saveCustomTrackToCloud(trackObj) {
+            saveStateToLocalStorage(false);
+            if (typeof window.cloudSaveTrack === "function") {
+                try { await window.cloudSaveTrack(trackObj); } catch (e) {}
+            }
+        }
+
+        async function deleteCustomTrackFromCloud(trackId) {
+            saveStateToLocalStorage(false);
+            if (typeof window.cloudDeleteTrack === "function") {
+                try { await window.cloudDeleteTrack(trackId); } catch (e) {}
+            }
+        }
+
+        function initDarkMusicApp() {
+            loadStateFromLocalStorage();
+            renderAllViews();
+            populateAlbumSelectForArtist();
+            loadArtistBioAndFactsForm();
+        }
+
+        initDarkMusicApp();
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const setupCloudSync = async () => {
+            try {
+                if (typeof __firebase_config === "undefined" || !__firebase_config) return;
+                const firebaseConfig = JSON.parse(__firebase_config);
+                const appId = typeof __app_id !== "undefined" ? __app_id : "dark-music-app";
+
+                const app = initializeApp(firebaseConfig);
+                const auth = getAuth(app);
+                const db = getFirestore(app);
+
+                try {
+                    if (typeof __initial_auth_token !== "undefined" && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } catch (authError) {
+                    await signInAnonymously(auth);
+                }
+
+                const currentUser = auth.currentUser;
+                if (!currentUser) return;
+
+                const settingsDocRef = doc(db, "artifacts", appId, "public", "data", "dark_music_config", "settings");
+                const tracksColRef = collection(db, "artifacts", appId, "public", "data", "dark_music_tracks");
+
+                window.cloudSaveSettings = async (settingsPayload) => {
+                    if (!auth.currentUser) return;
+                    await setDoc(settingsDocRef, settingsPayload, { merge: true });
+                };
+
+                window.cloudSaveTrack = async (trackObj) => {
+                    if (!auth.currentUser || !trackObj.id) return;
+                    const trackRef = doc(db, "artifacts", appId, "public", "data", "dark_music_tracks", trackObj.id);
+                    await setDoc(trackRef, trackObj);
+                };
+
+                window.cloudDeleteTrack = async (trackId) => {
+                    if (!auth.currentUser || !trackId) return;
+                    const trackRef = doc(db, "artifacts", appId, "public", "data", "dark_music_tracks", trackId);
+                    await deleteDoc(trackRef);
+                };
+
+                if (pendingCloudSyncQueue) {
+                    pendingCloudSyncQueue = false;
+                    await window.cloudSaveSettings(buildFullSyncPayload());
+                }
+
+                const initialSnap = await getDoc(settingsDocRef);
+                if (initialSnap.exists()) {
+                    const cloudData = initialSnap.data();
+                    const cloudUpdatedAt = cloudData.updatedAt || 0;
+
+                    if (localUpdatedAt > cloudUpdatedAt) {
+                        applySyncDataToMemory(cloudData, true);
+                        await window.cloudSaveSettings(buildFullSyncPayload());
+                    } else {
+                        applySyncDataToMemory(cloudData, true);
+                        saveStateToLocalStorage(false);
+                        renderAllViews();
+                    }
+                } else if (localUpdatedAt > 0 || customTracksFromCloud.length > 0 || customAlbumsFromCloud.length > 0) {
+                    await window.cloudSaveSettings(buildFullSyncPayload());
+                }
+
+                onSnapshot(
+                    settingsDocRef,
+                    (snapshot) => {
+                        if (snapshot.exists()) {
+                            const data = snapshot.data();
+                            const incomingTime = data.updatedAt || 0;
+                            if (localUpdatedAt > incomingTime) return;
+
+                            applySyncDataToMemory(data, true);
+                            saveStateToLocalStorage(false);
+
+                            const repoInput = document.getElementById("repoPathInput");
+                            const branchInput = document.getElementById("repoBranchInput");
+                            if (repoInput && document.activeElement !== repoInput) repoInput.value = githubRepoPath;
+                            if (branchInput && document.activeElement !== branchInput) branchInput.value = githubBranch;
+
+                            renderAllViews();
+                            if (!isOwnerUnlocked) {
+                                populateAlbumSelectForArtist();
+                                loadArtistBioAndFactsForm();
+                            }
+                            updateSyncStatusBadge("Синхронизировано со всеми устройствами ✓", true);
+                        }
+                    },
+                    (err) => { console.warn("Cloud settings sync notice:", err); }
+                );
+
+                onSnapshot(
+                    tracksColRef,
+                    (snapshot) => {
+                        const loaded = [];
+                        snapshot.forEach(docSnap => {
+                            const d = docSnap.data();
+                            if (d && d.id && d.title && !LEGACY_MOCK_TRACK_IDS.has(d.id) && !deletedCustomIds.has(d.id)) {
+                                loaded.push(d);
+                            }
+                        });
+                        if (loaded.length > 0) {
+                            const mapById = new Map();
+                            customTracksFromCloud.forEach(t => { if (!deletedCustomIds.has(t.id)) mapById.set(t.id, t); });
+                            loaded.forEach(t => { if (!deletedCustomIds.has(t.id)) mapById.set(t.id, t); });
+                            customTracksFromCloud = Array.from(mapById.values()).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                            saveStateToLocalStorage(false);
+                            renderAllViews();
+                        }
+                    },
+                    (err) => { console.warn("Cloud tracks sync notice:", err); }
+                );
+            } catch (err) {
+                console.warn("Cloud session fallback:", err);
+            }
+        };
+
+        setupCloudSync();
+    </script>
+</body>
+</html>
