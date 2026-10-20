@@ -87,9 +87,6 @@ jobs:
               im.resize((size,size), Image.Resampling.LANCZOS).save(os.path.join(folder,"ic_launcher.png"))
           PY
 
-      - name: Create Android project
-        run: npx cap add android
-
       - name: Sync web app into Android project
         run: npx cap sync android
 
