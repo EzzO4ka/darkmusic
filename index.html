@@ -190,22 +190,8 @@
 
     <div class="max-w-[430px] mx-auto min-h-screen bg-black border-x border-zinc-900/80 relative flex flex-col pb-36 shadow-2xl shadow-purple-950/20">
 
-        <!-- ВЕРХНИЙ СТАТУС-БАР ANDROID -->
-        <div class="sticky top-0 z-30 bg-black/90 backdrop-blur-md px-4 pt-2 pb-1 flex items-center justify-between text-[11px] text-zinc-400 font-semibold">
-            <span id="statusClock">21:00</span>
-            <div class="flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
-                <span class="text-[10px] tracking-widest uppercase text-zinc-400 font-bold">DARK • AMOLED OS</span>
-            </div>
-            <div class="flex items-center gap-2 text-xs">
-                <i class="fa-solid fa-wifi text-[10px]"></i>
-                <i class="fa-solid fa-signal text-[10px]"></i>
-                <i class="fa-solid fa-battery-full text-emerald-400"></i>
-            </div>
-        </div>
-
         <!-- ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ (ТОСТ) -->
-        <div id="toastBanner" class="fixed top-10 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-[390px] pointer-events-none opacity-0 -translate-y-3 transition-all duration-300">
+        <div id="toastBanner" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-[390px] pointer-events-none opacity-0 -translate-y-3 transition-all duration-300">
             <div class="bg-zinc-900/95 backdrop-blur-xl border border-purple-500/40 rounded-2xl px-4 py-3 shadow-2xl shadow-purple-950/60 flex items-center gap-3">
                 <div class="w-8 h-8 rounded-xl bg-purple-600/20 border border-purple-500/40 flex items-center justify-center text-purple-400 shrink-0">
                     <i class="fa-solid fa-compact-disc fa-spin text-sm"></i>
@@ -218,7 +204,7 @@
         </div>
 
         <!-- ШАПКА ПРИЛОЖЕНИЯ -->
-        <header class="sticky top-7 z-20 bg-black/85 backdrop-blur-xl px-4 py-3 flex items-center justify-between border-b border-zinc-900/80">
+        <header class="sticky top-0 z-20 bg-black/85 backdrop-blur-xl px-4 py-3 flex items-center justify-between border-b border-zinc-900/80">
             <button onclick="switchTab('home')" class="flex items-center gap-2.5 text-left spring-btn">
                 <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-600 via-fuchsia-600 to-indigo-900 flex items-center justify-center shadow-lg shadow-purple-600/30 border border-purple-400/30">
                     <i class="fa-solid fa-compact-disc text-white text-sm"></i>
@@ -402,33 +388,54 @@
                             </div>
                             <div>
                                 <h2 class="text-xs font-black text-white">Режим владельца активен</h2>
-                                <p id="cloudSyncStatusText" class="text-[10px] text-emerald-400 font-semibold">Тройная защита сохранения активна</p>
+                                <p id="cloudSyncStatusText" class="text-[10px] text-emerald-400 font-semibold">Глобальная синхронизация GitHub активна</p>
                             </div>
                         </div>
                         <button onclick="lockOwnerMode()" class="px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-[11px] text-rose-400 font-bold spring-btn">
                             Выйти
                         </button>
                     </div>
+
                     <button onclick="forcePushAllToCloud()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-[11px] flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/25 spring-btn">
                         <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
-                        <span>Принудительно сохранить всё в облако для всех устройств</span>
+                        <span>Опубликовать изменения на все устройства (GitHub Sync)</span>
                     </button>
+
+                    <div class="grid grid-cols-2 gap-2 pt-1">
+                        <button onclick="downloadCatalogJsonFile()" class="py-2 px-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-purple-500/40 text-purple-300 font-bold text-[10px] flex items-center justify-center gap-1.5 spring-btn">
+                            <i class="fa-solid fa-file-code text-xs"></i>
+                            <span>Скачать catalog.json</span>
+                        </button>
+                        <button onclick="downloadBakedIndexHtml()" class="py-2 px-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-fuchsia-500/40 text-fuchsia-300 font-bold text-[10px] flex items-center justify-center gap-1.5 spring-btn">
+                            <i class="fa-solid fa-download text-xs"></i>
+                            <span>Скачать готовый index.html</span>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- 1. Настройка хранилища файлов -->
+                <!-- 1. Настройка хранилища файлов и авто-публикации на GitHub -->
                 <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 space-y-3">
-                    <h3 class="text-xs font-black uppercase tracking-wider text-purple-400">1. Подключение к облачному хранилищу</h3>
-                    <div class="space-y-2">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-purple-400">1. Подключение к GitHub (для всех устройств)</h3>
+                    <div class="space-y-2.5">
                         <div>
-                            <label class="text-[10px] text-zinc-400 font-semibold block mb-1">Хранилище (логин/репозиторий)</label>
-                            <input id="repoPathInput" type="text" placeholder="например: darkuser/dark-music-vault" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                            <label class="text-[10px] text-zinc-400 font-semibold block mb-1">Хранилище GitHub (логин/репозиторий)</label>
+                            <input id="repoPathInput" type="text" placeholder="например: darkuser/dark-music" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
                         </div>
-                        <div>
-                            <label class="text-[10px] text-zinc-400 font-semibold block mb-1">Ветка (branch)</label>
-                            <input id="repoBranchInput" type="text" value="main" placeholder="main" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[10px] text-zinc-400 font-semibold block mb-1">Ветка (branch)</label>
+                                <input id="repoBranchInput" type="text" value="main" placeholder="main" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-emerald-400 font-semibold block mb-1">GitHub Token (для авто-записи)</label>
+                                <input id="githubTokenInput" type="password" placeholder="ghp_... (необязательно)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                            </div>
                         </div>
+                        <p class="text-[10px] text-zinc-500 leading-relaxed">
+                            💡 <b class="text-zinc-300">Как это работает для друзей:</b> если вы укажете <b class="text-emerald-400">GitHub Token</b> (создаётся в GitHub → Settings → Developer settings → Personal access tokens → Classic с галочкой <code>repo</code>), то любое ваше изменение на телефоне будет <b>автоматически</b> сохраняться прямо в ваш репозиторий в файл <code>catalog.json</code> и <code>index.html</code> — и у друга всё сразу обновится! Без токена просто нажмите кнопку <b>«Скачать готовый index.html»</b> выше и загрузите его в репозиторий.
+                        </p>
                         <button onclick="saveRepoSettings()" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs spring-btn">
-                            Сохранить и синхронизировать хранилище
+                            Сохранить и синхронизировать с GitHub
                         </button>
                     </div>
                 </div>
@@ -814,14 +821,40 @@
     <audio id="audioElement" preload="metadata" crossorigin="anonymous"></audio>
 
     <script>
+        /*__BAKED_VAULT_START__*/
+        window.__BAKED_VAULT_DATA__ = null;
+        /*__BAKED_VAULT_END__*/
+
         // Секретный код владельца (скрыт от интерфейса)
         const OWNER_SECRET_PIN = "4681";
         let isOwnerUnlocked = false;
         let enteredPin = "";
 
-        // Параметры репозитория
+        // Параметры репозитория (определяются автоматически на GitHub Pages или из сохранённой базы)
         let githubRepoPath = "dark-music/vault";
         let githubBranch = "main";
+        let githubPersonalToken = "";
+
+        // Автоматическое определение репозитория, если сайт открыт через GitHub Pages (username.github.io/repo)
+        function autoDetectGitHubPagesRepo() {
+            try {
+                const host = window.location.hostname || "";
+                const pathParts = (window.location.pathname || "").split("/").filter(Boolean);
+                if (host.endsWith(".github.io")) {
+                    const owner = host.replace(".github.io", "");
+                    const repo = pathParts[0] || "";
+                    if (owner && repo) {
+                        return `${owner}/${repo}`;
+                    }
+                }
+            } catch (e) {}
+            return null;
+        }
+
+        const detectedPagesRepo = autoDetectGitHubPagesRepo();
+        if (detectedPagesRepo) {
+            githubRepoPath = detectedPagesRepo;
+        }
 
         // 4 Эксклюзивных артиста лейбла Dark Music
         const ARTISTS = {
@@ -907,6 +940,7 @@
         };
 
         const LOCAL_STORAGE_KEY = "dark_music_persistent_vault_v3";
+        const GITHUB_TOKEN_STORAGE_KEY = "dark_music_owner_gh_token";
         const LEGACY_STORAGE_KEYS = [
             "dark_music_persistent_vault_v3",
             "dark_music_persistent_vault_v2",
@@ -963,8 +997,7 @@
                 githubBranch,
                 avatars,
                 artistBios,
-                artistRoles,
-                artistFacts,
+                artistRoles,                artistFacts,
                 customAlbums: cleanValidAlbums(customAlbumsFromCloud),
                 customTracks: cleanValidTracks(customTracksFromCloud),
                 deletedCustomIds: Array.from(deletedCustomIds),
@@ -973,13 +1006,13 @@
         }
 
         function applySyncDataToMemory(data, mergeMode = true) {
-            if (!data) return;
+            if (!data || typeof data !== "object") return;
 
             if (Array.isArray(data.deletedCustomIds)) {
                 data.deletedCustomIds.forEach(id => deletedCustomIds.add(id));
             }
 
-            if (data.githubRepoPath && (data.githubRepoPath !== "dark-music/vault" || githubRepoPath === "dark-music/vault")) {
+            if (data.githubRepoPath && data.githubRepoPath !== "dark-music/vault") {
                 githubRepoPath = data.githubRepoPath;
             }
             if (data.githubBranch) githubBranch = data.githubBranch;
@@ -1088,6 +1121,9 @@
                 const serialized = JSON.stringify(payload);
                 localStorage.setItem(LOCAL_STORAGE_KEY, serialized);
                 localStorage.setItem("dark_music_persistent_vault_v2", serialized);
+                if (githubPersonalToken) {
+                    localStorage.setItem(GITHUB_TOKEN_STORAGE_KEY, githubPersonalToken);
+                }
                 saveToIndexedDB(payload);
 
                 const backupArea = document.getElementById("backupJsonTextarea");
@@ -1099,10 +1135,24 @@
 
         function loadStateFromLocalStorage() {
             try {
+                // 1. Сначала применяем вшитую базу (если файл index.html был скачан со встроенными данными)
+                if (window.__BAKED_VAULT_DATA__ && typeof window.__BAKED_VAULT_DATA__ === "object") {
+                    applySyncDataToMemory(window.__BAKED_VAULT_DATA__, true);
+                }
+
+                // 2. Восстанавливаем токен владельца (если он есть на этом устройстве)
+                const savedToken = localStorage.getItem(GITHUB_TOKEN_STORAGE_KEY);
+                if (savedToken) {
+                    githubPersonalToken = savedToken;
+                }
+
+                // 3. Сканируем все ключи в памяти устройства
                 const keysToScan = new Set(LEGACY_STORAGE_KEYS);
                 for (let i = 0; i < localStorage.length; i++) {
                     const k = localStorage.key(i);
-                    if (k && k.startsWith("dark_music")) keysToScan.add(k);
+                    if (k && k.startsWith("dark_music") && k !== GITHUB_TOKEN_STORAGE_KEY) {
+                        keysToScan.add(k);
+                    }
                 }
 
                 const foundSnapshots = [];
@@ -1121,6 +1171,11 @@
                 foundSnapshots.sort((a, b) => (a.updatedAt || 0) - (b.updatedAt || 0));
                 foundSnapshots.forEach(snap => applySyncDataToMemory(snap, true));
 
+                // Если открыто на GitHub Pages, но репозиторий ещё стандартный — ставим автоопределённый
+                if (detectedPagesRepo && githubRepoPath === "dark-music/vault") {
+                    githubRepoPath = detectedPagesRepo;
+                }
+
                 loadFromIndexedDB((idbData) => {
                     if (idbData) {
                         applySyncDataToMemory(idbData, true);
@@ -1130,6 +1185,187 @@
             } catch (e) {
                 console.warn("Local storage load error:", e);
             }
+        }
+
+        // =========================================================================
+        // ГЛОБАЛЬНАЯ СИНХРОНИЗАЦИЯ ЧЕРЕЗ GITHUB (ДЛЯ ДРУЗЕЙ И ДРУГИХ УСТРОЙСТВ)
+        // =========================================================================
+
+        function utf8ToBase64(str) {
+            return btoa(unescape(encodeURIComponent(str)));
+        }
+
+        function base64ToUtf8(b64) {
+            return decodeURIComponent(escape(atob(b64.replace(/\s/g, ""))));
+        }
+
+        // Чтение catalog.json напрямую из вашего GitHub-репозитория (работает у всех друзей без токена!)
+        async function fetchCatalogFromGitHubRepo(silent = true) {
+            try {
+                let loadedCatalog = null;
+
+                // Попытка 1: Относительный файл ./catalog.json (если открыто на GitHub Pages / хостинге)
+                try {
+                    const relResp = await fetch(`./catalog.json?t=${Date.now()}`, { cache: "no-store" });
+                    if (relResp.ok) {
+                        const json = await relResp.json();
+                        if (json && (json.customTracks || json.customAlbums || json.githubRepoPath)) {
+                            loadedCatalog = json;
+                        }
+                    }
+                } catch (e) {}
+
+                // Попытка 2: Чтение без кэша через GitHub REST API (обновляется за 1 секунду после сохранения!)
+                const cleanRepo = (githubRepoPath || "").replace(/^\/+|\/+$/g, "");
+                const cleanBranch = (githubBranch || "main").replace(/^\/+|\/+$/g, "") || "main";
+
+                if (cleanRepo && cleanRepo !== "dark-music/vault") {
+                    try {
+                        const apiHeaders = { "Accept": "application/vnd.github.v3+json" };
+                        if (githubPersonalToken) {
+                            apiHeaders["Authorization"] = `token ${githubPersonalToken}`;
+                        }
+                        const apiResp = await fetch(
+                            `https://api.github.com/repos/${cleanRepo}/contents/catalog.json?ref=${encodeURIComponent(cleanBranch)}&t=${Date.now()}`,
+                            { headers: apiHeaders, cache: "no-store" }
+                        );
+                        if (apiResp.ok) {
+                            const meta = await apiResp.json();
+                            if (meta && meta.content) {
+                                const decoded = JSON.parse(base64ToUtf8(meta.content));
+                                if (!loadedCatalog || (decoded.updatedAt || 0) >= (loadedCatalog.updatedAt || 0)) {
+                                    loadedCatalog = decoded;
+                                }
+                            }
+                        }
+                    } catch (e) {}
+
+                    // Попытка 3: Raw GitHub URL (резервный канал)
+                    if (!loadedCatalog) {
+                        try {
+                            const rawResp = await fetch(
+                                `https://raw.githubusercontent.com/${cleanRepo}/${cleanBranch}/catalog.json?t=${Date.now()}`,
+                                { cache: "no-store" }
+                            );
+                            if (rawResp.ok) {
+                                loadedCatalog = await rawResp.json();
+                            }
+                        } catch (e) {}
+                    }
+                }
+
+                if (loadedCatalog && typeof loadedCatalog === "object") {
+                    const remoteTime = loadedCatalog.updatedAt || 0;
+                    // Если у друга база пустая или на сервере более свежая версия — обновляем!
+                    if (remoteTime >= localUpdatedAt || customTracksFromCloud.length === 0) {
+                        // Если пользователь не находится в режиме редактирования, принимаем актуальный список из GitHub как основной
+                        applySyncDataToMemory(loadedCatalog, isOwnerUnlocked);
+                        saveStateToLocalStorage(false);
+                        renderAllViews();
+                        updateSyncStatusBadge("Синхронизировано с GitHub для всех устройств ✓", true);
+                        if (!silent) {
+                            showToast("Каталог синхронизирован с GitHub!", "ОБНОВЛЕНО");
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn("GitHub catalog fetch notice:", err);
+            }
+        }
+
+        // Автоматическая запись catalog.json (и обновлённого index.html) в ваш GitHub репозиторий при наличии токена
+        async function pushCatalogToGitHubRepo(showMessage = false) {
+            const cleanRepo = (githubRepoPath || "").replace(/^\/+|\/+$/g, "");
+            const cleanBranch = (githubBranch || "main").replace(/^\/+|\/+$/g, "") || "main";
+            if (!cleanRepo || cleanRepo === "dark-music/vault" || !githubPersonalToken) {
+                return false;
+            }
+
+            try {
+                updateSyncStatusBadge("Выгрузка изменений в GitHub...", false);
+                const payload = buildFullSyncPayload();
+                const contentStr = JSON.stringify(payload, null, 2);
+                const apiUrl = `https://api.github.com/repos/${cleanRepo}/contents/catalog.json`;
+                const headers = {
+                    "Accept": "application/vnd.github.v3+json",
+                    "Authorization": `token ${githubPersonalToken}`,
+                    "Content-Type": "application/json"
+                };
+
+                // Узнаём текущий SHA файла catalog.json, если он уже есть в репозитории
+                let existingSha = null;
+                const getResp = await fetch(`${apiUrl}?ref=${encodeURIComponent(cleanBranch)}&t=${Date.now()}`, {
+                    headers,
+                    cache: "no-store"
+                });
+                if (getResp.ok) {
+                    const fileData = await getResp.json();
+                    existingSha = fileData.sha;
+                }
+
+                const bodyObj = {
+                    message: "Обновление каталога Dark Music (треки, альбомы, биографии)",
+                    content: utf8ToBase64(contentStr),
+                    branch: cleanBranch
+                };
+                if (existingSha) bodyObj.sha = existingSha;
+
+                const putResp = await fetch(apiUrl, {
+                    method: "PUT",
+                    headers,
+                    body: JSON.stringify(bodyObj)
+                });
+
+                if (putResp.ok) {
+                    updateSyncStatusBadge("Опубликовано в GitHub для всех устройств ✓", true);
+                    if (showMessage) {
+                        showToast("Каталог автоматически загружен в ваш GitHub!", "СИНХРОНИЗАЦИЯ");
+                    }
+                    return true;
+                } else {
+                    updateSyncStatusBadge("Проверьте права GitHub Token (нужен доступ repo)", false);
+                }
+            } catch (e) {
+                console.warn("GitHub API push error:", e);
+            }
+            return false;
+        }
+
+        // Скачивание файла catalog.json в 1 клик (если пользователь не использует токен)
+        function downloadCatalogJsonFile() {
+            const payload = buildFullSyncPayload();
+            const jsonStr = JSON.stringify(payload, null, 2);
+            const blob = new Blob([jsonStr], { type: "application/json;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "catalog.json";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            showToast("Файл catalog.json скачан! Загрузите его в корень GitHub", "ГОТОВО");
+        }
+
+        // Скачивание готового index.html, в который УЖЕ вшиты все ваши треки, альбомы, биографии и путь к GitHub!
+        function downloadBakedIndexHtml() {
+            const payload = buildFullSyncPayload();
+            const currentHtml = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            const bakedBlock = `/*__BAKED_VAULT_START__*/\n        window.__BAKED_VAULT_DATA__ = ${JSON.stringify(payload)};\n        /*__BAKED_VAULT_END__*/`;
+            const updatedHtml = currentHtml.replace(
+                /\/\*__BAKED_VAULT_START__\*\/[\s\S]*?\/\*__BAKED_VAULT_END__\*\//,
+                bakedBlock
+            );
+            const blob = new Blob([updatedHtml], { type: "text/html;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "index.html";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            showToast("Готовый index.html со всеми треками скачан!", "ГОТОВО ДЛЯ ДРУЗЕЙ");
         }
 
         function exportCatalogBackup() {
@@ -1250,8 +1486,10 @@
 
             const repoInput = document.getElementById("repoPathInput");
             const branchInput = document.getElementById("repoBranchInput");
+            const tokenInput = document.getElementById("githubTokenInput");
             if (repoInput && document.activeElement !== repoInput) repoInput.value = githubRepoPath;
             if (branchInput && document.activeElement !== branchInput) branchInput.value = githubBranch;
+            if (tokenInput && document.activeElement !== tokenInput) tokenInput.value = githubPersonalToken;
 
             Object.keys(ARTISTS).forEach(k => {
                 const inp = document.getElementById(`avatar_${k}`);
@@ -1758,8 +1996,7 @@
         function playArtistTracks(artistId, shuffle = false) {
             const list = TRACKS.filter(t => t.artistId === artistId);
             if (list.length === 0) {
-                showToast("У этого артиста пока нет треков", "КАТАЛОГ");
-                return;
+                showToast("У этого артиста пока нет треков", "КАТАЛОГ");                return;
             }
             isShuffle = shuffle;
             const chosen = shuffle ? list[Math.floor(Math.random() * list.length)] : list[0];
@@ -2086,14 +2323,22 @@
         async function saveRepoSettings() {
             const pathVal = document.getElementById("repoPathInput").value.trim();
             const branchVal = document.getElementById("repoBranchInput").value.trim() || "main";
+            const tokenVal = document.getElementById("githubTokenInput")?.value.trim() || "";
             if (!pathVal) {
                 showToast("Укажите путь к хранилищу", "ВНИМАНИЕ");
                 return;
             }
             githubRepoPath = pathVal;
             githubBranch = branchVal;
+            githubPersonalToken = tokenVal;
+            if (tokenVal) {
+                localStorage.setItem(GITHUB_TOKEN_STORAGE_KEY, tokenVal);
+            } else {
+                localStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY);
+            }
             saveStateToLocalStorage(true);
             renderAllViews();
+            await fetchCatalogFromGitHubRepo(true);
             await persistSettingsToCloud();
             showToast("Хранилище синхронизировано и сохранено!", "СИНХРОНИЗАЦИЯ");
         }
@@ -2222,7 +2467,7 @@
 
             await saveCustomTrackToCloud(newTrack);
             await persistSettingsToCloud();
-            showToast(`Трек «${title}» опубликован в каталог!`, " КАТАЛОГ ОБНОВЛЁН");
+            showToast(`Трек «${title}» опубликован в каталог!`, "КАТАЛОГ ОБНОВЛЁН");
         }
 
         function loadArtistBioAndFactsForm() {
@@ -2494,19 +2739,27 @@
 
         async function persistSettingsToCloud() {
             saveStateToLocalStorage(true);
-            updateSyncStatusBadge("Сохранение в облако...", false);
+            updateSyncStatusBadge("Синхронизация...", false);
+
+            // 1. Автоматически отправляем catalog.json в GitHub репозиторий (если указан GitHub Token)
+            const pushedToGh = await pushCatalogToGitHubRepo(false);
+
+            // 2. Параллельно сохраняем в облачную сессию (если активна)
             if (typeof window.cloudSaveSettings === "function") {
                 try {
                     const fullPayload = buildFullSyncPayload();
                     await window.cloudSaveSettings(fullPayload);
                     updateSyncStatusBadge("Сохранено на устройстве и в облаке ✓", true);
+                    return;
                 } catch (e) {
                     pendingCloudSyncQueue = true;
-                    updateSyncStatusBadge("Сохранено локально (ожидание сети)", false);
                 }
+            }
+
+            if (pushedToGh) {
+                updateSyncStatusBadge("Опубликовано в GitHub для всех устройств ✓", true);
             } else {
-                pendingCloudSyncQueue = true;
-                updateSyncStatusBadge("Сохранено в памяти устройства ✓", true);
+                updateSyncStatusBadge("Сохранено! Для друзей: укажите Token или скачайте catalog.json", true);
             }
         }
 
@@ -2515,7 +2768,10 @@
             for (const track of customTracksFromCloud) {
                 await saveCustomTrackToCloud(track);
             }
-            showToast("Все треки, фото и альбомы выгружены в облако для всех устройств!", "СИНХРОНИЗАЦИЯ");
+            const pushed = await pushCatalogToGitHubRepo(true);
+            if (!pushed) {
+                showToast("Данные сохранены! Нажмите «Скачать готовый index.html» или укажите GitHub Token", "СИНХРОНИЗАЦИЯ");
+            }
         }
 
         async function saveCustomTrackToCloud(trackObj) {
@@ -2537,6 +2793,22 @@
             renderAllViews();
             populateAlbumSelectForArtist();
             loadArtistBioAndFactsForm();
+
+            // При открытии на любом устройстве (у друга) сразу проверяем catalog.json из репозитория GitHub
+            fetchCatalogFromGitHubRepo(true);
+
+            // Фоновая проверка обновлений каталога каждые 20 секунд (чтобы у друга всё менялось на лету)
+            setInterval(() => {
+                if (!isOwnerUnlocked) {
+                    fetchCatalogFromGitHubRepo(true);
+                }
+            }, 20000);
+
+            document.addEventListener("visibilitychange", () => {
+                if (document.visibilityState === "visible" && !isOwnerUnlocked) {
+                    fetchCatalogFromGitHubRepo(true);
+                }
+            });
         }
 
         initDarkMusicApp();
