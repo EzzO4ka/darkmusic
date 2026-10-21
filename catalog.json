@@ -63,6 +63,18 @@
   ],
   "customTracks": [
     {
+      "id": "trk_1792604765920",
+      "title": "Мёртвый Туолет",
+      "artistId": "mc_ezdit",
+      "albumId": "alb_1792604400709",
+      "filePath": "tracks/mc_ezdit/МС Ездить Мёртвый Туолет.mp3",
+      "coverFile": "",
+      "duration": "1:05",
+      "year": 2024,
+      "isNew": false,
+      "createdAt": 1792604765920
+    },
+    {
       "id": "trk_1792604659532",
       "title": "Ленин наш батюшка (Коломенская)",
       "artistId": "mc_ezdit",
@@ -147,5 +159,5 @@
     "message": "Обновите приложение. Старая версия не работает",
     "updatedAt": 1792603452086
   },
-  "updatedAt": 1792604659547
+  "updatedAt": 1792604765932
 }
