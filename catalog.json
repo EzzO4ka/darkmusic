@@ -83,10 +83,10 @@
   ],
   "tempBroadcast": {
     "id": "",
-    "title": "Уведомляем",
-    "message": "Вы все долбоебы",
+    "title": "Объявление Dark Music",
+    "message": "",
     "active": false,
-    "createdAt": 1792603393866
+    "createdAt": 1792603402361
   },
   "pinnedBroadcast": {
     "id": "",
@@ -102,5 +102,5 @@
     "message": "Обновите приложение. Старая версия не работает",
     "updatedAt": 1792600292309
   },
-  "updatedAt": 1792603393867
+  "updatedAt": 1792603402362
 }
