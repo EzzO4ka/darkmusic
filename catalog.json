@@ -63,6 +63,18 @@
   ],
   "customTracks": [
     {
+      "id": "trk_1792605048746",
+      "title": "Прогулка по улице",
+      "artistId": "mc_ezdit",
+      "albumId": "alb_1792604400709",
+      "filePath": "tracks/mc_ezdit/МС Ездить Прогулка по улице.mp3",
+      "coverFile": "",
+      "duration": "1:05",
+      "year": 2024,
+      "isNew": false,
+      "createdAt": 1792605048746
+    },
+    {
       "id": "trk_1792605018896",
       "title": "Отец детей из говна",
       "artistId": "mc_ezdit",
@@ -183,5 +195,5 @@
     "message": "Обновите приложение. Старая версия не работает",
     "updatedAt": 1792603452086
   },
-  "updatedAt": 1792605018912
+  "updatedAt": 1792605048760
 }
