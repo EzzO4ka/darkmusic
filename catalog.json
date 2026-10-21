@@ -63,6 +63,18 @@
   ],
   "customTracks": [
     {
+      "id": "trk_1792611936565",
+      "title": "Волшебная бутылочка",
+      "artistId": "mc_makaka",
+      "albumId": "alb_1792597638805",
+      "filePath": "tracks/mc_makaka/МС Макака - Волшебная бутылочка.mp3",
+      "coverFile": "",
+      "duration": "2:18",
+      "year": 2023,
+      "isNew": false,
+      "createdAt": 1792611936565
+    },
+    {
       "id": "trk_1792611895502",
       "title": "Не еби мне мозги",
       "artistId": "mc_makaka",
@@ -267,5 +279,5 @@
     "message": "Обновите приложение. Старая версия не работает",
     "updatedAt": 1792603452086
   },
-  "updatedAt": 1792611895532
+  "updatedAt": 1792611936596
 }
