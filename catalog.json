@@ -81,5 +81,26 @@
   "deletedCustomIds": [
     "alb_1792597596794"
   ],
-  "updatedAt": 1792597878802
+  "tempBroadcast": {
+    "id": "",
+    "title": "Новый релиз",
+    "message": "",
+    "active": false,
+    "createdAt": 1792600090844
+  },
+  "pinnedBroadcast": {
+    "id": "",
+    "title": "",
+    "message": "",
+    "active": false,
+    "updatedAt": 0
+  },
+  "forceUpdate": {
+    "active": false,
+    "requiredVersion": 2,
+    "downloadUrl": "",
+    "message": "",
+    "updatedAt": 0
+  },
+  "updatedAt": 1792600090846
 }
