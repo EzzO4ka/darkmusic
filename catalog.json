@@ -50,6 +50,15 @@
       "year": 2023,
       "coverFile": "covers/alb_zageev.jpg",
       "gradient": "from-emerald-600 via-teal-900 to-zinc-950"
+    },
+    {
+      "id": "alb_1792604400709",
+      "title": "Мертворождённые",
+      "artistId": "mc_ezdit",
+      "type": "АЛЬБОМ",
+      "year": 2024,
+      "coverFile": "covers/alb_mertvorozdennye.jpg",
+      "gradient": "from-rose-600 via-red-900 to-zinc-950"
     }
   ],
   "customTracks": [
@@ -114,5 +123,5 @@
     "message": "Обновите приложение. Старая версия не работает",
     "updatedAt": 1792603452086
   },
-  "updatedAt": 1792603726634
+  "updatedAt": 1792604400724
 }
