@@ -314,11 +314,11 @@
     "createdAt": 1792603402361
   },
   "pinnedBroadcast": {
-    "id": "",
+    "id": "pin_1792613206703",
     "title": "Важная информация",
-    "message": "",
-    "active": false,
-    "updatedAt": 1792603341468
+    "message": "Возможны лаги при прослушивании треков. Проблему решаем.",
+    "active": true,
+    "updatedAt": 1792613206703
   },
   "forceUpdate": {
     "active": false,
@@ -327,5 +327,5 @@
     "message": "Обновите приложение. Старая версия не работает",
     "updatedAt": 1792603452086
   },
-  "updatedAt": 1792613045178
+  "updatedAt": 1792613206707
 }
