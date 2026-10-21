@@ -63,6 +63,18 @@
   ],
   "customTracks": [
     {
+      "id": "trk_1792612900589",
+      "title": "Про продюсеров",
+      "artistId": "mc_makaka",
+      "albumId": "",
+      "filePath": "tracks/mc_makaka/МС Макака - Про продюсеров.mp3",
+      "coverFile": "covers/alb_prod.jpg",
+      "duration": "0:37",
+      "year": 2023,
+      "isNew": false,
+      "createdAt": 1792612900589
+    },
+    {
       "id": "trk_1792612000839",
       "title": "Шляпка гриба",
       "artistId": "mc_makaka",
@@ -291,5 +303,5 @@
     "message": "Обновите приложение. Старая версия не работает",
     "updatedAt": 1792603452086
   },
-  "updatedAt": 1792612000881
+  "updatedAt": 1792612900640
 }
