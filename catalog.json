@@ -63,6 +63,18 @@
   ],
   "customTracks": [
     {
+      "id": "trk_1792611895502",
+      "title": "Не еби мне мозги",
+      "artistId": "mc_makaka",
+      "albumId": "alb_1792597638805",
+      "filePath": "tracks/mc_makaka/МС Макака - Не еби мне мозги.mp3",
+      "coverFile": "",
+      "duration": "1:48",
+      "year": 2023,
+      "isNew": false,
+      "createdAt": 1792611895502
+    },
+    {
       "id": "trk_1792611847469",
       "title": "Загеев",
       "artistId": "mc_makaka",
@@ -255,5 +267,5 @@
     "message": "Обновите приложение. Старая версия не работает",
     "updatedAt": 1792603452086
   },
-  "updatedAt": 1792611847490
+  "updatedAt": 1792611895532
 }
