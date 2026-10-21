@@ -41,10 +41,20 @@
       "Его саб-частоты опускаются ниже 28 Гц."
     ]
   },
-  "customAlbums": [],
+  "customAlbums": [
+    {
+      "id": "alb_1792597638805",
+      "title": "ЗАГЕЕВ",
+      "artistId": "mc_makaka",
+      "type": "АЛЬБОМ",
+      "year": 2023,
+      "coverFile": "covers/alb_zageev.jpg",
+      "gradient": "from-emerald-600 via-teal-900 to-zinc-950"
+    }
+  ],
   "customTracks": [],
   "deletedCustomIds": [
     "alb_1792597596794"
   ],
-  "updatedAt": 1792597619564
+  "updatedAt": 1792597638808
 }
