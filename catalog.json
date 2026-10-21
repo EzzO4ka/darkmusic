@@ -63,6 +63,18 @@
   ],
   "customTracks": [
     {
+      "id": "trk_1792605310798",
+      "title": "Милена спрыгнула с окна",
+      "artistId": "mc_makaka",
+      "albumId": "alb_1792597638805",
+      "filePath": "tracks/mc_makaka/МС_Макака_Милена_спрыгнула_с_окна.mp3",
+      "coverFile": "",
+      "duration": "2:00",
+      "year": 2023,
+      "isNew": false,
+      "createdAt": 1792605310798
+    },
+    {
       "id": "trk_1792605138686",
       "title": "Что делать сегодня",
       "artistId": "mc_ezdit",
@@ -219,5 +231,5 @@
     "message": "Обновите приложение. Старая версия не работает",
     "updatedAt": 1792603452086
   },
-  "updatedAt": 1792605138705
+  "updatedAt": 1792605310813
 }
