@@ -51,22 +51,45 @@ jobs:
       - name: Create Android project
         run: npx cap add android
 
-      - name: Generate launcher icon resources from the original PNG
+      - name: Generate launcher icons from the original PNG
         run: |
           python -m pip install --quiet pillow
           python - <<'PY'
           import os
-          from PIL import Image, ImageOps
+          from PIL import Image
+
           source = "Глянцевая музыкальная нота в кольце.png"
           im = Image.open(source).convert("RGBA")
-          # Preserve the supplied artwork; fit it to a square canvas without redrawing it.
+
+          # Regular launcher icons: keep the original artwork centered on black.
           side = max(im.width, im.height)
-          canvas = Image.new("RGBA", (side, side), (0, 0, 0, 255))
-          canvas.alpha_composite(im, ((side-im.width)//2, (side-im.height)//2))
+          square = Image.new("RGBA", (side, side), (0, 0, 0, 255))
+          square.alpha_composite(im, ((side - im.width) // 2, (side - im.height) // 2))
           for name, size in [("mdpi",48),("hdpi",72),("xhdpi",96),("xxhdpi",144),("xxxhdpi",192)]:
-              folder=f"android/app/src/main/res/mipmap-{name}"
+              folder = f"android/app/src/main/res/mipmap-{name}"
               os.makedirs(folder, exist_ok=True)
-              canvas.resize((size,size), Image.Resampling.LANCZOS).save(os.path.join(folder,"ic_launcher.png"))
+              square.resize((size, size), Image.Resampling.LANCZOS).save(os.path.join(folder, "ic_launcher.png"))
+              # Adaptive-icon foreground uses Android's 108dp canvas; keep art inside the safe zone.
+              fg = Image.new("RGBA", (432, 432), (0, 0, 0, 0))
+              art = square.copy()
+              art.thumbnail((300, 300), Image.Resampling.LANCZOS)
+              fg.alpha_composite(art, ((432-art.width)//2, (432-art.height)//2))
+              fg.resize((size * 2, size * 2), Image.Resampling.LANCZOS).save(os.path.join(folder, "ic_launcher_foreground.png"))
+
+          colors = "android/app/src/main/res/values"
+          os.makedirs(colors, exist_ok=True)
+          with open(os.path.join(colors, "ic_launcher_background.xml"), "w", encoding="utf-8") as f:
+              f.write('<resources><color name="ic_launcher_background">#000000</color></resources>')
+
+          adaptive = "android/app/src/main/res/mipmap-anydpi-v26"
+          os.makedirs(adaptive, exist_ok=True)
+          xml = '''<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+              <background android:drawable="@color/ic_launcher_background"/>
+              <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+          </adaptive-icon>'''
+          for name in ("ic_launcher.xml", "ic_launcher_round.xml"):
+              with open(os.path.join(adaptive, name), "w", encoding="utf-8") as f:
+                  f.write(xml)
           PY
 
       - name: Sync web app into Android project
