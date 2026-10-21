@@ -63,6 +63,18 @@
   ],
   "customTracks": [
     {
+      "id": "trk_1792611847469",
+      "title": "Загеев",
+      "artistId": "mc_makaka",
+      "albumId": "alb_1792597638805",
+      "filePath": "tracks/mc_makaka/МС Макака - Загеев.mp3",
+      "coverFile": "",
+      "duration": "1:50",
+      "year": 2023,
+      "isNew": false,
+      "createdAt": 1792611847469
+    },
+    {
       "id": "trk_1792605485661",
       "title": "Моя любовь",
       "artistId": "mc_makaka",
@@ -243,5 +255,5 @@
     "message": "Обновите приложение. Старая версия не работает",
     "updatedAt": 1792603452086
   },
-  "updatedAt": 1792605485678
+  "updatedAt": 1792611847490
 }
