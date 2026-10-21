@@ -41,18 +41,10 @@
       "Его саб-частоты опускаются ниже 28 Гц."
     ]
   },
-  "customAlbums": [
-    {
-      "id": "alb_1792597596794",
-      "title": "ЗАГЕЕВ",
-      "artistId": "mc_geich",
-      "type": "АЛЬБОМ",
-      "year": 2023,
-      "coverFile": "covers/alb_zageev.jpg",
-      "gradient": "from-purple-600 via-indigo-900 to-zinc-950"
-    }
-  ],
+  "customAlbums": [],
   "customTracks": [],
-  "deletedCustomIds": [],
-  "updatedAt": 1792597596803
+  "deletedCustomIds": [
+    "alb_1792597596794"
+  ],
+  "updatedAt": 1792597619564
 }
