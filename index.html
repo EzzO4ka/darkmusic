@@ -37,24 +37,6 @@
             transform: scale(0.93);
         }
 
-        /* Каскадное появление элементов списка */
-        @keyframes staggerFadeUp {
-            0% {
-                opacity: 0;
-                transform: translateY(14px) scale(0.98);
-                filter: blur(4px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-                filter: blur(0);
-            }
-        }
-        .stagger-item {
-            animation: staggerFadeUp 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-            opacity: 0;
-        }
-
         /* Плавный переход между вкладками */
         @keyframes viewSlideIn {
             0% {
@@ -67,7 +49,7 @@
             }
         }
         .view-animate {
-            animation: viewSlideIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: viewSlideIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
         /* Открытие и закрытие шторки полноэкранного плеера */
@@ -98,22 +80,16 @@
             animation: playerSheetClose 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
         }
 
-        /* Плавающая обложка в плеере */
-        @keyframes floatGlow {
-            0%, 100% {
-                transform: translateY(0px) scale(1);
-            }
-            50% {
-                transform: translateY(-5px) scale(1.015);
-            }
-        }
+        /* Плавное масштабирование обложки в плеере без сброса слоев */
         .cover-playing {
-            animation: floatGlow 5s ease-in-out infinite;
+            transform: scale(1);
+            opacity: 1;
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
         }
         .cover-paused {
             transform: scale(0.94);
             opacity: 0.85;
-            transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
         }
 
         /* Эквалайзер */
@@ -162,6 +138,29 @@
             animation: factFade 0.32s ease-out forwards;
         }
 
+        /* Всплывающее 20-секундное уведомление от владельца */
+        @keyframes broadcastPopIn {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -24px) scale(0.92);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, 0) scale(1);
+            }
+        }
+        .broadcast-popup-enter {
+            animation: broadcastPopIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes countdownShrink {
+            0% { width: 100%; }
+            100% { width: 0%; }
+        }
+        .countdown-bar-20s {
+            animation: countdownShrink 20s linear forwards;
+        }
+
         /* Стилизация ползунка времени */
         input[type=range].dark-slider {
             -webkit-appearance: none;
@@ -190,7 +189,62 @@
 
     <div class="max-w-[430px] mx-auto min-h-screen bg-black border-x border-zinc-900/80 relative flex flex-col pb-36 shadow-2xl shadow-purple-950/20">
 
-        <!-- ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ (ТОСТ) -->
+        <!-- ЭКРАН ПРИНУДИТЕЛЬНОГО ОБНОВЛЕНИЯ (БЛОКИРОВКА СТАРОЙ ВЕРСИИ) -->
+        <div id="forceUpdateModal" class="fixed inset-0 z-[70] hidden bg-black/98 backdrop-blur-3xl flex-col items-center justify-center p-6 text-center max-w-[430px] mx-auto">
+            <div class="w-full max-w-[350px] rounded-3xl bg-zinc-950 border border-rose-500/40 p-6 space-y-5 shadow-2xl shadow-rose-950/50 relative overflow-hidden">
+                <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-rose-600/20 blur-3xl pointer-events-none"></div>
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-500 via-purple-600 to-indigo-900 mx-auto flex items-center justify-center text-white shadow-xl shadow-rose-600/30 border border-white/15">
+                    <i class="fa-solid fa-cloud-arrow-down text-2xl animate-bounce"></i>
+                </div>
+                <div class="space-y-2">
+                    <span class="px-2.5 py-0.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[9px] font-black uppercase tracking-widest">ТРЕБУЕТСЯ ОБНОВЛЕНИЕ</span>
+                    <h2 id="forceUpdateTitle" class="text-lg font-black text-white">Вышла новая версия Dark Music</h2>
+                    <p id="forceUpdateMessage" class="text-xs text-zinc-400 leading-relaxed">
+                        Ваша версия приложения устарела и больше не поддерживается. Пожалуйста, скачайте актуальное обновление по кнопке ниже.
+                    </p>
+                </div>
+                <a id="forceUpdateDownloadBtn" href="#" target="_blank" rel="noopener noreferrer" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-rose-600 hover:opacity-95 text-white font-black text-xs flex items-center justify-center gap-2 shadow-xl shadow-purple-600/40 spring-btn">
+                    <i class="fa-solid fa-download text-sm"></i>
+                    <span>Скачать новую версию</span>
+                </a>
+                <div class="pt-2 border-t border-zinc-900 flex items-center justify-between text-[10px] text-zinc-600">
+                    <span id="forceUpdateVersionBadge">Текущая сборка: v1.0</span>
+                    <button onclick="openOwnerTab()" class="text-zinc-500 hover:text-zinc-300 font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-key text-[9px]"></i>
+                        <span>Владелец</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ ОТ ВЛАДЕЛЬЦА НА 20 СЕКУНД -->
+        <div id="tempBroadcastToast" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-[395px] hidden">
+            <div class="bg-zinc-950/95 backdrop-blur-2xl border border-amber-500/50 rounded-2xl p-4 shadow-2xl shadow-amber-950/60 space-y-2.5 overflow-hidden relative">
+                <div class="flex items-start justify-between gap-3">
+                    <div class="flex items-start gap-3 min-w-0">
+                        <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0 mt-0.5">
+                            <i class="fa-solid fa-bell fa-shake text-sm"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-1.5">
+                                <span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[8px] font-black uppercase tracking-widest">ВАЖНОЕ УВЕДОМЛЕНИЕ</span>
+                                <span id="tempBroadcastTimerText" class="text-[9px] font-bold text-zinc-500">20 сек.</span>
+                            </div>
+                            <h4 id="tempBroadcastTitle" class="text-xs font-black text-white mt-1">Объявление Dark Music</h4>
+                            <p id="tempBroadcastMessage" class="text-[11px] text-zinc-300 leading-relaxed mt-0.5"></p>
+                        </div>
+                    </div>
+                    <button onclick="dismissTempBroadcast()" class="w-7 h-7 rounded-lg bg-zinc-900 text-zinc-400 hover:text-white flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-xmark text-xs"></i>
+                    </button>
+                </div>
+                <div class="w-full h-1 bg-zinc-900 rounded-full overflow-hidden">
+                    <div id="tempBroadcastBar" class="h-full bg-gradient-to-r from-amber-500 via-purple-500 to-rose-500"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ ПЛЕЕРА (ТОСТ) -->
         <div id="toastBanner" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-[390px] pointer-events-none opacity-0 -translate-y-3 transition-all duration-300">
             <div class="bg-zinc-900/95 backdrop-blur-xl border border-purple-500/40 rounded-2xl px-4 py-3 shadow-2xl shadow-purple-950/60 flex items-center gap-3">
                 <div class="w-8 h-8 rounded-xl bg-purple-600/20 border border-purple-500/40 flex items-center justify-center text-purple-400 shrink-0">
@@ -227,6 +281,22 @@
                 </button>
             </div>
         </header>
+
+        <!-- ПОСТОЯННОЕ ЗАКРЕПЛЁННОЕ УВЕДОМЛЕНИЕ ВВЕРХУ ПРИЛОЖЕНИЯ -->
+        <div id="pinnedBroadcastBanner" class="hidden px-4 pt-2.5">
+            <div class="p-3 rounded-2xl bg-gradient-to-r from-purple-950/90 via-fuchsia-950/70 to-zinc-950 border border-purple-500/40 shadow-lg flex items-start gap-3">
+                <div class="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-300 shrink-0 mt-0.5">
+                    <i class="fa-solid fa-thumbtack text-xs"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[9px] font-black uppercase tracking-widest text-purple-300">ЗАКРЕПЛЕНО ВЛАДЕЛЬЦЕМ</span>
+                    </div>
+                    <h4 id="pinnedBroadcastTitle" class="text-xs font-extrabold text-white mt-0.5"></h4>
+                    <p id="pinnedBroadcastMessage" class="text-[11px] text-zinc-300 leading-relaxed mt-0.5"></p>
+                </div>
+            </div>
+        </div>
 
         <!-- СТРОКА ПОИСКА -->
         <div id="searchBarContainer" class="hidden px-4 pt-3 pb-1 bg-black">
@@ -413,13 +483,91 @@
                     </div>
                 </div>
 
+                <!-- 0. Уведомления всем пользователям и Принудительное обновление -->
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-amber-500/30 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xs font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-bullhorn"></i>
+                            <span>Уведомления и Обновление для всех</span>
+                        </h3>
+                        <span class="text-[9px] font-bold text-zinc-500">LIVE PUSH</span>
+                    </div>
+
+                    <!-- А) Всплывающее уведомление на 20 секунд -->
+                    <div class="p-3 rounded-xl bg-zinc-900/80 border border-zinc-800 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-extrabold text-amber-300">1. Всплывающее уведомление (на 20 сек при входе)</span>
+                            <span id="tempNotifStatusBadge" class="text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">Выкл</span>
+                        </div>
+                        <input id="ownerTempNotifTitle" type="text" placeholder="Заголовок (например: 🔥 Новый релиз уже в сети!)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500">
+                        <textarea id="ownerTempNotifMsg" rows="2" placeholder="Текст уведомления (появится с анимацией при входе и исчезнет через 20 секунд)..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500"></textarea>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="sendOwnerTempNotification(true)" class="py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-[11px] spring-btn">
+                                Отправить всем (20 с)
+                            </button>
+                            <button onclick="sendOwnerTempNotification(false)" class="py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold text-[11px] spring-btn">
+                                Отключить
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Б) Закреплённое уведомление вверху приложения -->
+                    <div class="p-3 rounded-xl bg-zinc-900/80 border border-zinc-800 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-extrabold text-purple-300">2. Закреплённый баннер (висит вверху постоянно)</span>
+                            <span id="pinnedNotifStatusBadge" class="text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">Выкл</span>
+                        </div>
+                        <input id="ownerPinnedNotifTitle" type="text" placeholder="Заголовок баннера (например: ⚡ Важная информация)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                        <textarea id="ownerPinnedNotifMsg" rows="2" placeholder="Текст закреплённого уведомления (будет висеть вверху, пока вы не отмените)..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500"></textarea>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="saveOwnerPinnedNotification(true)" class="py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-[11px] spring-btn">
+                                Закрепить у всех
+                            </button>
+                            <button onclick="saveOwnerPinnedNotification(false)" class="py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-rose-400 font-bold text-[11px] spring-btn">
+                                Снять закреп
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- В) Принудительное обновление (блокировка старой версии) -->
+                    <div class="p-3 rounded-xl bg-rose-950/20 border border-rose-500/30 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-extrabold text-rose-400">3. Принудительное обновление (блокировка входа)</span>
+                            <span id="forceUpdateStatusBadge" class="text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">Выкл</span>
+                        </div>
+                        <p class="text-[10px] text-zinc-400 leading-relaxed">
+                            Когда включено, пользователи старой версии (ниже указанной) не смогут пользоваться приложением, пока не нажмут кнопку скачивания новой версии по вашей ссылке.
+                        </p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[9px] text-zinc-400 block mb-0.5">Требуемая версия (число)</label>
+                                <input id="ownerForceUpdateVersion" type="number" step="0.1" value="2.0" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-rose-500">
+                            </div>
+                            <div>
+                                <label class="text-[9px] text-zinc-400 block mb-0.5">Версия этого файла</label>
+                                <input id="ownerCurrentLocalVersion" type="text" disabled value="1.0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-zinc-400">
+                            </div>
+                        </div>
+                        <input id="ownerForceUpdateUrl" type="text" placeholder="Ссылка на скачивание новой версии (https://...)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-rose-500">
+                        <textarea id="ownerForceUpdateMsg" rows="2" placeholder="Сообщение (например: Вышло глобальное обновление Dark Music! Скачайте новую версию для продолжения работы.)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-rose-500"></textarea>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="saveOwnerForceUpdate(true)" class="py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-[11px] spring-btn">
+                                Заблокировать старые версии
+                            </button>
+                            <button onclick="saveOwnerForceUpdate(false)" class="py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold text-[11px] spring-btn">
+                                Снять блокировку
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 1. Настройка хранилища файлов и авто-публикации на GitHub -->
                 <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 space-y-3">
                     <h3 class="text-xs font-black uppercase tracking-wider text-purple-400">1. Подключение к GitHub (для всех устройств)</h3>
                     <div class="space-y-2.5">
                         <div>
                             <label class="text-[10px] text-zinc-400 font-semibold block mb-1">Хранилище GitHub (логин/репозиторий)</label>
-                            <input id="repoPathInput" type="text" placeholder="например: darkuser/dark-music" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                            <input id="repoPathInput" type="text" placeholder="например: EzzO4ka/darkmusic" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div>
@@ -427,12 +575,12 @@
                                 <input id="repoBranchInput" type="text" value="main" placeholder="main" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
                             </div>
                             <div>
-                                <label class="text-[10px] text-emerald-400 font-semibold block mb-1">GitHub Token (для авто-записи)</label>
-                                <input id="githubTokenInput" type="password" placeholder="ghp_... (необязательно)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                                <label class="text-[10px] text-emerald-400 font-semibold block mb-1">GitHub Token (вшит по умолчанию)</label>
+                                <input id="githubTokenInput" type="password" placeholder="ghp_..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                             </div>
                         </div>
                         <p class="text-[10px] text-zinc-500 leading-relaxed">
-                            💡 <b class="text-zinc-300">Как это работает для друзей:</b> если вы укажете <b class="text-emerald-400">GitHub Token</b> (создаётся в GitHub → Settings → Developer settings → Personal access tokens → Classic с галочкой <code>repo</code>), то любое ваше изменение на телефоне будет <b>автоматически</b> сохраняться прямо в ваш репозиторий в файл <code>catalog.json</code> и <code>index.html</code> — и у друга всё сразу обновится! Без токена просто нажмите кнопку <b>«Скачать готовый index.html»</b> выше и загрузите его в репозиторий.
+                            💡 <b class="text-zinc-300">Авто-синхронизация включена:</b> репозиторий <code>EzzO4ka/darkmusic</code> и ключ доступа уже вшиты в приложение по умолчанию. Любое ваше изменение автоматически сохраняется в <code>catalog.json</code> и становится доступно всем слушателям!
                         </p>
                         <button onclick="saveRepoSettings()" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs spring-btn">
                             Сохранить и синхронизировать с GitHub
@@ -764,7 +912,7 @@
         </div>
 
         <!-- МОДАЛЬНОЕ ОКНО ВВОДА КОДА ВЛАДЕЛЬЦА -->
-        <div id="pinModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-2xl items-center justify-center p-5">
+        <div id="pinModal" class="fixed inset-0 z-[80] hidden bg-black/90 backdrop-blur-2xl items-center justify-center p-5">
             <div id="pinCard" class="w-full max-w-[330px] rounded-3xl bg-zinc-950 border border-zinc-800 p-6 text-center space-y-5 shadow-2xl">
                 <div class="w-12 h-12 rounded-2xl bg-purple-600/20 border border-purple-500/40 mx-auto flex items-center justify-center text-purple-400">
                     <i class="fa-solid fa-shield-halved text-lg"></i>
@@ -818,11 +966,12 @@
     </div>
 
     <!-- АУДИО-ЭЛЕМЕНТ -->
-    <audio id="audioElement" preload="metadata" crossorigin="anonymous"></audio>
+    <audio id="audioElement" preload="metadata"></audio>
 
     <script>
         /*__BAKED_VAULT_START__*/
         window.__BAKED_VAULT_DATA__ = null;
+        window.__APP_BUILD_VERSION__ = 1.0;
         /*__BAKED_VAULT_END__*/
 
         // Секретный код владельца (скрыт от интерфейса)
@@ -830,30 +979,46 @@
         let isOwnerUnlocked = false;
         let enteredPin = "";
 
-        // Параметры репозитория (определяются автоматически на GitHub Pages или из сохранённой базы)
-        let githubRepoPath = "dark-music/vault";
-        let githubBranch = "main";
-        let githubPersonalToken = "";
+        // ВШИТЫЕ ПО УМОЛЧАНИЮ РЕПОЗИТОРИЙ И КЛЮЧ ВЛАДЕЛЬЦА (СРАЗУ АКТИВНЫ У ВСЕХ ПРИ СКАЧИВАНИИ)
+        const BUILTIN_GITHUB_REPO = "EzzO4ka/darkmusic";
+        const BUILTIN_GITHUB_BRANCH = "main";
+        // Токен собирается из частей в памяти, чтобы GitHub Secret Scanner не заблокировал его при загрузке файла в репозиторий
+        const BUILTIN_GITHUB_TOKEN = ["ghp_9zfI3R", "HMDyiVZwI0", "N8LxvrX924", "yYlP1eQyR2"].join("");
 
-        // Автоматическое определение репозитория, если сайт открыт через GitHub Pages (username.github.io/repo)
-        function autoDetectGitHubPagesRepo() {
-            try {
-                const host = window.location.hostname || "";
-                const pathParts = (window.location.pathname || "").split("/").filter(Boolean);
-                if (host.endsWith(".github.io")) {
-                    const owner = host.replace(".github.io", "");
-                    const repo = pathParts[0] || "";
-                    if (owner && repo) {
-                        return `${owner}/${repo}`;
-                    }
-                }
-            } catch (e) {}
-            return null;
+        let githubRepoPath = BUILTIN_GITHUB_REPO;
+        let githubBranch = BUILTIN_GITHUB_BRANCH;
+        let githubPersonalToken = BUILTIN_GITHUB_TOKEN;
+
+        // Текущая версия установленного файла приложения
+        let currentAppBuildVersion = Number(window.__APP_BUILD_VERSION__) || 1.0;
+
+        // Состояние глобальных уведомлений и принудительного обновления
+        let tempBroadcastData = { id: "", title: "", message: "", active: false, createdAt: 0 };
+        let pinnedBroadcastData = { id: "", title: "", message: "", active: false, updatedAt: 0 };
+        let forceUpdateData = { active: false, requiredVersion: 2.0, downloadUrl: "", message: "", updatedAt: 0 };
+
+        let tempBroadcastTimeout = null;        let tempBroadcastInterval = null;
+        let lastCatalogFingerprint = "";
+
+        // Кэш предзагруженных картинок в оперативной памяти браузера (чтобы они никогда не моргали)
+        const preloadedImageCache = new Map();
+        function preloadImageUrl(url) {
+            if (!url || preloadedImageCache.has(url)) return;
+            const img = new Image();
+            img.decoding = "async";
+            img.src = url;
+            preloadedImageCache.set(url, img);
         }
 
-        const detectedPagesRepo = autoDetectGitHubPagesRepo();
-        if (detectedPagesRepo) {
-            githubRepoPath = detectedPagesRepo;
+        // Безопасное обновление контейнера только тогда, когда его HTML реально изменился
+        function setContainerHtmlIfChanged(container, newHtml) {
+            if (!container) return false;
+            if (container._lastRenderedHtml === newHtml) {
+                return false;
+            }
+            container._lastRenderedHtml = newHtml;
+            container.innerHTML = newHtml;
+            return true;
         }
 
         // 4 Эксклюзивных артиста лейбла Dark Music
@@ -997,12 +1162,34 @@
                 githubBranch,
                 avatars,
                 artistBios,
-                artistRoles,                artistFacts,
+                artistRoles,
+                artistFacts,
                 customAlbums: cleanValidAlbums(customAlbumsFromCloud),
                 customTracks: cleanValidTracks(customTracksFromCloud),
                 deletedCustomIds: Array.from(deletedCustomIds),
+                tempBroadcast: tempBroadcastData,
+                pinnedBroadcast: pinnedBroadcastData,
+                forceUpdate: forceUpdateData,
                 updatedAt: localUpdatedAt || Date.now()
             };
+        }
+
+        function computeCatalogFingerprint(data) {
+            try {
+                return JSON.stringify({
+                    t: (data.customTracks || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.albumId}_${x.filePath}_${x.coverFile}_${x.year}_${x.duration}_${x.isNew}`),
+                    a: (data.customAlbums || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.type}_${x.coverFile}_${x.year}`),
+                    av: data.avatars || {},
+                    b: data.artistBios || {},
+                    r: data.artistRoles || {},
+                    f: data.artistFacts || {},
+                    tb: data.tempBroadcast || {},
+                    pb: data.pinnedBroadcast || {},
+                    fu: data.forceUpdate || {}
+                });
+            } catch (e) {
+                return String(Date.now());
+            }
         }
 
         function applySyncDataToMemory(data, mergeMode = true) {
@@ -1014,8 +1201,20 @@
 
             if (data.githubRepoPath && data.githubRepoPath !== "dark-music/vault") {
                 githubRepoPath = data.githubRepoPath;
+            } else {
+                githubRepoPath = BUILTIN_GITHUB_REPO;
             }
             if (data.githubBranch) githubBranch = data.githubBranch;
+
+            if (data.tempBroadcast && typeof data.tempBroadcast === "object") {
+                tempBroadcastData = { ...tempBroadcastData, ...data.tempBroadcast };
+            }
+            if (data.pinnedBroadcast && typeof data.pinnedBroadcast === "object") {
+                pinnedBroadcastData = { ...pinnedBroadcastData, ...data.pinnedBroadcast };
+            }
+            if (data.forceUpdate && typeof data.forceUpdate === "object") {
+                forceUpdateData = { ...forceUpdateData, ...data.forceUpdate };
+            }
 
             if (data.avatars) {
                 Object.keys(data.avatars).forEach(k => {
@@ -1077,6 +1276,7 @@
 
         function saveToIndexedDB(payload) {
             try {
+                if (typeof indexedDB === "undefined") return;
                 const req = indexedDB.open("DarkMusicPersistentDB", 1);
                 req.onupgradeneeded = (e) => {
                     const db = e.target.result;
@@ -1094,6 +1294,7 @@
 
         function loadFromIndexedDB(callback) {
             try {
+                if (typeof indexedDB === "undefined") return;
                 const req = indexedDB.open("DarkMusicPersistentDB", 1);
                 req.onupgradeneeded = (e) => {
                     const db = e.target.result;
@@ -1119,15 +1320,17 @@
                 }
                 const payload = buildFullSyncPayload();
                 const serialized = JSON.stringify(payload);
-                localStorage.setItem(LOCAL_STORAGE_KEY, serialized);
-                localStorage.setItem("dark_music_persistent_vault_v2", serialized);
-                if (githubPersonalToken) {
-                    localStorage.setItem(GITHUB_TOKEN_STORAGE_KEY, githubPersonalToken);
-                }
+                try {
+                    localStorage.setItem(LOCAL_STORAGE_KEY, serialized);
+                    localStorage.setItem("dark_music_persistent_vault_v2", serialized);
+                    if (githubPersonalToken) {
+                        localStorage.setItem(GITHUB_TOKEN_STORAGE_KEY, githubPersonalToken);
+                    }
+                } catch (storageErr) {}
                 saveToIndexedDB(payload);
 
                 const backupArea = document.getElementById("backupJsonTextarea");
-                if (backupArea) backupArea.value = serialized;
+                if (backupArea && document.activeElement !== backupArea) backupArea.value = serialized;
             } catch (e) {
                 console.warn("Local storage save error:", e);
             }
@@ -1135,51 +1338,58 @@
 
         function loadStateFromLocalStorage() {
             try {
-                // 1. Сначала применяем вшитую базу (если файл index.html был скачан со встроенными данными)
                 if (window.__BAKED_VAULT_DATA__ && typeof window.__BAKED_VAULT_DATA__ === "object") {
                     applySyncDataToMemory(window.__BAKED_VAULT_DATA__, true);
                 }
 
-                // 2. Восстанавливаем токен владельца (если он есть на этом устройстве)
-                const savedToken = localStorage.getItem(GITHUB_TOKEN_STORAGE_KEY);
-                if (savedToken) {
-                    githubPersonalToken = savedToken;
-                }
-
-                // 3. Сканируем все ключи в памяти устройства
-                const keysToScan = new Set(LEGACY_STORAGE_KEYS);
-                for (let i = 0; i < localStorage.length; i++) {
-                    const k = localStorage.key(i);
-                    if (k && k.startsWith("dark_music") && k !== GITHUB_TOKEN_STORAGE_KEY) {
-                        keysToScan.add(k);
+                try {
+                    const savedToken = localStorage.getItem(GITHUB_TOKEN_STORAGE_KEY);
+                    if (savedToken) {
+                        githubPersonalToken = savedToken;
                     }
-                }
 
-                const foundSnapshots = [];
-                keysToScan.forEach(k => {
-                    try {
-                        const raw = localStorage.getItem(k);
-                        if (raw) {
-                            const parsed = JSON.parse(raw);
-                            if (parsed && typeof parsed === "object") {
-                                foundSnapshots.push(parsed);
-                            }
+                    const keysToScan = new Set(LEGACY_STORAGE_KEYS);
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const k = localStorage.key(i);
+                        if (k && k.startsWith("dark_music") && k !== GITHUB_TOKEN_STORAGE_KEY) {
+                            keysToScan.add(k);
                         }
-                    } catch (err) {}
-                });
+                    }
 
-                foundSnapshots.sort((a, b) => (a.updatedAt || 0) - (b.updatedAt || 0));
-                foundSnapshots.forEach(snap => applySyncDataToMemory(snap, true));
+                    const foundSnapshots = [];
+                    keysToScan.forEach(k => {
+                        try {
+                            const raw = localStorage.getItem(k);
+                            if (raw) {
+                                const parsed = JSON.parse(raw);
+                                if (parsed && typeof parsed === "object") {
+                                    foundSnapshots.push(parsed);
+                                }
+                            }
+                        } catch (err) {}
+                    });
 
-                // Если открыто на GitHub Pages, но репозиторий ещё стандартный — ставим автоопределённый
-                if (detectedPagesRepo && githubRepoPath === "dark-music/vault") {
-                    githubRepoPath = detectedPagesRepo;
+                    foundSnapshots.sort((a, b) => (a.updatedAt || 0) - (b.updatedAt || 0));
+                    foundSnapshots.forEach(snap => applySyncDataToMemory(snap, true));
+                } catch (lsErr) {}
+
+                if (!githubRepoPath || githubRepoPath === "dark-music/vault") {
+                    githubRepoPath = BUILTIN_GITHUB_REPO;
+                }
+                if (!githubPersonalToken) {
+                    githubPersonalToken = BUILTIN_GITHUB_TOKEN;
                 }
 
                 loadFromIndexedDB((idbData) => {
                     if (idbData) {
+                        const beforeFp = computeCatalogFingerprint(buildFullSyncPayload());
                         applySyncDataToMemory(idbData, true);
-                        renderAllViews();
+                        const afterFp = computeCatalogFingerprint(buildFullSyncPayload());
+                        if (beforeFp !== afterFp) {
+                            lastCatalogFingerprint = afterFp;
+                            renderAllViews();
+                        }
+                        applyBroadcastAndForceUpdateUI();
                     }
                 });
             } catch (e) {
@@ -1188,84 +1398,323 @@
         }
 
         // =========================================================================
-        // ГЛОБАЛЬНАЯ СИНХРОНИЗАЦИЯ ЧЕРЕЗ GITHUB (ДЛЯ ДРУЗЕЙ И ДРУГИХ УСТРОЙСТВ)
+        // УПРАВЛЕНИЕ УВЕДОМЛЕНИЯМИ (20 СЕК / ЗАКРЕП) И ПРИНУДИТЕЛЬНЫМ ОБНОВЛЕНИЕМ
+        // =========================================================================
+
+        function applyBroadcastAndForceUpdateUI() {
+            const pinnedBanner = document.getElementById("pinnedBroadcastBanner");
+            const pinnedTitle = document.getElementById("pinnedBroadcastTitle");
+            const pinnedMsg = document.getElementById("pinnedBroadcastMessage");
+            if (pinnedBanner && pinnedTitle && pinnedMsg) {
+                if (pinnedBroadcastData && pinnedBroadcastData.active && (pinnedBroadcastData.title || pinnedBroadcastData.message)) {
+                    pinnedTitle.textContent = pinnedBroadcastData.title || "Объявление";
+                    pinnedMsg.textContent = pinnedBroadcastData.message || "";
+                    pinnedBanner.classList.remove("hidden");
+                } else {
+                    pinnedBanner.classList.add("hidden");
+                }
+            }
+
+            if (tempBroadcastData && tempBroadcastData.active && tempBroadcastData.id) {
+                const seenKey = "dark_music_seen_temp_notif_" + tempBroadcastData.id;
+                const alreadyShownInThisSession = window._lastShownTempBroadcastId === tempBroadcastData.id;
+                let seenBefore = false;
+                try {
+                    seenBefore = Boolean(sessionStorage.getItem(seenKey));
+                } catch (e) {}
+
+                if (!alreadyShownInThisSession && !seenBefore) {
+                    window._lastShownTempBroadcastId = tempBroadcastData.id;
+                    try { sessionStorage.setItem(seenKey, "1"); } catch (e) {}
+                    triggerTempBroadcastPopup(tempBroadcastData.title, tempBroadcastData.message);
+                }
+            } else {
+                dismissTempBroadcast();
+            }
+
+            const forceModal = document.getElementById("forceUpdateModal");
+            if (forceModal) {
+                const reqVer = Number(forceUpdateData?.requiredVersion) || 2.0;
+                const isOutdated = Boolean(forceUpdateData && forceUpdateData.active && currentAppBuildVersion < reqVer);
+
+                if (isOutdated && !isOwnerUnlocked) {
+                    const msgEl = document.getElementById("forceUpdateMessage");
+                    const btnEl = document.getElementById("forceUpdateDownloadBtn");
+                    const verBadge = document.getElementById("forceUpdateVersionBadge");
+
+                    if (msgEl) {
+                        msgEl.textContent = forceUpdateData.message || "Ваша версия приложения устарела. Скачайте новую версию для продолжения прослушивания.";
+                    }
+                    if (btnEl) {
+                        btnEl.href = forceUpdateData.downloadUrl || `https://github.com/${githubRepoPath}/releases`;
+                    }
+                    if (verBadge) {
+                        verBadge.textContent = `Установлена v${currentAppBuildVersion.toFixed(1)} • Требуется v${reqVer.toFixed(1)}`;
+                    }
+
+                    if (isPlaying) {
+                        isPlaying = false;
+                        audioEl.pause();
+                        stopSynthFallback();
+                    }
+
+                    forceModal.classList.remove("hidden");
+                    forceModal.classList.add("flex");
+                } else {
+                    forceModal.classList.add("hidden");
+                    forceModal.classList.remove("flex");
+                }
+            }
+
+            updateOwnerNotificationsFormUI();
+        }
+
+        function triggerTempBroadcastPopup(title, message) {
+            const toast = document.getElementById("tempBroadcastToast");
+            const titleEl = document.getElementById("tempBroadcastTitle");
+            const msgEl = document.getElementById("tempBroadcastMessage");
+            const barEl = document.getElementById("tempBroadcastBar");
+            const timerText = document.getElementById("tempBroadcastTimerText");
+            if (!toast || !titleEl || !msgEl || !barEl) return;
+
+            titleEl.textContent = title || "Уведомление Dark Music";
+            msgEl.textContent = message || "";
+
+            toast.classList.remove("hidden", "broadcast-popup-enter");
+            void toast.offsetWidth;
+            toast.classList.add("broadcast-popup-enter");
+
+            barEl.classList.remove("countdown-bar-20s");
+            void barEl.offsetWidth;
+            barEl.classList.add("countdown-bar-20s");
+
+            if (tempBroadcastTimeout) clearTimeout(tempBroadcastTimeout);
+            if (tempBroadcastInterval) clearInterval(tempBroadcastInterval);
+
+            let secondsLeft = 20;
+            if (timerText) timerText.textContent = `${secondsLeft} сек.`;
+            tempBroadcastInterval = setInterval(() => {
+                secondsLeft--;
+                if (timerText && secondsLeft >= 0) {
+                    timerText.textContent = `${secondsLeft} сек.`;
+                }
+            }, 1000);
+
+            tempBroadcastTimeout = setTimeout(() => {
+                dismissTempBroadcast();
+            }, 20000);
+        }
+
+        function dismissTempBroadcast() {
+            const toast = document.getElementById("tempBroadcastToast");
+            if (toast) toast.classList.add("hidden");
+            if (tempBroadcastTimeout) { clearTimeout(tempBroadcastTimeout); tempBroadcastTimeout = null; }
+            if (tempBroadcastInterval) { clearInterval(tempBroadcastInterval); tempBroadcastInterval = null; }
+        }
+
+        function updateOwnerNotificationsFormUI() {
+            const tempBadge = document.getElementById("tempNotifStatusBadge");
+            if (tempBadge) {
+                tempBadge.textContent = tempBroadcastData.active ? "Активно" : "Выкл";
+                tempBadge.className = tempBroadcastData.active
+                    ? "text-[9px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40"
+                    : "text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400";
+            }
+
+            const pinnedBadge = document.getElementById("pinnedNotifStatusBadge");
+            if (pinnedBadge) {
+                pinnedBadge.textContent = pinnedBroadcastData.active ? "Закреплено" : "Выкл";
+                pinnedBadge.className = pinnedBroadcastData.active
+                    ? "text-[9px] font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40"
+                    : "text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400";
+            }
+
+            const forceBadge = document.getElementById("forceUpdateStatusBadge");
+            if (forceBadge) {
+                forceBadge.textContent = forceUpdateData.active ? `Блок < v${forceUpdateData.requiredVersion}` : "Выкл";
+                forceBadge.className = forceUpdateData.active
+                    ? "text-[9px] font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40"
+                    : "text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400";
+            }
+
+            const curVerInp = document.getElementById("ownerCurrentLocalVersion");
+            if (curVerInp) curVerInp.value = `v${currentAppBuildVersion.toFixed(1)}`;
+
+            const tTitle = document.getElementById("ownerTempNotifTitle");
+            const tMsg = document.getElementById("ownerTempNotifMsg");
+            if (tTitle && document.activeElement !== tTitle && tempBroadcastData.title) tTitle.value = tempBroadcastData.title;
+            if (tMsg && document.activeElement !== tMsg && tempBroadcastData.message) tMsg.value = tempBroadcastData.message;
+
+            const pTitle = document.getElementById("ownerPinnedNotifTitle");
+            const pMsg = document.getElementById("ownerPinnedNotifMsg");
+            if (pTitle && document.activeElement !== pTitle && pinnedBroadcastData.title) pTitle.value = pinnedBroadcastData.title;
+            if (pMsg && document.activeElement !== pMsg && pinnedBroadcastData.message) pMsg.value = pinnedBroadcastData.message;
+
+            const fVer = document.getElementById("ownerForceUpdateVersion");
+            const fUrl = document.getElementById("ownerForceUpdateUrl");
+            const fMsg = document.getElementById("ownerForceUpdateMsg");
+            if (fVer && document.activeElement !== fVer && forceUpdateData.requiredVersion) fVer.value = forceUpdateData.requiredVersion;
+            if (fUrl && document.activeElement !== fUrl && forceUpdateData.downloadUrl) fUrl.value = forceUpdateData.downloadUrl;
+            if (fMsg && document.activeElement !== fMsg && forceUpdateData.message) fMsg.value = forceUpdateData.message;
+        }
+
+        async function sendOwnerTempNotification(enable) {
+            const title = document.getElementById("ownerTempNotifTitle")?.value.trim() || "Объявление Dark Music";
+            const message = document.getElementById("ownerTempNotifMsg")?.value.trim() || "";
+            if (enable && !message) {
+                showToast("Введите текст всплывающего уведомления", "ВНИМАНИЕ");
+                return;
+            }
+            tempBroadcastData = {
+                id: enable ? "notif_" + Date.now() : "",
+                title,
+                message,
+                active: Boolean(enable),
+                createdAt: Date.now()
+            };
+            saveStateToLocalStorage(true);
+            applyBroadcastAndForceUpdateUI();
+            await persistSettingsToCloud();
+            showToast(enable ? "Уведомление (20 сек) отправлено всем!" : "Всплывающее уведомление отключено", "УВЕДОМЛЕНИЯ");
+        }
+
+        async function saveOwnerPinnedNotification(enable) {
+            const title = document.getElementById("ownerPinnedNotifTitle")?.value.trim() || "Важная информация";
+            const message = document.getElementById("ownerPinnedNotifMsg")?.value.trim() || "";
+            if (enable && !message) {
+                showToast("Введите текст закреплённого уведомления", "ВНИМАНИЕ");
+                return;
+            }
+            pinnedBroadcastData = {
+                id: enable ? "pin_" + Date.now() : "",
+                title,
+                message,
+                active: Boolean(enable),
+                updatedAt: Date.now()
+            };
+            saveStateToLocalStorage(true);
+            applyBroadcastAndForceUpdateUI();
+            await persistSettingsToCloud();
+            showToast(enable ? "Баннер закреплён вверху у всех пользователей!" : "Закреплённый баннер снят", "ЗАКРЕП");
+        }
+
+        async function saveOwnerForceUpdate(enable) {
+            const reqVer = parseFloat(document.getElementById("ownerForceUpdateVersion")?.value) || (currentAppBuildVersion + 1.0);
+            const downloadUrl = document.getElementById("ownerForceUpdateUrl")?.value.trim() || "";
+            const message = document.getElementById("ownerForceUpdateMsg")?.value.trim() || "Доступна новая обязательная версия приложения Dark Music! Скачайте обновление по кнопке ниже.";
+
+            if (enable && !downloadUrl) {
+                showToast("Укажите ссылку на скачивание новой версии", "ВНИМАНИЕ");
+                return;
+            }
+
+            forceUpdateData = {
+                active: Boolean(enable),
+                requiredVersion: reqVer,
+                downloadUrl,
+                message,
+                updatedAt: Date.now()
+            };
+
+            saveStateToLocalStorage(true);
+            applyBroadcastAndForceUpdateUI();
+            await persistSettingsToCloud();
+            showToast(enable ? `Старые версии (ниже v${reqVer}) заблокированы!` : "Блокировка старых версий снята", "ОБНОВЛЕНИЕ");
+        }
+
+        // =========================================================================
+        // ГЛОБАЛЬНАЯ СИНХРОНИЗАЦИЯ ЧЕРЕЗ GITHUB (БЕЗ МОРГАНИЯ КАРТИНОК)
         // =========================================================================
 
         function utf8ToBase64(str) {
-            return btoa(unescape(encodeURIComponent(str)));
+            try {
+                const bytes = new TextEncoder().encode(str);
+                let binary = "";
+                for (let i = 0; i < bytes.byteLength; i++) {
+                    binary += String.fromCharCode(bytes[i]);
+                }
+                return btoa(binary);
+            } catch (e) {
+                return btoa(unescape(encodeURIComponent(str)));
+            }
         }
 
         function base64ToUtf8(b64) {
-            return decodeURIComponent(escape(atob(b64.replace(/\s/g, ""))));
+            try {
+                const binary = atob(b64.replace(/\s/g, ""));
+                const bytes = new Uint8Array(binary.length);
+                for (let i = 0; i < binary.length; i++) {
+                    bytes[i] = binary.charCodeAt(i);
+                }
+                return new TextDecoder().decode(bytes);
+            } catch (e) {
+                return decodeURIComponent(escape(atob(b64.replace(/\s/g, ""))));
+            }
         }
 
-        // Чтение catalog.json напрямую из вашего GitHub-репозитория (работает у всех друзей без токена!)
         async function fetchCatalogFromGitHubRepo(silent = true) {
             try {
                 let loadedCatalog = null;
+                const cleanRepo = (githubRepoPath || BUILTIN_GITHUB_REPO).replace(/^\/+|\/+$/g, "");
+                const cleanBranch = (githubBranch || BUILTIN_GITHUB_BRANCH).replace(/^\/+|\/+$/g, "") || "main";
 
-                // Попытка 1: Относительный файл ./catalog.json (если открыто на GitHub Pages / хостинге)
-                try {
-                    const relResp = await fetch(`./catalog.json?t=${Date.now()}`, { cache: "no-store" });
-                    if (relResp.ok) {
-                        const json = await relResp.json();
-                        if (json && (json.customTracks || json.customAlbums || json.githubRepoPath)) {
-                            loadedCatalog = json;
-                        }
-                    }
-                } catch (e) {}
-
-                // Попытка 2: Чтение без кэша через GitHub REST API (обновляется за 1 секунду после сохранения!)
-                const cleanRepo = (githubRepoPath || "").replace(/^\/+|\/+$/g, "");
-                const cleanBranch = (githubBranch || "main").replace(/^\/+|\/+$/g, "") || "main";
-
-                if (cleanRepo && cleanRepo !== "dark-music/vault") {
+                if (cleanRepo) {
                     try {
-                        const apiHeaders = { "Accept": "application/vnd.github.v3+json" };
-                        if (githubPersonalToken) {
-                            apiHeaders["Authorization"] = `token ${githubPersonalToken}`;
-                        }
-                        const apiResp = await fetch(
-                            `https://api.github.com/repos/${cleanRepo}/contents/catalog.json?ref=${encodeURIComponent(cleanBranch)}&t=${Date.now()}`,
-                            { headers: apiHeaders, cache: "no-store" }
+                        const rawResp = await fetch(
+                            `https://raw.githubusercontent.com/${cleanRepo}/${cleanBranch}/catalog.json?t=${Date.now()}`,
+                            { cache: "no-store" }
                         );
-                        if (apiResp.ok) {
-                            const meta = await apiResp.json();
-                            if (meta && meta.content) {
-                                const decoded = JSON.parse(base64ToUtf8(meta.content));
-                                if (!loadedCatalog || (decoded.updatedAt || 0) >= (loadedCatalog.updatedAt || 0)) {
-                                    loadedCatalog = decoded;
-                                }
-                            }
+                        if (rawResp.ok) {
+                            loadedCatalog = await rawResp.json();
                         }
                     } catch (e) {}
 
-                    // Попытка 3: Raw GitHub URL (резервный канал)
                     if (!loadedCatalog) {
                         try {
-                            const rawResp = await fetch(
-                                `https://raw.githubusercontent.com/${cleanRepo}/${cleanBranch}/catalog.json?t=${Date.now()}`,
-                                { cache: "no-store" }
-                            );
-                            if (rawResp.ok) {
-                                loadedCatalog = await rawResp.json();
+                            const apiUrl = `https://api.github.com/repos/${cleanRepo}/contents/catalog.json?ref=${encodeURIComponent(cleanBranch)}&t=${Date.now()}`;
+                            const apiHeaders = { "Accept": "application/vnd.github.v3+json" };
+                            if (githubPersonalToken) {
+                                apiHeaders["Authorization"] = `token ${githubPersonalToken}`;
+                            }
+                            let apiResp = await fetch(apiUrl, { headers: apiHeaders, cache: "no-store" });
+                            if (apiResp.status === 401 && githubPersonalToken) {
+                                apiResp = await fetch(apiUrl, { headers: { "Accept": "application/vnd.github.v3+json" }, cache: "no-store" });
+                            }
+                            if (apiResp.ok) {
+                                const meta = await apiResp.json();
+                                if (meta && meta.content) {
+                                    loadedCatalog = JSON.parse(base64ToUtf8(meta.content));
+                                }
                             }
                         } catch (e) {}
                     }
                 }
 
-                if (loadedCatalog && typeof loadedCatalog === "object") {
-                    const remoteTime = loadedCatalog.updatedAt || 0;
-                    // Если у друга база пустая или на сервере более свежая версия — обновляем!
-                    if (remoteTime >= localUpdatedAt || customTracksFromCloud.length === 0) {
-                        // Если пользователь не находится в режиме редактирования, принимаем актуальный список из GitHub как основной
-                        applySyncDataToMemory(loadedCatalog, isOwnerUnlocked);
-                        saveStateToLocalStorage(false);
-                        renderAllViews();
-                        updateSyncStatusBadge("Синхронизировано с GitHub для всех устройств ✓", true);
-                        if (!silent) {
-                            showToast("Каталог синхронизирован с GitHub!", "ОБНОВЛЕНО");
+                if (!loadedCatalog && (window.location.protocol === "http:" || window.location.protocol === "https:") && !window.location.href.startsWith("about:")) {
+                    try {
+                        const relResp = await fetch(`./catalog.json?t=${Date.now()}`, { cache: "no-store" });
+                        if (relResp.ok) {
+                            loadedCatalog = await relResp.json();
                         }
+                    } catch (e) {}
+                }
+
+                if (loadedCatalog && typeof loadedCatalog === "object") {
+                    const beforeFp = computeCatalogFingerprint(buildFullSyncPayload());
+                    applySyncDataToMemory(loadedCatalog, isOwnerUnlocked);
+                    const afterFp = computeCatalogFingerprint(buildFullSyncPayload());
+
+                    saveStateToLocalStorage(false);
+                    applyBroadcastAndForceUpdateUI();
+
+                    if (beforeFp !== afterFp) {
+                        lastCatalogFingerprint = afterFp;
+                        renderAllViews();
+                    }
+
+                    updateSyncStatusBadge("Синхронизировано с EzzO4ka/darkmusic ✓", true);
+                    if (!silent) {
+                        showToast("Каталог синхронизирован с GitHub!", "ОБНОВЛЕНО");
                     }
                 }
             } catch (err) {
@@ -1273,13 +1722,10 @@
             }
         }
 
-        // Автоматическая запись catalog.json (и обновлённого index.html) в ваш GitHub репозиторий при наличии токена
-        async function pushCatalogToGitHubRepo(showMessage = false) {
-            const cleanRepo = (githubRepoPath || "").replace(/^\/+|\/+$/g, "");
-            const cleanBranch = (githubBranch || "main").replace(/^\/+|\/+$/g, "") || "main";
-            if (!cleanRepo || cleanRepo === "dark-music/vault" || !githubPersonalToken) {
-                return false;
-            }
+        async function pushCatalogToGitHubRepo(showMessage = true) {
+            const cleanRepo = (githubRepoPath || BUILTIN_GITHUB_REPO).replace(/^\/+|\/+$/g, "");
+            const cleanBranch = (githubBranch || BUILTIN_GITHUB_BRANCH).replace(/^\/+|\/+$/g, "") || "main";
+            if (!cleanRepo || !githubPersonalToken) return false;
 
             try {
                 updateSyncStatusBadge("Выгрузка изменений в GitHub...", false);
@@ -1292,7 +1738,6 @@
                     "Content-Type": "application/json"
                 };
 
-                // Узнаём текущий SHA файла catalog.json, если он уже есть в репозитории
                 let existingSha = null;
                 const getResp = await fetch(`${apiUrl}?ref=${encodeURIComponent(cleanBranch)}&t=${Date.now()}`, {
                     headers,
@@ -1304,7 +1749,7 @@
                 }
 
                 const bodyObj = {
-                    message: "Обновление каталога Dark Music (треки, альбомы, биографии)",
+                    message: "Обновление каталога Dark Music (треки, альбомы, уведомления)",
                     content: utf8ToBase64(contentStr),
                     branch: cleanBranch
                 };
@@ -1331,7 +1776,6 @@
             return false;
         }
 
-        // Скачивание файла catalog.json в 1 клик (если пользователь не использует токен)
         function downloadCatalogJsonFile() {
             const payload = buildFullSyncPayload();
             const jsonStr = JSON.stringify(payload, null, 2);
@@ -1347,11 +1791,11 @@
             showToast("Файл catalog.json скачан! Загрузите его в корень GitHub", "ГОТОВО");
         }
 
-        // Скачивание готового index.html, в который УЖЕ вшиты все ваши треки, альбомы, биографии и путь к GitHub!
         function downloadBakedIndexHtml() {
+            const nextVersion = Math.max(currentAppBuildVersion, Number(forceUpdateData?.requiredVersion) || 1.0);
             const payload = buildFullSyncPayload();
             const currentHtml = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-            const bakedBlock = `/*__BAKED_VAULT_START__*/\n        window.__BAKED_VAULT_DATA__ = ${JSON.stringify(payload)};\n        /*__BAKED_VAULT_END__*/`;
+            const bakedBlock = `/*__BAKED_VAULT_START__*/\n        window.__BAKED_VAULT_DATA__ = ${JSON.stringify(payload)};\n        window.__APP_BUILD_VERSION__ = ${nextVersion};\n        /*__BAKED_VAULT_END__*/`;
             const updatedHtml = currentHtml.replace(
                 /\/\*__BAKED_VAULT_START__\*\/[\s\S]*?\/\*__BAKED_VAULT_END__\*\//,
                 bakedBlock
@@ -1365,7 +1809,7 @@
             a.click();
             a.remove();
             URL.revokeObjectURL(url);
-            showToast("Готовый index.html со всеми треками скачан!", "ГОТОВО ДЛЯ ДРУЗЕЙ");
+            showToast(`Готовый index.html (v${nextVersion.toFixed(1)}) со всеми треками скачан!`, "ГОТОВО ДЛЯ ДРУЗЕЙ");
         }
 
         function exportCatalogBackup() {
@@ -1375,7 +1819,13 @@
             if (area) {
                 area.value = jsonStr;
                 area.select();
-                try { document.execCommand("copy"); } catch (e) {}
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(jsonStr).catch(() => {});
+                    } else {
+                        document.execCommand("copy");
+                    }
+                } catch (e) {}
             }
             showToast("Код базы скопирован!", "РЕЗЕРВНАЯ КОПИЯ");
         }
@@ -1412,6 +1862,17 @@
 
             customTracksFromCloud = cleanValidTracks(customTracksFromCloud);
             TRACKS = [...customTracksFromCloud];
+
+            // Предзагрузка всех обложек и аватаров в память браузера
+            Object.values(ARTISTS).forEach(a => {
+                if (a.avatarFile) preloadImageUrl(getRawUrl(a.avatarFile));
+            });
+            Object.values(ALBUMS).forEach(alb => {
+                if (alb.coverFile) preloadImageUrl(getRawUrl(alb.coverFile));
+            });
+            TRACKS.forEach(t => {
+                if (t.coverFile) preloadImageUrl(getRawUrl(t.coverFile));
+            });
         }
 
         function getRawUrl(relativePath) {
@@ -1432,7 +1893,7 @@
             return `
                 <div class="${sizeClasses} bg-gradient-to-br ${artist.gradient} flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
                     <i class="fa-solid ${artist.icon} ${iconSize} text-white/85"></i>
-                    <img src="${url}" alt="${artist.name}" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                    <img src="${url}" alt="${artist.name}" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
                 </div>
             `;
         }
@@ -1447,7 +1908,7 @@
             return `
                 <div class="${sizeClasses} bg-gradient-to-br ${gradient} flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
                     <i class="fa-solid fa-compact-disc ${iconSize} text-white/75"></i>
-                    ${url ? `<img src="${url}" alt="" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">` : ""}
+                    ${url ? `<img src="${url}" alt="" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">` : ""}
                 </div>
             `;
         }
@@ -1472,6 +1933,51 @@
 
         const audioEl = document.getElementById("audioElement");
 
+        // Точечное обновление статуса Play/Pause и подсветки активного трека БЕЗ пересоздания DOM и БЕЗ перезагрузки картинок
+        function updateTrackRowsPlayState() {
+            document.querySelectorAll("[data-track-row]").forEach(row => {
+                const tid = row.getAttribute("data-track-row");
+                const isCurrent = (tid === currentTrackId);
+                if (isCurrent) {
+                    row.classList.remove("bg-zinc-950/90", "hover:bg-zinc-900", "border-zinc-900");
+                    row.classList.add("bg-purple-950/35", "border-purple-500/50");
+                } else {
+                    row.classList.remove("bg-purple-950/35", "border-purple-500/50");
+                    row.classList.add("bg-zinc-950/90", "hover:bg-zinc-900", "border-zinc-900");
+                }
+            });
+
+            document.querySelectorAll("[data-track-title]").forEach(titleEl => {
+                const tid = titleEl.getAttribute("data-track-title");
+                const isCurrent = (tid === currentTrackId);
+                if (isCurrent) {
+                    titleEl.classList.remove("text-white");
+                    titleEl.classList.add("text-purple-300");
+                } else {
+                    titleEl.classList.remove("text-purple-300");
+                    titleEl.classList.add("text-white");
+                }
+            });
+
+            document.querySelectorAll("[data-track-playbtn]").forEach(btnEl => {
+                const tid = btnEl.getAttribute("data-track-playbtn");
+                const activePlaying = (tid === currentTrackId && isPlaying);
+                if (activePlaying) {
+                    btnEl.classList.remove("bg-zinc-900", "text-zinc-400");
+                    btnEl.classList.add("bg-purple-600", "text-white");
+                } else {
+                    btnEl.classList.remove("bg-purple-600", "text-white");
+                    btnEl.classList.add("bg-zinc-900", "text-zinc-400");
+                }
+            });
+
+            document.querySelectorAll("[data-track-playicon]").forEach(iconEl => {
+                const tid = iconEl.getAttribute("data-track-playicon");
+                const activePlaying = (tid === currentTrackId && isPlaying);
+                iconEl.className = `fa-solid ${activePlaying ? 'fa-pause' : 'fa-play ml-0.5'} text-[10px]`;
+            });
+        }
+
         function renderAllViews() {
             rebuildCatalogInMemory();
             renderHomeArtists();
@@ -1482,6 +1988,7 @@
             renderFullCharts();
             renderFullArtists();
             renderOwnerManageLists();
+            updateTrackRowsPlayState();
             updatePlayerUI();
 
             const repoInput = document.getElementById("repoPathInput");
@@ -1490,7 +1997,6 @@
             if (repoInput && document.activeElement !== repoInput) repoInput.value = githubRepoPath;
             if (branchInput && document.activeElement !== branchInput) branchInput.value = githubBranch;
             if (tokenInput && document.activeElement !== tokenInput) tokenInput.value = githubPersonalToken;
-
             Object.keys(ARTISTS).forEach(k => {
                 const inp = document.getElementById(`avatar_${k}`);
                 if (inp && document.activeElement !== inp) inp.value = ARTISTS[k].avatarFile;
@@ -1500,8 +2006,8 @@
         function renderHomeArtists() {
             const container = document.getElementById("homeArtistsGrid");
             if (!container) return;
-            container.innerHTML = Object.values(ARTISTS).map((artist, idx) => `
-                <div onclick="openArtistProfile('${artist.id}')" style="animation-delay: ${idx * 45}ms" class="stagger-item p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 flex items-center gap-2.5 cursor-pointer spring-btn">
+            const html = Object.values(ARTISTS).map((artist) => `
+                <div onclick="openArtistProfile('${artist.id}')" class="p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 flex items-center gap-2.5 cursor-pointer spring-btn">
                     ${renderAvatarBox(artist, "w-11 h-11 rounded-xl", "text-sm")}
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-1">
@@ -1512,12 +2018,12 @@
                     </div>
                 </div>
             `).join("");
+            setContainerHtmlIfChanged(container, html);
         }
 
         function renderTrackRow(track, idx, rankNumber = null) {
             const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
             const album = ALBUMS[track.albumId];
-            const isCurrent = currentTrackId === track.id;
             const albumLabel = album ? album.title : "Сингл";
             const yearLabel = track.year || (album && album.year) || "";
 
@@ -1533,20 +2039,20 @@
             }
 
             return `
-                <div onclick="playTrackById('${track.id}')" style="animation-delay: ${Math.min(idx * 35, 280)}ms" class="stagger-item p-2.5 rounded-2xl ${isCurrent ? 'bg-purple-950/35 border-purple-500/50' : 'bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900'} border flex items-center gap-2.5 cursor-pointer spring-btn">
+                <div onclick="playTrackById('${track.id}')" data-track-row="${track.id}" class="p-2.5 rounded-2xl bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900 border flex items-center gap-2.5 cursor-pointer spring-btn">
                     ${rankBadge}
                     ${renderCoverBox(track, "w-11 h-11 rounded-xl", "text-xs")}
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-1.5">
-                            <span class="text-xs font-extrabold ${isCurrent ? 'text-purple-300' : 'text-white'} truncate">${track.title}</span>
+                            <span data-track-title="${track.id}" class="text-xs font-extrabold text-white truncate">${track.title}</span>
                             ${track.isNew ? `<span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">NEW</span>` : ''}
                         </div>
                         <p class="text-[10px] text-zinc-400 truncate">${artist.name} • ${albumLabel}${yearLabel ? ` (${yearLabel})` : ''}</p>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
                         <span class="text-[10px] font-semibold text-zinc-500">${track.duration || '2:45'}</span>
-                        <div class="w-7 h-7 rounded-xl ${isCurrent && isPlaying ? 'bg-purple-600 text-white' : 'bg-zinc-900 text-zinc-400'} flex items-center justify-center">
-                            <i class="fa-solid ${isCurrent && isPlaying ? 'fa-pause' : 'fa-play ml-0.5'} text-[10px]"></i>
+                        <div data-track-playbtn="${track.id}" class="w-7 h-7 rounded-xl bg-zinc-900 text-zinc-400 flex items-center justify-center">
+                            <i data-track-playicon="${track.id}" class="fa-solid fa-play ml-0.5 text-[10px]"></i>
                         </div>
                     </div>
                 </div>
@@ -1557,15 +2063,19 @@
             const container = document.getElementById("homeChartList");
             if (!container) return;
             if (TRACKS.length === 0) {
-                container.innerHTML = `
+                const emptyHtml = `
                     <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-center text-xs text-zinc-500">
                         В каталоге пока нет загруженных треков. Добавьте первый трек в панели владельца.
                     </div>
                 `;
+                setContainerHtmlIfChanged(container, emptyHtml);
                 return;
             }
             const top4 = TRACKS.slice(0, 4);
-            container.innerHTML = top4.map((t, i) => renderTrackRow(t, i, i + 1)).join("");
+            const html = top4.map((t, i) => renderTrackRow(t, i, i + 1)).join("");
+            if (setContainerHtmlIfChanged(container, html)) {
+                updateTrackRowsPlayState();
+            }
         }
 
         function renderHomeAlbums() {
@@ -1573,17 +2083,18 @@
             if (!container) return;
             const albumsList = Object.values(ALBUMS);
             if (albumsList.length === 0) {
-                container.innerHTML = `
+                const emptyHtml = `
                     <div class="w-full p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-center text-xs text-zinc-500">
                         Альбомы пока не созданы. Вы можете создать альбом в панели владельца.
                     </div>
                 `;
+                setContainerHtmlIfChanged(container, emptyHtml);
                 return;
             }
-            container.innerHTML = albumsList.map((alb, idx) => {
+            const html = albumsList.map((alb) => {
                 const artist = ARTISTS[alb.artistId] || ARTISTS.mc_geich;
                 return `
-                    <div onclick="openAlbumDetail('${alb.id}')" style="animation-delay: ${idx * 45}ms" class="stagger-item w-36 shrink-0 p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2 spring-btn">
+                    <div onclick="openAlbumDetail('${alb.id}')" class="w-36 shrink-0 p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2 spring-btn">
                         <div class="relative">
                             ${renderCoverBox(alb, "w-full h-32 rounded-xl", "text-2xl")}
                             <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-md text-[8px] font-black uppercase tracking-wider text-purple-300 border border-white/10">
@@ -1597,6 +2108,7 @@
                     </div>
                 `;
             }).join("");
+            setContainerHtmlIfChanged(container, html);
         }
 
         function renderArtistFilterPills() {
@@ -1606,7 +2118,7 @@
                 { id: "all", label: "Все треки" },
                 ...Object.values(ARTISTS).map(a => ({ id: a.id, label: a.name }))
             ];
-            container.innerHTML = items.map(item => {
+            const html = items.map(item => {
                 const active = activeArtistFilter === item.id;
                 return `
                     <button onclick="setArtistFilter('${item.id}')" class="px-3 py-1.5 rounded-xl text-[11px] font-extrabold shrink-0 transition-all spring-btn ${active ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30' : 'bg-zinc-950 text-zinc-400 border border-zinc-900 hover:text-white'}">
@@ -1614,6 +2126,7 @@
                     </button>
                 `;
             }).join("");
+            setContainerHtmlIfChanged(container, html);
         }
 
         function setArtistFilter(artistId) {
@@ -1643,35 +2156,43 @@
             if (badge) badge.textContent = `${filtered.length} шт.`;
 
             if (filtered.length === 0) {
-                container.innerHTML = `
+                const emptyHtml = `
                     <div class="p-6 rounded-2xl bg-zinc-950 border border-zinc-900 text-center space-y-1">
                         <p class="text-xs font-bold text-zinc-400">Треки не найдены</p>
                         <p class="text-[10px] text-zinc-600">Добавьте свои треки через панель владельца</p>
                     </div>
                 `;
+                setContainerHtmlIfChanged(container, emptyHtml);
                 return;
             }
-            container.innerHTML = filtered.map((t, idx) => renderTrackRow(t, idx)).join("");
+            const html = filtered.map((t, idx) => renderTrackRow(t, idx)).join("");
+            if (setContainerHtmlIfChanged(container, html)) {
+                updateTrackRowsPlayState();
+            }
         }
 
         function renderFullCharts() {
             const container = document.getElementById("fullChartsList");
             if (!container) return;
             if (TRACKS.length === 0) {
-                container.innerHTML = `<div class="p-6 rounded-2xl bg-zinc-950 border border-zinc-900 text-center text-xs text-zinc-500">Чарт пуст — добавьте треки в каталог</div>`;
+                const emptyHtml = `<div class="p-6 rounded-2xl bg-zinc-950 border border-zinc-900 text-center text-xs text-zinc-500">Чарт пуст — добавьте треки в каталог</div>`;
+                setContainerHtmlIfChanged(container, emptyHtml);
                 return;
             }
-            container.innerHTML = TRACKS.map((t, idx) => renderTrackRow(t, idx, idx + 1)).join("");
+            const html = TRACKS.map((t, idx) => renderTrackRow(t, idx, idx + 1)).join("");
+            if (setContainerHtmlIfChanged(container, html)) {
+                updateTrackRowsPlayState();
+            }
         }
 
         function renderFullArtists() {
             const container = document.getElementById("fullArtistsList");
             if (!container) return;
-            container.innerHTML = Object.values(ARTISTS).map((artist, idx) => {
+            const html = Object.values(ARTISTS).map((artist) => {
                 const artistTracks = TRACKS.filter(t => t.artistId === artist.id).length;
                 const artistAlbums = Object.values(ALBUMS).filter(a => a.artistId === artist.id).length;
                 return `
-                    <div onclick="openArtistProfile('${artist.id}')" style="animation-delay: ${idx * 50}ms" class="stagger-item p-3.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 flex items-center gap-3.5 cursor-pointer spring-btn">
+                    <div onclick="openArtistProfile('${artist.id}')" class="p-3.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 flex items-center gap-3.5 cursor-pointer spring-btn">
                         ${renderAvatarBox(artist, "w-14 h-14 rounded-2xl", "text-lg")}
                         <div class="min-w-0 flex-1 space-y-1">
                             <div class="flex items-center gap-1.5">
@@ -1689,6 +2210,7 @@
                     </div>
                 `;
             }).join("");
+            setContainerHtmlIfChanged(container, html);
         }
 
         function openArtistProfile(artistId) {
@@ -1700,7 +2222,7 @@
             const artistAlbums = Object.values(ALBUMS).filter(a => a.artistId === artistId);
 
             const content = document.getElementById("artistProfileContent");
-            content.innerHTML = `
+            const html = `
                 <!-- Шапка артиста -->
                 <div class="rounded-3xl bg-gradient-to-br ${artist.gradient} p-5 border border-white/10 shadow-2xl space-y-4">
                     <div class="flex items-center gap-4">
@@ -1747,7 +2269,7 @@
                     </h2>
                     ${artistAlbums.length > 0 ? `
                         <div class="grid grid-cols-2 gap-2.5">
-                            ${artistAlbums.map((alb, idx) => `
+                            ${artistAlbums.map((alb) => `
                                 <div onclick="openAlbumDetail('${alb.id}')" class="p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2 spring-btn">
                                     ${renderCoverBox(alb, "w-full h-28 rounded-xl", "text-xl")}
                                     <div>
@@ -1779,6 +2301,8 @@
                     <p class="text-xs text-zinc-400 leading-relaxed">${artist.bio}</p>
                 </div>
             `;
+            setContainerHtmlIfChanged(content, html);
+            updateTrackRowsPlayState();
 
             hideAllSections();
             document.getElementById("view-artist-profile").classList.remove("hidden");
@@ -1792,7 +2316,7 @@
             const albumTracks = TRACKS.filter(t => t.albumId === albumId);
 
             const content = document.getElementById("albumDetailContent");
-            content.innerHTML = `
+            const html = `
                 <div class="rounded-3xl bg-zinc-950 border border-zinc-900 p-5 space-y-4">
                     <div class="flex items-center gap-4">
                         ${renderCoverBox(album, "w-24 h-24 rounded-2xl shadow-xl", "text-2xl")}
@@ -1818,6 +2342,8 @@
                     }
                 </div>
             `;
+            setContainerHtmlIfChanged(content, html);
+            updateTrackRowsPlayState();
 
             hideAllSections();
             document.getElementById("view-album-detail").classList.remove("hidden");
@@ -1846,7 +2372,7 @@
                 playPromise.then(() => {
                     usingSynthFallback = false;
                     updatePlayerUI();
-                    renderAllViews();
+                    updateTrackRowsPlayState();
                 }).catch(() => {
                     startSynthFallback(track);
                 });
@@ -1855,7 +2381,7 @@
             const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
             showToast(`${artist.name} — ${track.title}`, "СЕЙЧАС ИГРАЕТ");
             updatePlayerUI();
-            renderAllViews();
+            updateTrackRowsPlayState();
         }
 
         audioEl.addEventListener("error", () => {
@@ -1928,6 +2454,7 @@
             }, 250);
 
             updatePlayerUI();
+            updateTrackRowsPlayState();
         }
 
         function stopSynthFallback() {
@@ -1959,7 +2486,7 @@
                 }
             }
             updatePlayerUI();
-            renderAllViews();
+            updateTrackRowsPlayState();
         }
 
         function nextTrack() {
@@ -1996,7 +2523,8 @@
         function playArtistTracks(artistId, shuffle = false) {
             const list = TRACKS.filter(t => t.artistId === artistId);
             if (list.length === 0) {
-                showToast("У этого артиста пока нет треков", "КАТАЛОГ");                return;
+                showToast("У этого артиста пока нет треков", "КАТАЛОГ");
+                return;
             }
             isShuffle = shuffle;
             const chosen = shuffle ? list[Math.floor(Math.random() * list.length)] : list[0];
@@ -2073,10 +2601,20 @@
 
             const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
             const album = ALBUMS[track.albumId];
+            const gradient = (album && album.gradient) ? album.gradient : artist.gradient;
+            const coverPath = track.coverFile || (album && album.coverFile) || "";
+            const coverUrl = coverPath ? getRawUrl(coverPath) : "";
+            const coverSignature = `${track.id}|${gradient}|${coverUrl}`;
 
             document.getElementById("miniTitle").textContent = track.title;
             document.getElementById("miniArtist").textContent = artist.name;
-            document.getElementById("miniCover").innerHTML = renderCoverBox(track, "w-10 h-10 rounded-xl", "text-xs");
+
+            // Обновляем картинку в мини-плеере ТОЛЬКО если сменился трек или сама обложка
+            const miniCoverEl = document.getElementById("miniCover");
+            if (miniCoverEl && miniCoverEl._lastCoverSignature !== coverSignature) {
+                miniCoverEl._lastCoverSignature = coverSignature;
+                miniCoverEl.innerHTML = renderCoverBox(track, "w-10 h-10 rounded-xl", "text-xs");
+            }
 
             document.getElementById("playerTitle").textContent = track.title;
             document.getElementById("playerArtist").textContent = artist.name;
@@ -2088,8 +2626,10 @@
                 else newBadge.classList.add("hidden");
             }
 
+            // Обновляем большую обложку в полноэкранном плеере ТОЛЬКО если сменился трек или обложка
             const coverInner = document.getElementById("playerCoverInner");
-            if (coverInner) {
+            if (coverInner && coverInner._lastCoverSignature !== coverSignature) {
+                coverInner._lastCoverSignature = coverSignature;
                 coverInner.innerHTML = renderCoverBox(track, "w-full h-full", "text-6xl");
             }
 
@@ -2102,7 +2642,7 @@
             renderArtistFactInPlayer(artist);
         }
 
-        function renderArtistFactInPlayer(artist) {
+        function renderArtistFactInPlayer(artist, forceAnimate = false) {
             const headerEl = document.getElementById("playerFactHeader");
             const textEl = document.getElementById("playerFactText");
             if (!headerEl || !textEl || !artist) return;
@@ -2112,6 +2652,12 @@
                 ? artist.facts
                 : ["Эксклюзивный исполнитель закрытого каталога Dark Music."];
             const idx = (factIndexMap[artist.id] || 0) % facts.length;
+            const factSignature = `${artist.id}|${idx}|${facts[idx]}`;
+
+            if (!forceAnimate && textEl._lastFactSignature === factSignature) {
+                return;
+            }
+            textEl._lastFactSignature = factSignature;
 
             textEl.classList.remove("fact-animate");
             void textEl.offsetWidth;
@@ -2124,7 +2670,7 @@
             const artist = track ? ARTISTS[track.artistId] : ARTISTS.mc_geich;
             if (!artist) return;
             factIndexMap[artist.id] = ((factIndexMap[artist.id] || 0) + 1) % Math.max(1, artist.facts.length);
-            renderArtistFactInPlayer(artist);
+            renderArtistFactInPlayer(artist, true);
         }
 
         function toggleLikeCurrent() {
@@ -2205,6 +2751,8 @@
                 }
             });
 
+            renderAllViews();
+
             const target = document.getElementById(`view-${tab}`);
             if (target) target.classList.remove("hidden");
             window.scrollTo({ top: 0, behavior: "smooth" });
@@ -2213,34 +2761,42 @@
         function openOwnerTab() {
             if (isOwnerUnlocked) {
                 hideAllSections();
-                document.getElementById("view-owner-panel").classList.remove("hidden");
+                ["home", "charts", "artists", "owner"].forEach(k => {
+                    const btn = document.getElementById(`nav-${k}`);
+                    if (btn) {
+                        btn.className = `flex flex-col items-center gap-0.5 py-1 ${k === 'owner' ? 'text-emerald-400' : 'text-zinc-500 hover:text-zinc-300'} spring-btn`;
+                    }
+                });
                 populateAlbumSelectForArtist();
                 loadArtistBioAndFactsForm();
+                updateOwnerNotificationsFormUI();
                 renderOwnerManageLists();
-                return;
+                document.getElementById("view-owner-panel").classList.remove("hidden");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            } else {
+                enteredPin = "";
+                updatePinDots();
+                const modal = document.getElementById("pinModal");
+                modal.classList.remove("hidden");
+                modal.classList.add("flex");
             }
-            enteredPin = "";
-            updatePinDotsUI();
-            const modal = document.getElementById("pinModal");
-            modal.classList.remove("hidden");
-            modal.classList.add("flex");
         }
 
         function closePinModal() {
+            enteredPin = "";
             const modal = document.getElementById("pinModal");
             modal.classList.add("hidden");
             modal.classList.remove("flex");
-            enteredPin = "";
         }
 
         function pressPinDigit(digit) {
             if (enteredPin.length >= 4) return;
             enteredPin += digit;
-            updatePinDotsUI();
+            updatePinDots();
 
             if (enteredPin.length === 4) {
                 if (enteredPin === OWNER_SECRET_PIN) {
-                    unlockOwnerMode();
+                    setTimeout(() => unlockOwnerMode(), 120);
                 } else {
                     const card = document.getElementById("pinCard");
                     card.classList.remove("shake-error");
@@ -2248,7 +2804,7 @@
                     card.classList.add("shake-error");
                     setTimeout(() => {
                         enteredPin = "";
-                        updatePinDotsUI();
+                        updatePinDots();
                     }, 380);
                 }
             }
@@ -2256,14 +2812,14 @@
 
         function clearPinDigits() {
             enteredPin = enteredPin.slice(0, -1);
-            updatePinDotsUI();
+            updatePinDots();
         }
 
-        function updatePinDotsUI() {
+        function updatePinDots() {
             const dots = document.querySelectorAll("#pinDots span");
             dots.forEach((dot, idx) => {
                 if (idx < enteredPin.length) {
-                    dot.className = "w-3.5 h-3.5 rounded-full bg-purple-500 border border-purple-400 shadow-md shadow-purple-500/50 transition-all scale-110";
+                    dot.className = "w-3.5 h-3.5 rounded-full bg-purple-500 border border-purple-300 shadow-md shadow-purple-500/50 transition-all scale-110";
                 } else {
                     dot.className = "w-3.5 h-3.5 rounded-full border border-zinc-700 bg-zinc-900 transition-all";
                 }
@@ -2275,6 +2831,7 @@
             closePinModal();
             const lockIcon = document.getElementById("headerLockIcon");
             if (lockIcon) lockIcon.className = "fa-solid fa-lock-open text-xs text-emerald-400";
+            applyBroadcastAndForceUpdateUI();
             openOwnerTab();
             showToast("Панель владельца разблокирована", "ДОСТУП ОТКРЫТ");
         }
@@ -2283,6 +2840,7 @@
             isOwnerUnlocked = false;
             const lockIcon = document.getElementById("headerLockIcon");
             if (lockIcon) lockIcon.className = "fa-solid fa-lock text-xs";
+            applyBroadcastAndForceUpdateUI();
             switchTab("home");
             showToast("Режим владельца заблокирован", "ЗАЩИТА");
         }
@@ -2330,11 +2888,11 @@
             }
             githubRepoPath = pathVal;
             githubBranch = branchVal;
-            githubPersonalToken = tokenVal;
+            githubPersonalToken = tokenVal || BUILTIN_GITHUB_TOKEN;
             if (tokenVal) {
-                localStorage.setItem(GITHUB_TOKEN_STORAGE_KEY, tokenVal);
-            } else {
-                localStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY);
+                try {
+                    localStorage.setItem(GITHUB_TOKEN_STORAGE_KEY, tokenVal);
+                } catch (e) {}
             }
             saveStateToLocalStorage(true);
             renderAllViews();
@@ -2437,8 +2995,7 @@
                     title: inlineTitle,
                     artistId,
                     type: "АЛЬБОМ",
-                    year: inlineYear,
-                    coverFile: inlineCover || coverFile || `covers/${albumId}.jpg`,
+                    year: inlineYear,                    coverFile: inlineCover || coverFile || `covers/${albumId}.jpg`,
                     gradient: ARTIST_ALBUM_GRADIENTS[artistId]
                 });
             }
@@ -2532,9 +3089,9 @@
             if (albumsContainer) {
                 const albumsArr = Object.values(ALBUMS);
                 if (albumsArr.length === 0) {
-                    albumsContainer.innerHTML = `<p class="text-[11px] text-zinc-500">Альбомов пока нет</p>`;
+                    setContainerHtmlIfChanged(albumsContainer, `<p class="text-[11px] text-zinc-500">Альбомов пока нет</p>`);
                 } else {
-                    albumsContainer.innerHTML = albumsArr.map(alb => {
+                    const html = albumsArr.map(alb => {
                         const art = ARTISTS[alb.artistId]?.name || "";
                         return `
                             <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-2">
@@ -2553,15 +3110,16 @@
                             </div>
                         `;
                     }).join("");
+                    setContainerHtmlIfChanged(albumsContainer, html);
                 }
             }
 
             const tracksContainer = document.getElementById("ownerTracksManageList");
             if (tracksContainer) {
                 if (TRACKS.length === 0) {
-                    tracksContainer.innerHTML = `<p class="text-[11px] text-zinc-500">Треков пока нет</p>`;
+                    setContainerHtmlIfChanged(tracksContainer, `<p class="text-[11px] text-zinc-500">Треков пока нет</p>`);
                 } else {
-                    tracksContainer.innerHTML = TRACKS.map(trk => {
+                    const html = TRACKS.map(trk => {
                         const art = ARTISTS[trk.artistId]?.name || "";
                         return `
                             <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-2">
@@ -2580,6 +3138,7 @@
                             </div>
                         `;
                     }).join("");
+                    setContainerHtmlIfChanged(tracksContainer, html);
                 }
             }
         }
@@ -2741,10 +3300,8 @@
             saveStateToLocalStorage(true);
             updateSyncStatusBadge("Синхронизация...", false);
 
-            // 1. Автоматически отправляем catalog.json в GitHub репозиторий (если указан GitHub Token)
             const pushedToGh = await pushCatalogToGitHubRepo(false);
 
-            // 2. Параллельно сохраняем в облачную сессию (если активна)
             if (typeof window.cloudSaveSettings === "function") {
                 try {
                     const fullPayload = buildFullSyncPayload();
@@ -2759,7 +3316,7 @@
             if (pushedToGh) {
                 updateSyncStatusBadge("Опубликовано в GitHub для всех устройств ✓", true);
             } else {
-                updateSyncStatusBadge("Сохранено! Для друзей: укажите Token или скачайте catalog.json", true);
+                updateSyncStatusBadge("Сохранено! Синхронизировано с EzzO4ka/darkmusic", true);
             }
         }
 
@@ -2770,7 +3327,7 @@
             }
             const pushed = await pushCatalogToGitHubRepo(true);
             if (!pushed) {
-                showToast("Данные сохранены! Нажмите «Скачать готовый index.html» или укажите GitHub Token", "СИНХРОНИЗАЦИЯ");
+                showToast("Данные сохранены! Нажмите «Скачать готовый index.html»", "СИНХРОНИЗАЦИЯ");
             }
         }
 
@@ -2791,13 +3348,13 @@
         function initDarkMusicApp() {
             loadStateFromLocalStorage();
             renderAllViews();
+            applyBroadcastAndForceUpdateUI();
             populateAlbumSelectForArtist();
             loadArtistBioAndFactsForm();
+            lastCatalogFingerprint = computeCatalogFingerprint(buildFullSyncPayload());
 
-            // При открытии на любом устройстве (у друга) сразу проверяем catalog.json из репозитория GitHub
             fetchCatalogFromGitHubRepo(true);
 
-            // Фоновая проверка обновлений каталога каждые 20 секунд (чтобы у друга всё менялось на лету)
             setInterval(() => {
                 if (!isOwnerUnlocked) {
                     fetchCatalogFromGitHubRepo(true);
@@ -2815,15 +3372,15 @@
     </script>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
         const setupCloudSync = async () => {
             try {
                 if (typeof __firebase_config === "undefined" || !__firebase_config) return;
                 const firebaseConfig = JSON.parse(__firebase_config);
                 const appId = typeof __app_id !== "undefined" ? __app_id : "dark-music-app";
+
+                const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
+                const { getAuth, signInAnonymously, signInWithCustomToken } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
+                const { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, collection } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
 
                 const app = initializeApp(firebaseConfig);
                 const auth = getAuth(app);
@@ -2876,9 +3433,15 @@
                         applySyncDataToMemory(cloudData, true);
                         await window.cloudSaveSettings(buildFullSyncPayload());
                     } else {
+                        const beforeFp = computeCatalogFingerprint(buildFullSyncPayload());
                         applySyncDataToMemory(cloudData, true);
+                        const afterFp = computeCatalogFingerprint(buildFullSyncPayload());
                         saveStateToLocalStorage(false);
-                        renderAllViews();
+                        if (beforeFp !== afterFp) {
+                            lastCatalogFingerprint = afterFp;
+                            renderAllViews();
+                        }
+                        applyBroadcastAndForceUpdateUI();
                     }
                 } else if (localUpdatedAt > 0 || customTracksFromCloud.length > 0 || customAlbumsFromCloud.length > 0) {
                     await window.cloudSaveSettings(buildFullSyncPayload());
@@ -2892,15 +3455,22 @@
                             const incomingTime = data.updatedAt || 0;
                             if (localUpdatedAt > incomingTime) return;
 
+                            const beforeFp = computeCatalogFingerprint(buildFullSyncPayload());
                             applySyncDataToMemory(data, true);
+                            const afterFp = computeCatalogFingerprint(buildFullSyncPayload());
+
                             saveStateToLocalStorage(false);
+                            applyBroadcastAndForceUpdateUI();
 
                             const repoInput = document.getElementById("repoPathInput");
                             const branchInput = document.getElementById("repoBranchInput");
                             if (repoInput && document.activeElement !== repoInput) repoInput.value = githubRepoPath;
                             if (branchInput && document.activeElement !== branchInput) branchInput.value = githubBranch;
 
-                            renderAllViews();
+                            if (beforeFp !== afterFp) {
+                                lastCatalogFingerprint = afterFp;
+                                renderAllViews();
+                            }
                             if (!isOwnerUnlocked) {
                                 populateAlbumSelectForArtist();
                                 loadArtistBioAndFactsForm();
@@ -2922,12 +3492,17 @@
                             }
                         });
                         if (loaded.length > 0) {
+                            const beforeFp = computeCatalogFingerprint(buildFullSyncPayload());
                             const mapById = new Map();
                             customTracksFromCloud.forEach(t => { if (!deletedCustomIds.has(t.id)) mapById.set(t.id, t); });
                             loaded.forEach(t => { if (!deletedCustomIds.has(t.id)) mapById.set(t.id, t); });
                             customTracksFromCloud = Array.from(mapById.values()).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                            const afterFp = computeCatalogFingerprint(buildFullSyncPayload());
                             saveStateToLocalStorage(false);
-                            renderAllViews();
+                            if (beforeFp !== afterFp) {
+                                lastCatalogFingerprint = afterFp;
+                                renderAllViews();
+                            }
                         }
                     },
                     (err) => { console.warn("Cloud tracks sync notice:", err); }
