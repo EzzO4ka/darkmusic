@@ -54,6 +54,18 @@
   ],
   "customTracks": [
     {
+      "id": "trk_1792603726620",
+      "title": "Перезвон",
+      "artistId": "mc_ezdit",
+      "albumId": "",
+      "filePath": "tracks/mc_ezdit/МС ЕЗДИТЬ - ПЕРЕЗВОН.MP3",
+      "coverFile": "covers/alb_perezvon.jpg",
+      "duration": "9:23",
+      "year": 2026,
+      "isNew": false,
+      "createdAt": 1792603726620
+    },
+    {
       "id": "trk_1792597878782",
       "title": "МАМА ПАПА",
       "artistId": "mc_ezdit",
@@ -102,5 +114,5 @@
     "message": "Обновите приложение. Старая версия не работает",
     "updatedAt": 1792603452086
   },
-  "updatedAt": 1792603452087
+  "updatedAt": 1792603726634
 }
