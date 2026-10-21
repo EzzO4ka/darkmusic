@@ -54,6 +54,18 @@
   ],
   "customTracks": [
     {
+      "id": "trk_1792597878782",
+      "title": "МАМА ПАПА",
+      "artistId": "mc_ezdit",
+      "albumId": "",
+      "filePath": "tracks/mc_ezdit/МС ЕЗДИТЬ - МАМА ПАПА.MP3",
+      "coverFile": "covers/alb_mamapapa",
+      "duration": "2:55",
+      "year": 2026,
+      "isNew": false,
+      "createdAt": 1792597878782
+    },
+    {
       "id": "trk_1792597676680",
       "title": "Маша ебанулась",
       "artistId": "mc_makaka",
@@ -69,5 +81,5 @@
   "deletedCustomIds": [
     "alb_1792597596794"
   ],
-  "updatedAt": 1792597781838
+  "updatedAt": 1792597878802
 }
