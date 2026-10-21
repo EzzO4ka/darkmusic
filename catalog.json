@@ -52,9 +52,22 @@
       "gradient": "from-emerald-600 via-teal-900 to-zinc-950"
     }
   ],
-  "customTracks": [],
+  "customTracks": [
+    {
+      "id": "trk_1792597676680",
+      "title": "Маша ебанулась",
+      "artistId": "mc_makaka",
+      "albumId": "alb_1792597638805",
+      "filePath": "tracks/mc_makaka/МС Макака - Маша ебанулась.mp3",
+      "coverFile": "",
+      "duration": "2:29",
+      "year": 2023,
+      "isNew": false,
+      "createdAt": 1792597676680
+    }
+  ],
   "deletedCustomIds": [
     "alb_1792597596794"
   ],
-  "updatedAt": 1792597638808
+  "updatedAt": 1792597676708
 }
