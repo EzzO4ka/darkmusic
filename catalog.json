@@ -82,11 +82,11 @@
     "alb_1792597596794"
   ],
   "tempBroadcast": {
-    "id": "notif_1792600123249",
+    "id": "",
     "title": "Уведомляем",
     "message": "Временно могут быть ошибки в приложении",
-    "active": true,
-    "createdAt": 1792600123249
+    "active": false,
+    "createdAt": 1792600998958
   },
   "pinnedBroadcast": {
     "id": "",
@@ -102,5 +102,5 @@
     "message": "Обновите приложение. Старая версия не работает",
     "updatedAt": 1792600292309
   },
-  "updatedAt": 1792600995109
+  "updatedAt": 1792600998959
 }
