@@ -90,10 +90,10 @@
   },
   "pinnedBroadcast": {
     "id": "",
-    "title": "Внимание",
-    "message": "Временно не работает плеер. Уже решаем",
+    "title": "Важная информация",
+    "message": "",
     "active": false,
-    "updatedAt": 1792603276836
+    "updatedAt": 1792603341468
   },
   "forceUpdate": {
     "active": false,
@@ -102,5 +102,5 @@
     "message": "Обновите приложение. Старая версия не работает",
     "updatedAt": 1792600292309
   },
-  "updatedAt": 1792603311545
+  "updatedAt": 1792603341469
 }
