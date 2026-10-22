@@ -310,25 +310,25 @@
     "alb_1792597596794"
   ],
   "tempBroadcast": {
-    "id": "",
+    "id": "notif_1792648853159",
     "title": "Объявление Dark Music",
     "message": "Прррпак",
-    "active": false,
-    "createdAt": 1792648339611
+    "active": true,
+    "createdAt": 1792648853160
   },
   "pinnedBroadcast": {
-    "id": "",
+    "id": "pin_1792613226552",
     "title": "Важная информация",
     "message": "Возможны лаги при прослушивании треков. Решаем.",
-    "active": false,
-    "updatedAt": 1792648781705
+    "active": true,
+    "updatedAt": 1792613226552
   },
   "forceUpdate": {
-    "active": true,
+    "active": false,
     "requiredVersion": 2,
     "downloadUrl": "https://fjfjfjfjfjfjfjf.com/fjfjfjfjfjfjf",
     "message": "Обновите приложение. Старая версия не работает",
-    "updatedAt": 1792648786786
+    "updatedAt": 1792648398701
   },
-  "updatedAt": 1792648790461
+  "updatedAt": 1792648853169
 }
