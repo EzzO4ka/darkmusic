@@ -310,11 +310,11 @@
     "alb_1792597596794"
   ],
   "tempBroadcast": {
-    "id": "notif_1792648853159",
+    "id": "",
     "title": "Объявление Dark Music",
     "message": "Прррпак",
-    "active": true,
-    "createdAt": 1792648853160
+    "active": false,
+    "createdAt": 1792648871593
   },
   "pinnedBroadcast": {
     "id": "pin_1792613226552",
@@ -330,5 +330,5 @@
     "message": "Обновите приложение. Старая версия не работает",
     "updatedAt": 1792648398701
   },
-  "updatedAt": 1792648853169
+  "updatedAt": 1792648871594
 }
