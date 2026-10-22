@@ -324,11 +324,11 @@
     "updatedAt": 1792651178533
   },
   "forceUpdate": {
-    "active": true,
+    "active": false,
     "requiredVersion": 2,
     "downloadUrl": "https://fjfjfjfjfjfjfjf.com/fjfjfjfjfjfjf",
     "message": "Обновите приложение. Старая версия не работает",
-    "updatedAt": 1792651321038
+    "updatedAt": 1792651374906
   },
-  "updatedAt": 1792651321040
+  "updatedAt": 1792651374907
 }
