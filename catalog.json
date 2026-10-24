@@ -68,17 +68,17 @@
   ],
   "customTracks": [
     {
-      "id": "trk_1792613045145",
-      "title": "Я",
-      "artistId": "mc_geich",
-      "albumId": "",
+      "isExplicit": true,
       "filePath": "tracks/mc_geich/Геич - Я.mp3",
-      "coverFile": "covers/alb_ya.JPG",
-      "duration": "1:24",
       "year": 2024,
-      "isNew": false,
+      "title": "Я",
+      "duration": "1:24",
       "createdAt": 1792613045145,
-      "isExplicit": true
+      "albumId": "",
+      "isNew": false,
+      "coverFile": "covers/alb_ya.JPG",
+      "artistId": "mc_geich",
+      "id": "trk_1792613045145"
     },
     {
       "id": "trk_1792612989945",
@@ -90,7 +90,8 @@
       "duration": "0:55",
       "year": 2024,
       "isNew": false,
-      "createdAt": 1792612989945
+      "createdAt": 1792612989945,
+      "isExplicit": true
     },
     {
       "id": "trk_1792612900589",
@@ -343,5 +344,5 @@
     "active": false,
     "updatedAt": 0
   },
-  "updatedAt": 1792843287277
+  "updatedAt": 1792843290395
 }
