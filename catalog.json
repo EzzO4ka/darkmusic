@@ -237,17 +237,17 @@
       "isExplicit": true
     },
     {
-      "id": "trk_1792604909501",
-      "title": "Нюхать клей",
-      "artistId": "mc_ezdit",
-      "albumId": "alb_1792604400709",
-      "filePath": "tracks/mc_ezdit/МС Ездить Нюхать клей.mp3",
       "coverFile": "",
-      "duration": "1:05",
       "year": 2024,
       "isNew": false,
+      "albumId": "alb_1792604400709",
       "createdAt": 1792604909501,
-      "isExplicit": true
+      "artistId": "mc_ezdit",
+      "filePath": "tracks/mc_ezdit/МС Ездить Нюхать клей.mp3",
+      "id": "trk_1792604909501",
+      "title": "Нюхать клей",
+      "isExplicit": true,
+      "duration": "1:05"
     },
     {
       "id": "trk_1792604765920",
@@ -259,7 +259,8 @@
       "duration": "1:05",
       "year": 2024,
       "isNew": false,
-      "createdAt": 1792604765920
+      "createdAt": 1792604765920,
+      "isExplicit": true
     },
     {
       "id": "trk_1792604659532",
@@ -356,5 +357,5 @@
     "active": false,
     "updatedAt": 0
   },
-  "updatedAt": 1792843318333
+  "updatedAt": 1792843322844
 }
