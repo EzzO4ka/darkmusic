@@ -224,16 +224,16 @@
       "duration": "1:05"
     },
     {
-      "id": "trk_1792605018896",
       "title": "Отец детей из говна",
       "artistId": "mc_ezdit",
+      "id": "trk_1792605018896",
       "albumId": "alb_1792604400709",
-      "filePath": "tracks/mc_ezdit/МС Ездить Отец детей из говна.mp3",
-      "coverFile": "",
-      "duration": "1:05",
       "year": 2024,
-      "isNew": false,
+      "duration": "1:05",
+      "coverFile": "",
+      "filePath": "tracks/mc_ezdit/МС Ездить Отец детей из говна.mp3",
       "createdAt": 1792605018896,
+      "isNew": false,
       "isExplicit": true
     },
     {
@@ -246,7 +246,8 @@
       "duration": "1:05",
       "year": 2024,
       "isNew": false,
-      "createdAt": 1792604909501
+      "createdAt": 1792604909501,
+      "isExplicit": true
     },
     {
       "id": "trk_1792604765920",
@@ -355,5 +356,5 @@
     "active": false,
     "updatedAt": 0
   },
-  "updatedAt": 1792843316145
+  "updatedAt": 1792843318333
 }
