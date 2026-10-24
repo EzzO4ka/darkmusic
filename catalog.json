@@ -290,29 +290,29 @@
     },
     {
       "id": "trk_1792603726620",
-      "title": "Перезвон",
+      "createdAt": 1792603726620,
+      "year": 2026,
+      "isNew": false,
+      "isExplicit": false,
+      "coverFile": "covers/alb_perezvon.jpg",
       "artistId": "mc_ezdit",
       "albumId": "",
       "filePath": "tracks/mc_ezdit/МС ЕЗДИТЬ - ПЕРЕЗВОН.MP3",
-      "coverFile": "covers/alb_perezvon.jpg",
       "duration": "9:23",
-      "year": 2026,
-      "isNew": false,
-      "createdAt": 1792603726620,
-      "isExplicit": false
+      "title": "Перезвон"
     },
     {
-      "id": "trk_1792597878782",
       "title": "МАМА ПАПА",
       "artistId": "mc_ezdit",
-      "albumId": "",
-      "filePath": "tracks/mc_ezdit/МС ЕЗДИТЬ - МАМА ПАПА.MP3",
+      "id": "trk_1792597878782",
+      "isExplicit": true,
       "coverFile": "covers/alb_mamapapa.jpg",
-      "duration": "2:55",
-      "year": 2026,
+      "filePath": "tracks/mc_ezdit/МС ЕЗДИТЬ - МАМА ПАПА.MP3",
+      "albumId": "",
       "isNew": false,
       "createdAt": 1792597878782,
-      "isExplicit": true
+      "year": 2026,
+      "duration": "2:55"
     },
     {
       "id": "trk_1792597676680",
@@ -324,7 +324,8 @@
       "duration": "2:29",
       "year": 2023,
       "isNew": false,
-      "createdAt": 1792597676680
+      "createdAt": 1792597676680,
+      "isExplicit": true
     }
   ],
   "customVideos": [],
@@ -361,5 +362,5 @@
     "active": false,
     "updatedAt": 0
   },
-  "updatedAt": 1792843333625
+  "updatedAt": 1792843336185
 }
