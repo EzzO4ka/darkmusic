@@ -276,17 +276,17 @@
       "coverFile": ""
     },
     {
-      "id": "trk_1792604538770",
-      "title": "Кто в говнище",
-      "artistId": "mc_ezdit",
       "albumId": "alb_1792604400709",
-      "filePath": "tracks/mc_ezdit/МС Ездить Кто в говнище....mp3",
-      "coverFile": "",
       "duration": "1:05",
-      "year": 2024,
       "isNew": false,
-      "createdAt": 1792604538770,
-      "isExplicit": true
+      "filePath": "tracks/mc_ezdit/МС Ездить Кто в говнище....mp3",
+      "artistId": "mc_ezdit",
+      "title": "Кто в говнище",
+      "coverFile": "",
+      "isExplicit": true,
+      "id": "trk_1792604538770",
+      "year": 2024,
+      "createdAt": 1792604538770
     },
     {
       "id": "trk_1792603726620",
@@ -298,7 +298,8 @@
       "duration": "9:23",
       "year": 2026,
       "isNew": false,
-      "createdAt": 1792603726620
+      "createdAt": 1792603726620,
+      "isExplicit": true
     },
     {
       "id": "trk_1792597878782",
@@ -359,5 +360,5 @@
     "active": false,
     "updatedAt": 0
   },
-  "updatedAt": 1792843327025
+  "updatedAt": 1792843328592
 }
