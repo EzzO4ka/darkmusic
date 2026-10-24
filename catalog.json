@@ -120,17 +120,17 @@
       "duration": "2:01"
     },
     {
-      "id": "trk_1792611936565",
-      "title": "Волшебная бутылочка",
-      "artistId": "mc_makaka",
-      "albumId": "alb_1792597638805",
-      "filePath": "tracks/mc_makaka/МС Макака - Волшебная бутылочка.mp3",
-      "coverFile": "",
-      "duration": "2:18",
-      "year": 2023,
       "isNew": false,
+      "duration": "2:18",
+      "filePath": "tracks/mc_makaka/МС Макака - Волшебная бутылочка.mp3",
+      "year": 2023,
+      "albumId": "alb_1792597638805",
+      "artistId": "mc_makaka",
       "createdAt": 1792611936565,
-      "isExplicit": true
+      "id": "trk_1792611936565",
+      "isExplicit": true,
+      "coverFile": "",
+      "title": "Волшебная бутылочка"
     },
     {
       "id": "trk_1792611895502",
@@ -142,7 +142,8 @@
       "duration": "1:48",
       "year": 2023,
       "isNew": false,
-      "createdAt": 1792611895502
+      "createdAt": 1792611895502,
+      "isExplicit": true
     },
     {
       "id": "trk_1792611847469",
@@ -347,5 +348,5 @@
     "active": false,
     "updatedAt": 0
   },
-  "updatedAt": 1792843297759
+  "updatedAt": 1792843300147
 }
