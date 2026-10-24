@@ -94,17 +94,17 @@
       "title": "Ахмад"
     },
     {
-      "id": "trk_1792612900589",
-      "title": "Про продюсеров",
-      "artistId": "mc_makaka",
-      "albumId": "",
-      "filePath": "tracks/mc_makaka/МС Макака - Про продюсеров.mp3",
-      "coverFile": "covers/alb_prod.jpg",
-      "duration": "0:37",
-      "year": 2023,
       "isNew": false,
+      "id": "trk_1792612900589",
+      "filePath": "tracks/mc_makaka/МС Макака - Про продюсеров.mp3",
+      "year": 2023,
+      "duration": "0:37",
+      "albumId": "",
+      "isExplicit": true,
       "createdAt": 1792612900589,
-      "isExplicit": true
+      "artistId": "mc_makaka",
+      "coverFile": "covers/alb_prod.jpg",
+      "title": "Про продюсеров"
     },
     {
       "id": "trk_1792612000839",
@@ -116,7 +116,8 @@
       "duration": "2:01",
       "year": 2023,
       "isNew": false,
-      "createdAt": 1792612000839
+      "createdAt": 1792612000839,
+      "isExplicit": true
     },
     {
       "id": "trk_1792611936565",
@@ -345,5 +346,5 @@
     "active": false,
     "updatedAt": 0
   },
-  "updatedAt": 1792843293305
+  "updatedAt": 1792843295750
 }
