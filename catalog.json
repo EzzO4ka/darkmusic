@@ -211,17 +211,17 @@
       "year": 2024
     },
     {
-      "id": "trk_1792605048746",
-      "title": "Прогулка по улице",
+      "isExplicit": true,
       "artistId": "mc_ezdit",
+      "year": 2024,
+      "title": "Прогулка по улице",
+      "coverFile": "",
+      "isNew": false,
+      "id": "trk_1792605048746",
       "albumId": "alb_1792604400709",
       "filePath": "tracks/mc_ezdit/МС Ездить Прогулка по улице.mp3",
-      "coverFile": "",
-      "duration": "1:05",
-      "year": 2024,
-      "isNew": false,
       "createdAt": 1792605048746,
-      "isExplicit": true
+      "duration": "1:05"
     },
     {
       "id": "trk_1792605018896",
@@ -233,7 +233,8 @@
       "duration": "1:05",
       "year": 2024,
       "isNew": false,
-      "createdAt": 1792605018896
+      "createdAt": 1792605018896,
+      "isExplicit": true
     },
     {
       "id": "trk_1792604909501",
@@ -354,5 +355,5 @@
     "active": false,
     "updatedAt": 0
   },
-  "updatedAt": 1792843314154
+  "updatedAt": 1792843316145
 }
