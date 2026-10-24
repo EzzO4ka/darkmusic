@@ -263,17 +263,17 @@
       "year": 2024
     },
     {
+      "year": 2024,
+      "filePath": "tracks/mc_ezdit/МС Ездить Ленин наш батюшка (Каломенская).mp3",
       "id": "trk_1792604659532",
       "title": "Ленин наш батюшка (Коломенская)",
-      "artistId": "mc_ezdit",
-      "albumId": "alb_1792604400709",
-      "filePath": "tracks/mc_ezdit/МС Ездить Ленин наш батюшка (Каломенская).mp3",
-      "coverFile": "",
       "duration": "1:13",
-      "year": 2024,
+      "albumId": "alb_1792604400709",
       "isNew": false,
       "createdAt": 1792604659532,
-      "isExplicit": true
+      "artistId": "mc_ezdit",
+      "isExplicit": true,
+      "coverFile": ""
     },
     {
       "id": "trk_1792604538770",
@@ -285,7 +285,8 @@
       "duration": "1:05",
       "year": 2024,
       "isNew": false,
-      "createdAt": 1792604538770
+      "createdAt": 1792604538770,
+      "isExplicit": true
     },
     {
       "id": "trk_1792603726620",
@@ -358,5 +359,5 @@
     "active": false,
     "updatedAt": 0
   },
-  "updatedAt": 1792843324933
+  "updatedAt": 1792843327025
 }
