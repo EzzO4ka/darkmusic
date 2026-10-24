@@ -159,16 +159,16 @@
       "title": "Загеев"
     },
     {
-      "id": "trk_1792605485661",
-      "title": "Моя любовь",
-      "artistId": "mc_makaka",
+      "duration": "1:25",
+      "year": 2023,
+      "createdAt": 1792605485661,
+      "isNew": false,
       "albumId": "alb_1792597638805",
       "filePath": "tracks/mc_makaka/МС Макака - Моя любовь.mp3",
       "coverFile": "",
-      "duration": "1:25",
-      "year": 2023,
-      "isNew": false,
-      "createdAt": 1792605485661,
+      "id": "trk_1792605485661",
+      "artistId": "mc_makaka",
+      "title": "Моя любовь",
       "isExplicit": true
     },
     {
@@ -181,7 +181,8 @@
       "duration": "2:00",
       "year": 2023,
       "isNew": false,
-      "createdAt": 1792605310798
+      "createdAt": 1792605310798,
+      "isExplicit": true
     },
     {
       "id": "trk_1792605138686",
@@ -350,5 +351,5 @@
     "active": false,
     "updatedAt": 0
   },
-  "updatedAt": 1792843306177
+  "updatedAt": 1792843308476
 }
