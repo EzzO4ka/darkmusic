@@ -52,7 +52,8 @@
       "type": "АЛЬБОМ",
       "year": 2023,
       "coverFile": "covers/alb_zageev.jpg",
-      "gradient": "from-emerald-600 via-teal-900 to-zinc-950"
+      "gradient": "from-emerald-600 via-teal-900 to-zinc-950",
+      "isExplicit": true
     },
     {
       "id": "alb_1792604400709",
@@ -341,5 +342,5 @@
     "active": false,
     "updatedAt": 0
   },
-  "updatedAt": 1792843279595
+  "updatedAt": 1792843282189
 }
