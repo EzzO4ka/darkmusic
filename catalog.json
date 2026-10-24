@@ -185,17 +185,17 @@
       "coverFile": ""
     },
     {
-      "id": "trk_1792605138686",
-      "title": "Что делать сегодня",
       "artistId": "mc_ezdit",
       "albumId": "alb_1792604400709",
-      "filePath": "tracks/mc_ezdit/МС Ездить Что делать вегодня....mp3",
-      "coverFile": "",
-      "duration": "1:05",
+      "isExplicit": true,
+      "title": "Что делать сегодня",
       "year": 2024,
       "isNew": false,
+      "coverFile": "",
+      "duration": "1:05",
+      "filePath": "tracks/mc_ezdit/МС Ездить Что делать вегодня....mp3",
       "createdAt": 1792605138686,
-      "isExplicit": true
+      "id": "trk_1792605138686"
     },
     {
       "id": "trk_1792605088772",
@@ -207,7 +207,8 @@
       "duration": "1:05",
       "year": 2024,
       "isNew": false,
-      "createdAt": 1792605088772
+      "createdAt": 1792605088772,
+      "isExplicit": true
     },
     {
       "id": "trk_1792605048746",
@@ -352,5 +353,5 @@
     "active": false,
     "updatedAt": 0
   },
-  "updatedAt": 1792843310334
+  "updatedAt": 1792843312621
 }
