@@ -133,17 +133,17 @@
       "title": "Волшебная бутылочка"
     },
     {
-      "id": "trk_1792611895502",
-      "title": "Не еби мне мозги",
-      "artistId": "mc_makaka",
-      "albumId": "alb_1792597638805",
-      "filePath": "tracks/mc_makaka/МС Макака - Не еби мне мозги.mp3",
-      "coverFile": "",
-      "duration": "1:48",
       "year": 2023,
-      "isNew": false,
+      "artistId": "mc_makaka",
+      "id": "trk_1792611895502",
+      "albumId": "alb_1792597638805",
       "createdAt": 1792611895502,
-      "isExplicit": true
+      "title": "Не еби мне мозги",
+      "coverFile": "",
+      "isNew": false,
+      "duration": "1:48",
+      "isExplicit": true,
+      "filePath": "tracks/mc_makaka/МС Макака - Не еби мне мозги.mp3"
     },
     {
       "id": "trk_1792611847469",
@@ -155,7 +155,8 @@
       "duration": "1:50",
       "year": 2023,
       "isNew": false,
-      "createdAt": 1792611847469
+      "createdAt": 1792611847469,
+      "isExplicit": true
     },
     {
       "id": "trk_1792605485661",
@@ -348,5 +349,5 @@
     "active": false,
     "updatedAt": 0
   },
-  "updatedAt": 1792843300147
+  "updatedAt": 1792843303968
 }
