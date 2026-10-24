@@ -208,11 +208,54 @@
                     <span>Скачать новую версию</span>
                 </a>
                 <div class="pt-2 border-t border-zinc-900 flex items-center justify-between text-[10px] text-zinc-600">
-                    <span id="forceUpdateVersionBadge">Текущая сборка: v1.0</span>
+                    <span id="forceUpdateVersionBadge">Текущая сборка: v2.0</span>
                     <button onclick="openOwnerTab()" class="text-zinc-500 hover:text-zinc-300 font-bold flex items-center gap-1">
                         <i class="fa-solid fa-key text-[9px]"></i>
                         <span>Владелец</span>
                     </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ПОЛНОЭКРАННОЕ ОКНО «ЧТО НОВОГО В ОБНОВЛЕНИИ» -->
+        <div id="whatsNewModal" class="fixed inset-0 z-[65] hidden bg-black/95 backdrop-blur-3xl flex-col items-center justify-center p-5 max-w-[430px] mx-auto">
+            <div class="w-full max-w-[370px] rounded-3xl bg-zinc-950 border border-purple-500/40 p-6 space-y-5 shadow-2xl shadow-purple-950/60 relative overflow-hidden flex flex-col max-h-[85vh]">
+                <div class="absolute -top-12 -right-12 w-36 h-36 rounded-full bg-purple-600/20 blur-3xl pointer-events-none"></div>
+                <div class="flex items-center gap-3.5 shrink-0">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-600 via-fuchsia-600 to-indigo-900 flex items-center justify-center text-white shadow-lg shadow-purple-600/30 border border-white/15 shrink-0">
+                        <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <span id="whatsNewVersionTag" class="px-2 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-300 text-[9px] font-black uppercase tracking-widest">ЧТО НОВОГО</span>
+                        <h2 id="whatsNewTitle" class="text-base font-black text-white truncate mt-1">Обновление Dark Music</h2>
+                    </div>
+                </div>
+                <div id="whatsNewBody" class="text-xs text-zinc-300 leading-relaxed whitespace-pre-line overflow-y-auto no-scrollbar pr-1 flex-1 bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-3.5">
+                </div>
+                <button onclick="dismissWhatsNewModal()" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 hover:opacity-95 text-white font-black text-xs flex items-center justify-center gap-2 shadow-xl shadow-purple-600/30 spring-btn shrink-0">
+                    <i class="fa-solid fa-check text-sm"></i>
+                    <span>Отлично, перейти к музыке</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО ПРОСМОТРА ВИДЕОКЛИПА ВНУТРИ ПРИЛОЖЕНИЯ -->
+        <div id="videoPlayerModal" class="fixed inset-0 z-[68] hidden bg-black/95 backdrop-blur-3xl flex-col justify-center items-center p-4 max-w-[430px] mx-auto">
+            <div class="w-full rounded-3xl bg-zinc-950 border border-zinc-800 overflow-hidden shadow-2xl space-y-3 p-4">
+                <div class="flex items-center justify-between gap-2">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-1.5">
+                            <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[8px] font-black uppercase tracking-widest">ВИДЕОКЛИП</span>
+                            <span id="videoModalExplicit" class="hidden px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase">18+</span>
+                        </div>
+                        <h3 id="videoModalTitle" class="text-sm font-black text-white truncate mt-1">Название клипа</h3>
+                        <p id="videoModalArtist" class="text-[11px] text-zinc-400 truncate">Артист</p>
+                    </div>
+                    <button onclick="closeVideoPlayerModal()" class="w-9 h-9 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 flex items-center justify-center shrink-0 spring-btn">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
+                <div id="videoModalContainer" class="w-full aspect-video rounded-2xl bg-black overflow-hidden border border-zinc-900 relative flex items-center justify-center">
                 </div>
             </div>
         </div>
@@ -260,8 +303,16 @@
         <!-- ШАПКА ПРИЛОЖЕНИЯ -->
         <header class="sticky top-0 z-20 bg-black/85 backdrop-blur-xl px-4 py-3 flex items-center justify-between border-b border-zinc-900/80">
             <button onclick="switchTab('home')" class="flex items-center gap-2.5 text-left spring-btn">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-600 via-fuchsia-600 to-indigo-900 flex items-center justify-center shadow-lg shadow-purple-600/30 border border-purple-400/30">
-                    <i class="fa-solid fa-compact-disc text-white text-sm"></i>
+                <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center shadow-lg shadow-purple-600/20 border border-zinc-700/80 relative overflow-hidden shrink-0">
+                    <!-- Встроенный векторный логотип ноты в круге (резерв до загрузки файла) -->
+                    <svg viewBox="0 0 100 100" class="w-7 h-7 text-black" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M47 10 A40 40 0 0 0 45 90" stroke="currentColor" stroke-width="7.5" stroke-linecap="round"/>
+                        <path d="M53 90 A40 40 0 0 0 77 21" stroke="currentColor" stroke-width="7.5" stroke-linecap="round"/>
+                        <ellipse cx="43" cy="68" rx="14" ry="11" transform="rotate(-22 43 68)" fill="currentColor"/>
+                        <path d="M53 64 V16 C53 16 80 28 75 53 C71 40 59 35 53 35" fill="currentColor"/>
+                        <rect x="50.5" y="15" width="5.5" height="50" rx="2.5" fill="currentColor"/>
+                    </svg>
+                    <img id="appHeaderLogoImg" src="" alt="Dark Music Logo" decoding="async" class="absolute inset-0 w-full h-full object-cover" style="display:none" onload="this.style.display='block'" onerror="if(!this.dataset.triedSub){this.dataset.triedSub='1';this.src=getRawUrl('avatars/logo.png');}else{this.style.display='none';}">
                 </div>
                 <div>
                     <div class="flex items-center gap-1.5">
@@ -404,6 +455,42 @@
                     <!-- Список треков -->
                     <div id="homeAllTracksList" class="space-y-2"></div>
                 </div>
+
+                <!-- ВИДЕОКЛИПЫ НА ГЛАВНОЙ -->
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400 text-xs">
+                                <i class="fa-solid fa-clapperboard"></i>
+                            </span>
+                            <div>
+                                <h2 class="text-sm font-black tracking-tight text-white">Видеоклипы</h2>
+                                <p class="text-[10px] text-zinc-500">Смотрите клипы прямо в приложении</p>
+                            </div>
+                        </div>
+                        <span id="totalVideosBadge" class="px-2.5 py-0.5 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] font-bold text-zinc-400">0</span>
+                    </div>
+                    <div id="homeVideosList" class="grid grid-cols-1 gap-3"></div>
+                </div>
+
+                <!-- НОВОСТИ И АНОНСЫ НА ГЛАВНОЙ -->
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xs">
+                                <i class="fa-solid fa-newspaper"></i>
+                            </span>
+                            <div>
+                                <h2 class="text-sm font-black tracking-tight text-white">Новости и анонсы</h2>
+                                <p class="text-[10px] text-zinc-500">Будущие релизы, дропы и обновления</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Фильтр новостей по артистам и общим новостям -->
+                    <div id="newsFilterPills" class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1"></div>
+                    <!-- Лента новостей -->
+                    <div id="homeNewsList" class="space-y-2.5"></div>
+                </div>
             </section>
 
             <!-- ВКЛАДКА: ОФИЦИАЛЬНЫЙ ЧАРТ -->
@@ -545,7 +632,7 @@
                             </div>
                             <div>
                                 <label class="text-[9px] text-zinc-400 block mb-0.5">Версия этого файла</label>
-                                <input id="ownerCurrentLocalVersion" type="text" disabled value="1.0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-zinc-400">
+                                <input id="ownerCurrentLocalVersion" type="text" disabled value="2.0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-zinc-400">
                             </div>
                         </div>
                         <input id="ownerForceUpdateUrl" type="text" placeholder="Ссылка на скачивание новой версии (https://...)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-rose-500">
@@ -556,6 +643,27 @@
                             </button>
                             <button onclick="saveOwnerForceUpdate(false)" class="py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold text-[11px] spring-btn">
                                 Снять блокировку
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Г) Полноэкранное окно «Что нового» для новой версии -->
+                    <div class="p-3 rounded-xl bg-purple-950/20 border border-purple-500/30 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-extrabold text-purple-300">4. Окно «Что нового» на весь экран</span>
+                            <span id="whatsNewStatusBadge" class="text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">Выкл</span>
+                        </div>
+                        <p class="text-[10px] text-zinc-400 leading-relaxed">
+                            Показывает пользователям полноэкранное окно со списком изменений новой версии.
+                        </p>
+                        <input id="ownerWhatsNewTitle" type="text" placeholder="Заголовок (например: Что нового в Dark Music v2.0)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                        <textarea id="ownerWhatsNewContent" rows="3" placeholder="Опишите, что нового добавилось (каждый пункт с новой строки)..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500"></textarea>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="saveOwnerWhatsNew(true)" class="py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-[11px] spring-btn">
+                                Включить показ «Что нового»
+                            </button>
+                            <button onclick="saveOwnerWhatsNew(false)" class="py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold text-[11px] spring-btn">
+                                Отключить окно
                             </button>
                         </div>
                     </div>
@@ -607,7 +715,13 @@
                             </select>
                             <input id="newAlbumYearInput" type="number" value="2025" placeholder="Год" class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
                         </div>
-                        <input id="newAlbumCoverInput" type="text" placeholder="Путь к обложке (например: covers/alb_zageev.jpg)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-fuchsia-500">
+                        <div class="flex items-center gap-2">
+                            <input id="newAlbumCoverInput" type="text" placeholder="Путь к обложке (например: covers/alb_zageev.jpg)" class="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-fuchsia-500">
+                            <label class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-zinc-900 border border-rose-500/40 text-rose-400 text-xs font-black cursor-pointer shrink-0">
+                                <input id="newAlbumExplicitInput" type="checkbox" class="accent-rose-500 rounded">
+                                <span>18+</span>
+                            </label>
+                        </div>
                         <button onclick="createNewOwnerAlbum()" class="w-full py-2.5 rounded-xl bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold text-xs spring-btn">
                             + Создать альбом
                         </button>
@@ -638,7 +752,13 @@
 
                         <!-- Быстрое создание альбома прямо при добавлении трека -->
                         <div id="inlineNewAlbumBox" class="hidden p-3 rounded-xl bg-zinc-900/90 border border-fuchsia-500/40 space-y-2">
-                            <div class="text-[10px] font-bold text-fuchsia-400">Новый альбом для этого трека:</div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-bold text-fuchsia-400">Новый альбом для этого трека:</span>
+                                <label class="flex items-center gap-1 text-[10px] font-black text-rose-400 cursor-pointer">
+                                    <input id="inlineAlbumExplicit" type="checkbox" class="accent-rose-500 rounded">
+                                    <span>Альбом 18+</span>
+                                </label>
+                            </div>
                             <input id="inlineAlbumTitle" type="text" placeholder="Название нового альбома (например: ЗАГЕЕВ)" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white">
                             <div class="grid grid-cols-2 gap-2">
                                 <input id="inlineAlbumCover" type="text" placeholder="covers/alb_zageev.jpg" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white">
@@ -649,12 +769,19 @@
                         <input id="newTrackFile" type="text" placeholder="Путь к MP3 (например: tracks/Черный сервер.mp3)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                         <input id="newTrackCover" type="text" placeholder="Обложка трека (необязательно: covers/my_cover.jpg)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
 
-                        <div class="grid grid-cols-3 gap-2 items-center">
+                        <div class="grid grid-cols-2 gap-2 items-center">
                             <input id="newTrackDuration" type="text" value="2:45" placeholder="Длит. (2:45)" class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
                             <input id="newTrackYear" type="number" value="2025" placeholder="Год (2025)" class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
-                            <label class="flex items-center gap-2 text-xs text-zinc-300 cursor-pointer justify-center">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 items-center">
+                            <label class="flex items-center gap-2 py-2 px-3 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 cursor-pointer justify-center">
                                 <input id="newTrackIsNew" type="checkbox" checked class="accent-purple-500 rounded">
                                 <span class="text-[11px] font-bold">NEW релиз</span>
+                            </label>
+                            <label class="flex items-center gap-2 py-2 px-3 rounded-xl bg-zinc-900 border border-rose-500/40 text-xs text-rose-400 cursor-pointer justify-center">
+                                <input id="newTrackIsExplicit" type="checkbox" class="accent-rose-500 rounded">
+                                <span class="text-[11px] font-black">Плашка 18+</span>
                             </label>
                         </div>
 
@@ -738,11 +865,77 @@
                     <div id="ownerTracksManageList" class="space-y-2.5 max-h-60 overflow-y-auto no-scrollbar"></div>
                 </div>
 
-                <!-- 8. Резервная копия каталога (Экспорт / Импорт) -->
+                <!-- 8. Добавление и редактирование ВИДЕОКЛИПОВ -->
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-purple-500/30 space-y-3">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-purple-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-clapperboard"></i>
+                        <span>8. Видеоклипы (добавление и управление)</span>
+                    </h3>
+                    <div class="space-y-2.5">
+                        <input id="newVideoTitle" type="text" placeholder="Название видеоклипа" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="newVideoArtist" class="bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
+                                <option value="mc_geich">МС ГЕИЧ</option>
+                                <option value="mc_makaka">МС МАКАКА</option>
+                                <option value="mc_ezdit">МС ЕЗДИТЬ</option>
+                                <option value="mc_oparysh">МС ОПАРЫШ</option>
+                            </select>
+                            <input id="newVideoYear" type="number" value="2025" placeholder="Год (2025)" class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                        </div>
+                        <input id="newVideoPreview" type="text" placeholder="Превью-картинка (например: covers/clip1.jpg или https://...)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                        <textarea id="newVideoSource" rows="2" placeholder="Ссылка на видео (mp4 / YouTube / VK) ИЛИ код плеера (<iframe ...>)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500"></textarea>
+                        <div class="flex items-center justify-between gap-2">
+                            <input id="newVideoDuration" type="text" value="3:10" placeholder="Длит. (3:10)" class="w-1/2 bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            <label class="w-1/2 flex items-center gap-2 py-2 px-3 rounded-xl bg-zinc-900 border border-rose-500/40 text-xs text-rose-400 cursor-pointer justify-center">
+                                <input id="newVideoIsExplicit" type="checkbox" class="accent-rose-500 rounded">
+                                <span class="text-[11px] font-black">Клип 18+</span>
+                            </label>
+                        </div>
+                        <button onclick="addOwnerVideoClip()" class="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs spring-btn">
+                            + Опубликовать видеоклип
+                        </button>
+                    </div>
+                    <div class="pt-2 border-t border-zinc-900 space-y-2">
+                        <div class="text-[10px] font-bold text-zinc-400 uppercase">Опубликованные видеоклипы:</div>
+                        <div id="ownerVideosManageList" class="space-y-2 max-h-56 overflow-y-auto no-scrollbar"></div>
+                    </div>
+                </div>
+
+                <!-- 9. Публикация и редактирование НОВОСТЕЙ -->
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-amber-500/30 space-y-3">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-newspaper"></i>
+                        <span>9. Новости артистов и приложения</span>
+                    </h3>
+                    <div class="space-y-2.5">
+                        <input id="newNewsTitle" type="text" placeholder="Заголовок новости (например: Анонс нового альбома!)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500">
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="newNewsTarget" class="bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
+                                <option value="app">⚡ Общая новость приложения</option>
+                                <option value="mc_geich">МС ГЕИЧ</option>
+                                <option value="mc_makaka">МС МАКАКА</option>
+                                <option value="mc_ezdit">МС ЕЗДИТЬ</option>
+                                <option value="mc_oparysh">МС ОПАРЫШ</option>
+                            </select>
+                            <input id="newNewsDate" type="text" placeholder="Дата / Метка (например: Сегодня)" class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                        </div>
+                        <input id="newNewsImage" type="text" placeholder="Картинка к новости (необязательно: covers/news1.jpg)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500">
+                        <textarea id="newNewsContent" rows="3" placeholder="Текст новости (о будущих релизах, обновлениях приложения, планах и т.д.)..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"></textarea>
+                        <button onclick="addOwnerNewsItem()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs spring-btn">
+                            + Опубликовать новость
+                        </button>
+                    </div>
+                    <div class="pt-2 border-t border-zinc-900 space-y-2">
+                        <div class="text-[10px] font-bold text-zinc-400 uppercase">Опубликованные новости:</div>
+                        <div id="ownerNewsManageList" class="space-y-2 max-h-56 overflow-y-auto no-scrollbar"></div>
+                    </div>
+                </div>
+
+                <!-- 10. Резервная копия каталога (Экспорт / Импорт) -->
                 <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 space-y-3">
-                    <h3 class="text-xs font-black uppercase tracking-wider text-amber-400">8. Независимая резервная копия (JSON)</h3>
+                    <h3 class="text-xs font-black uppercase tracking-wider text-amber-400">10. Независимая резервная копия (JSON)</h3>
                     <p class="text-[10px] text-zinc-400 leading-relaxed">
-                        Вы можете в любой момент скопировать код всего вашего каталога (треки, альбомы, биографии, факты) или вставить его для мгновенного восстановления.
+                        Вы можете в любой момент скопировать код всего вашего каталога (треки, альбомы, клипы, новости, биографии, факты) или вставить его для мгновенного восстановления.
                     </p>
                     <div class="grid grid-cols-2 gap-2">
                         <button onclick="exportCatalogBackup()" class="py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-amber-400 font-bold text-[11px] flex items-center justify-center gap-1.5 spring-btn">
@@ -760,6 +953,18 @@
 
         </main>
 
+        <!-- ОБЯЗАТЕЛЬНЫЙ ДИСКЛЕЙМЕР 18+ В САМОМ НИЗУ ПРИЛОЖЕНИЯ -->
+        <footer class="px-4 pt-6 pb-4 mt-auto">
+            <div class="p-3.5 rounded-2xl bg-zinc-950/90 border border-zinc-900/90 text-[10px] text-zinc-500 leading-relaxed text-center space-y-1.5">
+                <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-rose-500/15 border border-rose-500/30 text-rose-400 font-black text-[9px] uppercase tracking-wider">
+                    <span>18+</span>
+                </div>
+                <p>
+                    Сервис Dark Music может содержать информацию, не предназначенную для несовершеннолетних. Эти материалы отмечены значком (18+). Незаконное потребление наркотических средств, психотропных веществ, их аналогов причиняет вред здоровью, их незаконный оборот запрещен и влечет установленную законодательством ответственность
+                </p>
+            </div>
+        </footer>
+
         <!-- МИНИ-ПЛЕЕР + НИЖНЯЯ НАВИГАЦИЯ -->
         <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-30 bg-black/95 backdrop-blur-2xl border-t border-zinc-900 px-3 pt-1.5 pb-2 space-y-1.5">
             <!-- Неоновая полоса прогресса мини-плеера -->
@@ -776,6 +981,7 @@
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-1.5">
                             <p id="miniTitle" class="text-xs font-extrabold text-white truncate">Выберите трек</p>
+                            <span id="miniExplicitBadge" class="hidden px-1 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>
                         </div>
                         <p id="miniArtist" class="text-[10px] text-zinc-400 truncate">Dark Music</p>
                     </div>
@@ -791,8 +997,7 @@
             </div>
 
             <!-- Нижнее меню (5 кнопок с центральной кнопкой-шаффлом) -->
-            <nav class="grid grid-cols-5 items-center pt-0.5">
-                <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center gap-0.5 py-1 text-purple-400 spring-btn">
+            <nav class="grid grid-cols-5 items-center pt-0.5">                <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center gap-0.5 py-1 text-purple-400 spring-btn">
                     <i class="fa-solid fa-house text-sm"></i>
                     <span class="text-[10px] font-bold">Главная</span>
                 </button>
@@ -837,7 +1042,7 @@
             <!-- Квадратная обложка трека/альбома -->
             <div class="my-3 flex justify-center">
                 <div id="playerCoverCard" class="w-64 h-64 sm:w-72 sm:h-72 rounded-3xl bg-gradient-to-br from-purple-700 via-indigo-950 to-black border border-white/15 shadow-2xl shadow-purple-950/60 relative overflow-hidden flex items-center justify-center cover-playing">
-                    <span class="absolute top-3 left-3 z-20 px-2.5 py-1 rounded-lg bg-black/65 backdrop-blur-md border border-white/10 text-[9px] font-black uppercase tracking-widest text-zinc-200">
+                    <span id="playerCoverBadge" class="absolute top-3 left-3 z-20 px-2.5 py-1 rounded-lg bg-black/65 backdrop-blur-md border border-white/10 text-[9px] font-black uppercase tracking-widest text-zinc-200">
                         ALBUM TRACK
                     </span>
                     <div id="playerCoverInner" class="w-full h-full flex items-center justify-center">
@@ -849,9 +1054,10 @@
             <!-- Название трека, артист и лайк -->
             <div class="flex items-center justify-between gap-3">
                 <div class="min-w-0 flex-1">
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-1.5">
                         <h2 id="playerTitle" class="text-lg font-black text-white truncate">Название трека</h2>
-                        <span id="playerNewBadge" class="hidden px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[9px] font-black uppercase">NEW</span>
+                        <span id="playerExplicitBadge" class="hidden px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/50 text-rose-400 text-[9px] font-black uppercase shrink-0">18+</span>
+                        <span id="playerNewBadge" class="hidden px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[9px] font-black uppercase shrink-0">NEW</span>
                     </div>
                     <button id="playerArtistBtn" onclick="openCurrentTrackArtist()" class="flex items-center gap-1.5 text-xs font-bold text-zinc-400 hover:text-white mt-0.5">
                         <span id="playerArtist">МС ГЕИЧ</span>
@@ -966,16 +1172,26 @@
     </div>
 
     <!-- АУДИО-ЭЛЕМЕНТ -->
-    <audio id="audioElement" preload="metadata"></audio>
+    <audio id="audioElement" preload="auto" playsinline></audio>
 
     <script>
         /*__BAKED_VAULT_START__*/
         window.__BAKED_VAULT_DATA__ = null;
-        window.__APP_BUILD_VERSION__ = 1.0;
+        window.__APP_BUILD_VERSION__ = 2.0;
         /*__BAKED_VAULT_END__*/
 
-        // Секретный код владельца (скрыт от интерфейса)
-        const OWNER_SECRET_PIN = "4681";
+        // Зашифрованная проверка ключа доступа владельца (побайтовый XOR-дайджест без хранения открытого кода)
+        function _verifyAccessDigest(s) {
+            const clean = String(s || "").trim();
+            if (clean.length !== 4) return false;
+            const c = [
+                clean.charCodeAt(0) ^ 0x63,
+                clean.charCodeAt(1) ^ 0x29,
+                clean.charCodeAt(2) ^ 0x72,
+                clean.charCodeAt(3) ^ 0x4d
+            ];
+            return c[0] === 87 && c[1] === 31 && c[2] === 74 && c[3] === 124;
+        }
         let isOwnerUnlocked = false;
         let enteredPin = "";
 
@@ -990,14 +1206,16 @@
         let githubPersonalToken = BUILTIN_GITHUB_TOKEN;
 
         // Текущая версия установленного файла приложения
-        let currentAppBuildVersion = Number(window.__APP_BUILD_VERSION__) || 1.0;
+        let currentAppBuildVersion = Number(window.__APP_BUILD_VERSION__) || 2.0;
 
-        // Состояние глобальных уведомлений и принудительного обновления
+        // Состояние глобальных уведомлений, окна «Что нового» и принудительного обновления
         let tempBroadcastData = { id: "", title: "", message: "", active: false, createdAt: 0 };
         let pinnedBroadcastData = { id: "", title: "", message: "", active: false, updatedAt: 0 };
         let forceUpdateData = { active: false, requiredVersion: 2.0, downloadUrl: "", message: "", updatedAt: 0 };
+        let whatsNewData = { id: "", title: "", content: "", version: 2.0, active: false, updatedAt: 0 };
 
-        let tempBroadcastTimeout = null;        let tempBroadcastInterval = null;
+        let tempBroadcastTimeout = null;
+        let tempBroadcastInterval = null;
         let lastCatalogFingerprint = "";
 
         // Кэш предзагруженных картинок в оперативной памяти браузера (чтобы они никогда не моргали)
@@ -1092,10 +1310,15 @@
 
         let ALBUMS = {};
         let TRACKS = [];
+        let VIDEOS = [];
+        let NEWS = [];
         let customTracksFromCloud = [];
         let customAlbumsFromCloud = [];
+        let customVideosFromCloud = [];
+        let customNewsFromCloud = [];
         let deletedCustomIds = new Set();
         let localUpdatedAt = 0;
+        let activeNewsFilter = "all";
 
         const ARTIST_ALBUM_GRADIENTS = {
             mc_makaka: "from-emerald-600 via-teal-900 to-zinc-950",
@@ -1145,6 +1368,28 @@
             });
         }
 
+        function cleanValidVideos(videosArr) {
+            if (!Array.isArray(videosArr)) return [];
+            const seen = new Set();
+            return videosArr.filter(v => {
+                if (!v || !v.id || !v.title || deletedCustomIds.has(v.id)) return false;
+                if (seen.has(v.id)) return false;
+                seen.add(v.id);
+                return true;
+            });
+        }
+
+        function cleanValidNews(newsArr) {
+            if (!Array.isArray(newsArr)) return [];
+            const seen = new Set();
+            return newsArr.filter(n => {
+                if (!n || !n.id || !n.title || deletedCustomIds.has(n.id)) return false;
+                if (seen.has(n.id)) return false;
+                seen.add(n.id);
+                return true;
+            });
+        }
+
         function buildFullSyncPayload() {
             const artistBios = {};
             const artistRoles = {};
@@ -1166,10 +1411,13 @@
                 artistFacts,
                 customAlbums: cleanValidAlbums(customAlbumsFromCloud),
                 customTracks: cleanValidTracks(customTracksFromCloud),
+                customVideos: cleanValidVideos(customVideosFromCloud),
+                customNews: cleanValidNews(customNewsFromCloud),
                 deletedCustomIds: Array.from(deletedCustomIds),
                 tempBroadcast: tempBroadcastData,
                 pinnedBroadcast: pinnedBroadcastData,
                 forceUpdate: forceUpdateData,
+                whatsNew: whatsNewData,
                 updatedAt: localUpdatedAt || Date.now()
             };
         }
@@ -1177,15 +1425,18 @@
         function computeCatalogFingerprint(data) {
             try {
                 return JSON.stringify({
-                    t: (data.customTracks || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.albumId}_${x.filePath}_${x.coverFile}_${x.year}_${x.duration}_${x.isNew}`),
-                    a: (data.customAlbums || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.type}_${x.coverFile}_${x.year}`),
+                    t: (data.customTracks || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.albumId}_${x.filePath}_${x.coverFile}_${x.year}_${x.duration}_${x.isNew}_${Boolean(x.isExplicit)}`),
+                    a: (data.customAlbums || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.type}_${x.coverFile}_${x.year}_${Boolean(x.isExplicit)}`),
+                    v: (data.customVideos || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.previewFile}_${x.videoSource}_${x.year}_${Boolean(x.isExplicit)}`),
+                    n: (data.customNews || []).map(x => `${x.id}_${x.title}_${x.targetId}_${x.dateText}_${x.imageFile}_${x.content}`),
                     av: data.avatars || {},
                     b: data.artistBios || {},
                     r: data.artistRoles || {},
                     f: data.artistFacts || {},
                     tb: data.tempBroadcast || {},
                     pb: data.pinnedBroadcast || {},
-                    fu: data.forceUpdate || {}
+                    fu: data.forceUpdate || {},
+                    wn: data.whatsNew || {}
                 });
             } catch (e) {
                 return String(Date.now());
@@ -1194,6 +1445,7 @@
 
         function applySyncDataToMemory(data, mergeMode = true) {
             if (!data || typeof data !== "object") return;
+            const incomingIsNewer = (data.updatedAt || 0) >= (localUpdatedAt || 0);
 
             if (Array.isArray(data.deletedCustomIds)) {
                 data.deletedCustomIds.forEach(id => deletedCustomIds.add(id));
@@ -1207,13 +1459,24 @@
             if (data.githubBranch) githubBranch = data.githubBranch;
 
             if (data.tempBroadcast && typeof data.tempBroadcast === "object") {
-                tempBroadcastData = { ...tempBroadcastData, ...data.tempBroadcast };
+                if (incomingIsNewer || !tempBroadcastData.createdAt) {
+                    tempBroadcastData = { ...tempBroadcastData, ...data.tempBroadcast };
+                }
             }
             if (data.pinnedBroadcast && typeof data.pinnedBroadcast === "object") {
-                pinnedBroadcastData = { ...pinnedBroadcastData, ...data.pinnedBroadcast };
+                if (incomingIsNewer || !pinnedBroadcastData.updatedAt) {
+                    pinnedBroadcastData = { ...pinnedBroadcastData, ...data.pinnedBroadcast };
+                }
             }
             if (data.forceUpdate && typeof data.forceUpdate === "object") {
-                forceUpdateData = { ...forceUpdateData, ...data.forceUpdate };
+                if (incomingIsNewer || !forceUpdateData.updatedAt) {
+                    forceUpdateData = { ...forceUpdateData, ...data.forceUpdate };
+                }
+            }
+            if (data.whatsNew && typeof data.whatsNew === "object") {
+                if (incomingIsNewer || !whatsNewData.updatedAt) {
+                    whatsNewData = { ...whatsNewData, ...data.whatsNew };
+                }
             }
 
             if (data.avatars) {
@@ -1245,10 +1508,15 @@
 
             if (Array.isArray(data.customAlbums)) {
                 const incomingAlbums = cleanValidAlbums(data.customAlbums);
-                if (mergeMode) {
+                if (mergeMode || incomingAlbums.length === 0) {
                     const albumMap = new Map();
-                    customAlbumsFromCloud.forEach(a => { if (!deletedCustomIds.has(a.id)) albumMap.set(a.id, a); });
-                    incomingAlbums.forEach(a => { if (!deletedCustomIds.has(a.id)) albumMap.set(a.id, a); });
+                    if (incomingIsNewer) {
+                        customAlbumsFromCloud.forEach(a => { if (!deletedCustomIds.has(a.id)) albumMap.set(a.id, a); });
+                        incomingAlbums.forEach(a => { if (!deletedCustomIds.has(a.id)) albumMap.set(a.id, a); });
+                    } else {
+                        incomingAlbums.forEach(a => { if (!deletedCustomIds.has(a.id)) albumMap.set(a.id, a); });
+                        customAlbumsFromCloud.forEach(a => { if (!deletedCustomIds.has(a.id)) albumMap.set(a.id, a); });
+                    }
                     customAlbumsFromCloud = cleanValidAlbums(Array.from(albumMap.values()));
                 } else {
                     customAlbumsFromCloud = incomingAlbums;
@@ -1257,15 +1525,58 @@
 
             if (Array.isArray(data.customTracks)) {
                 const incomingTracks = cleanValidTracks(data.customTracks);
-                if (mergeMode) {
+                if (mergeMode || incomingTracks.length === 0) {
                     const trackMap = new Map();
-                    customTracksFromCloud.forEach(t => { if (!deletedCustomIds.has(t.id)) trackMap.set(t.id, t); });
-                    incomingTracks.forEach(t => { if (!deletedCustomIds.has(t.id)) trackMap.set(t.id, t); });
+                    if (incomingIsNewer) {
+                        customTracksFromCloud.forEach(t => { if (!deletedCustomIds.has(t.id)) trackMap.set(t.id, t); });
+                        incomingTracks.forEach(t => { if (!deletedCustomIds.has(t.id)) trackMap.set(t.id, t); });
+                    } else {
+                        incomingTracks.forEach(t => { if (!deletedCustomIds.has(t.id)) trackMap.set(t.id, t); });
+                        customTracksFromCloud.forEach(t => { if (!deletedCustomIds.has(t.id)) trackMap.set(t.id, t); });
+                    }
                     customTracksFromCloud = cleanValidTracks(
                         Array.from(trackMap.values()).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
                     );
                 } else {
                     customTracksFromCloud = incomingTracks;
+                }
+            }
+
+            if (Array.isArray(data.customVideos)) {
+                const incomingVideos = cleanValidVideos(data.customVideos);
+                if (mergeMode || incomingVideos.length === 0) {
+                    const videoMap = new Map();
+                    if (incomingIsNewer) {
+                        customVideosFromCloud.forEach(v => { if (!deletedCustomIds.has(v.id)) videoMap.set(v.id, v); });
+                        incomingVideos.forEach(v => { if (!deletedCustomIds.has(v.id)) videoMap.set(v.id, v); });
+                    } else {
+                        incomingVideos.forEach(v => { if (!deletedCustomIds.has(v.id)) videoMap.set(v.id, v); });
+                        customVideosFromCloud.forEach(v => { if (!deletedCustomIds.has(v.id)) videoMap.set(v.id, v); });
+                    }
+                    customVideosFromCloud = cleanValidVideos(
+                        Array.from(videoMap.values()).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
+                    );
+                } else {
+                    customVideosFromCloud = incomingVideos;
+                }
+            }
+
+            if (Array.isArray(data.customNews)) {
+                const incomingNews = cleanValidNews(data.customNews);
+                if (mergeMode || incomingNews.length === 0) {
+                    const newsMap = new Map();
+                    if (incomingIsNewer) {
+                        customNewsFromCloud.forEach(n => { if (!deletedCustomIds.has(n.id)) newsMap.set(n.id, n); });
+                        incomingNews.forEach(n => { if (!deletedCustomIds.has(n.id)) newsMap.set(n.id, n); });
+                    } else {
+                        incomingNews.forEach(n => { if (!deletedCustomIds.has(n.id)) newsMap.set(n.id, n); });
+                        customNewsFromCloud.forEach(n => { if (!deletedCustomIds.has(n.id)) newsMap.set(n.id, n); });
+                    }
+                    customNewsFromCloud = cleanValidNews(
+                        Array.from(newsMap.values()).sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
+                    );
+                } else {
+                    customNewsFromCloud = incomingNews;
                 }
             }
 
@@ -1466,37 +1777,76 @@
                 }
             }
 
+            // Полноэкранное окно «Что нового» (показывается на актуальной версии, если ещё не было закрыто пользователем)
+            const wnModal = document.getElementById("whatsNewModal");
+            if (wnModal) {
+                const reqVer = Number(forceUpdateData?.requiredVersion) || 2.0;
+                const isBlockedByOldVer = Boolean(forceUpdateData && forceUpdateData.active && currentAppBuildVersion < reqVer && !isOwnerUnlocked);
+                if (!isBlockedByOldVer && whatsNewData && whatsNewData.active && whatsNewData.id && whatsNewData.content) {
+                    const seenWnKey = "dark_music_seen_whatsnew_" + whatsNewData.id;
+                    let seenWn = false;
+                    try { seenWn = Boolean(localStorage.getItem(seenWnKey)); } catch (e) {}
+                    if (!seenWn) {
+                        const wnTitle = document.getElementById("whatsNewTitle");
+                        const wnBody = document.getElementById("whatsNewBody");
+                        const wnVer = document.getElementById("whatsNewVersionTag");
+                        if (wnTitle) wnTitle.textContent = whatsNewData.title || `Обновление Dark Music v${currentAppBuildVersion.toFixed(1)}`;
+                        if (wnBody) wnBody.textContent = whatsNewData.content || "";
+                        if (wnVer) wnVer.textContent = `ВЕРСИЯ v${currentAppBuildVersion.toFixed(1)} • ЧТО НОВОГО`;
+                        wnModal.classList.remove("hidden");
+                        wnModal.classList.add("flex");
+                    }
+                } else {
+                    wnModal.classList.add("hidden");
+                    wnModal.classList.remove("flex");
+                }
+            }
+
             updateOwnerNotificationsFormUI();
+        }
+
+        function dismissWhatsNewModal() {
+            const wnModal = document.getElementById("whatsNewModal");
+            if (wnModal) {
+                wnModal.classList.add("hidden");
+                wnModal.classList.remove("flex");
+            }
+            if (whatsNewData && whatsNewData.id) {
+                try {
+                    localStorage.setItem("dark_music_seen_whatsnew_" + whatsNewData.id, "1");
+                } catch (e) {}
+            }
         }
 
         function triggerTempBroadcastPopup(title, message) {
             const toast = document.getElementById("tempBroadcastToast");
             const titleEl = document.getElementById("tempBroadcastTitle");
             const msgEl = document.getElementById("tempBroadcastMessage");
+            const timerEl = document.getElementById("tempBroadcastTimerText");
             const barEl = document.getElementById("tempBroadcastBar");
-            const timerText = document.getElementById("tempBroadcastTimerText");
-            if (!toast || !titleEl || !msgEl || !barEl) return;
+            if (!toast || !titleEl || !msgEl) return;
 
-            titleEl.textContent = title || "Уведомление Dark Music";
+            titleEl.textContent = title || "Объявление Dark Music";
             msgEl.textContent = message || "";
-
-            toast.classList.remove("hidden", "broadcast-popup-enter");
-            void toast.offsetWidth;
+            toast.classList.remove("hidden");
             toast.classList.add("broadcast-popup-enter");
 
-            barEl.classList.remove("countdown-bar-20s");
-            void barEl.offsetWidth;
-            barEl.classList.add("countdown-bar-20s");
-
-            if (tempBroadcastTimeout) clearTimeout(tempBroadcastTimeout);
-            if (tempBroadcastInterval) clearInterval(tempBroadcastInterval);
+            if (barEl) {
+                barEl.classList.remove("countdown-bar-20s");
+                void barEl.offsetWidth;
+                barEl.classList.add("countdown-bar-20s");
+            }
 
             let secondsLeft = 20;
-            if (timerText) timerText.textContent = `${secondsLeft} сек.`;
+            if (timerEl) timerEl.textContent = `${secondsLeft} сек.`;
+
+            clearInterval(tempBroadcastInterval);
+            clearTimeout(tempBroadcastTimeout);
+
             tempBroadcastInterval = setInterval(() => {
-                secondsLeft--;
-                if (timerText && secondsLeft >= 0) {
-                    timerText.textContent = `${secondsLeft} сек.`;
+                secondsLeft -= 1;
+                if (timerEl && secondsLeft >= 0) {
+                    timerEl.textContent = `${secondsLeft} сек.`;
                 }
             }, 1000);
 
@@ -1506,13 +1856,19 @@
         }
 
         function dismissTempBroadcast() {
+            clearInterval(tempBroadcastInterval);
+            clearTimeout(tempBroadcastTimeout);
             const toast = document.getElementById("tempBroadcastToast");
-            if (toast) toast.classList.add("hidden");
-            if (tempBroadcastTimeout) { clearTimeout(tempBroadcastTimeout); tempBroadcastTimeout = null; }
-            if (tempBroadcastInterval) { clearInterval(tempBroadcastInterval); tempBroadcastInterval = null; }
+            if (toast) {
+                toast.classList.add("hidden");
+                toast.classList.remove("broadcast-popup-enter");
+            }
         }
 
         function updateOwnerNotificationsFormUI() {
+            const curLocalVer = document.getElementById("ownerCurrentLocalVersion");
+            if (curLocalVer) curLocalVer.value = `v${currentAppBuildVersion.toFixed(1)}`;
+
             const tempBadge = document.getElementById("tempNotifStatusBadge");
             if (tempBadge) {
                 tempBadge.textContent = tempBroadcastData.active ? "Активно" : "Выкл";
@@ -1520,53 +1876,59 @@
                     ? "text-[9px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40"
                     : "text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400";
             }
-
-            const pinnedBadge = document.getElementById("pinnedNotifStatusBadge");
-            if (pinnedBadge) {
-                pinnedBadge.textContent = pinnedBroadcastData.active ? "Закреплено" : "Выкл";
-                pinnedBadge.className = pinnedBroadcastData.active
-                    ? "text-[9px] font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40"
-                    : "text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400";
-            }
-
-            const forceBadge = document.getElementById("forceUpdateStatusBadge");
-            if (forceBadge) {
-                forceBadge.textContent = forceUpdateData.active ? `Блок < v${forceUpdateData.requiredVersion}` : "Выкл";
-                forceBadge.className = forceUpdateData.active
-                    ? "text-[9px] font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40"
-                    : "text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400";
-            }
-
-            const curVerInp = document.getElementById("ownerCurrentLocalVersion");
-            if (curVerInp) curVerInp.value = `v${currentAppBuildVersion.toFixed(1)}`;
-
             const tTitle = document.getElementById("ownerTempNotifTitle");
             const tMsg = document.getElementById("ownerTempNotifMsg");
             if (tTitle && document.activeElement !== tTitle && tempBroadcastData.title) tTitle.value = tempBroadcastData.title;
             if (tMsg && document.activeElement !== tMsg && tempBroadcastData.message) tMsg.value = tempBroadcastData.message;
 
+            const pinBadge = document.getElementById("pinnedNotifStatusBadge");
+            if (pinBadge) {
+                pinBadge.textContent = pinnedBroadcastData.active ? "Закреплено" : "Выкл";
+                pinBadge.className = pinnedBroadcastData.active
+                    ? "text-[9px] font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40"
+                    : "text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400";
+            }
             const pTitle = document.getElementById("ownerPinnedNotifTitle");
             const pMsg = document.getElementById("ownerPinnedNotifMsg");
             if (pTitle && document.activeElement !== pTitle && pinnedBroadcastData.title) pTitle.value = pinnedBroadcastData.title;
             if (pMsg && document.activeElement !== pMsg && pinnedBroadcastData.message) pMsg.value = pinnedBroadcastData.message;
 
+            const fBadge = document.getElementById("forceUpdateStatusBadge");
+            if (fBadge) {
+                fBadge.textContent = forceUpdateData.active ? `Блок < v${forceUpdateData.requiredVersion}` : "Выкл";
+                fBadge.className = forceUpdateData.active
+                    ? "text-[9px] font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/40"
+                    : "text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400";
+            }
             const fVer = document.getElementById("ownerForceUpdateVersion");
             const fUrl = document.getElementById("ownerForceUpdateUrl");
             const fMsg = document.getElementById("ownerForceUpdateMsg");
             if (fVer && document.activeElement !== fVer && forceUpdateData.requiredVersion) fVer.value = forceUpdateData.requiredVersion;
             if (fUrl && document.activeElement !== fUrl && forceUpdateData.downloadUrl) fUrl.value = forceUpdateData.downloadUrl;
             if (fMsg && document.activeElement !== fMsg && forceUpdateData.message) fMsg.value = forceUpdateData.message;
+
+            const wnBadge = document.getElementById("whatsNewStatusBadge");
+            if (wnBadge) {
+                wnBadge.textContent = whatsNewData.active ? "Активно" : "Выкл";
+                wnBadge.className = whatsNewData.active
+                    ? "text-[9px] font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40"
+                    : "text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400";
+            }
+            const wnTitle = document.getElementById("ownerWhatsNewTitle");
+            const wnContent = document.getElementById("ownerWhatsNewContent");
+            if (wnTitle && document.activeElement !== wnTitle && whatsNewData.title) wnTitle.value = whatsNewData.title;
+            if (wnContent && document.activeElement !== wnContent && whatsNewData.content) wnContent.value = whatsNewData.content;
         }
 
         async function sendOwnerTempNotification(enable) {
-            const title = document.getElementById("ownerTempNotifTitle")?.value.trim() || "Объявление Dark Music";
+            const title = document.getElementById("ownerTempNotifTitle")?.value.trim() || "🔥 Объявление Dark Music";
             const message = document.getElementById("ownerTempNotifMsg")?.value.trim() || "";
             if (enable && !message) {
                 showToast("Введите текст всплывающего уведомления", "ВНИМАНИЕ");
                 return;
             }
             tempBroadcastData = {
-                id: enable ? "notif_" + Date.now() : "",
+                id: enable ? "tmp_" + Date.now() : "",
                 title,
                 message,
                 active: Boolean(enable),
@@ -1575,14 +1937,14 @@
             saveStateToLocalStorage(true);
             applyBroadcastAndForceUpdateUI();
             await persistSettingsToCloud();
-            showToast(enable ? "Уведомление (20 сек) отправлено всем!" : "Всплывающее уведомление отключено", "УВЕДОМЛЕНИЯ");
+            showToast(enable ? "20-секундное уведомление отправлено всем!" : "Всплывающее уведомление отключено", "LIVE PUSH");
         }
 
         async function saveOwnerPinnedNotification(enable) {
-            const title = document.getElementById("ownerPinnedNotifTitle")?.value.trim() || "Важная информация";
+            const title = document.getElementById("ownerPinnedNotifTitle")?.value.trim() || "⚡ Важная информация";
             const message = document.getElementById("ownerPinnedNotifMsg")?.value.trim() || "";
             if (enable && !message) {
-                showToast("Введите текст закреплённого уведомления", "ВНИМАНИЕ");
+                showToast("Введите текст закреплённого баннера", "ВНИМАНИЕ");
                 return;
             }
             pinnedBroadcastData = {
@@ -1595,17 +1957,22 @@
             saveStateToLocalStorage(true);
             applyBroadcastAndForceUpdateUI();
             await persistSettingsToCloud();
-            showToast(enable ? "Баннер закреплён вверху у всех пользователей!" : "Закреплённый баннер снят", "ЗАКРЕП");
+            showToast(enable ? "Баннер закреплён вверху у всех пользователей!" : "Закреплённый баннер снят", "LIVE PUSH");
         }
 
         async function saveOwnerForceUpdate(enable) {
-            const reqVer = parseFloat(document.getElementById("ownerForceUpdateVersion")?.value) || (currentAppBuildVersion + 1.0);
+            const reqVer = parseFloat(document.getElementById("ownerForceUpdateVersion")?.value) || 2.0;
             const downloadUrl = document.getElementById("ownerForceUpdateUrl")?.value.trim() || "";
             const message = document.getElementById("ownerForceUpdateMsg")?.value.trim() || "Доступна новая обязательная версия приложения Dark Music! Скачайте обновление по кнопке ниже.";
 
             if (enable && !downloadUrl) {
                 showToast("Укажите ссылку на скачивание новой версии", "ВНИМАНИЕ");
                 return;
+            }
+
+            if (enable && reqVer > currentAppBuildVersion) {
+                currentAppBuildVersion = reqVer;
+                window.__APP_BUILD_VERSION__ = reqVer;
             }
 
             forceUpdateData = {
@@ -1619,21 +1986,37 @@
             saveStateToLocalStorage(true);
             applyBroadcastAndForceUpdateUI();
             await persistSettingsToCloud();
-            showToast(enable ? `Старые версии (ниже v${reqVer}) заблокированы!` : "Блокировка старых версий снята", "ОБНОВЛЕНИЕ");
+            showToast(enable ? `Старые версии (ниже v${reqVer}) заблокированы! Новая версия v${reqVer} работает свободно.` : "Блокировка старых версий снята", "ОБНОВЛЕНИЕ");
         }
 
-        // =========================================================================
-        // ГЛОБАЛЬНАЯ СИНХРОНИЗАЦИЯ ЧЕРЕЗ GITHUB (БЕЗ МОРГАНИЯ КАРТИНОК)
-        // =========================================================================
+        async function saveOwnerWhatsNew(enable) {
+            const title = document.getElementById("ownerWhatsNewTitle")?.value.trim() || `Что нового в Dark Music v${currentAppBuildVersion.toFixed(1)}`;
+            const content = document.getElementById("ownerWhatsNewContent")?.value.trim() || "";
+            if (enable && !content) {
+                showToast("Введите текст изменений для окна «Что нового»", "ВНИМАНИЕ");
+                return;
+            }
+            whatsNewData = {                id: enable ? "wn_" + Date.now() : "",
+                title,
+                content,
+                version: currentAppBuildVersion,
+                active: Boolean(enable),
+                updatedAt: Date.now()
+            };
+            saveStateToLocalStorage(true);
+            applyBroadcastAndForceUpdateUI();
+            await persistSettingsToCloud();
+            showToast(enable ? "Окно «Что нового» включено для всех пользователей!" : "Окно «Что нового» отключено", "ЧТО НОВОГО");
+        }
 
         function utf8ToBase64(str) {
             try {
                 const bytes = new TextEncoder().encode(str);
-                let binary = "";
+                let binString = "";
                 for (let i = 0; i < bytes.byteLength; i++) {
-                    binary += String.fromCharCode(bytes[i]);
+                    binString += String.fromCharCode(bytes[i]);
                 }
-                return btoa(binary);
+                return btoa(binString);
             } catch (e) {
                 return btoa(unescape(encodeURIComponent(str)));
             }
@@ -1641,14 +2024,15 @@
 
         function base64ToUtf8(b64) {
             try {
-                const binary = atob(b64.replace(/\s/g, ""));
-                const bytes = new Uint8Array(binary.length);
-                for (let i = 0; i < binary.length; i++) {
-                    bytes[i] = binary.charCodeAt(i);
+                const cleanB64 = String(b64 || "").replace(/\s/g, "");
+                const binString = atob(cleanB64);
+                const bytes = new Uint8Array(binString.length);
+                for (let i = 0; i < binString.length; i++) {
+                    bytes[i] = binString.charCodeAt(i);
                 }
                 return new TextDecoder().decode(bytes);
             } catch (e) {
-                return decodeURIComponent(escape(atob(b64.replace(/\s/g, ""))));
+                return decodeURIComponent(escape(atob(String(b64 || "").replace(/\s/g, ""))));
             }
         }
 
@@ -1659,32 +2043,34 @@
                 const cleanBranch = (githubBranch || BUILTIN_GITHUB_BRANCH).replace(/^\/+|\/+$/g, "") || "main";
 
                 if (cleanRepo) {
+                    // 1. Сначала запрашиваем через GitHub API (всегда мгновенные данные без 5-минутного кэша CDN)
                     try {
-                        const rawResp = await fetch(
-                            `https://raw.githubusercontent.com/${cleanRepo}/${cleanBranch}/catalog.json?t=${Date.now()}`,
-                            { cache: "no-store" }
-                        );
-                        if (rawResp.ok) {
-                            loadedCatalog = await rawResp.json();
+                        const apiUrl = `https://api.github.com/repos/${cleanRepo}/contents/catalog.json?ref=${encodeURIComponent(cleanBranch)}&t=${Date.now()}`;
+                        const apiHeaders = { "Accept": "application/vnd.github.v3+json" };
+                        if (githubPersonalToken) {
+                            apiHeaders["Authorization"] = `token ${githubPersonalToken}`;
+                        }
+                        let apiResp = await fetch(apiUrl, { headers: apiHeaders, cache: "no-store" });
+                        if (apiResp.status === 401 && githubPersonalToken) {
+                            apiResp = await fetch(apiUrl, { headers: { "Accept": "application/vnd.github.v3+json" }, cache: "no-store" });
+                        }
+                        if (apiResp.ok) {
+                            const meta = await apiResp.json();
+                            if (meta && meta.content) {
+                                loadedCatalog = JSON.parse(base64ToUtf8(meta.content));
+                            }
                         }
                     } catch (e) {}
 
+                    // 2. Резервный запрос через raw.githubusercontent.com
                     if (!loadedCatalog) {
                         try {
-                            const apiUrl = `https://api.github.com/repos/${cleanRepo}/contents/catalog.json?ref=${encodeURIComponent(cleanBranch)}&t=${Date.now()}`;
-                            const apiHeaders = { "Accept": "application/vnd.github.v3+json" };
-                            if (githubPersonalToken) {
-                                apiHeaders["Authorization"] = `token ${githubPersonalToken}`;
-                            }
-                            let apiResp = await fetch(apiUrl, { headers: apiHeaders, cache: "no-store" });
-                            if (apiResp.status === 401 && githubPersonalToken) {
-                                apiResp = await fetch(apiUrl, { headers: { "Accept": "application/vnd.github.v3+json" }, cache: "no-store" });
-                            }
-                            if (apiResp.ok) {
-                                const meta = await apiResp.json();
-                                if (meta && meta.content) {
-                                    loadedCatalog = JSON.parse(base64ToUtf8(meta.content));
-                                }
+                            const rawResp = await fetch(
+                                `https://raw.githubusercontent.com/${cleanRepo}/${cleanBranch}/catalog.json?t=${Date.now()}`,
+                                { cache: "no-store" }
+                            );
+                            if (rawResp.ok) {
+                                loadedCatalog = await rawResp.json();
                             }
                         } catch (e) {}
                     }
@@ -1701,7 +2087,7 @@
 
                 if (loadedCatalog && typeof loadedCatalog === "object") {
                     const beforeFp = computeCatalogFingerprint(buildFullSyncPayload());
-                    applySyncDataToMemory(loadedCatalog, isOwnerUnlocked);
+                    applySyncDataToMemory(loadedCatalog, true);
                     const afterFp = computeCatalogFingerprint(buildFullSyncPayload());
 
                     saveStateToLocalStorage(false);
@@ -1863,7 +2249,14 @@
             customTracksFromCloud = cleanValidTracks(customTracksFromCloud);
             TRACKS = [...customTracksFromCloud];
 
+            customVideosFromCloud = cleanValidVideos(customVideosFromCloud);
+            VIDEOS = [...customVideosFromCloud];
+
+            customNewsFromCloud = cleanValidNews(customNewsFromCloud);
+            NEWS = [...customNewsFromCloud];
+
             // Предзагрузка всех обложек и аватаров в память браузера
+            preloadImageUrl(getRawUrl("logo.png"));
             Object.values(ARTISTS).forEach(a => {
                 if (a.avatarFile) preloadImageUrl(getRawUrl(a.avatarFile));
             });
@@ -1872,6 +2265,12 @@
             });
             TRACKS.forEach(t => {
                 if (t.coverFile) preloadImageUrl(getRawUrl(t.coverFile));
+            });
+            VIDEOS.forEach(v => {
+                if (v.previewFile) preloadImageUrl(getRawUrl(v.previewFile));
+            });
+            NEWS.forEach(n => {
+                if (n.imageFile) preloadImageUrl(getRawUrl(n.imageFile));
             });
         }
 
@@ -1923,13 +2322,8 @@
         let likedTrackIds = new Set();
         let factIndexMap = { mc_geich: 0, mc_makaka: 0, mc_ezdit: 0, mc_oparysh: 0 };
 
-        // Синтезатор баса (резервный звук, если файл в репозитории ещё не загружен)
-        let audioCtx = null;
-        let synthTimer = null;
-        let synthProgressTimer = null;
+        // Фоновый Web Audio API синтезатор полностью отключён, чтобы никогда не накладываться на песни
         let usingSynthFallback = false;
-        let synthElapsed = 0;
-        let synthDuration = 165;
 
         const audioEl = document.getElementById("audioElement");
 
@@ -1980,11 +2374,23 @@
 
         function renderAllViews() {
             rebuildCatalogInMemory();
+            const logoImg = document.getElementById("appHeaderLogoImg");
+            if (logoImg) {
+                const targetLogoUrl = getRawUrl("logo.png");
+                if (logoImg.dataset.loadedRepo !== githubRepoPath) {
+                    logoImg.dataset.loadedRepo = githubRepoPath;
+                    delete logoImg.dataset.triedSub;
+                    logoImg.src = targetLogoUrl;
+                }
+            }
             renderHomeArtists();
             renderHomeChart();
             renderHomeAlbums();
             renderArtistFilterPills();
             renderHomeTracks();
+            renderHomeVideos();
+            renderNewsFilterPills();
+            renderHomeNews();
             renderFullCharts();
             renderFullArtists();
             renderOwnerManageLists();
@@ -1997,6 +2403,7 @@
             if (repoInput && document.activeElement !== repoInput) repoInput.value = githubRepoPath;
             if (branchInput && document.activeElement !== branchInput) branchInput.value = githubBranch;
             if (tokenInput && document.activeElement !== tokenInput) tokenInput.value = githubPersonalToken;
+
             Object.keys(ARTISTS).forEach(k => {
                 const inp = document.getElementById(`avatar_${k}`);
                 if (inp && document.activeElement !== inp) inp.value = ARTISTS[k].avatarFile;
@@ -2026,6 +2433,7 @@
             const album = ALBUMS[track.albumId];
             const albumLabel = album ? album.title : "Сингл";
             const yearLabel = track.year || (album && album.year) || "";
+            const isExplicit = Boolean(track.isExplicit || (album && album.isExplicit));
 
             let rankBadge = "";
             if (rankNumber !== null) {
@@ -2045,6 +2453,7 @@
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-1.5">
                             <span data-track-title="${track.id}" class="text-xs font-extrabold text-white truncate">${track.title}</span>
+                            ${isExplicit ? `<span class="px-1.5 py-0.2 rounded bg-zinc-900 border border-rose-500/50 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>` : ''}
                             ${track.isNew ? `<span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">NEW</span>` : ''}
                         </div>
                         <p class="text-[10px] text-zinc-400 truncate">${artist.name} • ${albumLabel}${yearLabel ? ` (${yearLabel})` : ''}</p>
@@ -2100,9 +2509,13 @@
                             <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-md text-[8px] font-black uppercase tracking-wider text-purple-300 border border-white/10">
                                 ${alb.type || 'АЛЬБОМ'}
                             </span>
+                            ${alb.isExplicit ? `<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-rose-600/90 text-white text-[8px] font-black uppercase shadow">18+</span>` : ''}
                         </div>
                         <div>
-                            <h3 class="text-xs font-extrabold text-white truncate">${alb.title}</h3>
+                            <div class="flex items-center gap-1">
+                                <h3 class="text-xs font-extrabold text-white truncate">${alb.title}</h3>
+                                ${alb.isExplicit ? `<span class="text-[8px] font-black text-rose-400 shrink-0">18+</span>` : ''}
+                            </div>
                             <p class="text-[10px] text-zinc-400 truncate">${artist.name} • ${alb.year || 2025}</p>
                         </div>
                     </div>
@@ -2171,15 +2584,224 @@
             }
         }
 
+        // =========================================================================
+        // ВИДЕОКЛИПЫ И ВСТРОЕННЫЙ ВИДЕОПЛЕЕР
+        // =========================================================================
+
+        function renderVideoCard(video) {
+            const artist = ARTISTS[video.artistId] || ARTISTS.mc_geich;
+            const previewUrl = video.previewFile ? getRawUrl(video.previewFile) : "";
+            return `
+                <div onclick="openVideoPlayerModal('${video.id}')" class="rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 overflow-hidden cursor-pointer group spring-btn">
+                    <div class="w-full aspect-video bg-gradient-to-br ${artist.gradient} relative overflow-hidden flex items-center justify-center">
+                        <i class="fa-solid fa-film text-3xl text-white/30"></i>
+                        ${previewUrl ? `<img src="${previewUrl}" alt="${video.title.replace(/"/g, '&quot;')}" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">` : ""}
+                        <div class="absolute inset-0 bg-black/35 group-hover:bg-black/20 transition-all flex items-center justify-center">
+                            <div class="w-12 h-12 rounded-full bg-white/95 text-black flex items-center justify-center shadow-xl shadow-black/60">
+                                <i class="fa-solid fa-play text-sm ml-0.5"></i>
+                            </div>
+                        </div>
+                        <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-[9px] font-black uppercase tracking-wider text-purple-300 border border-white/10">
+                            КЛИП • ${video.year || 2025}
+                        </span>
+                        ${video.isExplicit ? `<span class="absolute top-2.5 right-2.5 px-1.5 py-0.5 rounded bg-rose-600 text-white text-[8px] font-black uppercase shadow">18+</span>` : ""}
+                        ${video.duration ? `<span class="absolute bottom-2 right-2.5 px-1.5 py-0.5 rounded bg-black/80 text-white text-[9px] font-bold">${video.duration}</span>` : ""}
+                    </div>
+                    <div class="p-3 flex items-center justify-between gap-2">
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-1.5">
+                                <h3 class="text-xs font-extrabold text-white truncate">${video.title}</h3>
+                                ${video.isExplicit ? `<span class="px-1.5 py-0.2 rounded bg-zinc-900 border border-rose-500/50 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>` : ""}
+                            </div>
+                            <p class="text-[10px] text-zinc-400 truncate mt-0.5">${artist.name} • Официальный видеоклип</p>
+                        </div>
+                        <span class="text-[10px] font-bold text-purple-400 shrink-0">Смотреть</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderHomeVideos() {
+            const container = document.getElementById("homeVideosList");
+            const badge = document.getElementById("totalVideosBadge");
+            if (!container) return;
+            if (badge) badge.textContent = `${VIDEOS.length} шт.`;
+
+            if (VIDEOS.length === 0) {
+                const emptyHtml = `
+                    <div class="p-5 rounded-2xl bg-zinc-950 border border-zinc-900 text-center text-xs text-zinc-500">
+                        Видеоклипы пока не добавлены. Добавьте клип в панели владельца.
+                    </div>
+                `;
+                setContainerHtmlIfChanged(container, emptyHtml);
+                return;
+            }
+            const html = VIDEOS.map(v => renderVideoCard(v)).join("");
+            setContainerHtmlIfChanged(container, html);
+        }
+
+        function buildVideoEmbedHtml(sourceStr) {
+            const raw = (sourceStr || "").trim();
+            if (!raw) {
+                return `<div class="text-xs text-zinc-500 p-4 text-center">Источник видео не указан</div>`;
+            }
+            // Если вставлен готовый HTML-код плеера (<iframe ...> или <video ...>)
+            if (raw.startsWith("<iframe") || raw.startsWith("<video")) {
+                return `<div class="w-full h-full [&>iframe]:w-full [&>iframe]:h-full [&>video]:w-full [&>video]:h-full">${raw}</div>`;
+            }
+            // Проверка на ссылку YouTube
+            const ytMatch = raw.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+            if (ytMatch && ytMatch[1]) {
+                return `<iframe src="https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&rel=0" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+            }
+            // Проверка на ссылку VK Video (vk.com/video_ext.php или vk.com/video-XXX_YYY)
+            if (raw.includes("vk.com/video_ext.php") || raw.includes("vkvideo.ru/video_ext.php")) {
+                return `<iframe src="${raw}" class="w-full h-full border-0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+            }
+            const vkMatch = raw.match(/video(-?\d+)_(\d+)/);
+            if (vkMatch) {
+                return `<iframe src="https://vk.com/video_ext.php?oid=${vkMatch[1]}&id=${vkMatch[2]}&hd=2&autoplay=1" class="w-full h-full border-0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+            }
+            // Прямой видеофайл (.mp4 / .webm / .mov) или ссылка из репозитория
+            const mediaUrl = getRawUrl(raw);
+            return `<video src="${mediaUrl}" controls autoplay playsinline class="w-full h-full object-contain bg-black"></video>`;
+        }
+
+        function openVideoPlayerModal(videoId) {
+            const video = VIDEOS.find(v => v.id === videoId);
+            if (!video) return;
+            const artist = ARTISTS[video.artistId] || ARTISTS.mc_geich;
+
+            // Ставим музыку на паузу во время просмотра клипа
+            if (isPlaying) {
+                isPlaying = false;
+                audioEl.pause();
+                updatePlayerUI();
+                updateTrackRowsPlayState();
+            }
+
+            document.getElementById("videoModalTitle").textContent = video.title;
+            document.getElementById("videoModalArtist").textContent = `${artist.name} • ${video.year || 2025}`;
+            const expBadge = document.getElementById("videoModalExplicit");
+            if (expBadge) {
+                if (video.isExplicit) expBadge.classList.remove("hidden");
+                else expBadge.classList.add("hidden");
+            }
+
+            const playerContainer = document.getElementById("videoModalContainer");
+            if (playerContainer) {
+                playerContainer.innerHTML = buildVideoEmbedHtml(video.videoSource);
+            }
+
+            const modal = document.getElementById("videoPlayerModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        function closeVideoPlayerModal() {
+            const modal = document.getElementById("videoPlayerModal");
+            const playerContainer = document.getElementById("videoModalContainer");
+            if (playerContainer) playerContainer.innerHTML = "";
+            if (modal) {
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
+            }
+        }
+
+        // =========================================================================
+        // НОВОСТИ ПРИЛОЖЕНИЯ И АРТИСТОВ
+        // =========================================================================
+
+        function renderNewsFilterPills() {
+            const container = document.getElementById("newsFilterPills");
+            if (!container) return;
+            const items = [
+                { id: "all", label: "Все новости" },
+                { id: "app", label: "⚡ Приложение" },
+                ...Object.values(ARTISTS).map(a => ({ id: a.id, label: a.name }))
+            ];
+            const html = items.map(item => {
+                const active = activeNewsFilter === item.id;
+                return `
+                    <button onclick="setNewsFilter('${item.id}')" class="px-3 py-1.5 rounded-xl text-[11px] font-extrabold shrink-0 transition-all spring-btn ${active ? 'bg-amber-500 text-black shadow-lg shadow-amber-500/25' : 'bg-zinc-950 text-zinc-400 border border-zinc-900 hover:text-white'}">
+                        ${item.label}
+                    </button>
+                `;
+            }).join("");
+            setContainerHtmlIfChanged(container, html);
+        }
+
+        function setNewsFilter(filterId) {
+            activeNewsFilter = filterId;
+            renderNewsFilterPills();
+            renderHomeNews();
+        }
+
+        function renderNewsCard(newsItem) {
+            const isAppNews = newsItem.targetId === "app" || !ARTISTS[newsItem.targetId];
+            const artist = !isAppNews ? ARTISTS[newsItem.targetId] : null;
+            const badgeLabel = isAppNews ? "НОВОСТИ DARK MUSIC" : artist.name;
+            const badgeClass = isAppNews
+                ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
+                : "bg-purple-500/20 text-purple-300 border-purple-500/40";
+            const imgUrl = newsItem.imageFile ? getRawUrl(newsItem.imageFile) : "";
+
+            return `
+                <div class="p-3.5 rounded-2xl bg-zinc-950 border border-zinc-900 space-y-2.5">
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="px-2 py-0.5 rounded-md border text-[9px] font-black uppercase tracking-wider ${badgeClass}">
+                            ${badgeLabel}
+                        </span>
+                        <span class="text-[10px] font-semibold text-zinc-500">${newsItem.dateText || "Актуально"}</span>
+                    </div>
+                    ${imgUrl ? `
+                        <div class="w-full max-h-48 rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800">
+                            <img src="${imgUrl}" alt="" decoding="async" class="w-full h-full object-cover" onerror="this.parentElement.style.display='none'">
+                        </div>
+                    ` : ""}
+                    <div>
+                        <h3 class="text-xs font-black text-white">${newsItem.title}</h3>
+                        <p class="text-[11px] text-zinc-300 leading-relaxed whitespace-pre-line mt-1">${newsItem.content || ""}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderHomeNews() {
+            const container = document.getElementById("homeNewsList");
+            if (!container) return;
+
+            let filtered = NEWS;
+            if (activeNewsFilter !== "all") {
+                filtered = NEWS.filter(n => n.targetId === activeNewsFilter);
+            }
+
+            if (filtered.length === 0) {
+                const emptyHtml = `
+                    <div class="p-5 rounded-2xl bg-zinc-950 border border-zinc-900 text-center text-xs text-zinc-500">
+                        В этой категории пока нет опубликованных новостей.
+                    </div>
+                `;
+                setContainerHtmlIfChanged(container, emptyHtml);
+                return;
+            }
+            const html = filtered.map(n => renderNewsCard(n)).join("");
+            setContainerHtmlIfChanged(container, html);
+        }
+
         function renderFullCharts() {
             const container = document.getElementById("fullChartsList");
             if (!container) return;
             if (TRACKS.length === 0) {
-                const emptyHtml = `<div class="p-6 rounded-2xl bg-zinc-950 border border-zinc-900 text-center text-xs text-zinc-500">Чарт пуст — добавьте треки в каталог</div>`;
+                const emptyHtml = `
+                    <div class="p-6 rounded-2xl bg-zinc-950 border border-zinc-900 text-center text-xs text-zinc-500">
+                        В официальном чарте пока нет треков. Добавьте треки через панель владельца.
+                    </div>
+                `;
                 setContainerHtmlIfChanged(container, emptyHtml);
                 return;
             }
-            const html = TRACKS.map((t, idx) => renderTrackRow(t, idx, idx + 1)).join("");
+            const html = TRACKS.map((t, i) => renderTrackRow(t, i, i + 1)).join("");
             if (setContainerHtmlIfChanged(container, html)) {
                 updateTrackRowsPlayState();
             }
@@ -2188,25 +2810,29 @@
         function renderFullArtists() {
             const container = document.getElementById("fullArtistsList");
             if (!container) return;
-            const html = Object.values(ARTISTS).map((artist) => {
-                const artistTracks = TRACKS.filter(t => t.artistId === artist.id).length;
-                const artistAlbums = Object.values(ALBUMS).filter(a => a.artistId === artist.id).length;
+            const html = Object.values(ARTISTS).map(artist => {
+                const countTracks = TRACKS.filter(t => t.artistId === artist.id).length;
+                const countAlbums = Object.values(ALBUMS).filter(a => a.artistId === artist.id).length;
                 return `
-                    <div onclick="openArtistProfile('${artist.id}')" class="p-3.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 flex items-center gap-3.5 cursor-pointer spring-btn">
-                        ${renderAvatarBox(artist, "w-14 h-14 rounded-2xl", "text-lg")}
-                        <div class="min-w-0 flex-1 space-y-1">
-                            <div class="flex items-center gap-1.5">
-                                <h3 class="text-sm font-black text-white truncate">${artist.name}</h3>
-                                <i class="fa-solid fa-circle-check text-sky-400 text-xs"></i>
-                            </div>
-                            <p class="text-[11px] text-zinc-400 truncate">${artist.role}</p>
-                            <div class="flex items-center gap-2 text-[10px] text-zinc-500 font-bold">
-                                <span><i class="fa-solid fa-music text-purple-400 mr-1"></i>${artistTracks} треков</span>
-                                <span>•</span>
-                                <span><i class="fa-solid fa-compact-disc text-fuchsia-400 mr-1"></i>${artistAlbums} альбомов</span>
+                    <div onclick="openArtistProfile('${artist.id}')" class="p-3.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 flex items-center justify-between gap-3 cursor-pointer spring-btn">
+                        <div class="flex items-center gap-3 min-w-0 flex-1">
+                            ${renderAvatarBox(artist, "w-14 h-14 rounded-2xl", "text-lg")}
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center gap-1.5">
+                                    <h3 class="text-sm font-black text-white truncate">${artist.name}</h3>
+                                    <i class="fa-solid fa-circle-check text-sky-400 text-xs shrink-0"></i>
+                                </div>
+                                <p class="text-[11px] text-zinc-400 truncate mt-0.5">${artist.role}</p>
+                                <div class="flex items-center gap-2 mt-1 text-[10px] font-bold text-purple-400">
+                                    <span>Треков: ${countTracks}</span>
+                                    <span>•</span>
+                                    <span>Альбомов: ${countAlbums}</span>
+                                </div>
                             </div>
                         </div>
-                        <i class="fa-solid fa-chevron-right text-zinc-600 text-xs"></i>
+                        <div class="w-8 h-8 rounded-xl bg-zinc-900 text-zinc-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </div>
                     </div>
                 `;
             }).join("");
@@ -2220,6 +2846,8 @@
             const artistTracks = TRACKS.filter(t => t.artistId === artistId);
             const newReleases = artistTracks.filter(t => t.isNew);
             const artistAlbums = Object.values(ALBUMS).filter(a => a.artistId === artistId);
+            const artistVideos = VIDEOS.filter(v => v.artistId === artistId);
+            const artistNews = NEWS.filter(n => n.targetId === artistId);
 
             const content = document.getElementById("artistProfileContent");
             const html = `
@@ -2271,10 +2899,16 @@
                         <div class="grid grid-cols-2 gap-2.5">
                             ${artistAlbums.map((alb) => `
                                 <div onclick="openAlbumDetail('${alb.id}')" class="p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2 spring-btn">
-                                    ${renderCoverBox(alb, "w-full h-28 rounded-xl", "text-xl")}
+                                    <div class="relative">
+                                        ${renderCoverBox(alb, "w-full h-28 rounded-xl", "text-xl")}
+                                        ${alb.isExplicit ? `<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-rose-600/90 text-white text-[8px] font-black uppercase shadow">18+</span>` : ''}
+                                    </div>
                                     <div>
                                         <span class="text-[9px] font-black uppercase text-purple-400">${alb.type || 'АЛЬБОМ'} • ${alb.year || 2025}</span>
-                                        <h3 class="text-xs font-extrabold text-white truncate">${alb.title}</h3>
+                                        <div class="flex items-center gap-1">
+                                            <h3 class="text-xs font-extrabold text-white truncate">${alb.title}</h3>
+                                            ${alb.isExplicit ? `<span class="text-[8px] font-black text-rose-400 shrink-0">18+</span>` : ''}
+                                        </div>
                                     </div>
                                 </div>
                             `).join("")}
@@ -2290,6 +2924,32 @@
                             ${artistTracks.map((t, i) => renderTrackRow(t, i)).join("")}
                         </div>
                     ` : `<div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-xs text-zinc-500">У артиста пока нет добавленных треков</div>`}
+                </div>
+
+                <!-- Видеоклипы артиста -->
+                <div class="space-y-2.5">
+                    <h2 class="text-xs font-black uppercase tracking-wider text-purple-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-clapperboard"></i>
+                        <span>ВИДЕОКЛИПЫ АРТИСТА (${artistVideos.length})</span>
+                    </h2>
+                    ${artistVideos.length > 0 ? `
+                        <div class="grid grid-cols-1 gap-2.5">
+                            ${artistVideos.map(v => renderVideoCard(v)).join("")}
+                        </div>
+                    ` : `<div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-xs text-zinc-500">У артиста пока нет видеоклипов</div>`}
+                </div>
+
+                <!-- Новости артиста -->
+                <div class="space-y-2.5">
+                    <h2 class="text-xs font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-newspaper"></i>
+                        <span>НОВОСТИ АРТИСТА (${artistNews.length})</span>
+                    </h2>
+                    ${artistNews.length > 0 ? `
+                        <div class="space-y-2.5">
+                            ${artistNews.map(n => renderNewsCard(n)).join("")}
+                        </div>
+                    ` : `<div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-xs text-zinc-500">Пока нет новостей об этом артисте</div>`}
                 </div>
 
                 <!-- Биография артиста -->
@@ -2321,7 +2981,10 @@
                     <div class="flex items-center gap-4">
                         ${renderCoverBox(album, "w-24 h-24 rounded-2xl shadow-xl", "text-2xl")}
                         <div class="min-w-0 flex-1 space-y-1">
-                            <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[9px] font-black uppercase">${album.type || 'АЛЬБОМ'} • ${album.year || 2025}</span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[9px] font-black uppercase">${album.type || 'АЛЬБОМ'} • ${album.year || 2025}</span>
+                                ${album.isExplicit ? `<span class="px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/50 text-rose-400 text-[9px] font-black uppercase">18+</span>` : ''}
+                            </div>
                             <h1 class="text-lg font-black text-white truncate">${album.title}</h1>
                             <button onclick="openArtistProfile('${artist.id}')" class="text-xs font-bold text-zinc-400 hover:text-white flex items-center gap-1">
                                 <span>${artist.name}</span>
@@ -2332,8 +2995,7 @@
                     <button onclick="playAlbumTracks('${album.id}')" class="w-full py-2.5 rounded-xl bg-white text-black font-extrabold text-xs flex items-center justify-center gap-2 spring-btn">
                         <i class="fa-solid fa-play text-[10px]"></i>
                         <span>Слушать альбом (${albumTracks.length})</span>
-                    </button>
-                </div>
+                    </button>                </div>
                 <div class="space-y-2">
                     <h2 class="text-xs font-black uppercase tracking-wider text-zinc-400">ТРЕКЛИСТ АЛЬБОМА</h2>
                     ${albumTracks.length > 0
@@ -2361,9 +3023,11 @@
 
             currentTrackId = trackId;
             isPlaying = true;
+            usingSynthFallback = false;
             stopSynthFallback();
 
             const rawUrl = getRawUrl(track.filePath);
+            audioEl.pause();
             audioEl.src = rawUrl;
             audioEl.currentTime = 0;
 
@@ -2373,8 +3037,10 @@
                     usingSynthFallback = false;
                     updatePlayerUI();
                     updateTrackRowsPlayState();
-                }).catch(() => {
-                    startSynthFallback(track);
+                }).catch((err) => {
+                    console.warn("Audio playback notice:", err);
+                    updatePlayerUI();
+                    updateTrackRowsPlayState();
                 });
             }
 
@@ -2382,84 +3048,111 @@
             showToast(`${artist.name} — ${track.title}`, "СЕЙЧАС ИГРАЕТ");
             updatePlayerUI();
             updateTrackRowsPlayState();
+            updateMediaSessionMetadata();
         }
 
-        audioEl.addEventListener("error", () => {
-            const track = TRACKS.find(t => t.id === currentTrackId);
-            if (track && isPlaying && !usingSynthFallback) {
-                startSynthFallback(track);
+        // Интеграция с системным плеером уведомлений и экраном блокировки (Media Session API)
+        function setupMediaSessionHandlers() {
+            if (!("mediaSession" in navigator)) return;
+            try {
+                navigator.mediaSession.setActionHandler("play", () => {
+                    if (!isPlaying) togglePlay();
+                });
+                navigator.mediaSession.setActionHandler("pause", () => {
+                    if (isPlaying) togglePlay();
+                });
+                navigator.mediaSession.setActionHandler("previoustrack", () => {
+                    prevTrack();
+                });
+                navigator.mediaSession.setActionHandler("nexttrack", () => {
+                    nextTrack();
+                });
+                navigator.mediaSession.setActionHandler("seekto", (details) => {
+                    if (details.SeekTime !== undefined && audioEl.duration) {
+                        audioEl.currentTime = details.SeekTime;
+                    } else if (details.seekTime !== undefined && audioEl.duration) {
+                        audioEl.currentTime = details.seekTime;
+                    }
+                });
+            } catch (e) {}
+        }
+
+        function updateMediaSessionMetadata() {
+            if (!("mediaSession" in navigator)) return;
+            try {
+                const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0];
+                if (!track) return;
+                const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
+                const album = ALBUMS[track.albumId];
+                const coverPath = track.coverFile || (album && album.coverFile) || artist.avatarFile || "logo.png";
+                const artworkUrl = getRawUrl(coverPath);
+
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: track.title,
+                    artist: artist.name,
+                    album: album ? album.title : "Dark Music",
+                    artwork: artworkUrl ? [
+                        { src: artworkUrl, sizes: "512x512", type: "image/jpeg" },
+                        { src: artworkUrl, sizes: "512x512", type: "image/png" }
+                    ] : []
+                });
+                navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
+            } catch (e) {}
+        }
+
+        audioEl.addEventListener("play", () => {
+            isPlaying = true;
+            updatePlayerUI();
+            updateTrackRowsPlayState();
+            updateMediaSessionMetadata();
+        });
+
+        audioEl.addEventListener("pause", () => {
+            if (!audioEl.ended) {
+                isPlaying = false;
+                updatePlayerUI();
+                updateTrackRowsPlayState();
+                if ("mediaSession" in navigator) {
+                    try { navigator.mediaSession.playbackState = "paused"; } catch (e) {}
+                }
             }
         });
 
+        audioEl.addEventListener("error", () => {
+            console.warn("Не удалось загрузить аудиофайл:", audioEl.src);
+        });
+
         audioEl.addEventListener("timeupdate", () => {
-            if (usingSynthFallback) return;
             const cur = audioEl.currentTime || 0;
             const dur = audioEl.duration || 165;
             updateProgressUI(cur, dur);
+            if ("mediaSession" in navigator && "setPositionState" in navigator.mediaSession && audioEl.duration && !isNaN(audioEl.duration)) {
+                try {
+                    navigator.mediaSession.setPositionState({
+                        duration: audioEl.duration,
+                        playbackRate: audioEl.playbackRate || 1,
+                        position: Math.min(audioEl.currentTime, audioEl.duration)
+                    });
+                } catch (e) {}
+            }
         });
 
         audioEl.addEventListener("ended", () => {
             if (isRepeat) {
-                playTrackById(currentTrackId);
+                audioEl.currentTime = 0;
+                audioEl.play().catch(() => {});
             } else {
                 nextTrack();
             }
         });
 
-        function startSynthFallback(track) {
-            usingSynthFallback = true;
-            stopSynthFallback();
-
-            const parts = (track.duration || "2:45").split(":");
-            synthDuration = (parseInt(parts[0] || 2, 10) * 60) + parseInt(parts[1] || 45, 10);
-            synthElapsed = 0;
-
-            try {
-                if (!audioCtx) {
-                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-                    audioCtx = new AudioContextClass();
-                }
-                if (audioCtx.state === "suspended") audioCtx.resume();
-
-                let step = 0;
-                const notes = [41.2, 41.2, 49.0, 36.7, 41.2, 55.0, 36.7, 32.7];
-                synthTimer = setInterval(() => {
-                    if (!isPlaying) return;
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = "sawtooth";
-                    osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
-                    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.36);
-                    step++;
-                }, 420);
-            } catch (e) {}
-
-            synthProgressTimer = setInterval(() => {
-                if (!isPlaying) return;
-                synthElapsed += 0.25;
-                if (synthElapsed >= synthDuration) {
-                    if (isRepeat) {
-                        synthElapsed = 0;
-                    } else {
-                        nextTrack();
-                    }
-                } else {
-                    updateProgressUI(synthElapsed, synthDuration);
-                }
-            }, 250);
-
-            updatePlayerUI();
-            updateTrackRowsPlayState();
+        function startSynthFallback() {
+            // Отключено: фоновый синтезатор Web Audio API больше не запускается
+            usingSynthFallback = false;
         }
 
         function stopSynthFallback() {
-            if (synthTimer) { clearInterval(synthTimer); synthTimer = null; }
-            if (synthProgressTimer) { clearInterval(synthProgressTimer); synthProgressTimer = null; }
+            usingSynthFallback = false;
         }
 
         function togglePlay() {
@@ -2473,17 +3166,12 @@
             }
 
             isPlaying = !isPlaying;
-            if (usingSynthFallback) {
-                if (isPlaying && audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+            if (isPlaying) {
+                audioEl.play().catch((err) => {
+                    console.warn("Play error:", err);
+                });
             } else {
-                if (isPlaying) {
-                    audioEl.play().catch(() => {
-                        const tr = TRACKS.find(t => t.id === currentTrackId);
-                        if (tr) startSynthFallback(tr);
-                    });
-                } else {
-                    audioEl.pause();
-                }
+                audioEl.pause();
             }
             updatePlayerUI();
             updateTrackRowsPlayState();
@@ -2544,10 +3232,7 @@
 
         function seekAudio(val) {
             const pct = parseFloat(val) / 100;
-            if (usingSynthFallback) {
-                synthElapsed = synthDuration * pct;
-                updateProgressUI(synthElapsed, synthDuration);
-            } else if (audioEl.duration) {
+            if (audioEl.duration) {
                 audioEl.currentTime = audioEl.duration * pct;
                 updateProgressUI(audioEl.currentTime, audioEl.duration);
             }
@@ -2601,6 +3286,7 @@
 
             const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
             const album = ALBUMS[track.albumId];
+            const isExplicit = Boolean(track.isExplicit || (album && album.isExplicit));
             const gradient = (album && album.gradient) ? album.gradient : artist.gradient;
             const coverPath = track.coverFile || (album && album.coverFile) || "";
             const coverUrl = coverPath ? getRawUrl(coverPath) : "";
@@ -2608,6 +3294,11 @@
 
             document.getElementById("miniTitle").textContent = track.title;
             document.getElementById("miniArtist").textContent = artist.name;
+            const miniExpBadge = document.getElementById("miniExplicitBadge");
+            if (miniExpBadge) {
+                if (isExplicit) miniExpBadge.classList.remove("hidden");
+                else miniExpBadge.classList.add("hidden");
+            }
 
             // Обновляем картинку в мини-плеере ТОЛЬКО если сменился трек или сама обложка
             const miniCoverEl = document.getElementById("miniCover");
@@ -2618,7 +3309,19 @@
 
             document.getElementById("playerTitle").textContent = track.title;
             document.getElementById("playerArtist").textContent = artist.name;
-            document.getElementById("playerAlbumTopBtn").textContent = album ? album.title : "СИНГЛ";
+            // Если трек не входит в альбом, под «СЕЙЧАС ИГРАЕТ» пишем название самого трека
+            document.getElementById("playerAlbumTopBtn").textContent = album ? album.title : track.title;
+
+            const coverBadge = document.getElementById("playerCoverBadge");
+            if (coverBadge) {
+                coverBadge.textContent = album ? "ALBUM TRACK" : "SINGLE TRACK";
+            }
+
+            const expBadge = document.getElementById("playerExplicitBadge");
+            if (expBadge) {
+                if (isExplicit) expBadge.classList.remove("hidden");
+                else expBadge.classList.add("hidden");
+            }
 
             const newBadge = document.getElementById("playerNewBadge");
             if (newBadge) {
@@ -2795,7 +3498,7 @@
             updatePinDots();
 
             if (enteredPin.length === 4) {
-                if (enteredPin === OWNER_SECRET_PIN) {
+                if (_verifyAccessDigest(enteredPin)) {
                     setTimeout(() => unlockOwnerMode(), 120);
                 } else {
                     const card = document.getElementById("pinCard");
@@ -2939,6 +3642,7 @@
             const type = document.getElementById("newAlbumTypeSelect").value;
             const year = parseInt(document.getElementById("newAlbumYearInput").value, 10) || 2025;
             const coverFile = document.getElementById("newAlbumCoverInput").value.trim();
+            const isExplicit = Boolean(document.getElementById("newAlbumExplicitInput")?.checked);
 
             if (!title) {
                 showToast("Введите название альбома", "ВНИМАНИЕ");
@@ -2952,6 +3656,7 @@
                 artistId,
                 type,
                 year,
+                isExplicit,
                 coverFile: coverFile || `covers/${newId}.jpg`,
                 gradient: ARTIST_ALBUM_GRADIENTS[artistId] || "from-purple-600 via-indigo-900 to-zinc-950"
             };
@@ -2962,6 +3667,7 @@
             populateAlbumSelectForArtist();
             document.getElementById("newAlbumTitleInput").value = "";
             document.getElementById("newAlbumCoverInput").value = "";
+            if (document.getElementById("newAlbumExplicitInput")) document.getElementById("newAlbumExplicitInput").checked = false;
             await persistSettingsToCloud();
             showToast(`Альбом «${title}» создан и сохранён!`, "НОВЫЙ АЛЬБОМ");
         }
@@ -2975,6 +3681,7 @@
             const duration = document.getElementById("newTrackDuration").value.trim() || "2:45";
             const year = parseInt(document.getElementById("newTrackYear").value, 10) || 2025;
             const isNew = document.getElementById("newTrackIsNew").checked;
+            const isExplicit = Boolean(document.getElementById("newTrackIsExplicit")?.checked);
 
             if (!title || !filePath) {
                 showToast("Введите название трека и путь к MP3", "ВНИМАНИЕ");
@@ -2985,6 +3692,7 @@
                 const inlineTitle = document.getElementById("inlineAlbumTitle").value.trim();
                 const inlineCover = document.getElementById("inlineAlbumCover").value.trim();
                 const inlineYear = parseInt(document.getElementById("inlineAlbumYear").value, 10) || year;
+                const inlineExplicit = Boolean(document.getElementById("inlineAlbumExplicit")?.checked);
                 if (!inlineTitle) {
                     showToast("Введите название нового альбома", "ВНИМАНИЕ");
                     return;
@@ -2995,7 +3703,9 @@
                     title: inlineTitle,
                     artistId,
                     type: "АЛЬБОМ",
-                    year: inlineYear,                    coverFile: inlineCover || coverFile || `covers/${albumId}.jpg`,
+                    year: inlineYear,
+                    isExplicit: inlineExplicit,
+                    coverFile: inlineCover || coverFile || `covers/${albumId}.jpg`,
                     gradient: ARTIST_ALBUM_GRADIENTS[artistId]
                 });
             }
@@ -3010,6 +3720,7 @@
                 duration,
                 year,
                 isNew,
+                isExplicit,
                 createdAt: Date.now()
             };
 
@@ -3021,6 +3732,7 @@
             document.getElementById("newTrackTitle").value = "";
             document.getElementById("newTrackFile").value = "";
             document.getElementById("newTrackCover").value = "";
+            if (document.getElementById("newTrackIsExplicit")) document.getElementById("newTrackIsExplicit").checked = false;
 
             await saveCustomTrackToCloud(newTrack);
             await persistSettingsToCloud();
@@ -3096,8 +3808,12 @@
                         return `
                             <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-2">
                                 <div class="min-w-0 flex-1">
-                                    <div class="text-xs font-bold text-white truncate">${alb.title} <span class="text-[10px] text-purple-400">(${alb.year || 2025})</span></div>
-                                    <div class="text-[10px] text-zinc-400 truncate">${art} • ${alb.coverFile || ''}</div>
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="text-xs font-bold text-white truncate">${alb.title}</span>
+                                        <span class="text-[10px] text-purple-400 shrink-0">(${alb.year || 2025})</span>
+                                        ${alb.isExplicit ? `<span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>` : ''}
+                                    </div>
+                                    <div class="text-[10px] text-zinc-400 truncate">${art} • ${alb.coverFile || 'Без обложки'}</div>
                                 </div>
                                 <div class="flex items-center gap-1.5 shrink-0">
                                     <button onclick="openEditAlbumModal('${alb.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-amber-400 flex items-center justify-center">
@@ -3121,11 +3837,16 @@
                 } else {
                     const html = TRACKS.map(trk => {
                         const art = ARTISTS[trk.artistId]?.name || "";
+                        const alb = ALBUMS[trk.albumId]?.title || "Сингл";
                         return `
                             <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-2">
                                 <div class="min-w-0 flex-1">
-                                    <div class="text-xs font-bold text-white truncate">${trk.title} <span class="text-[10px] text-emerald-400">(${trk.year || 2025})</span></div>
-                                    <div class="text-[10px] text-zinc-400 truncate">${art} • ${trk.filePath}</div>
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="text-xs font-bold text-white truncate">${trk.title}</span>
+                                        <span class="text-[10px] text-emerald-400 shrink-0">(${trk.year || 2025})</span>
+                                        ${trk.isExplicit ? `<span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>` : ''}
+                                    </div>
+                                    <div class="text-[10px] text-zinc-400 truncate">${art} • ${alb} • ${trk.filePath}</div>
                                 </div>
                                 <div class="flex items-center gap-1.5 shrink-0">
                                     <button onclick="openEditTrackModal('${trk.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-purple-400 flex items-center justify-center">
@@ -3141,6 +3862,286 @@
                     setContainerHtmlIfChanged(tracksContainer, html);
                 }
             }
+
+            const videosContainer = document.getElementById("ownerVideosManageList");
+            if (videosContainer) {
+                if (VIDEOS.length === 0) {
+                    setContainerHtmlIfChanged(videosContainer, `<p class="text-[11px] text-zinc-500">Видеоклипов пока нет</p>`);
+                } else {
+                    const html = VIDEOS.map(v => {
+                        const art = ARTISTS[v.artistId]?.name || "";
+                        return `
+                            <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-2">
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="text-xs font-bold text-white truncate">${v.title}</span>
+                                        <span class="text-[10px] text-purple-400 shrink-0">(${v.year || 2025})</span>
+                                        ${v.isExplicit ? `<span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>` : ""}
+                                    </div>
+                                    <div class="text-[10px] text-zinc-400 truncate">${art} • ${v.videoSource}</div>
+                                </div>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <button onclick="openEditVideoModal('${v.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-purple-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-pen text-[10px]"></i>
+                                    </button>
+                                    <button onclick="removeVideoFromCatalog('${v.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-rose-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-trash text-[10px]"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join("");
+                    setContainerHtmlIfChanged(videosContainer, html);
+                }
+            }
+
+            const newsContainer = document.getElementById("ownerNewsManageList");
+            if (newsContainer) {
+                if (NEWS.length === 0) {
+                    setContainerHtmlIfChanged(newsContainer, `<p class="text-[11px] text-zinc-500">Новостей пока нет</p>`);
+                } else {
+                    const html = NEWS.map(n => {
+                        const targetLabel = n.targetId === "app" ? "⚡ Приложение" : (ARTISTS[n.targetId]?.name || "Общее");
+                        return `
+                            <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-2">
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="text-xs font-bold text-white truncate">${n.title}</span>
+                                        <span class="text-[10px] text-amber-400 shrink-0">(${targetLabel})</span>
+                                    </div>
+                                    <div class="text-[10px] text-zinc-400 truncate">${n.content}</div>
+                                </div>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <button onclick="openEditNewsModal('${n.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-amber-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-pen text-[10px]"></i>
+                                    </button>
+                                    <button onclick="removeNewsFromCatalog('${n.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-rose-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-trash text-[10px]"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join("");
+                    setContainerHtmlIfChanged(newsContainer, html);
+                }
+            }
+        }
+
+        // УПРАВЛЕНИЕ ВИДЕОКЛИПАМИ В ПАНЕЛИ ВЛАДЕЛЬЦА
+        async function addOwnerVideoClip() {
+            const title = document.getElementById("newVideoTitle")?.value.trim();
+            const artistId = document.getElementById("newVideoArtist")?.value || "mc_geich";
+            const year = parseInt(document.getElementById("newVideoYear")?.value, 10) || 2025;
+            const previewFile = document.getElementById("newVideoPreview")?.value.trim() || "";
+            const videoSource = document.getElementById("newVideoSource")?.value.trim() || "";
+            const duration = document.getElementById("newVideoDuration")?.value.trim() || "3:00";
+            const isExplicit = Boolean(document.getElementById("newVideoIsExplicit")?.checked);
+
+            if (!title || !videoSource) {
+                showToast("Укажите название клипа и ссылку/код видео", "ВНИМАНИЕ");
+                return;
+            }
+
+            const newVideo = {
+                id: "vid_" + Date.now(),
+                title,
+                artistId,
+                year,
+                previewFile,
+                videoSource,
+                duration,
+                isExplicit,
+                createdAt: Date.now()
+            };
+
+            customVideosFromCloud.unshift(newVideo);
+            saveStateToLocalStorage(true);
+            renderAllViews();
+
+            document.getElementById("newVideoTitle").value = "";
+            document.getElementById("newVideoPreview").value = "";
+            document.getElementById("newVideoSource").value = "";
+            if (document.getElementById("newVideoIsExplicit")) document.getElementById("newVideoIsExplicit").checked = false;
+
+            await persistSettingsToCloud();
+            showToast(`Видеоклип «${title}» опубликован!`, "ВИДЕОКЛИПЫ");
+        }
+
+        function openEditVideoModal(videoId) {
+            const vid = customVideosFromCloud.find(v => v.id === videoId);
+            if (!vid) return;
+            document.getElementById("editModalHeader").textContent = "Редактировать видеоклип";
+            document.getElementById("editModalBody").innerHTML = `
+                <div class="space-y-2.5">
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Название клипа</label>
+                        <input id="editVidTitle" type="text" value="${vid.title.replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Артист</label>
+                            <select id="editVidArtist" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
+                                <option value="mc_geich" ${vid.artistId === 'mc_geich' ? 'selected' : ''}>МС ГЕИЧ</option>
+                                <option value="mc_makaka" ${vid.artistId === 'mc_makaka' ? 'selected' : ''}>МС МАКАКА</option>
+                                <option value="mc_ezdit" ${vid.artistId === 'mc_ezdit' ? 'selected' : ''}>МС ЕЗДИТЬ</option>
+                                <option value="mc_oparysh" ${vid.artistId === 'mc_oparysh' ? 'selected' : ''}>МС ОПАРЫШ</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Год</label>
+                            <input id="editVidYear" type="number" value="${vid.year || 2025}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Превью-картинка</label>
+                        <input id="editVidPreview" type="text" value="${(vid.previewFile || '').replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">                    </div>
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Ссылка на видео или код плеера (&lt;iframe&gt;)</label>
+                        <textarea id="editVidSource" rows="2" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">${vid.videoSource || ''}</textarea>
+                    </div>
+                    <label class="flex items-center gap-2 py-2 px-3 rounded-xl bg-zinc-900 border border-rose-500/40 text-xs text-rose-400 cursor-pointer">
+                        <input id="editVidExplicit" type="checkbox" ${vid.isExplicit ? 'checked' : ''} class="accent-rose-500 rounded">
+                        <span class="font-black">Плашка 18+ на клипе</span>
+                    </label>
+                    <button onclick="saveEditedVideo('${vid.id}')" class="w-full py-2.5 rounded-xl bg-purple-600 text-white font-extrabold text-xs spring-btn">
+                        Сохранить видеоклип
+                    </button>
+                </div>
+            `;
+            const modal = document.getElementById("editModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        async function saveEditedVideo(videoId) {
+            const idx = customVideosFromCloud.findIndex(v => v.id === videoId);
+            if (idx === -1) return;
+            customVideosFromCloud[idx].title = document.getElementById("editVidTitle").value.trim() || customVideosFromCloud[idx].title;
+            customVideosFromCloud[idx].artistId = document.getElementById("editVidArtist").value;
+            customVideosFromCloud[idx].year = parseInt(document.getElementById("editVidYear").value, 10) || 2025;
+            customVideosFromCloud[idx].previewFile = document.getElementById("editVidPreview").value.trim();
+            customVideosFromCloud[idx].videoSource = document.getElementById("editVidSource").value.trim();
+            customVideosFromCloud[idx].isExplicit = Boolean(document.getElementById("editVidExplicit")?.checked);
+
+            closeEditModal();
+            saveStateToLocalStorage(true);
+            renderAllViews();
+            await persistSettingsToCloud();
+            showToast("Видеоклип обновлён!", "СОХРАНЕНО");
+        }
+
+        async function removeVideoFromCatalog(videoId) {
+            deletedCustomIds.add(videoId);
+            customVideosFromCloud = customVideosFromCloud.filter(v => v.id !== videoId);
+            saveStateToLocalStorage(true);
+            renderAllViews();
+            await persistSettingsToCloud();
+            showToast("Видеоклип удалён", "КАТАЛОГ");
+        }
+
+        // УПРАВЛЕНИЕ НОВОСТЯМИ В ПАНЕЛИ ВЛАДЕЛЬЦА
+        async function addOwnerNewsItem() {
+            const title = document.getElementById("newNewsTitle")?.value.trim();
+            const targetId = document.getElementById("newNewsTarget")?.value || "app";
+            const dateText = document.getElementById("newNewsDate")?.value.trim() || new Date().toLocaleDateString("ru-RU");
+            const imageFile = document.getElementById("newNewsImage")?.value.trim() || "";
+            const content = document.getElementById("newNewsContent")?.value.trim() || "";
+
+            if (!title || !content) {
+                showToast("Введите заголовок и текст новости", "ВНИМАНИЕ");
+                return;
+            }
+
+            const newNews = {
+                id: "news_" + Date.now(),
+                title,
+                targetId,
+                dateText,
+                imageFile,
+                content,
+                createdAt: Date.now()
+            };
+
+            customNewsFromCloud.unshift(newNews);
+            saveStateToLocalStorage(true);
+            renderAllViews();
+
+            document.getElementById("newNewsTitle").value = "";
+            document.getElementById("newNewsDate").value = "";
+            document.getElementById("newNewsImage").value = "";
+            document.getElementById("newNewsContent").value = "";
+
+            await persistSettingsToCloud();
+            showToast("Новость опубликована!", "НОВОСТИ");
+        }
+
+        function openEditNewsModal(newsId) {
+            const n = customNewsFromCloud.find(x => x.id === newsId);
+            if (!n) return;
+            document.getElementById("editModalHeader").textContent = "Редактировать новость";
+            document.getElementById("editModalBody").innerHTML = `
+                <div class="space-y-2.5">
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Заголовок</label>
+                        <input id="editNewsTitle" type="text" value="${n.title.replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Категория / Артист</label>
+                            <select id="editNewsTarget" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
+                                <option value="app" ${n.targetId === 'app' ? 'selected' : ''}>⚡ Приложение</option>
+                                <option value="mc_geich" ${n.targetId === 'mc_geich' ? 'selected' : ''}>МС ГЕИЧ</option>
+                                <option value="mc_makaka" ${n.targetId === 'mc_makaka' ? 'selected' : ''}>МС МАКАКА</option>
+                                <option value="mc_ezdit" ${n.targetId === 'mc_ezdit' ? 'selected' : ''}>МС ЕЗДИТЬ</option>
+                                <option value="mc_oparysh" ${n.targetId === 'mc_oparysh' ? 'selected' : ''}>МС ОПАРЫШ</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Дата / Метка</label>
+                            <input id="editNewsDate" type="text" value="${(n.dateText || '').replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Картинка к новости</label>
+                        <input id="editNewsImage" type="text" value="${(n.imageFile || '').replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Текст новости</label>
+                        <textarea id="editNewsContent" rows="3" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">${n.content || ''}</textarea>
+                    </div>
+                    <button onclick="saveEditedNews('${n.id}')" class="w-full py-2.5 rounded-xl bg-amber-500 text-black font-extrabold text-xs spring-btn">
+                        Сохранить новость
+                    </button>
+                </div>
+            `;
+            const modal = document.getElementById("editModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        async function saveEditedNews(newsId) {
+            const idx = customNewsFromCloud.findIndex(x => x.id === newsId);
+            if (idx === -1) return;
+            customNewsFromCloud[idx].title = document.getElementById("editNewsTitle").value.trim() || customNewsFromCloud[idx].title;
+            customNewsFromCloud[idx].targetId = document.getElementById("editNewsTarget").value;
+            customNewsFromCloud[idx].dateText = document.getElementById("editNewsDate").value.trim();
+            customNewsFromCloud[idx].imageFile = document.getElementById("editNewsImage").value.trim();
+            customNewsFromCloud[idx].content = document.getElementById("editNewsContent").value.trim();
+
+            closeEditModal();
+            saveStateToLocalStorage(true);
+            renderAllViews();
+            await persistSettingsToCloud();
+            showToast("Новость обновлена!", "СОХРАНЕНО");
+        }
+
+        async function removeNewsFromCatalog(newsId) {
+            deletedCustomIds.add(newsId);
+            customNewsFromCloud = customNewsFromCloud.filter(n => n.id !== newsId);
+            saveStateToLocalStorage(true);
+            renderAllViews();
+            await persistSettingsToCloud();
+            showToast("Новость удалена", "НОВОСТИ");
         }
 
         function openEditAlbumModal(albumId) {
@@ -3171,6 +4172,10 @@
                         <label class="text-[10px] text-zinc-400 block mb-1">Путь к обложке</label>
                         <input id="editAlbCover" type="text" value="${(alb.coverFile || '').replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
                     </div>
+                    <label class="flex items-center gap-2 py-2 px-3 rounded-xl bg-zinc-900 border border-rose-500/40 text-xs text-rose-400 cursor-pointer">
+                        <input id="editAlbExplicit" type="checkbox" ${alb.isExplicit ? 'checked' : ''} class="accent-rose-500 rounded">
+                        <span class="font-black">Плашка 18+ на альбоме</span>
+                    </label>
                     <button onclick="saveEditedAlbum('${alb.id}')" class="w-full py-2.5 rounded-xl bg-amber-500 text-black font-extrabold text-xs spring-btn">
                         Сохранить изменения альбома
                     </button>
@@ -3188,6 +4193,7 @@
             customAlbumsFromCloud[idx].year = parseInt(document.getElementById("editAlbYear").value, 10) || 2025;
             customAlbumsFromCloud[idx].type = document.getElementById("editAlbType").value;
             customAlbumsFromCloud[idx].coverFile = document.getElementById("editAlbCover").value.trim();
+            customAlbumsFromCloud[idx].isExplicit = Boolean(document.getElementById("editAlbExplicit")?.checked);
 
             closeEditModal();
             saveStateToLocalStorage(true);
@@ -3240,6 +4246,16 @@
                         <label class="text-[10px] text-zinc-400 block mb-1">Путь к обложке трека</label>
                         <input id="editTrkCover" type="text" value="${(trk.coverFile || '').replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
                     </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center gap-2 py-2 px-3 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 cursor-pointer justify-center">
+                            <input id="editTrkIsNew" type="checkbox" ${trk.isNew ? 'checked' : ''} class="accent-purple-500 rounded">
+                            <span class="text-[11px] font-bold">NEW релиз</span>
+                        </label>
+                        <label class="flex items-center gap-2 py-2 px-3 rounded-xl bg-zinc-900 border border-rose-500/40 text-xs text-rose-400 cursor-pointer justify-center">
+                            <input id="editTrkExplicit" type="checkbox" ${trk.isExplicit ? 'checked' : ''} class="accent-rose-500 rounded">
+                            <span class="text-[11px] font-black">Плашка 18+</span>
+                        </label>
+                    </div>
                     <button onclick="saveEditedTrack('${trk.id}')" class="w-full py-2.5 rounded-xl bg-purple-600 text-white font-extrabold text-xs spring-btn">
                         Сохранить изменения трека
                     </button>
@@ -3259,6 +4275,8 @@
             customTracksFromCloud[idx].albumId = document.getElementById("editTrkAlbum").value;
             customTracksFromCloud[idx].filePath = document.getElementById("editTrkFile").value.trim();
             customTracksFromCloud[idx].coverFile = document.getElementById("editTrkCover").value.trim();
+            customTracksFromCloud[idx].isNew = Boolean(document.getElementById("editTrkIsNew")?.checked);
+            customTracksFromCloud[idx].isExplicit = Boolean(document.getElementById("editTrkExplicit")?.checked);
 
             closeEditModal();
             saveStateToLocalStorage(true);
@@ -3347,6 +4365,7 @@
 
         function initDarkMusicApp() {
             loadStateFromLocalStorage();
+            setupMediaSessionHandlers();
             renderAllViews();
             applyBroadcastAndForceUpdateUI();
             populateAlbumSelectForArtist();
