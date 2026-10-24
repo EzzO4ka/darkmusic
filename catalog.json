@@ -107,17 +107,17 @@
       "title": "Про продюсеров"
     },
     {
+      "coverFile": "",
+      "isNew": false,
+      "artistId": "mc_makaka",
+      "createdAt": 1792612000839,
+      "albumId": "alb_1792597638805",
       "id": "trk_1792612000839",
       "title": "Шляпка гриба",
-      "artistId": "mc_makaka",
-      "albumId": "alb_1792597638805",
       "filePath": "tracks/mc_makaka/МС Макака - Шляпка гриба.mp3",
-      "coverFile": "",
-      "duration": "2:01",
+      "isExplicit": true,
       "year": 2023,
-      "isNew": false,
-      "createdAt": 1792612000839,
-      "isExplicit": true
+      "duration": "2:01"
     },
     {
       "id": "trk_1792611936565",
@@ -129,7 +129,8 @@
       "duration": "2:18",
       "year": 2023,
       "isNew": false,
-      "createdAt": 1792611936565
+      "createdAt": 1792611936565,
+      "isExplicit": true
     },
     {
       "id": "trk_1792611895502",
@@ -346,5 +347,5 @@
     "active": false,
     "updatedAt": 0
   },
-  "updatedAt": 1792843295750
+  "updatedAt": 1792843297759
 }
