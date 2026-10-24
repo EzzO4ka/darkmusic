@@ -61,7 +61,8 @@
       "type": "АЛЬБОМ",
       "year": 2024,
       "coverFile": "covers/alb_mertvorozdennye.jpg",
-      "gradient": "from-rose-600 via-red-900 to-zinc-950"
+      "gradient": "from-rose-600 via-red-900 to-zinc-950",
+      "isExplicit": true
     }
   ],
   "customTracks": [
@@ -306,6 +307,8 @@
       "createdAt": 1792597676680
     }
   ],
+  "customVideos": [],
+  "customNews": [],
   "deletedCustomIds": [
     "alb_1792597596794"
   ],
@@ -330,5 +333,13 @@
     "message": "Обновите приложение. Старая версия не работает",
     "updatedAt": 1792829054654
   },
-  "updatedAt": 1792829054656
+  "whatsNew": {
+    "id": "",
+    "title": "",
+    "content": "",
+    "version": 2,
+    "active": false,
+    "updatedAt": 0
+  },
+  "updatedAt": 1792843279595
 }
