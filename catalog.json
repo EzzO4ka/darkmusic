@@ -172,17 +172,17 @@
       "isExplicit": true
     },
     {
+      "isExplicit": true,
       "id": "trk_1792605310798",
       "title": "Милена спрыгнула с окна",
-      "artistId": "mc_makaka",
       "albumId": "alb_1792597638805",
-      "filePath": "tracks/mc_makaka/МС_Макака_Милена_спрыгнула_с_окна.mp3",
-      "coverFile": "",
       "duration": "2:00",
+      "filePath": "tracks/mc_makaka/МС_Макака_Милена_спрыгнула_с_окна.mp3",
+      "artistId": "mc_makaka",
+      "createdAt": 1792605310798,
       "year": 2023,
       "isNew": false,
-      "createdAt": 1792605310798,
-      "isExplicit": true
+      "coverFile": ""
     },
     {
       "id": "trk_1792605138686",
@@ -194,7 +194,8 @@
       "duration": "1:05",
       "year": 2024,
       "isNew": false,
-      "createdAt": 1792605138686
+      "createdAt": 1792605138686,
+      "isExplicit": true
     },
     {
       "id": "trk_1792605088772",
@@ -351,5 +352,5 @@
     "active": false,
     "updatedAt": 0
   },
-  "updatedAt": 1792843308476
+  "updatedAt": 1792843310334
 }
