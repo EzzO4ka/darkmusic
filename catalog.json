@@ -198,17 +198,17 @@
       "id": "trk_1792605138686"
     },
     {
-      "id": "trk_1792605088772",
       "title": "Протухшое яйцо",
       "artistId": "mc_ezdit",
-      "albumId": "alb_1792604400709",
+      "isExplicit": true,
       "filePath": "tracks/mc_ezdit/МС Ездить Протухшое яйцо.mp3",
       "coverFile": "",
-      "duration": "1:05",
-      "year": 2024,
-      "isNew": false,
+      "id": "trk_1792605088772",
       "createdAt": 1792605088772,
-      "isExplicit": true
+      "duration": "1:05",
+      "isNew": false,
+      "albumId": "alb_1792604400709",
+      "year": 2024
     },
     {
       "id": "trk_1792605048746",
@@ -220,7 +220,8 @@
       "duration": "1:05",
       "year": 2024,
       "isNew": false,
-      "createdAt": 1792605048746
+      "createdAt": 1792605048746,
+      "isExplicit": true
     },
     {
       "id": "trk_1792605018896",
@@ -353,5 +354,5 @@
     "active": false,
     "updatedAt": 0
   },
-  "updatedAt": 1792843312621
+  "updatedAt": 1792843314154
 }
