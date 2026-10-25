@@ -330,6 +330,17 @@
   ],
   "customVideos": [
     {
+      "id": "vid_1792918889558",
+      "title": "Перезвон",
+      "artistId": "mc_ezdit",
+      "year": 2026,
+      "previewFile": "",
+      "videoSource": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/Oa6z5XOWFMY?si=zgh1BEkxej78OrjE\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+      "duration": "9:49",
+      "isExplicit": false,
+      "createdAt": 1792918889559
+    },
+    {
       "id": "vid_1792918643112",
       "title": "МАМА ПАПА",
       "artistId": "mc_ezdit",
@@ -374,5 +385,5 @@
     "active": true,
     "updatedAt": 1792845951435
   },
-  "updatedAt": 1792918858406
+  "updatedAt": 1792918889565
 }
