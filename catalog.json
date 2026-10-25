@@ -341,11 +341,11 @@
     "createdAt": 1792648871593
   },
   "pinnedBroadcast": {
-    "id": "pin_1792873853758",
+    "id": "",
     "title": "Временные неполадки с приложением",
     "message": "Временно не работает фоновое воспроизведение и функционал переключения музыки и паузы. Исправляем баг.",
-    "active": true,
-    "updatedAt": 1792873853758
+    "active": false,
+    "updatedAt": 1792915286413
   },
   "forceUpdate": {
     "active": false,
@@ -362,5 +362,5 @@
     "active": true,
     "updatedAt": 1792845951435
   },
-  "updatedAt": 1792873853760
+  "updatedAt": 1792915286414
 }
