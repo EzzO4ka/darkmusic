@@ -337,7 +337,7 @@
       "previewFile": "",
       "videoSource": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/ELoWJ9hkM-E?si=ds__hGQAZN5qlBli\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
       "duration": "2:55",
-      "isExplicit": false,
+      "isExplicit": true,
       "createdAt": 1792918643112
     }
   ],
@@ -374,5 +374,5 @@
     "active": true,
     "updatedAt": 1792845951435
   },
-  "updatedAt": 1792918643118
+  "updatedAt": 1792918858406
 }
