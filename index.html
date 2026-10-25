@@ -303,16 +303,8 @@
         <!-- ШАПКА ПРИЛОЖЕНИЯ -->
         <header class="sticky top-0 z-20 bg-black/85 backdrop-blur-xl px-4 py-3 flex items-center justify-between border-b border-zinc-900/80">
             <button onclick="switchTab('home')" class="flex items-center gap-2.5 text-left spring-btn">
-                <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center shadow-lg shadow-purple-600/20 border border-zinc-700/80 relative overflow-hidden shrink-0">
-                    <!-- Встроенный векторный логотип ноты в круге (резерв до загрузки файла) -->
-                    <svg viewBox="0 0 100 100" class="w-7 h-7 text-black" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M47 10 A40 40 0 0 0 45 90" stroke="currentColor" stroke-width="7.5" stroke-linecap="round"/>
-                        <path d="M53 90 A40 40 0 0 0 77 21" stroke="currentColor" stroke-width="7.5" stroke-linecap="round"/>
-                        <ellipse cx="43" cy="68" rx="14" ry="11" transform="rotate(-22 43 68)" fill="currentColor"/>
-                        <path d="M53 64 V16 C53 16 80 28 75 53 C71 40 59 35 53 35" fill="currentColor"/>
-                        <rect x="50.5" y="15" width="5.5" height="50" rx="2.5" fill="currentColor"/>
-                    </svg>
-                    <img id="appHeaderLogoImg" src="" alt="Dark Music Logo" decoding="async" class="absolute inset-0 w-full h-full object-cover" style="display:none" onload="this.style.display='block'" onerror="if(!this.dataset.triedSub){this.dataset.triedSub='1';this.src=getRawUrl('avatars/logo.png');}else{this.style.display='none';}">
+                <div class="w-9 h-9 rounded-xl bg-zinc-950 flex items-center justify-center shadow-lg shadow-purple-600/20 border border-zinc-800 relative overflow-hidden shrink-0">
+                    <img id="appHeaderLogoImg" src="" alt="Dark Music" decoding="async" class="w-full h-full object-contain" onerror="if(!this.dataset.triedSub){this.dataset.triedSub='1';this.src=getRawUrl('avatars/logo.png');}">
                 </div>
                 <div>
                     <div class="flex items-center gap-1.5">
@@ -505,8 +497,7 @@
                         <i class="fa-solid fa-play text-base ml-0.5"></i>
                     </button>
                 </div>
-                <div id="fullChartsList" class="space-y-2"></div>
-            </section>
+                <div id="fullChartsList" class="space-y-2"></div>            </section>
 
             <!-- ВКЛАДКА: ВСЕ АРТИСТЫ -->
             <section id="view-artists" class="hidden space-y-4 view-animate">
@@ -997,15 +988,15 @@
             </div>
 
             <!-- Нижнее меню (5 кнопок с центральной кнопкой-шаффлом) -->
-            <nav class="grid grid-cols-5 items-center pt-0.5">                <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center gap-0.5 py-1 text-purple-400 spring-btn">
+            <nav class="grid grid-cols-5 items-center pt-0.5">
+                <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center gap-0.5 py-1 text-purple-400 spring-btn">
                     <i class="fa-solid fa-house text-sm"></i>
                     <span class="text-[10px] font-bold">Главная</span>
                 </button>
                 <button onclick="switchTab('charts')" id="nav-charts" class="flex flex-col items-center gap-0.5 py-1 text-zinc-500 hover:text-zinc-300 spring-btn">
                     <i class="fa-solid fa-chart-simple text-sm"></i>
                     <span class="text-[10px] font-bold">Чарты</span>
-                </button>
-                <div class="flex justify-center">
+                </button>                <div class="flex justify-center">
                     <button onclick="playShuffleAll()" class="w-11 h-11 -mt-3 rounded-2xl bg-gradient-to-br from-purple-600 via-fuchsia-600 to-indigo-700 text-white flex items-center justify-center shadow-lg shadow-purple-600/40 border border-purple-400/40 spring-btn" title="Моя волна — Вперемешку">
                         <i class="fa-solid fa-shuffle text-sm"></i>
                     </button>
@@ -1172,7 +1163,7 @@
     </div>
 
     <!-- АУДИО-ЭЛЕМЕНТ -->
-    <audio id="audioElement" preload="auto" playsinline></audio>
+    <audio id="audioElement" preload="auto"></audio>
 
     <script>
         /*__BAKED_VAULT_START__*/
@@ -1505,7 +1496,6 @@
                     }
                 });
             }
-
             if (Array.isArray(data.customAlbums)) {
                 const incomingAlbums = cleanValidAlbums(data.customAlbums);
                 if (mergeMode || incomingAlbums.length === 0) {
@@ -1996,15 +1986,15 @@
                 showToast("Введите текст изменений для окна «Что нового»", "ВНИМАНИЕ");
                 return;
             }
-            whatsNewData = {                id: enable ? "wn_" + Date.now() : "",
+            whatsNewData = {
+                id: enable ? "wn_" + Date.now() : "",
                 title,
                 content,
                 version: currentAppBuildVersion,
                 active: Boolean(enable),
                 updatedAt: Date.now()
             };
-            saveStateToLocalStorage(true);
-            applyBroadcastAndForceUpdateUI();
+            saveStateToLocalStorage(true);            applyBroadcastAndForceUpdateUI();
             await persistSettingsToCloud();
             showToast(enable ? "Окно «Что нового» включено для всех пользователей!" : "Окно «Что нового» отключено", "ЧТО НОВОГО");
         }
@@ -2503,8 +2493,7 @@
             const html = albumsList.map((alb) => {
                 const artist = ARTISTS[alb.artistId] || ARTISTS.mc_geich;
                 return `
-                    <div onclick="openAlbumDetail('${alb.id}')" class="w-36 shrink-0 p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2 spring-btn">
-                        <div class="relative">
+                    <div onclick="openAlbumDetail('${alb.id}')" class="w-36 shrink-0 p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2 spring-btn">                        <div class="relative">
                             ${renderCoverBox(alb, "w-full h-32 rounded-xl", "text-2xl")}
                             <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-md text-[8px] font-black uppercase tracking-wider text-purple-300 border border-white/10">
                                 ${alb.type || 'АЛЬБОМ'}
@@ -2995,15 +2984,15 @@
                     <button onclick="playAlbumTracks('${album.id}')" class="w-full py-2.5 rounded-xl bg-white text-black font-extrabold text-xs flex items-center justify-center gap-2 spring-btn">
                         <i class="fa-solid fa-play text-[10px]"></i>
                         <span>Слушать альбом (${albumTracks.length})</span>
-                    </button>                </div>
+                    </button>
+                </div>
                 <div class="space-y-2">
                     <h2 class="text-xs font-black uppercase tracking-wider text-zinc-400">ТРЕКЛИСТ АЛЬБОМА</h2>
                     ${albumTracks.length > 0
                         ? albumTracks.map((t, i) => renderTrackRow(t, i, i + 1)).join("")
                         : `<div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-xs text-zinc-500">В этом альбоме пока нет треков</div>`
                     }
-                </div>
-            `;
+                </div>            `;
             setContainerHtmlIfChanged(content, html);
             updateTrackRowsPlayState();
 
@@ -3016,89 +3005,297 @@
             const track = TRACKS.find(t => t.id === trackId);
             if (!track) return;
 
-            if (currentTrackId === trackId) {
+            if (currentTrackId === trackId && !audioEl.ended) {
                 togglePlay();
                 return;
             }
 
+            isTransitioningTrack = true;
             currentTrackId = trackId;
             isPlaying = true;
             usingSynthFallback = false;
-            stopSynthFallback();
+
+            ensureSilentBackgroundKeepAlive();
 
             const rawUrl = getRawUrl(track.filePath);
-            audioEl.pause();
-            audioEl.src = rawUrl;
+            const cachedBlobUrl = audioBlobCache.get(rawUrl);
+            const targetSrc = cachedBlobUrl || rawUrl;
+
+            // Не вызываем audioEl.pause() перед сменой трека, чтобы ОС не сбрасывала фоновый аудио-фокус на заблокированном экране
+            if (audioEl.src !== targetSrc) {
+                audioEl.src = targetSrc;
+            }
             audioEl.currentTime = 0;
+
+            updatePlayerUI();
+            updateTrackRowsPlayState();
+            updateMediaSessionMetadata();
 
             const playPromise = audioEl.play();
             if (playPromise !== undefined) {
                 playPromise.then(() => {
-                    usingSynthFallback = false;
+                    isTransitioningTrack = false;
+                    isPlaying = true;
                     updatePlayerUI();
                     updateTrackRowsPlayState();
+                    updateMediaSessionMetadata();
+                    updateMediaSessionPositionState();
+                    prepareAndPreloadNextTrack();
                 }).catch((err) => {
-                    console.warn("Audio playback notice:", err);
-                    updatePlayerUI();
-                    updateTrackRowsPlayState();
+                    isTransitioningTrack = false;
+                    // Если кэшированный blob-URL устарел, пробуем прямой URL
+                    if (cachedBlobUrl && audioEl.src === cachedBlobUrl) {
+                        audioBlobCache.delete(rawUrl);
+                        audioEl.src = rawUrl;
+                        audioEl.play().then(() => {
+                            isPlaying = true;
+                            updatePlayerUI();
+                            updateTrackRowsPlayState();
+                            updateMediaSessionMetadata();
+                            prepareAndPreloadNextTrack();
+                        }).catch(() => {});
+                    } else {
+                        console.warn("Audio playback notice:", err);
+                        updatePlayerUI();
+                        updateTrackRowsPlayState();
+                    }
                 });
+            } else {
+                isTransitioningTrack = false;
+                prepareAndPreloadNextTrack();
             }
 
             const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
             showToast(`${artist.name} — ${track.title}`, "СЕЙЧАС ИГРАЕТ");
-            updatePlayerUI();
-            updateTrackRowsPlayState();
-            updateMediaSessionMetadata();
         }
 
-        // Интеграция с системным плеером уведомлений и экраном блокировки (Media Session API)
+        // =========================================================================
+        // ФОНОВОЕ ВОСПРОИЗВЕДЕНИЕ, ПРЕДЗАГРУЗКА В ПАМЯТЬ И ЭКРАН БЛОКИРОВКИ (MEDIA SESSION)
+        // =========================================================================
+
+        let isTransitioningTrack = false;
+        let queuedNextTrackId = null;
+        const audioBlobCache = new Map();
+        const artworkDataUrlCache = new Map();
+        let silentKeepAliveCtx = null;
+        let silentKeepAliveSource = null;
+        let lastPositionStateUpdate = 0;
+
+        // Абсолютно бесшумный (нулевой буфер 0.0) удержатель аудио-сессии, чтобы телефон не усыплял вкладку между треками
+        function ensureSilentBackgroundKeepAlive() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                if (!silentKeepAliveCtx) {
+                    silentKeepAliveCtx = new AudioCtx();
+                }
+                if (silentKeepAliveCtx.state === "suspended") {
+                    silentKeepAliveCtx.resume().catch(() => {});
+                }
+                if (!silentKeepAliveSource) {
+                    const silentBuffer = silentKeepAliveCtx.createBuffer(1, silentKeepAliveCtx.sampleRate, silentKeepAliveCtx.sampleRate);
+                    const src = silentKeepAliveCtx.createBufferSource();
+                    src.buffer = silentBuffer;
+                    src.loop = true;
+                    const zeroGain = silentKeepAliveCtx.createGain();
+                    zeroGain.gain.value = 0.00001; // Полная тишина без единого звука или гула
+                    src.connect(zeroGain);
+                    zeroGain.connect(silentKeepAliveCtx.destination);
+                    src.start(0);
+                    silentKeepAliveSource = src;
+                }
+            } catch (e) {}
+        }
+
+        // Вычисление и предзагрузка следующего трека в оперативную память (Blob), чтобы в фоне он включался мгновенно без ожидания сети
+        function pickNextTrackId() {
+            if (TRACKS.length === 0) return null;
+            if (TRACKS.length === 1) return TRACKS[0].id;
+            if (isShuffle) {
+                const others = TRACKS.filter(t => t.id !== currentTrackId);
+                const pick = others[Math.floor(Math.random() * others.length)];
+                return pick ? pick.id : TRACKS[0].id;
+            }
+            const idx = TRACKS.findIndex(t => t.id === currentTrackId);
+            const nextIdx = (idx + 1) % TRACKS.length;
+            return TRACKS[nextIdx].id;
+        }
+
+        async function prepareAndPreloadNextTrack() {
+            queuedNextTrackId = pickNextTrackId();
+            if (!queuedNextTrackId) return;
+            const nextTrk = TRACKS.find(t => t.id === queuedNextTrackId);
+            if (!nextTrk || !nextTrk.filePath) return;
+
+            const rawUrl = getRawUrl(nextTrk.filePath);
+            if (!rawUrl || audioBlobCache.has(rawUrl)) return;
+
+            try {
+                const resp = await fetch(rawUrl, { mode: "cors" });
+                if (resp.ok) {
+                    const blob = await resp.blob();
+                    if (blob && blob.size > 1024) {
+                        if (audioBlobCache.size >= 6) {
+                            const oldestKey = audioBlobCache.keys().next().value;
+                            const oldBlobUrl = audioBlobCache.get(oldestKey);
+                            try { URL.revokeObjectURL(oldBlobUrl); } catch (e) {}
+                            audioBlobCache.delete(oldestKey);
+                        }
+                        const blobUrl = URL.createObjectURL(blob);
+                        audioBlobCache.set(rawUrl, blobUrl);
+                    }
+                }
+            } catch (e) {}
+        }
+
+        // Генерация гарантированной обложки 512x512 для шторки уведомлений и экрана блокировки
+        function getFallbackArtworkDataUrl(track, artist) {
+            const key = `${track.id}_${artist.id}`;
+            if (artworkDataUrlCache.has(key)) return artworkDataUrlCache.get(key);
+            try {
+                const canvas = document.createElement("canvas");
+                canvas.width = 512;
+                canvas.height = 512;
+                const ctx = canvas.getContext("2d");
+                const grad = ctx.createLinearGradient(0, 0, 512, 512);
+                grad.addColorStop(0, "#581c87");
+                grad.addColorStop(0.5, "#1e1b4b");
+                grad.addColorStop(1, "#09090b");
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, 512, 512);
+
+                ctx.fillStyle = "#a855f7";
+                ctx.font = "900 28px Inter, sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("DARK MUSIC", 256, 170);
+
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "900 40px Inter, sans-serif";
+                ctx.fillText((track.title || "Track").slice(0, 20), 256, 265);
+
+                ctx.fillStyle = "#d4d4d8";
+                ctx.font = "700 28px Inter, sans-serif";
+                ctx.fillText(artist.name || "Artist", 256, 325);
+
+                const dataUrl = canvas.toDataURL("image/png");
+                artworkDataUrlCache.set(key, dataUrl);
+                return dataUrl;
+            } catch (e) {
+                return "";
+            }
+        }
+
         function setupMediaSessionHandlers() {
             if (!("mediaSession" in navigator)) return;
-            try {
-                navigator.mediaSession.setActionHandler("play", () => {
-                    if (!isPlaying) togglePlay();
-                });
-                navigator.mediaSession.setActionHandler("pause", () => {
-                    if (isPlaying) togglePlay();
-                });
-                navigator.mediaSession.setActionHandler("previoustrack", () => {
-                    prevTrack();
-                });
-                navigator.mediaSession.setActionHandler("nexttrack", () => {
-                    nextTrack();
-                });
-                navigator.mediaSession.setActionHandler("seekto", (details) => {
-                    if (details.SeekTime !== undefined && audioEl.duration) {
-                        audioEl.currentTime = details.SeekTime;
-                    } else if (details.seekTime !== undefined && audioEl.duration) {
-                        audioEl.currentTime = details.seekTime;
+            const actions = [
+                ["play", () => {
+                    isPlaying = true;
+                    ensureSilentBackgroundKeepAlive();
+                    audioEl.play().catch(() => {});
+                    updatePlayerUI();
+                    updateTrackRowsPlayState();
+                    updateMediaSessionMetadata();
+                }],
+                ["pause", () => {
+                    isPlaying = false;
+                    audioEl.pause();
+                    updatePlayerUI();
+                    updateTrackRowsPlayState();
+                    if ("mediaSession" in navigator) {
+                        try { navigator.mediaSession.playbackState = "paused"; } catch (e) {}
                     }
+                }],
+                ["previoustrack", () => {
+                    prevTrack();
+                }],
+                ["nexttrack", () => {
+                    nextTrack();
+                }],
+                ["seekbackward", (details) => {
+                    const offset = (details && details.seekOffset) || 10;
+                    audioEl.currentTime = Math.max(0, (audioEl.currentTime || 0) - offset);
+                    updateMediaSessionPositionState();
+                }],
+                ["seekforward", (details) => {
+                    const offset = (details && details.seekOffset) || 10;
+                    if (audioEl.duration) {
+                        audioEl.currentTime = Math.min(audioEl.duration, (audioEl.currentTime || 0) + offset);
+                    }
+                    updateMediaSessionPositionState();
+                }],
+                ["seekto", (details) => {
+                    const targetTime = details.seekTime !== undefined ? details.seekTime : details.SeekTime;
+                    if (targetTime !== undefined && audioEl.duration) {
+                        audioEl.currentTime = Math.max(0, Math.min(audioEl.duration, targetTime));
+                        updateMediaSessionPositionState();
+                    }
+                }]
+            ];
+
+            actions.forEach(([action, handler]) => {
+                try {
+                    navigator.mediaSession.setActionHandler(action, handler);
+                } catch (e) {}
+            });
+        }
+
+        function updateMediaSessionPositionState() {
+            if (!("mediaSession" in navigator) || !("setPositionState" in navigator.mediaSession)) return;
+            const dur = audioEl.duration;
+            const cur = audioEl.currentTime;
+            if (!dur || !isFinite(dur) || isNaN(dur) || dur <= 0) return;
+            try {
+                navigator.mediaSession.setPositionState({
+                    duration: dur,
+                    playbackRate: audioEl.playbackRate || 1,
+                    position: Math.max(0, Math.min(cur || 0, dur))
                 });
             } catch (e) {}
         }
 
         function updateMediaSessionMetadata() {
-            if (!("mediaSession" in navigator)) return;
+            if (!("mediaSession" in navigator) || typeof MediaMetadata === "undefined") return;
             try {
                 const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0];
                 if (!track) return;
                 const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
                 const album = ALBUMS[track.albumId];
-                const coverPath = track.coverFile || (album && album.coverFile) || artist.avatarFile || "logo.png";
-                const artworkUrl = getRawUrl(coverPath);
+                const coverPath = track.coverFile || (album && album.coverFile) || artist.avatarFile || "";
+                const remoteUrl = coverPath ? getRawUrl(coverPath) : "";
+                const fallbackDataUrl = getFallbackArtworkDataUrl(track, artist);
+
+                const artworkList = [];
+                if (remoteUrl) {
+                    const isPng = remoteUrl.toLowerCase().endsWith(".png");
+                    artworkList.push({
+                        src: remoteUrl,
+                        sizes: "96x96 128x128 192x192 256x256 384x384 512x512",
+                        type: isPng ? "image/png" : "image/jpeg"
+                    });
+                }
+                if (fallbackDataUrl) {
+                    artworkList.push({
+                        src: fallbackDataUrl,
+                        sizes: "512x512",
+                        type: "image/png"
+                    });
+                }
 
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: track.title,
                     artist: artist.name,
                     album: album ? album.title : "Dark Music",
-                    artwork: artworkUrl ? [
-                        { src: artworkUrl, sizes: "512x512", type: "image/jpeg" },
-                        { src: artworkUrl, sizes: "512x512", type: "image/png" }
-                    ] : []
+                    artwork: artworkList
                 });
                 navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
+                setupMediaSessionHandlers();
             } catch (e) {}
         }
+
+        audioEl.addEventListener("loadedmetadata", () => {
+            updateMediaSessionMetadata();
+            updateMediaSessionPositionState();
+        });
 
         audioEl.addEventListener("play", () => {
             isPlaying = true;
@@ -3107,40 +3304,60 @@
             updateMediaSessionMetadata();
         });
 
+        audioEl.addEventListener("playing", () => {
+            isTransitioningTrack = false;
+            isPlaying = true;
+            updatePlayerUI();
+            updateTrackRowsPlayState();
+            updateMediaSessionMetadata();
+            updateMediaSessionPositionState();
+        });
+
         audioEl.addEventListener("pause", () => {
-            if (!audioEl.ended) {
-                isPlaying = false;
-                updatePlayerUI();
-                updateTrackRowsPlayState();
-                if ("mediaSession" in navigator) {
-                    try { navigator.mediaSession.playbackState = "paused"; } catch (e) {}
-                }
+            // Игнорируем техническое событие pause при окончании трека или переключении на следующий в фоне
+            const nearEnd = audioEl.duration && isFinite(audioEl.duration) && (audioEl.currentTime >= audioEl.duration - 0.45);
+            if (audioEl.ended || isTransitioningTrack || nearEnd) {
+                return;
             }
+            isPlaying = false;
+            updatePlayerUI();
+            updateTrackRowsPlayState();
+            if ("mediaSession" in navigator) {
+                try { navigator.mediaSession.playbackState = "paused"; } catch (e) {}
+            }
+        });
+
+        audioEl.addEventListener("seeked", () => {
+            updateMediaSessionPositionState();
         });
 
         audioEl.addEventListener("error", () => {
             console.warn("Не удалось загрузить аудиофайл:", audioEl.src);
+            isTransitioningTrack = false;
         });
 
         audioEl.addEventListener("timeupdate", () => {
             const cur = audioEl.currentTime || 0;
             const dur = audioEl.duration || 165;
             updateProgressUI(cur, dur);
-            if ("mediaSession" in navigator && "setPositionState" in navigator.mediaSession && audioEl.duration && !isNaN(audioEl.duration)) {
-                try {
-                    navigator.mediaSession.setPositionState({
-                        duration: audioEl.duration,
-                        playbackRate: audioEl.playbackRate || 1,
-                        position: Math.min(audioEl.currentTime, audioEl.duration)
-                    });
-                } catch (e) {}
+
+            const now = Date.now();
+            if (now - lastPositionStateUpdate > 1000) {
+                lastPositionStateUpdate = now;
+                updateMediaSessionPositionState();
             }
         });
 
         audioEl.addEventListener("ended", () => {
+            isTransitioningTrack = true;
             if (isRepeat) {
                 audioEl.currentTime = 0;
-                audioEl.play().catch(() => {});
+                audioEl.play().then(() => {
+                    isTransitioningTrack = false;
+                    updateMediaSessionPositionState();
+                }).catch(() => {
+                    isTransitioningTrack = false;
+                });
             } else {
                 nextTrack();
             }
@@ -3167,11 +3384,18 @@
 
             isPlaying = !isPlaying;
             if (isPlaying) {
-                audioEl.play().catch((err) => {
+                ensureSilentBackgroundKeepAlive();
+                audioEl.play().then(() => {
+                    updateMediaSessionMetadata();
+                    updateMediaSessionPositionState();
+                }).catch((err) => {
                     console.warn("Play error:", err);
                 });
             } else {
                 audioEl.pause();
+                if ("mediaSession" in navigator) {
+                    try { navigator.mediaSession.playbackState = "paused"; } catch (e) {}
+                }
             }
             updatePlayerUI();
             updateTrackRowsPlayState();
@@ -3179,21 +3403,29 @@
 
         function nextTrack() {
             if (TRACKS.length === 0) return;
-            if (isShuffle && TRACKS.length > 1) {
-                const others = TRACKS.filter(t => t.id !== currentTrackId);
-                const pick = others[Math.floor(Math.random() * others.length)];
-                if (pick) playTrackById(pick.id);
+            isTransitioningTrack = true;
+
+            if (queuedNextTrackId && TRACKS.some(t => t.id === queuedNextTrackId) && queuedNextTrackId !== currentTrackId) {
+                const nextId = queuedNextTrackId;
+                queuedNextTrackId = null;
+                currentTrackId = null;
+                playTrackById(nextId);
                 return;
             }
-            const idx = TRACKS.findIndex(t => t.id === currentTrackId);
-            const nextIdx = (idx + 1) % TRACKS.length;
-            playTrackById(TRACKS[nextIdx].id);
+
+            const nextId = pickNextTrackId();
+            if (nextId) {
+                currentTrackId = null;
+                playTrackById(nextId);
+            }
         }
 
         function prevTrack() {
             if (TRACKS.length === 0) return;
+            isTransitioningTrack = true;
             const idx = TRACKS.findIndex(t => t.id === currentTrackId);
             const prevIdx = (idx - 1 + TRACKS.length) % TRACKS.length;
+            currentTrackId = null;
             playTrackById(TRACKS[prevIdx].id);
         }
 
@@ -3259,8 +3491,7 @@
         }
 
         function updatePlayerUI() {
-            const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0] || null;
-            const miniPlayIcon = document.getElementById("miniPlayIcon");
+            const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0] || null;            const miniPlayIcon = document.getElementById("miniPlayIcon");
             const playerPlayIcon = document.getElementById("playerPlayIcon");
             const heroEq = document.getElementById("heroEq");
             const coverCard = document.getElementById("playerCoverCard");
@@ -3759,8 +3990,7 @@
 
         function addFactInputRow(existingText = "", num = null) {
             const container = document.getElementById("bioEditorFactsList");
-            if (!container) return;
-            const count = num || (container.children.length + 1);
+            if (!container) return;            const count = num || (container.children.length + 1);
             const row = document.createElement("div");
             row.className = "flex items-center gap-2";
             row.innerHTML = `
@@ -3994,7 +4224,8 @@
                     </div>
                     <div>
                         <label class="text-[10px] text-zinc-400 block mb-1">Превью-картинка</label>
-                        <input id="editVidPreview" type="text" value="${(vid.previewFile || '').replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">                    </div>
+                        <input id="editVidPreview" type="text" value="${(vid.previewFile || '').replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                    </div>
                     <div>
                         <label class="text-[10px] text-zinc-400 block mb-1">Ссылка на видео или код плеера (&lt;iframe&gt;)</label>
                         <textarea id="editVidSource" rows="2" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">${vid.videoSource || ''}</textarea>
@@ -4258,8 +4489,7 @@
                     </div>
                     <button onclick="saveEditedTrack('${trk.id}')" class="w-full py-2.5 rounded-xl bg-purple-600 text-white font-extrabold text-xs spring-btn">
                         Сохранить изменения трека
-                    </button>
-                </div>
+                    </button>                </div>
             `;
             const modal = document.getElementById("editModal");
             modal.classList.remove("hidden");
