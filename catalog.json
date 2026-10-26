@@ -200,7 +200,7 @@
     {
       "filePath": "tracks/mc_ezdit/МС Ездить Протухшое яйцо.mp3",
       "artistId": "mc_ezdit",
-      "isExplicit": true,
+      "isExplicit": false,
       "title": "Протухшое яйцо",
       "id": "trk_1792605088772",
       "albumId": "alb_1792604400709",
@@ -385,5 +385,5 @@
     "active": true,
     "updatedAt": 1793050956862
   },
-  "updatedAt": 1793051634479
+  "updatedAt": 1793054283510
 }
