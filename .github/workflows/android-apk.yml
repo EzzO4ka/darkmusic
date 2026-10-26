@@ -22,7 +22,10 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         with:
-          tools: false
+          packages: |
+            platform-tools
+            platforms;android-34
+            build-tools;34.0.0
 
       - name: Generate Native Android Project with MediaSession & LockScreen Service
         run: |
