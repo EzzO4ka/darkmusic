@@ -1,109 +1,598 @@
 name: Build Dark Music APK
 
 on:
-  workflow_dispatch:
   push:
-    paths:
-      - "index.html"
-      - "package.json"
-      - "package-lock.json"
-      - "capacitor.config.json"
-      - ".github/workflows/android-apk.yml"
-      - "Глянцевая музыкальная нота в кольце.png"
-
-permissions:
-  contents: read
+    branches: [main, master]
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-apk:
     name: Build Android APK
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
+      - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Set up Java
+    
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: "21"
-
-      - name: Accept Android SDK licenses
-        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses
-
-      - name: Install Android SDK packages
+          distribution: 'temurin'
+          java-version: '17'
+    
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+    
+      - name: Generate Native Android Project with MediaSession & LockScreen Service
         run: |
-          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "platforms;android-36" "build-tools;36.0.0"
-
-      - name: Install JavaScript dependencies
-        run: npm install
-
-      - name: Prepare local web app
+          mkdir -p android-project/app/src/main/java/com/darkmusic/app
+          mkdir -p android-project/app/src/main/res/drawable
+          mkdir -p android-project/app/src/main/res/values
+          mkdir -p android-project/app/src/main/assets
+    
+          # Копируем index.html и локальные ресурсы в assets APK
+          cp index.html android-project/app/src/main/assets/index.html
+          [ -f catalog.json ] && cp catalog.json android-project/app/src/main/assets/catalog.json || true
+          [ -f logo.png ] && cp logo.png android-project/app/src/main/assets/logo.png || true
+          [ -f logo.png ] && cp logo.png android-project/app/src/main/res/drawable/app_logo.png || true
+          [ -f avatars/logo.png ] && cp avatars/logo.png android-project/app/src/main/res/drawable/app_logo.png || true
+    
+          cat << 'EOF' > android-project/settings.gradle
+          rootProject.name = "DarkMusic"
+          include ':app'
+          EOF
+    
+          cat << 'EOF' > android-project/build.gradle
+          buildscript {
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+              dependencies {
+                  classpath 'com.android.tools.build:gradle:8.2.2'
+              }
+          }
+          allprojects {
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+          EOF
+    
+          cat << 'EOF' > android-project/gradle.properties
+          org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+          android.useAndroidX=false
+          EOF
+    
+          cat << 'EOF' > android-project/app/build.gradle
+          apply plugin: 'com.android.application'
+    
+          android {
+              namespace "com.darkmusic.app"
+              compileSdk 34
+    
+              defaultConfig {
+                  applicationId "com.darkmusic.app"
+                  minSdk 24
+                  targetSdk 34
+                  versionCode 20
+                  versionName "2.0"
+              }
+    
+              buildTypes {
+                  debug {
+                      minifyEnabled false
+                  }
+              }
+    
+              compileOptions {
+                  sourceCompatibility JavaVersion.VERSION_17
+                  targetCompatibility JavaVersion.VERSION_17
+              }
+          }
+          EOF
+    
+          cat << 'EOF' > android-project/app/src/main/res/values/styles.xml
+          <?xml version="1.0" encoding="utf-8"?>
+          <resources>
+              <style name="AppTheme" parent="android:Theme.DeviceDefault.NoActionBar">
+                  <item name="android:statusBarColor">#000000</item>
+                  <item name="android:navigationBarColor">#000000</item>
+                  <item name="android:windowBackground">#000000</item>
+              </style>
+          </resources>
+          EOF
+    
+          # AndroidManifest с разрешениями для шторки уведомлений, экрана блокировки и фонового звука
+          cat << 'EOF' > android-project/app/src/main/AndroidManifest.xml
+          <?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+              package="com.darkmusic.app">
+    
+              <uses-permission android:name="android.permission.INTERNET" />
+              <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+              <uses-permission android:name="android.permission.WAKE_LOCK" />
+              <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+              <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+              <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    
+              <application
+                  android:allowBackup="true"
+                  android:label="Dark Music"
+                  android:icon="@android:drawable/ic_lock_silent_mode_off"
+                  android:usesCleartextTraffic="true"
+                  android:hardwareAccelerated="true"
+                  android:theme="@style/AppTheme">
+    
+                  <activity
+                      android:name=".MainActivity"
+                      android:exported="true"
+                      android:launchMode="singleTop"
+                      android:configChanges="orientation|screenSize|keyboardHidden">
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+                  </activity>
+    
+                  <service
+                      android:name=".MediaPlaybackService"
+                      android:enabled="true"
+                      android:exported="false"
+                      android:foregroundServiceType="mediaPlayback" />
+              </application>
+          </manifest>
+          EOF
+    
+          if [ -f android-project/app/src/main/res/drawable/app_logo.png ]; then
+              sed -i 's|@android:drawable/ic_lock_silent_mode_off|@drawable/app_logo|g' android-project/app/src/main/AndroidManifest.xml
+          fi
+    
+          # Нативный сервис MediaPlaybackService: отвечает за шторку уведомлений и экран блокировки
+          cat << 'EOF' > android-project/app/src/main/java/com/darkmusic/app/MediaPlaybackService.java
+          package com.darkmusic.app;
+    
+          import android.app.Notification;
+          import android.app.NotificationChannel;
+          import android.app.NotificationManager;
+          import android.app.PendingIntent;
+          import android.app.Service;
+          import android.content.Context;
+          import android.content.Intent;
+          import android.content.pm.ServiceInfo;
+          import android.graphics.Bitmap;
+          import android.graphics.BitmapFactory;
+          import android.media.MediaMetadata;
+          import android.media.session.MediaSession;
+          import android.media.session.PlaybackState;
+          import android.os.Build;
+          import android.os.IBinder;
+          import android.os.PowerManager;
+    
+          import java.io.InputStream;
+          import java.net.HttpURLConnection;
+          import java.net.URL;
+    
+          public class MediaPlaybackService extends Service {
+              public static final String CHANNEL_ID = "dark_music_playback_channel";
+              public static final int NOTIFICATION_ID = 4681;
+    
+              public static final String ACTION_UPDATE = "com.darkmusic.app.ACTION_UPDATE";
+              public static final String ACTION_PLAY = "com.darkmusic.app.ACTION_PLAY";
+              public static final String ACTION_PAUSE = "com.darkmusic.app.ACTION_PAUSE";
+              public static final String ACTION_NEXT = "com.darkmusic.app.ACTION_NEXT";
+              public static final String ACTION_PREV = "com.darkmusic.app.ACTION_PREV";
+    
+              private MediaSession mediaSession;
+              private PowerManager.WakeLock wakeLock;
+    
+              private String currentTitle = "Dark Music";
+              private String currentArtist = "Эксклюзивный каталог";
+              private String currentAlbum = "Dark Music";
+              private String currentCoverUrl = "";
+              private Bitmap currentArtwork = null;
+              private boolean isPlaying = false;
+              private long durationMs = 165000L;
+              private long positionMs = 0L;
+    
+              @Override
+              public void onCreate() {
+                  super.onCreate();
+                  createNotificationChannel();
+    
+                  PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                  if (pm != null) {
+                      wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "DarkMusic::AudioWakeLock");
+                      wakeLock.setReferenceCounted(false);
+                  }
+    
+                  mediaSession = new MediaSession(this, "DarkMusicMediaSession");
+                  mediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
+                  mediaSession.setCallback(new MediaSession.Callback() {
+                      @Override
+                      public void onPlay() {
+                          MainActivity.dispatchToWebView("play", -1);
+                      }
+    
+                      @Override
+                      public void onPause() {
+                          MainActivity.dispatchToWebView("pause", -1);
+                      }
+    
+                      @Override
+                      public void onSkipToNext() {
+                          MainActivity.dispatchToWebView("next", -1);
+                      }
+    
+                      @Override
+                      public void onSkipToPrevious() {
+                          MainActivity.dispatchToWebView("prev", -1);
+                      }
+    
+                      @Override
+                      public void onSeekTo(long pos) {
+                          positionMs = pos;
+                          updateSessionAndNotification();
+                          MainActivity.dispatchToWebView("seekto", pos);
+                      }
+                  });
+                  mediaSession.setActive(true);
+              }
+    
+              @Override
+              public int onStartCommand(Intent intent, int flags, int startId) {
+                  if (intent != null && intent.getAction() != null) {
+                      String act = intent.getAction();
+                      if (ACTION_PLAY.equals(act)) {
+                          MainActivity.dispatchToWebView("play", -1);
+                          return START_STICKY;
+                      } else if (ACTION_PAUSE.equals(act)) {
+                          MainActivity.dispatchToWebView("pause", -1);
+                          return START_STICKY;
+                      } else if (ACTION_NEXT.equals(act)) {
+                          MainActivity.dispatchToWebView("next", -1);
+                          return START_STICKY;
+                      } else if (ACTION_PREV.equals(act)) {
+                          MainActivity.dispatchToWebView("prev", -1);
+                          return START_STICKY;
+                      } else if (ACTION_UPDATE.equals(act)) {
+                          currentTitle = intent.getStringExtra("title") != null ? intent.getStringExtra("title") : "Dark Music";
+                          currentArtist = intent.getStringExtra("artist") != null ? intent.getStringExtra("artist") : "Dark Music";
+                          currentAlbum = intent.getStringExtra("album") != null ? intent.getStringExtra("album") : "Dark Music";
+                          String newCover = intent.getStringExtra("coverUrl") != null ? intent.getStringExtra("coverUrl") : "";
+                          isPlaying = intent.getBooleanExtra("isPlaying", false);
+                          durationMs = intent.getLongExtra("durationMs", 165000L);
+                          positionMs = intent.getLongExtra("positionMs", 0L);
+    
+                          if (wakeLock != null) {
+                              if (isPlaying && !wakeLock.isHeld()) {
+                                  wakeLock.acquire(6 * 60 * 60 * 1000L);
+                              } else if (!isPlaying && wakeLock.isHeld()) {
+                                  wakeLock.release();
+                              }
+                          }
+    
+                          if (!newCover.equals(currentCoverUrl)) {
+                              currentCoverUrl = newCover;
+                              fetchCoverArtAsync(newCover);
+                          }
+                          updateSessionAndNotification();
+                      }
+                  }
+                  return START_STICKY;
+              }
+    
+              private void fetchCoverArtAsync(final String urlStr) {
+                  if (urlStr == null || urlStr.isEmpty()) return;
+                  new Thread(() -> {
+                      try {
+                          URL url = new URL(urlStr);
+                          HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                          conn.setConnectTimeout(6000);
+                          conn.setReadTimeout(6000);
+                          conn.setDoInput(true);
+                          conn.connect();
+                          InputStream is = conn.getInputStream();
+                          Bitmap bmp = BitmapFactory.decodeStream(is);
+                          is.close();
+                          if (bmp != null && urlStr.equals(currentCoverUrl)) {
+                              currentArtwork = bmp;
+                              updateSessionAndNotification();
+                          }
+                      } catch (Exception ignored) {}
+                  }).start();
+              }
+    
+              private void updateSessionAndNotification() {
+                  try {
+                      long actions = PlaybackState.ACTION_PLAY
+                              | PlaybackState.ACTION_PAUSE
+                              | PlaybackState.ACTION_PLAY_PAUSE
+                              | PlaybackState.ACTION_SKIP_TO_NEXT
+                              | PlaybackState.ACTION_SKIP_TO_PREVIOUS
+                              | PlaybackState.ACTION_SEEK_TO;
+    
+                      int state = isPlaying ? PlaybackState.STATE_PLAYING : PlaybackState.STATE_PAUSED;
+                      PlaybackState playbackState = new PlaybackState.Builder()
+                              .setActions(actions)
+                              .setState(state, positionMs, isPlaying ? 1.0f : 0.0f)
+                              .build();
+                      mediaSession.setPlaybackState(playbackState);
+    
+                      MediaMetadata.Builder metaBuilder = new MediaMetadata.Builder()
+                              .putString(MediaMetadata.METADATA_KEY_TITLE, currentTitle)
+                              .putString(MediaMetadata.METADATA_KEY_ARTIST, currentArtist)
+                              .putString(MediaMetadata.METADATA_KEY_ALBUM, currentAlbum)
+                              .putLong(MediaMetadata.METADATA_KEY_DURATION, durationMs);
+    
+                      if (currentArtwork != null) {
+                          metaBuilder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, currentArtwork);
+                          metaBuilder.putBitmap(MediaMetadata.METADATA_KEY_ART, currentArtwork);
+                      }
+                      mediaSession.setMetadata(metaBuilder.build());
+    
+                      Notification notification = buildMediaNotification();
+                      if (isPlaying) {
+                          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                              startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
+                          } else {
+                              startForeground(NOTIFICATION_ID, notification);
+                          }
+                      } else {
+                          NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                          if (nm != null) {
+                              nm.notify(NOTIFICATION_ID, notification);
+                          }
+                      }
+                  } catch (Exception ignored) {}
+              }
+    
+              private Notification buildMediaNotification() {
+                  Intent openIntent = new Intent(this, MainActivity.class);
+                  openIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                  PendingIntent contentPendingIntent = PendingIntent.getActivity(
+                          this, 0, openIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                  );
+    
+                  PendingIntent prevPending = PendingIntent.getService(
+                          this, 1, new Intent(this, MediaPlaybackService.class).setAction(ACTION_PREV),
+                          PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                  );
+                  PendingIntent playPausePending = PendingIntent.getService(
+                          this, 2, new Intent(this, MediaPlaybackService.class).setAction(isPlaying ? ACTION_PAUSE : ACTION_PLAY),
+                          PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                  );
+                  PendingIntent nextPending = PendingIntent.getService(
+                          this, 3, new Intent(this, MediaPlaybackService.class).setAction(ACTION_NEXT),
+                          PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                  );
+    
+                  Notification.Builder builder;
+                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                      builder = new Notification.Builder(this, CHANNEL_ID);
+                  } else {
+                      builder = new Notification.Builder(this);
+                  }
+    
+                  Notification.Action prevAction = new Notification.Action.Builder(
+                          android.R.drawable.ic_media_previous, "Предыдущий", prevPending).build();
+                  Notification.Action playPauseAction = new Notification.Action.Builder(
+                          isPlaying ? android.R.drawable.ic_media_pause : android.R.drawable.ic_media_play,
+                          isPlaying ? "Пауза" : "Играть", playPausePending).build();
+                  Notification.Action nextAction = new Notification.Action.Builder(
+                          android.R.drawable.ic_media_next, "Следующий", nextPending).build();
+    
+                  Notification.MediaStyle style = new Notification.MediaStyle()
+                          .setMediaSession(mediaSession.getSessionToken())
+                          .setShowActionsInCompactView(0, 1, 2);
+    
+                  builder.setStyle(style)
+                          .setContentTitle(currentTitle)
+                          .setContentText(currentArtist)
+                          .setSubText(currentAlbum)
+                          .setSmallIcon(android.R.drawable.ic_media_play)
+                          .setContentIntent(contentPendingIntent)
+                          .setVisibility(Notification.VISIBILITY_PUBLIC)
+                          .setOngoing(isPlaying)
+                          .setOnlyAlertOnce(true)
+                          .addAction(prevAction)
+                          .addAction(playPauseAction)
+                          .addAction(nextAction);
+    
+                  if (currentArtwork != null) {
+                      builder.setLargeIcon(currentArtwork);
+                  }
+    
+                  return builder.build();
+              }
+    
+              private void createNotificationChannel() {
+                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                      NotificationChannel channel = new NotificationChannel(
+                              CHANNEL_ID,
+                              "Dark Music Плеер",
+                              NotificationManager.IMPORTANCE_LOW
+                      );
+                      channel.setDescription("Управление воспроизведением на экране блокировки");
+                      channel.setShowBadge(false);
+                      channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                      NotificationManager nm = getSystemService(NotificationManager.class);
+                      if (nm != null) {
+                          nm.createNotificationChannel(channel);
+                      }
+                  }
+              }
+    
+              @Override
+              public IBinder onBind(Intent intent) {
+                  return null;
+              }
+    
+              @Override
+              public void onDestroy() {
+                  if (wakeLock != null && wakeLock.isHeld()) {
+                      wakeLock.release();
+                  }
+                  if (mediaSession != null) {
+                      mediaSession.release();
+                  }
+                  super.onDestroy();
+              }
+          }
+          EOF
+    
+          # MainActivity с кастомным BackgroundWebView (не засыпает при выключении экрана) и JavascriptInterface
+          cat << 'EOF' > android-project/app/src/main/java/com/darkmusic/app/MainActivity.java
+          package com.darkmusic.app;
+    
+          import android.Manifest;
+          import android.app.Activity;
+          import android.content.Context;
+          import android.content.Intent;
+          import android.content.pm.PackageManager;
+          import android.net.Uri;
+          import android.os.Build;
+          import android.os.Bundle;
+          import android.view.View;
+          import android.webkit.DownloadListener;
+          import android.webkit.JavascriptInterface;
+          import android.webkit.WebChromeClient;
+          import android.webkit.WebResourceRequest;
+          import android.webkit.WebSettings;
+          import android.webkit.WebView;
+          import android.webkit.WebViewClient;
+    
+          public class MainActivity extends Activity {
+              private static WebView staticWebView;
+    
+              // Кастомный WebView, который продолжает играть и переключать треки даже при выключенном экране
+              public static class BackgroundAudioWebView extends WebView {
+                  public BackgroundAudioWebView(Context context) {
+                      super(context);
+                  }
+    
+                  @Override
+                  protected void onWindowVisibilityChanged(int visibility) {
+                      super.onWindowVisibilityChanged(View.VISIBLE);
+                  }
+              }
+    
+              @Override
+              protected void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+    
+                  // Запрос разрешения на показ уведомлений для Android 13+ (API 33+)
+                  if (Build.VERSION.SDK_INT >= 33) {
+                      if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                          requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+                      }
+                  }
+    
+                  BackgroundAudioWebView webView = new BackgroundAudioWebView(this);
+                  staticWebView = webView;
+                  setContentView(webView);
+    
+                  WebSettings settings = webView.getSettings();
+                  settings.setJavaScriptEnabled(true);
+                  settings.setDomStorageEnabled(true);
+                  settings.setDatabaseEnabled(true);
+                  settings.setMediaPlaybackRequiresUserGesture(false);
+                  settings.setAllowFileAccess(true);
+                  settings.setAllowContentAccess(true);
+                  settings.setAllowFileAccessFromFileURLs(true);
+                  settings.setAllowUniversalAccessFromFileURLs(true);
+                  settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+                  settings.setCacheMode(WebSettings.LOAD_DEFAULT);
+    
+                  webView.addJavascriptInterface(new AndroidMediaBridge(this), "AndroidMediaBridge");
+                  webView.setWebChromeClient(new WebChromeClient());
+                  webView.setWebViewClient(new WebViewClient() {
+                      @Override
+                      public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                          String url = request.getUrl().toString();
+                          if (url.startsWith("file://") || url.contains("raw.githubusercontent.com") || url.contains("api.github.com")) {
+                              return false;
+                          }
+                          try {
+                              Intent ext = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                              startActivity(ext);
+                              return true;
+                          } catch (Exception e) {
+                              return false;
+                          }
+                      }
+                  });
+    
+                  webView.setDownloadListener(new DownloadListener() {
+                      @Override
+                      public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+                          try {
+                              if (url.startsWith("http")) {
+                                  Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                  startActivity(i);
+                              }
+                          } catch (Exception ignored) {}
+                      }
+                  });
+    
+                  webView.loadUrl("file:///android_asset/index.html");
+              }
+    
+              public static void dispatchToWebView(final String action, final long seekMs) {
+                  if (staticWebView == null) return;
+                  staticWebView.post(() -> {
+                      String js = "if(window.__darkMusicNativeAction){window.__darkMusicNativeAction('" + action + "'," + seekMs + ");}";
+                      staticWebView.evaluateJavascript(js, null);
+                  });
+              }
+    
+              public static class AndroidMediaBridge {
+                  private final Context context;
+    
+                  public AndroidMediaBridge(Context ctx) {
+                      this.context = ctx.getApplicationContext();
+                  }
+    
+                  @JavascriptInterface
+                  public void updateMediaState(String title, String artist, String album, String coverUrl, boolean isPlaying, long durationMs, long positionMs) {
+                      Intent serviceIntent = new Intent(context, MediaPlaybackService.class);
+                      serviceIntent.setAction(MediaPlaybackService.ACTION_UPDATE);
+                      serviceIntent.putExtra("title", title);
+                      serviceIntent.putExtra("artist", artist);
+                      serviceIntent.putExtra("album", album);
+                      serviceIntent.putExtra("coverUrl", coverUrl);
+                      serviceIntent.putExtra("isPlaying", isPlaying);
+                      serviceIntent.putExtra("durationMs", durationMs);
+                      serviceIntent.putExtra("positionMs", positionMs);
+    
+                      try {
+                          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isPlaying) {
+                              context.startForegroundService(serviceIntent);
+                          } else {
+                              context.startService(serviceIntent);
+                          }
+                      } catch (Exception ignored) {}
+                  }
+              }
+    
+              @Override
+              public void onBackPressed() {
+                  if (staticWebView != null && staticWebView.canGoBack()) {
+                      staticWebView.goBack();
+                  } else {
+                      moveTaskToBack(true);
+                  }
+              }
+          }
+          EOF
+    
+      - name: Build Debug APK with Gradle
+        working-directory: android-project
         run: |
-          mkdir -p www
-          cp index.html www/index.html
-
-      - name: Create Android project
-        run: npx cap add android
-
-      - name: Generate launcher icons from the original PNG
-        run: |
-          python -m pip install --quiet pillow
-          python - <<'PY'
-          import os
-          from PIL import Image
-
-          source = "Глянцевая музыкальная нота в кольце.png"
-          im = Image.open(source).convert("RGBA")
-
-          # Regular launcher icons: keep the original artwork centered on black.
-          side = max(im.width, im.height)
-          square = Image.new("RGBA", (side, side), (0, 0, 0, 255))
-          square.alpha_composite(im, ((side - im.width) // 2, (side - im.height) // 2))
-          for name, size in [("mdpi",48),("hdpi",72),("xhdpi",96),("xxhdpi",144),("xxxhdpi",192)]:
-              folder = f"android/app/src/main/res/mipmap-{name}"
-              os.makedirs(folder, exist_ok=True)
-              square.resize((size, size), Image.Resampling.LANCZOS).save(os.path.join(folder, "ic_launcher.png"))
-              # Adaptive-icon foreground uses Android's 108dp canvas; keep art inside the safe zone.
-              fg = Image.new("RGBA", (432, 432), (0, 0, 0, 0))
-              art = square.copy()
-              art.thumbnail((300, 300), Image.Resampling.LANCZOS)
-              fg.alpha_composite(art, ((432-art.width)//2, (432-art.height)//2))
-              fg.resize((size * 2, size * 2), Image.Resampling.LANCZOS).save(os.path.join(folder, "ic_launcher_foreground.png"))
-
-          colors = "android/app/src/main/res/values"
-          os.makedirs(colors, exist_ok=True)
-          with open(os.path.join(colors, "ic_launcher_background.xml"), "w", encoding="utf-8") as f:
-              f.write('<resources><color name="ic_launcher_background">#000000</color></resources>')
-
-          adaptive = "android/app/src/main/res/mipmap-anydpi-v26"
-          os.makedirs(adaptive, exist_ok=True)
-          xml = '''<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-              <background android:drawable="@color/ic_launcher_background"/>
-              <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
-          </adaptive-icon>'''
-          for name in ("ic_launcher.xml", "ic_launcher_round.xml"):
-              with open(os.path.join(adaptive, name), "w", encoding="utf-8") as f:
-                  f.write(xml)
-          PY
-
-      - name: Sync web app into Android project
-        run: npx cap sync android
-
-      - name: Build debug APK
-        run: |
-          cd android
-          ./gradlew assembleDebug
-
-      - name: Upload APK
+          gradle assembleDebug --no-daemon
+    
+      - name: Upload Dark Music APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dark-music-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
-          retention-days: 14
+          name: DarkMusic-v2.0-APK
+          path: android-project/app/build/outputs/apk/debug/app-debug.apk
