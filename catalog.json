@@ -330,6 +330,17 @@
   ],
   "customVideos": [
     {
+      "id": "vid_1793051455024",
+      "title": "ПЕРЕЗВОН",
+      "artistId": "mc_ezdit",
+      "year": 2026,
+      "previewFile": "covers/alb_perezvon.jpg",
+      "videoSource": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/Oa6z5XOWFMY?si=ty6zUllX2tlpR0SY\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+      "duration": "9:48",
+      "isExplicit": false,
+      "createdAt": 1793051455024
+    },
+    {
       "id": "vid_1793051361313",
       "title": "МАМА ПАПА",
       "artistId": "mc_ezdit",
@@ -374,5 +385,5 @@
     "active": true,
     "updatedAt": 1793050956862
   },
-  "updatedAt": 1793051361378
+  "updatedAt": 1793051455079
 }
