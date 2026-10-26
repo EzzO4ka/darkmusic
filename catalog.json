@@ -328,7 +328,19 @@
       "albumId": "alb_1792597638805"
     }
   ],
-  "customVideos": [],
+  "customVideos": [
+    {
+      "id": "vid_1793051361313",
+      "title": "МАМА ПАПА",
+      "artistId": "mc_ezdit",
+      "year": 2026,
+      "previewFile": "covers/alb_mamapapa.jpg",
+      "videoSource": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/ELoWJ9hkM-E?si=Stk1AqNGWMmSSAoF\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+      "duration": "2:55",
+      "isExplicit": true,
+      "createdAt": 1793051361313
+    }
+  ],
   "customNews": [],
   "deletedCustomIds": [
     "alb_1792597596794"
@@ -362,5 +374,5 @@
     "active": true,
     "updatedAt": 1793050956862
   },
-  "updatedAt": 1793050972537
+  "updatedAt": 1793051361378
 }
