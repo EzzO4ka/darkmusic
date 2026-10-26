@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Dark Music">
     <title>Dark Music — Android Music App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -497,7 +501,8 @@
                         <i class="fa-solid fa-play text-base ml-0.5"></i>
                     </button>
                 </div>
-                <div id="fullChartsList" class="space-y-2"></div>            </section>
+                <div id="fullChartsList" class="space-y-2"></div>
+            </section>
 
             <!-- ВКЛАДКА: ВСЕ АРТИСТЫ -->
             <section id="view-artists" class="hidden space-y-4 view-animate">
@@ -996,7 +1001,8 @@
                 <button onclick="switchTab('charts')" id="nav-charts" class="flex flex-col items-center gap-0.5 py-1 text-zinc-500 hover:text-zinc-300 spring-btn">
                     <i class="fa-solid fa-chart-simple text-sm"></i>
                     <span class="text-[10px] font-bold">Чарты</span>
-                </button>                <div class="flex justify-center">
+                </button>
+                <div class="flex justify-center">
                     <button onclick="playShuffleAll()" class="w-11 h-11 -mt-3 rounded-2xl bg-gradient-to-br from-purple-600 via-fuchsia-600 to-indigo-700 text-white flex items-center justify-center shadow-lg shadow-purple-600/40 border border-purple-400/40 spring-btn" title="Моя волна — Вперемешку">
                         <i class="fa-solid fa-shuffle text-sm"></i>
                     </button>
@@ -1162,8 +1168,9 @@
 
     </div>
 
-    <!-- АУДИО-ЭЛЕМЕНТ -->
-    <audio id="audioElement" preload="auto"></audio>
+    <!-- АУДИО-ЭЛЕМЕНТЫ (основной с атрибутом controls для системного плеера ОС и скрытый для предзагрузки следующего трека) -->
+    <audio id="audioElement" controls playsinline webkit-playsinline x-webkit-airplay="allow" preload="auto" class="fixed -bottom-40 left-0 w-1 h-1 opacity-0 pointer-events-none"></audio>
+    <audio id="preloadAudioElement" preload="auto" muted class="hidden"></audio>
 
     <script>
         /*__BAKED_VAULT_START__*/
@@ -1496,6 +1503,7 @@
                     }
                 });
             }
+
             if (Array.isArray(data.customAlbums)) {
                 const incomingAlbums = cleanValidAlbums(data.customAlbums);
                 if (mergeMode || incomingAlbums.length === 0) {
@@ -1994,7 +2002,8 @@
                 active: Boolean(enable),
                 updatedAt: Date.now()
             };
-            saveStateToLocalStorage(true);            applyBroadcastAndForceUpdateUI();
+            saveStateToLocalStorage(true);
+            applyBroadcastAndForceUpdateUI();
             await persistSettingsToCloud();
             showToast(enable ? "Окно «Что нового» включено для всех пользователей!" : "Окно «Что нового» отключено", "ЧТО НОВОГО");
         }
@@ -2316,6 +2325,7 @@
         let usingSynthFallback = false;
 
         const audioEl = document.getElementById("audioElement");
+        const preloadAudioEl = document.getElementById("preloadAudioElement");
 
         // Точечное обновление статуса Play/Pause и подсветки активного трека БЕЗ пересоздания DOM и БЕЗ перезагрузки картинок
         function updateTrackRowsPlayState() {
@@ -2493,7 +2503,8 @@
             const html = albumsList.map((alb) => {
                 const artist = ARTISTS[alb.artistId] || ARTISTS.mc_geich;
                 return `
-                    <div onclick="openAlbumDetail('${alb.id}')" class="w-36 shrink-0 p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2 spring-btn">                        <div class="relative">
+                    <div onclick="openAlbumDetail('${alb.id}')" class="w-36 shrink-0 p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2 spring-btn">
+                        <div class="relative">
                             ${renderCoverBox(alb, "w-full h-32 rounded-xl", "text-2xl")}
                             <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-md text-[8px] font-black uppercase tracking-wider text-purple-300 border border-white/10">
                                 ${alb.type || 'АЛЬБОМ'}
@@ -2992,7 +3003,8 @@
                         ? albumTracks.map((t, i) => renderTrackRow(t, i, i + 1)).join("")
                         : `<div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-xs text-zinc-500">В этом альбоме пока нет треков</div>`
                     }
-                </div>            `;
+                </div>
+            `;
             setContainerHtmlIfChanged(content, html);
             updateTrackRowsPlayState();
 
@@ -3015,15 +3027,17 @@
             isPlaying = true;
             usingSynthFallback = false;
 
-            ensureSilentBackgroundKeepAlive();
-
+            const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
             const rawUrl = getRawUrl(track.filePath);
-            const cachedBlobUrl = audioBlobCache.get(rawUrl);
-            const targetSrc = cachedBlobUrl || rawUrl;
 
-            // Не вызываем audioEl.pause() перед сменой трека, чтобы ОС не сбрасывала фоновый аудио-фокус на заблокированном экране
-            if (audioEl.src !== targetSrc) {
-                audioEl.src = targetSrc;
+            // Обновляем заголовок документа и атрибут title у audio — мобильные ОС используют их для экрана блокировки
+            document.title = `${track.title} — ${artist.name}`;
+            audioEl.title = `${track.title} — ${artist.name}`;
+            audioEl.setAttribute("title", `${track.title} — ${artist.name}`);
+
+            // Используем прямой HTTPS URL (без blob:), чтобы Android и iOS распознавали поток как основной музыкальный плеер
+            if (audioEl.src !== rawUrl) {
+                audioEl.src = rawUrl;
             }
             audioEl.currentTime = 0;
 
@@ -3043,71 +3057,27 @@
                     prepareAndPreloadNextTrack();
                 }).catch((err) => {
                     isTransitioningTrack = false;
-                    // Если кэшированный blob-URL устарел, пробуем прямой URL
-                    if (cachedBlobUrl && audioEl.src === cachedBlobUrl) {
-                        audioBlobCache.delete(rawUrl);
-                        audioEl.src = rawUrl;
-                        audioEl.play().then(() => {
-                            isPlaying = true;
-                            updatePlayerUI();
-                            updateTrackRowsPlayState();
-                            updateMediaSessionMetadata();
-                            prepareAndPreloadNextTrack();
-                        }).catch(() => {});
-                    } else {
-                        console.warn("Audio playback notice:", err);
-                        updatePlayerUI();
-                        updateTrackRowsPlayState();
-                    }
+                    console.warn("Audio playback notice:", err);
+                    updatePlayerUI();
+                    updateTrackRowsPlayState();
                 });
             } else {
                 isTransitioningTrack = false;
                 prepareAndPreloadNextTrack();
             }
 
-            const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
             showToast(`${artist.name} — ${track.title}`, "СЕЙЧАС ИГРАЕТ");
         }
 
         // =========================================================================
-        // ФОНОВОЕ ВОСПРОИЗВЕДЕНИЕ, ПРЕДЗАГРУЗКА В ПАМЯТЬ И ЭКРАН БЛОКИРОВКИ (MEDIA SESSION)
+        // ФОНОВОЕ ВОСПРОИЗВЕДЕНИЕ, ПРЕДЗАГРУЗКА И ЭКРАН БЛОКИРОВКИ (MEDIA SESSION)
         // =========================================================================
 
         let isTransitioningTrack = false;
         let queuedNextTrackId = null;
-        const audioBlobCache = new Map();
-        const artworkDataUrlCache = new Map();
-        let silentKeepAliveCtx = null;
-        let silentKeepAliveSource = null;
         let lastPositionStateUpdate = 0;
 
-        // Абсолютно бесшумный (нулевой буфер 0.0) удержатель аудио-сессии, чтобы телефон не усыплял вкладку между треками
-        function ensureSilentBackgroundKeepAlive() {
-            try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                if (!AudioCtx) return;
-                if (!silentKeepAliveCtx) {
-                    silentKeepAliveCtx = new AudioCtx();
-                }
-                if (silentKeepAliveCtx.state === "suspended") {
-                    silentKeepAliveCtx.resume().catch(() => {});
-                }
-                if (!silentKeepAliveSource) {
-                    const silentBuffer = silentKeepAliveCtx.createBuffer(1, silentKeepAliveCtx.sampleRate, silentKeepAliveCtx.sampleRate);
-                    const src = silentKeepAliveCtx.createBufferSource();
-                    src.buffer = silentBuffer;
-                    src.loop = true;
-                    const zeroGain = silentKeepAliveCtx.createGain();
-                    zeroGain.gain.value = 0.00001; // Полная тишина без единого звука или гула
-                    src.connect(zeroGain);
-                    zeroGain.connect(silentKeepAliveCtx.destination);
-                    src.start(0);
-                    silentKeepAliveSource = src;
-                }
-            } catch (e) {}
-        }
-
-        // Вычисление и предзагрузка следующего трека в оперативную память (Blob), чтобы в фоне он включался мгновенно без ожидания сети
+        // Вычисление и предзагрузка следующего трека через второй скрытый <audio> (в нативный HTTP-кэш без blob: URL)
         function pickNextTrackId() {
             if (TRACKS.length === 0) return null;
             if (TRACKS.length === 1) return TRACKS[0].id;
@@ -3121,68 +3091,21 @@
             return TRACKS[nextIdx].id;
         }
 
-        async function prepareAndPreloadNextTrack() {
+        function prepareAndPreloadNextTrack() {
             queuedNextTrackId = pickNextTrackId();
             if (!queuedNextTrackId) return;
             const nextTrk = TRACKS.find(t => t.id === queuedNextTrackId);
             if (!nextTrk || !nextTrk.filePath) return;
 
             const rawUrl = getRawUrl(nextTrk.filePath);
-            if (!rawUrl || audioBlobCache.has(rawUrl)) return;
+            if (!rawUrl || !preloadAudioEl) return;
 
             try {
-                const resp = await fetch(rawUrl, { mode: "cors" });
-                if (resp.ok) {
-                    const blob = await resp.blob();
-                    if (blob && blob.size > 1024) {
-                        if (audioBlobCache.size >= 6) {
-                            const oldestKey = audioBlobCache.keys().next().value;
-                            const oldBlobUrl = audioBlobCache.get(oldestKey);
-                            try { URL.revokeObjectURL(oldBlobUrl); } catch (e) {}
-                            audioBlobCache.delete(oldestKey);
-                        }
-                        const blobUrl = URL.createObjectURL(blob);
-                        audioBlobCache.set(rawUrl, blobUrl);
-                    }
+                if (preloadAudioEl.src !== rawUrl) {
+                    preloadAudioEl.src = rawUrl;
+                    preloadAudioEl.load();
                 }
             } catch (e) {}
-        }
-
-        // Генерация гарантированной обложки 512x512 для шторки уведомлений и экрана блокировки
-        function getFallbackArtworkDataUrl(track, artist) {
-            const key = `${track.id}_${artist.id}`;
-            if (artworkDataUrlCache.has(key)) return artworkDataUrlCache.get(key);
-            try {
-                const canvas = document.createElement("canvas");
-                canvas.width = 512;
-                canvas.height = 512;
-                const ctx = canvas.getContext("2d");
-                const grad = ctx.createLinearGradient(0, 0, 512, 512);
-                grad.addColorStop(0, "#581c87");
-                grad.addColorStop(0.5, "#1e1b4b");
-                grad.addColorStop(1, "#09090b");
-                ctx.fillStyle = grad;
-                ctx.fillRect(0, 0, 512, 512);
-
-                ctx.fillStyle = "#a855f7";
-                ctx.font = "900 28px Inter, sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillText("DARK MUSIC", 256, 170);
-
-                ctx.fillStyle = "#ffffff";
-                ctx.font = "900 40px Inter, sans-serif";
-                ctx.fillText((track.title || "Track").slice(0, 20), 256, 265);
-
-                ctx.fillStyle = "#d4d4d8";
-                ctx.font = "700 28px Inter, sans-serif";
-                ctx.fillText(artist.name || "Artist", 256, 325);
-
-                const dataUrl = canvas.toDataURL("image/png");
-                artworkDataUrlCache.set(key, dataUrl);
-                return dataUrl;
-            } catch (e) {
-                return "";
-            }
         }
 
         function setupMediaSessionHandlers() {
@@ -3190,20 +3113,19 @@
             const actions = [
                 ["play", () => {
                     isPlaying = true;
-                    ensureSilentBackgroundKeepAlive();
-                    audioEl.play().catch(() => {});
+                    audioEl.play().then(() => {
+                        updateMediaSessionMetadata();
+                        updateMediaSessionPositionState();
+                    }).catch(() => {});
                     updatePlayerUI();
                     updateTrackRowsPlayState();
-                    updateMediaSessionMetadata();
                 }],
                 ["pause", () => {
                     isPlaying = false;
                     audioEl.pause();
                     updatePlayerUI();
                     updateTrackRowsPlayState();
-                    if ("mediaSession" in navigator) {
-                        try { navigator.mediaSession.playbackState = "paused"; } catch (e) {}
-                    }
+                    try { navigator.mediaSession.playbackState = "paused"; } catch (e) {}
                 }],
                 ["previoustrack", () => {
                     prevTrack();
@@ -3218,14 +3140,14 @@
                 }],
                 ["seekforward", (details) => {
                     const offset = (details && details.seekOffset) || 10;
-                    if (audioEl.duration) {
+                    if (audioEl.duration && isFinite(audioEl.duration)) {
                         audioEl.currentTime = Math.min(audioEl.duration, (audioEl.currentTime || 0) + offset);
                     }
                     updateMediaSessionPositionState();
                 }],
                 ["seekto", (details) => {
-                    const targetTime = details.seekTime !== undefined ? details.seekTime : details.SeekTime;
-                    if (targetTime !== undefined && audioEl.duration) {
+                    const targetTime = details && (details.seekTime !== undefined ? details.seekTime : details.SeekTime);
+                    if (targetTime !== undefined && audioEl.duration && isFinite(audioEl.duration)) {
                         audioEl.currentTime = Math.max(0, Math.min(audioEl.duration, targetTime));
                         updateMediaSessionPositionState();
                     }
@@ -3240,6 +3162,7 @@
         }
 
         function updateMediaSessionPositionState() {
+            syncNativeAndroidBridge();
             if (!("mediaSession" in navigator) || !("setPositionState" in navigator.mediaSession)) return;
             const dur = audioEl.duration;
             const cur = audioEl.currentTime;
@@ -3253,32 +3176,97 @@
             } catch (e) {}
         }
 
+        // Прямой мост с нативным Android APK (MediaSession + Notification.MediaStyle на экране блокировки)
+        function syncNativeAndroidBridge() {
+            const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0];
+            if (!track) return;
+            const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
+            const album = ALBUMS[track.albumId];
+            const coverPath = track.coverFile || (album && album.coverFile) || artist.avatarFile || "logo.png";
+            const remoteUrl = coverPath ? getRawUrl(coverPath) : getRawUrl("logo.png");
+            const durMs = (audioEl.duration && isFinite(audioEl.duration) && audioEl.duration > 0)
+                ? Math.round(audioEl.duration * 1000)
+                : 165000;
+            const posMs = (audioEl.currentTime && isFinite(audioEl.currentTime) && audioEl.currentTime >= 0)
+                ? Math.round(audioEl.currentTime * 1000)
+                : 0;
+
+            if (window.AndroidMediaBridge && typeof window.AndroidMediaBridge.updateMediaState === "function") {
+                try {
+                    window.AndroidMediaBridge.updateMediaState(
+                        String(track.title || "Dark Music"),
+                        String(artist.name || "Dark Music"),
+                        String(album ? album.title : track.title),
+                        String(remoteUrl || ""),
+                        Boolean(isPlaying),
+                        durMs,
+                        posMs
+                    );
+                } catch (e) {}
+            }
+        }
+
+        // Обработчик нажатий кнопок с нативного экрана блокировки и шторки уведомлений Android APK
+        window.__darkMusicNativeAction = function(action, seekMs) {
+            if (action === "play") {
+                if (!currentTrackId && TRACKS.length > 0) {
+                    playTrackById(TRACKS[0].id);
+                } else {
+                    isPlaying = true;
+                    audioEl.play().catch(() => {});
+                    updatePlayerUI();
+                    updateTrackRowsPlayState();
+                    syncNativeAndroidBridge();
+                }
+            } else if (action === "pause") {
+                isPlaying = false;
+                audioEl.pause();
+                updatePlayerUI();
+                updateTrackRowsPlayState();
+                syncNativeAndroidBridge();
+            } else if (action === "toggle") {
+                togglePlay();
+            } else if (action === "next") {
+                nextTrack();
+            } else if (action === "prev") {
+                prevTrack();
+            } else if (action === "seekto" && seekMs !== undefined && seekMs >= 0) {
+                if (audioEl.duration && isFinite(audioEl.duration)) {
+                    audioEl.currentTime = Math.max(0, Math.min(audioEl.duration, Number(seekMs) / 1000));
+                    updateProgressUI(audioEl.currentTime, audioEl.duration);
+                    syncNativeAndroidBridge();
+                }
+            }
+        };
+
         function updateMediaSessionMetadata() {
+            const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0];
+            if (!track) return;
+            const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
+            const album = ALBUMS[track.albumId];
+
+            // Всегда синхронизируем заголовок окна и аудио-элемента для системной шторки
+            document.title = `${track.title} — ${artist.name}`;
+            if (audioEl) {
+                audioEl.title = `${track.title} — ${artist.name}`;
+            }
+
+            // Передаём состояние в нативный Android-сервис APK
+            syncNativeAndroidBridge();
+
             if (!("mediaSession" in navigator) || typeof MediaMetadata === "undefined") return;
             try {
-                const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0];
-                if (!track) return;
-                const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
-                const album = ALBUMS[track.albumId];
-                const coverPath = track.coverFile || (album && album.coverFile) || artist.avatarFile || "";
-                const remoteUrl = coverPath ? getRawUrl(coverPath) : "";
-                const fallbackDataUrl = getFallbackArtworkDataUrl(track, artist);
+                const coverPath = track.coverFile || (album && album.coverFile) || artist.avatarFile || "logo.png";
+                const remoteUrl = coverPath ? getRawUrl(coverPath) : getRawUrl("logo.png");
 
                 const artworkList = [];
                 if (remoteUrl) {
-                    const isPng = remoteUrl.toLowerCase().endsWith(".png");
-                    artworkList.push({
-                        src: remoteUrl,
-                        sizes: "96x96 128x128 192x192 256x256 384x384 512x512",
-                        type: isPng ? "image/png" : "image/jpeg"
-                    });
-                }
-                if (fallbackDataUrl) {
-                    artworkList.push({
-                        src: fallbackDataUrl,
-                        sizes: "512x512",
-                        type: "image/png"
-                    });
+                    artworkList.push({ src: remoteUrl, sizes: "96x96" });
+                    artworkList.push({ src: remoteUrl, sizes: "128x128" });
+                    artworkList.push({ src: remoteUrl, sizes: "192x192" });
+                    artworkList.push({ src: remoteUrl, sizes: "256x256" });
+                    artworkList.push({ src: remoteUrl, sizes: "384x384" });
+                    artworkList.push({ src: remoteUrl, sizes: "512x512" });
                 }
 
                 navigator.mediaSession.metadata = new MediaMetadata({
@@ -3289,12 +3277,21 @@
                 });
                 navigator.mediaSession.playbackState = isPlaying ? "playing" : "paused";
                 setupMediaSessionHandlers();
-            } catch (e) {}
+            } catch (e) {
+                console.warn("MediaSession metadata error:", e);
+            }
         }
 
         audioEl.addEventListener("loadedmetadata", () => {
             updateMediaSessionMetadata();
             updateMediaSessionPositionState();
+        });
+
+        audioEl.addEventListener("canplay", () => {
+            if (isPlaying) {
+                updateMediaSessionMetadata();
+                updateMediaSessionPositionState();
+            }
         });
 
         audioEl.addEventListener("play", () => {
@@ -3322,6 +3319,7 @@
             isPlaying = false;
             updatePlayerUI();
             updateTrackRowsPlayState();
+            syncNativeAndroidBridge();
             if ("mediaSession" in navigator) {
                 try { navigator.mediaSession.playbackState = "paused"; } catch (e) {}
             }
@@ -3342,9 +3340,12 @@
             updateProgressUI(cur, dur);
 
             const now = Date.now();
-            if (now - lastPositionStateUpdate > 1000) {
+            if (now - lastPositionStateUpdate > 1500) {
                 lastPositionStateUpdate = now;
-                updateMediaSessionPositionState();
+                if (isPlaying && cur > 0.05) {
+                    updateMediaSessionMetadata();
+                    updateMediaSessionPositionState();
+                }
             }
         });
 
@@ -3384,7 +3385,6 @@
 
             isPlaying = !isPlaying;
             if (isPlaying) {
-                ensureSilentBackgroundKeepAlive();
                 audioEl.play().then(() => {
                     updateMediaSessionMetadata();
                     updateMediaSessionPositionState();
@@ -3399,6 +3399,7 @@
             }
             updatePlayerUI();
             updateTrackRowsPlayState();
+            syncNativeAndroidBridge();
         }
 
         function nextTrack() {
@@ -3491,7 +3492,8 @@
         }
 
         function updatePlayerUI() {
-            const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0] || null;            const miniPlayIcon = document.getElementById("miniPlayIcon");
+            const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0] || null;
+            const miniPlayIcon = document.getElementById("miniPlayIcon");
             const playerPlayIcon = document.getElementById("playerPlayIcon");
             const heroEq = document.getElementById("heroEq");
             const coverCard = document.getElementById("playerCoverCard");
@@ -3990,7 +3992,8 @@
 
         function addFactInputRow(existingText = "", num = null) {
             const container = document.getElementById("bioEditorFactsList");
-            if (!container) return;            const count = num || (container.children.length + 1);
+            if (!container) return;
+            const count = num || (container.children.length + 1);
             const row = document.createElement("div");
             row.className = "flex items-center gap-2";
             row.innerHTML = `
@@ -4489,7 +4492,8 @@
                     </div>
                     <button onclick="saveEditedTrack('${trk.id}')" class="w-full py-2.5 rounded-xl bg-purple-600 text-white font-extrabold text-xs spring-btn">
                         Сохранить изменения трека
-                    </button>                </div>
+                    </button>
+                </div>
             `;
             const modal = document.getElementById("editModal");
             modal.classList.remove("hidden");
