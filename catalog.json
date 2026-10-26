@@ -328,31 +328,6 @@
       "albumId": "alb_1792597638805"
     }
   ],
-  "customVideos": [
-    {
-      "id": "vid_1792918889558",
-      "title": "Перезвон",
-      "artistId": "mc_ezdit",
-      "year": 2026,
-      "previewFile": "",
-      "videoSource": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/Oa6z5XOWFMY?si=zgh1BEkxej78OrjE\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-      "duration": "9:49",
-      "isExplicit": false,
-      "createdAt": 1792918889559
-    },
-    {
-      "id": "vid_1792918643112",
-      "title": "МАМА ПАПА",
-      "artistId": "mc_ezdit",
-      "year": 2026,
-      "previewFile": "",
-      "videoSource": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/ELoWJ9hkM-E?si=ds__hGQAZN5qlBli\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
-      "duration": "2:55",
-      "isExplicit": true,
-      "createdAt": 1792918643112
-    }
-  ],
-  "customNews": [],
   "deletedCustomIds": [
     "alb_1792597596794"
   ],
@@ -371,19 +346,11 @@
     "updatedAt": 1792915286413
   },
   "forceUpdate": {
-    "active": false,
-    "requiredVersion": 2,
-    "downloadUrl": "https://fjfjfjfjfjfjfjf.com/fjfjfjfjfjfjf",
-    "message": "Обновите приложение. Старая версия не работает",
-    "updatedAt": 1792829054654
-  },
-  "whatsNew": {
-    "id": "wn_1792845951435",
-    "title": "Что нового в Dark Music v.2.0",
-    "content": "🎧 Глобальное обновление Dark Music v2.0 уже здесь!\n\n🚀 ЧТО НОВОГО:\n• Фоновое воспроизведение и управление с экрана блокировки: переключайте треки, ставьте на паузу и перематывайте прямо из шторки уведомлений телефона.\n• Автопереключение треков: музыка играет без остановки даже при выключенном экране.\n• Новый раздел «Видеоклипы»: смотрите клипы прямо внутри приложения (на главной и в профилях артистов).\n• Раздел «Новости и анонсы»: следите за будущими дропами артистов и обновлениями приложения с удобным фильтром.\n• Маркировка 18+ и обновлённый фирменный логотип Dark Music.\n\n🛠️ ИСПРАВЛЕНИЯ БАГОВ:\n• Полностью убран фоновый гул синтезатора (Web Audio API) поверх песен — теперь только чистый звук.\n• Исправлено пропадание треков из списка и ускорена синхронизация с сервером без задержек кэша.\n• Устранено моргание обложек при нажатии на паузу, смене трека и фоновом обновлении.\n• Убрана лишняя верхняя полоска статуса — шапка идеально подстроена под экран смартфона.",
-    "version": 2,
     "active": true,
-    "updatedAt": 1792845951435
+    "requiredVersion": 2,
+    "downloadUrl": "https://github.com/EzzO4ka/darkmusic/releases/tag/v.2.0",
+    "message": "Обновите приложение. Старая версия больше не работает",
+    "updatedAt": 1793024733779
   },
-  "updatedAt": 1792918889565
+  "updatedAt": 1793024733789
 }
