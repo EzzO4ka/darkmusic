@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Dark Music v2.0 -->
 <html lang="ru" class="dark">
 <head>
     <meta charset="UTF-8">
@@ -153,8 +154,22 @@
                 transform: translate(-50%, 0) scale(1);
             }
         }
+        @keyframes broadcastPopOut {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -28px) scale(0.9);
+            }
+        }
         .broadcast-popup-enter {
             animation: broadcastPopIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        .broadcast-popup-exit {
+            animation: broadcastPopOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            pointer-events: none;
         }
 
         @keyframes countdownShrink {
@@ -281,7 +296,7 @@
                             <p id="tempBroadcastMessage" class="text-[11px] text-zinc-300 leading-relaxed mt-0.5"></p>
                         </div>
                     </div>
-                    <button onclick="dismissTempBroadcast()" class="w-7 h-7 rounded-lg bg-zinc-900 text-zinc-400 hover:text-white flex items-center justify-center shrink-0">
+                    <button onclick="dismissTempBroadcast(true)" class="w-7 h-7 rounded-lg bg-zinc-900 text-zinc-400 hover:text-white flex items-center justify-center shrink-0 spring-btn">
                         <i class="fa-solid fa-xmark text-xs"></i>
                     </button>
                 </div>
@@ -308,7 +323,7 @@
         <header class="sticky top-0 z-20 bg-black/85 backdrop-blur-xl px-4 py-3 flex items-center justify-between border-b border-zinc-900/80">
             <button onclick="switchTab('home')" class="flex items-center gap-2.5 text-left spring-btn">
                 <div class="w-9 h-9 rounded-xl bg-zinc-950 flex items-center justify-center shadow-lg shadow-purple-600/20 border border-zinc-800 relative overflow-hidden shrink-0">
-                    <img id="appHeaderLogoImg" src="" alt="Dark Music" decoding="async" class="w-full h-full object-contain" onerror="if(!this.dataset.triedSub){this.dataset.triedSub='1';this.src=getRawUrl('avatars/logo.png');}">
+                    <img id="appHeaderLogoImg" src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/logo.png" alt="Dark Music" decoding="async" class="w-full h-full object-contain" onerror="if(!this.dataset.triedSub){this.dataset.triedSub='1';this.src='https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/avatars/logo.png';}else{this.style.display='none';}">
                 </div>
                 <div>
                     <div class="flex items-center gap-1.5">
@@ -694,16 +709,31 @@
 
                 <!-- 2. Создание нового альбома / EP -->
                 <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 space-y-3">
-                    <h3 class="text-xs font-black uppercase tracking-wider text-fuchsia-400">2. Создать новый альбом / EP</h3>
+                    <h3 class="text-xs font-black uppercase tracking-wider text-fuchsia-400">2. Создать новый альбом / EP / сингл</h3>
                     <div class="space-y-2.5">
-                        <input id="newAlbumTitleInput" type="text" placeholder="Название альбома (например: ЗАГЕЕВ)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-fuchsia-500">
-                        <div class="grid grid-cols-3 gap-2">
-                            <select id="newAlbumArtistSelect" class="bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
-                                <option value="mc_geich">МС ГЕИЧ</option>
-                                <option value="mc_makaka">МС МАКАКА</option>
-                                <option value="mc_ezdit">МС ЕЗДИТЬ</option>
-                                <option value="mc_oparysh">МС ОПАРЫШ</option>
-                            </select>
+                        <input id="newAlbumTitleInput" type="text" placeholder="Название альбома или сингла (например: ЗАГЕЕВ)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-fuchsia-500">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[10px] text-zinc-400 block mb-1">Основной артист</label>
+                                <select id="newAlbumArtistSelect" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
+                                    <option value="mc_geich">МС ГЕИЧ</option>
+                                    <option value="mc_makaka">МС МАКАКА</option>
+                                    <option value="mc_ezdit">МС ЕЗДИТЬ</option>
+                                    <option value="mc_oparysh">МС ОПАРЫШ</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-fuchsia-400 font-semibold block mb-1">Фит (2-й артист)</label>
+                                <select id="newAlbumFeatArtistSelect" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-fuchsia-500">
+                                    <option value="">Без фита (Соло)</option>
+                                    <option value="mc_geich">МС ГЕИЧ</option>
+                                    <option value="mc_makaka">МС МАКАКА</option>
+                                    <option value="mc_ezdit">МС ЕЗДИТЬ</option>
+                                    <option value="mc_oparysh">МС ОПАРЫШ</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
                             <select id="newAlbumTypeSelect" class="bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
                                 <option value="АЛЬБОМ">АЛЬБОМ</option>
                                 <option value="EP">EP</option>
@@ -719,7 +749,7 @@
                             </label>
                         </div>
                         <button onclick="createNewOwnerAlbum()" class="w-full py-2.5 rounded-xl bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold text-xs spring-btn">
-                            + Создать альбом
+                            + Создать релиз (альбом / EP / сингл)
                         </button>
                     </div>
                 </div>
@@ -732,7 +762,7 @@
 
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="text-[10px] text-zinc-400 block mb-1">Артист</label>
+                                <label class="text-[10px] text-zinc-400 block mb-1">Основной артист</label>
                                 <select id="newTrackArtist" onchange="populateAlbumSelectForArtist()" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
                                     <option value="mc_geich">МС ГЕИЧ</option>
                                     <option value="mc_makaka">МС МАКАКА</option>
@@ -741,21 +771,52 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="text-[10px] text-zinc-400 block mb-1">Альбом</label>
-                                <select id="newTrackAlbum" onchange="handleAlbumSelectChange()" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none"></select>
+                                <label class="text-[10px] text-purple-400 font-semibold block mb-1">Фит (2-й артист)</label>
+                                <select id="newTrackFeatArtist" onchange="syncInlineAlbumFeatSelect()" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                                    <option value="">Без фита (Соло)</option>
+                                    <option value="mc_geich">МС ГЕИЧ</option>
+                                    <option value="mc_makaka">МС МАКАКА</option>
+                                    <option value="mc_ezdit">МС ЕЗДИТЬ</option>
+                                    <option value="mc_oparysh">МС ОПАРЫШ</option>
+                                </select>
                             </div>
+                        </div>
+
+                        <div>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Альбом</label>
+                            <select id="newTrackAlbum" onchange="handleAlbumSelectChange()" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none"></select>
                         </div>
 
                         <!-- Быстрое создание альбома прямо при добавлении трека -->
                         <div id="inlineNewAlbumBox" class="hidden p-3 rounded-xl bg-zinc-900/90 border border-fuchsia-500/40 space-y-2">
                             <div class="flex items-center justify-between">
-                                <span class="text-[10px] font-bold text-fuchsia-400">Новый альбом для этого трека:</span>
+                                <span class="text-[10px] font-bold text-fuchsia-400">Новый альбом / сингл для этого трека:</span>
                                 <label class="flex items-center gap-1 text-[10px] font-black text-rose-400 cursor-pointer">
                                     <input id="inlineAlbumExplicit" type="checkbox" class="accent-rose-500 rounded">
-                                    <span>Альбом 18+</span>
+                                    <span>Релиз 18+</span>
                                 </label>
                             </div>
-                            <input id="inlineAlbumTitle" type="text" placeholder="Название нового альбома (например: ЗАГЕЕВ)" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white">
+                            <input id="inlineAlbumTitle" type="text" placeholder="Название нового альбома / сингла (например: ЗАГЕЕВ)" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white">
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-[9px] text-zinc-400 block mb-0.5">Тип релиза</label>
+                                    <select id="inlineAlbumType" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-2 py-1.5 text-xs text-white">
+                                        <option value="АЛЬБОМ">АЛЬБОМ</option>
+                                        <option value="EP">EP</option>
+                                        <option value="СИНГЛ">СИНГЛ</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-[9px] text-fuchsia-400 block mb-0.5">Фит на релизе (2-й артист)</label>
+                                    <select id="inlineAlbumFeatArtist" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-2 py-1.5 text-xs text-white">
+                                        <option value="">Без фита (Соло)</option>
+                                        <option value="mc_geich">МС ГЕИЧ</option>
+                                        <option value="mc_makaka">МС МАКАКА</option>
+                                        <option value="mc_ezdit">МС ЕЗДИТЬ</option>
+                                        <option value="mc_oparysh">МС ОПАРЫШ</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="grid grid-cols-2 gap-2">
                                 <input id="inlineAlbumCover" type="text" placeholder="covers/alb_zageev.jpg" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white">
                                 <input id="inlineAlbumYear" type="number" value="2025" placeholder="Год (2025)" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-2.5 py-1.5 text-xs text-white">
@@ -1056,10 +1117,17 @@
                         <span id="playerExplicitBadge" class="hidden px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/50 text-rose-400 text-[9px] font-black uppercase shrink-0">18+</span>
                         <span id="playerNewBadge" class="hidden px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[9px] font-black uppercase shrink-0">NEW</span>
                     </div>
-                    <button id="playerArtistBtn" onclick="openCurrentTrackArtist()" class="flex items-center gap-1.5 text-xs font-bold text-zinc-400 hover:text-white mt-0.5">
-                        <span id="playerArtist">МС ГЕИЧ</span>
-                        <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
-                    </button>
+                    <div class="flex items-center flex-wrap gap-1.5 mt-0.5">
+                        <button id="playerArtistBtn" onclick="openCurrentTrackArtist()" class="flex items-center gap-1 text-xs font-bold text-zinc-400 hover:text-white spring-btn">
+                            <span id="playerArtist">МС ГЕИЧ</span>
+                            <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
+                        </button>
+                        <span id="playerFeatDivider" class="hidden px-1.5 py-0.2 rounded bg-purple-500/20 border border-purple-500/40 text-purple-300 text-[9px] font-black uppercase">feat.</span>
+                        <button id="playerFeatArtistBtn" onclick="openCurrentTrackFeatArtist()" class="hidden items-center gap-1 text-xs font-bold text-purple-300 hover:text-white spring-btn">
+                            <span id="playerFeatArtist">МС МАКАКА</span>
+                            <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
+                        </button>
+                    </div>
                 </div>
                 <button id="playerLikeBtn" onclick="toggleLikeCurrent()" class="w-10 h-10 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 spring-btn">
                     <i class="fa-solid fa-heart text-sm"></i>
@@ -1423,8 +1491,8 @@
         function computeCatalogFingerprint(data) {
             try {
                 return JSON.stringify({
-                    t: (data.customTracks || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.albumId}_${x.filePath}_${x.coverFile}_${x.year}_${x.duration}_${x.isNew}_${Boolean(x.isExplicit)}`),
-                    a: (data.customAlbums || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.type}_${x.coverFile}_${x.year}_${Boolean(x.isExplicit)}`),
+                    t: (data.customTracks || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.featArtistId || ''}_${x.albumId}_${x.filePath}_${x.coverFile}_${x.year}_${x.duration}_${x.isNew}_${Boolean(x.isExplicit)}`),
+                    a: (data.customAlbums || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.featArtistId || ''}_${x.type}_${x.coverFile}_${x.year}_${Boolean(x.isExplicit)}`),
                     v: (data.customVideos || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.previewFile}_${x.videoSource}_${x.year}_${Boolean(x.isExplicit)}`),
                     n: (data.customNews || []).map(x => `${x.id}_${x.title}_${x.targetId}_${x.dateText}_${x.imageFile}_${x.content}`),
                     av: data.avatars || {},
@@ -1738,7 +1806,7 @@
                     triggerTempBroadcastPopup(tempBroadcastData.title, tempBroadcastData.message);
                 }
             } else {
-                dismissTempBroadcast();
+                dismissTempBroadcast(false);
             }
 
             const forceModal = document.getElementById("forceUpdateModal");
@@ -1824,9 +1892,11 @@
             const barEl = document.getElementById("tempBroadcastBar");
             if (!toast || !titleEl || !msgEl) return;
 
+            clearTimeout(window._tempBroadcastExitTimer);
             titleEl.textContent = title || "Объявление Dark Music";
             msgEl.textContent = message || "";
-            toast.classList.remove("hidden");
+            toast.classList.remove("hidden", "broadcast-popup-exit");
+            void toast.offsetWidth;
             toast.classList.add("broadcast-popup-enter");
 
             if (barEl) {
@@ -1849,18 +1919,30 @@
             }, 1000);
 
             tempBroadcastTimeout = setTimeout(() => {
-                dismissTempBroadcast();
+                dismissTempBroadcast(true);
             }, 20000);
         }
 
-        function dismissTempBroadcast() {
+        function dismissTempBroadcast(animate = true) {
             clearInterval(tempBroadcastInterval);
             clearTimeout(tempBroadcastTimeout);
             const toast = document.getElementById("tempBroadcastToast");
-            if (toast) {
+            if (!toast || toast.classList.contains("hidden")) return;
+
+            if (!animate) {
+                clearTimeout(window._tempBroadcastExitTimer);
                 toast.classList.add("hidden");
-                toast.classList.remove("broadcast-popup-enter");
+                toast.classList.remove("broadcast-popup-enter", "broadcast-popup-exit");
+                return;
             }
+
+            toast.classList.remove("broadcast-popup-enter");
+            toast.classList.add("broadcast-popup-exit");
+            clearTimeout(window._tempBroadcastExitTimer);
+            window._tempBroadcastExitTimer = setTimeout(() => {
+                toast.classList.add("hidden");
+                toast.classList.remove("broadcast-popup-exit");
+            }, 380);
         }
 
         function updateOwnerNotificationsFormUI() {
@@ -2286,6 +2368,34 @@
             return `https://raw.githubusercontent.com/${cleanRepo}/${cleanBranch}/${encodedPath}`;
         }
 
+        // Проверка принадлежности трека артисту (учитывает основной профиль и участие на фите)
+        function trackHasArtist(track, artistId) {
+            if (!track || !artistId) return false;
+            return track.artistId === artistId || (Boolean(track.featArtistId) && track.featArtistId === artistId);
+        }
+
+        // Формирование строки имени артиста (или дуэта при наличии фита)
+        function getTrackArtistsLabel(track) {
+            if (!track) return "Dark Music";
+            const mainArtist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
+            const featArtist = (track.featArtistId && track.featArtistId !== track.artistId) ? ARTISTS[track.featArtistId] : null;
+            return featArtist ? `${mainArtist.name} feat. ${featArtist.name}` : mainArtist.name;
+        }
+
+        // Проверка принадлежности альбома / сингла артисту (учитывает основного артиста и фит)
+        function albumHasArtist(album, artistId) {
+            if (!album || !artistId) return false;
+            return album.artistId === artistId || (Boolean(album.featArtistId) && album.featArtistId === artistId);
+        }
+
+        // Формирование строки артистов для альбома / EP / сингла
+        function getAlbumArtistsLabel(album) {
+            if (!album) return "Dark Music";
+            const mainArtist = ARTISTS[album.artistId] || ARTISTS.mc_geich;
+            const featArtist = (album.featArtistId && album.featArtistId !== album.artistId) ? ARTISTS[album.featArtistId] : null;
+            return featArtist ? `${mainArtist.name} feat. ${featArtist.name}` : mainArtist.name;
+        }
+
         function renderAvatarBox(artist, sizeClasses = "w-11 h-11 rounded-xl", iconSize = "text-sm") {
             const url = getRawUrl(artist.avatarFile);
             return `
@@ -2320,6 +2430,8 @@
         let searchQuery = "";
         let likedTrackIds = new Set();
         let factIndexMap = { mc_geich: 0, mc_makaka: 0, mc_ezdit: 0, mc_oparysh: 0 };
+        let factRotationTimer = null;
+        let currentTrackFactCursor = 0;
 
         // Фоновый Web Audio API синтезатор полностью отключён, чтобы никогда не накладываться на песни
         let usingSynthFallback = false;
@@ -2429,7 +2541,7 @@
         }
 
         function renderTrackRow(track, idx, rankNumber = null) {
-            const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
+            const artistsLabel = getTrackArtistsLabel(track);
             const album = ALBUMS[track.albumId];
             const albumLabel = album ? album.title : "Сингл";
             const yearLabel = track.year || (album && album.year) || "";
@@ -2456,7 +2568,7 @@
                             ${isExplicit ? `<span class="px-1.5 py-0.2 rounded bg-zinc-900 border border-rose-500/50 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>` : ''}
                             ${track.isNew ? `<span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">NEW</span>` : ''}
                         </div>
-                        <p class="text-[10px] text-zinc-400 truncate">${artist.name} • ${albumLabel}${yearLabel ? ` (${yearLabel})` : ''}</p>
+                        <p class="text-[10px] text-zinc-400 truncate">${artistsLabel} • ${albumLabel}${yearLabel ? ` (${yearLabel})` : ''}</p>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
                         <span class="text-[10px] font-semibold text-zinc-500">${track.duration || '2:45'}</span>
@@ -2501,7 +2613,7 @@
                 return;
             }
             const html = albumsList.map((alb) => {
-                const artist = ARTISTS[alb.artistId] || ARTISTS.mc_geich;
+                const artistsLabel = getAlbumArtistsLabel(alb);
                 return `
                     <div onclick="openAlbumDetail('${alb.id}')" class="w-36 shrink-0 p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2 spring-btn">
                         <div class="relative">
@@ -2516,7 +2628,7 @@
                                 <h3 class="text-xs font-extrabold text-white truncate">${alb.title}</h3>
                                 ${alb.isExplicit ? `<span class="text-[8px] font-black text-rose-400 shrink-0">18+</span>` : ''}
                             </div>
-                            <p class="text-[10px] text-zinc-400 truncate">${artist.name} • ${alb.year || 2025}</p>
+                            <p class="text-[10px] text-zinc-400 truncate">${artistsLabel} • ${alb.year || 2025}</p>
                         </div>
                     </div>
                 `;
@@ -2555,12 +2667,12 @@
 
             let filtered = TRACKS;
             if (activeArtistFilter !== "all") {
-                filtered = filtered.filter(t => t.artistId === activeArtistFilter);
+                filtered = filtered.filter(t => trackHasArtist(t, activeArtistFilter));
             }
             if (searchQuery.trim() !== "") {
                 const q = searchQuery.trim().toLowerCase();
                 filtered = filtered.filter(t => {
-                    const art = ARTISTS[t.artistId]?.name.toLowerCase() || "";
+                    const art = getTrackArtistsLabel(t).toLowerCase();
                     const alb = ALBUMS[t.albumId]?.title.toLowerCase() || "";
                     return t.title.toLowerCase().includes(q) || art.includes(q) || alb.includes(q);
                 });
@@ -2811,8 +2923,8 @@
             const container = document.getElementById("fullArtistsList");
             if (!container) return;
             const html = Object.values(ARTISTS).map(artist => {
-                const countTracks = TRACKS.filter(t => t.artistId === artist.id).length;
-                const countAlbums = Object.values(ALBUMS).filter(a => a.artistId === artist.id).length;
+                const countTracks = TRACKS.filter(t => trackHasArtist(t, artist.id)).length;
+                const countAlbums = Object.values(ALBUMS).filter(a => albumHasArtist(a, artist.id)).length;
                 return `
                     <div onclick="openArtistProfile('${artist.id}')" class="p-3.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 flex items-center justify-between gap-3 cursor-pointer spring-btn">
                         <div class="flex items-center gap-3 min-w-0 flex-1">
@@ -2843,9 +2955,9 @@
             const artist = ARTISTS[artistId];
             if (!artist) return;
 
-            const artistTracks = TRACKS.filter(t => t.artistId === artistId);
+            const artistTracks = TRACKS.filter(t => trackHasArtist(t, artistId));
             const newReleases = artistTracks.filter(t => t.isNew);
-            const artistAlbums = Object.values(ALBUMS).filter(a => a.artistId === artistId);
+            const artistAlbums = Object.values(ALBUMS).filter(a => albumHasArtist(a, artistId));
             const artistVideos = VIDEOS.filter(v => v.artistId === artistId);
             const artistNews = NEWS.filter(n => n.targetId === artistId);
 
@@ -2893,7 +3005,7 @@
                 <div class="space-y-2.5">
                     <h2 class="text-xs font-black uppercase tracking-wider text-purple-400 flex items-center gap-1.5">
                         <i class="fa-solid fa-compact-disc"></i>
-                        <span>АЛЬБОМЫ И EP (${artistAlbums.length})</span>
+                        <span>АЛЬБОМЫ, EP И СИНГЛЫ (${artistAlbums.length})</span>
                     </h2>
                     ${artistAlbums.length > 0 ? `
                         <div class="grid grid-cols-2 gap-2.5">
@@ -2909,6 +3021,7 @@
                                             <h3 class="text-xs font-extrabold text-white truncate">${alb.title}</h3>
                                             ${alb.isExplicit ? `<span class="text-[8px] font-black text-rose-400 shrink-0">18+</span>` : ''}
                                         </div>
+                                        <p class="text-[10px] text-zinc-400 truncate mt-0.5">${getAlbumArtistsLabel(alb)}</p>
                                     </div>
                                 </div>
                             `).join("")}
@@ -2973,6 +3086,7 @@
             const album = ALBUMS[albumId];
             if (!album) return;
             const artist = ARTISTS[album.artistId] || ARTISTS.mc_geich;
+            const featArtist = (album.featArtistId && album.featArtistId !== album.artistId) ? ARTISTS[album.featArtistId] : null;
             const albumTracks = TRACKS.filter(t => t.albumId === albumId);
 
             const content = document.getElementById("albumDetailContent");
@@ -2986,19 +3100,28 @@
                                 ${album.isExplicit ? `<span class="px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/50 text-rose-400 text-[9px] font-black uppercase">18+</span>` : ''}
                             </div>
                             <h1 class="text-lg font-black text-white truncate">${album.title}</h1>
-                            <button onclick="openArtistProfile('${artist.id}')" class="text-xs font-bold text-zinc-400 hover:text-white flex items-center gap-1">
-                                <span>${artist.name}</span>
-                                <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
-                            </button>
+                            <div class="flex items-center flex-wrap gap-1.5 pt-0.5">
+                                <button onclick="openArtistProfile('${artist.id}')" class="text-xs font-bold text-zinc-300 hover:text-white flex items-center gap-1 spring-btn">
+                                    <span>${artist.name}</span>
+                                    <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
+                                </button>
+                                ${featArtist ? `
+                                    <span class="px-1.5 py-0.2 rounded bg-fuchsia-500/20 border border-fuchsia-500/40 text-fuchsia-300 text-[9px] font-black uppercase">feat.</span>
+                                    <button onclick="openArtistProfile('${featArtist.id}')" class="text-xs font-bold text-fuchsia-300 hover:text-white flex items-center gap-1 spring-btn">
+                                        <span>${featArtist.name}</span>
+                                        <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
+                                    </button>
+                                ` : ''}
+                            </div>
                         </div>
                     </div>
                     <button onclick="playAlbumTracks('${album.id}')" class="w-full py-2.5 rounded-xl bg-white text-black font-extrabold text-xs flex items-center justify-center gap-2 spring-btn">
                         <i class="fa-solid fa-play text-[10px]"></i>
-                        <span>Слушать альбом (${albumTracks.length})</span>
+                        <span>Слушать релиз (${albumTracks.length})</span>
                     </button>
                 </div>
                 <div class="space-y-2">
-                    <h2 class="text-xs font-black uppercase tracking-wider text-zinc-400">ТРЕКЛИСТ АЛЬБОМА</h2>
+                    <h2 class="text-xs font-black uppercase tracking-wider text-zinc-400">ТРЕКЛИСТ РЕЛИЗА</h2>
                     ${albumTracks.length > 0
                         ? albumTracks.map((t, i) => renderTrackRow(t, i, i + 1)).join("")
                         : `<div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-xs text-zinc-500">В этом альбоме пока нет треков</div>`
@@ -3024,16 +3147,17 @@
 
             isTransitioningTrack = true;
             currentTrackId = trackId;
+            currentTrackFactCursor = 0;
             isPlaying = true;
             usingSynthFallback = false;
 
-            const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
+            const artistsLabel = getTrackArtistsLabel(track);
             const rawUrl = getRawUrl(track.filePath);
 
             // Обновляем заголовок документа и атрибут title у audio — мобильные ОС используют их для экрана блокировки
-            document.title = `${track.title} — ${artist.name}`;
-            audioEl.title = `${track.title} — ${artist.name}`;
-            audioEl.setAttribute("title", `${track.title} — ${artist.name}`);
+            document.title = `${track.title} — ${artistsLabel}`;
+            audioEl.title = `${track.title} — ${artistsLabel}`;
+            audioEl.setAttribute("title", `${track.title} — ${artistsLabel}`);
 
             // Используем прямой HTTPS URL (без blob:), чтобы Android и iOS распознавали поток как основной музыкальный плеер
             if (audioEl.src !== rawUrl) {
@@ -3044,6 +3168,7 @@
             updatePlayerUI();
             updateTrackRowsPlayState();
             updateMediaSessionMetadata();
+            resetFactAutoRotationTimer();
 
             const playPromise = audioEl.play();
             if (playPromise !== undefined) {
@@ -3066,7 +3191,7 @@
                 prepareAndPreloadNextTrack();
             }
 
-            showToast(`${artist.name} — ${track.title}`, "СЕЙЧАС ИГРАЕТ");
+            showToast(`${artistsLabel} — ${track.title}`, "СЕЙЧАС ИГРАЕТ");
         }
 
         // =========================================================================
@@ -3181,6 +3306,7 @@
             const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0];
             if (!track) return;
             const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
+            const artistsLabel = getTrackArtistsLabel(track);
             const album = ALBUMS[track.albumId];
             const coverPath = track.coverFile || (album && album.coverFile) || artist.avatarFile || "logo.png";
             const remoteUrl = coverPath ? getRawUrl(coverPath) : getRawUrl("logo.png");
@@ -3195,7 +3321,7 @@
                 try {
                     window.AndroidMediaBridge.updateMediaState(
                         String(track.title || "Dark Music"),
-                        String(artist.name || "Dark Music"),
+                        String(artistsLabel || "Dark Music"),
                         String(album ? album.title : track.title),
                         String(remoteUrl || ""),
                         Boolean(isPlaying),
@@ -3243,12 +3369,13 @@
             const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0];
             if (!track) return;
             const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
+            const artistsLabel = getTrackArtistsLabel(track);
             const album = ALBUMS[track.albumId];
 
             // Всегда синхронизируем заголовок окна и аудио-элемента для системной шторки
-            document.title = `${track.title} — ${artist.name}`;
+            document.title = `${track.title} — ${artistsLabel}`;
             if (audioEl) {
-                audioEl.title = `${track.title} — ${artist.name}`;
+                audioEl.title = `${track.title} — ${artistsLabel}`;
             }
 
             // Передаём состояние в нативный Android-сервис APK
@@ -3271,7 +3398,7 @@
 
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: track.title,
-                    artist: artist.name,
+                    artist: artistsLabel,
                     album: album ? album.title : "Dark Music",
                     artwork: artworkList
                 });
@@ -3442,7 +3569,7 @@
         }
 
         function playArtistTracks(artistId, shuffle = false) {
-            const list = TRACKS.filter(t => t.artistId === artistId);
+            const list = TRACKS.filter(t => trackHasArtist(t, artistId));
             if (list.length === 0) {
                 showToast("У этого артиста пока нет треков", "КАТАЛОГ");
                 return;
@@ -3518,6 +3645,8 @@
             if (!track) return;
 
             const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
+            const featArtist = (track.featArtistId && track.featArtistId !== track.artistId) ? ARTISTS[track.featArtistId] : null;
+            const artistsLabel = getTrackArtistsLabel(track);
             const album = ALBUMS[track.albumId];
             const isExplicit = Boolean(track.isExplicit || (album && album.isExplicit));
             const gradient = (album && album.gradient) ? album.gradient : artist.gradient;
@@ -3526,7 +3655,7 @@
             const coverSignature = `${track.id}|${gradient}|${coverUrl}`;
 
             document.getElementById("miniTitle").textContent = track.title;
-            document.getElementById("miniArtist").textContent = artist.name;
+            document.getElementById("miniArtist").textContent = artistsLabel;
             const miniExpBadge = document.getElementById("miniExplicitBadge");
             if (miniExpBadge) {
                 if (isExplicit) miniExpBadge.classList.remove("hidden");
@@ -3542,6 +3671,21 @@
 
             document.getElementById("playerTitle").textContent = track.title;
             document.getElementById("playerArtist").textContent = artist.name;
+
+            const featDivider = document.getElementById("playerFeatDivider");
+            const featBtn = document.getElementById("playerFeatArtistBtn");
+            const featNameEl = document.getElementById("playerFeatArtist");
+            if (featArtist && featDivider && featBtn && featNameEl) {
+                featNameEl.textContent = featArtist.name;
+                featDivider.classList.remove("hidden");
+                featBtn.classList.remove("hidden");
+                featBtn.classList.add("flex");
+            } else if (featDivider && featBtn) {
+                featDivider.classList.add("hidden");
+                featBtn.classList.add("hidden");
+                featBtn.classList.remove("flex");
+            }
+
             // Если трек не входит в альбом, под «СЕЙЧАС ИГРАЕТ» пишем название самого трека
             document.getElementById("playerAlbumTopBtn").textContent = album ? album.title : track.title;
 
@@ -3578,17 +3722,44 @@
             renderArtistFactInPlayer(artist);
         }
 
+        function buildTrackFactsPool(track, fallbackArtist) {
+            const pool = [];
+            const mainArtist = (track && ARTISTS[track.artistId]) || fallbackArtist || ARTISTS.mc_geich;
+            const featArtist = (track && track.featArtistId && track.featArtistId !== track.artistId) ? ARTISTS[track.featArtistId] : null;
+
+            const mainFacts = (mainArtist && Array.isArray(mainArtist.facts) && mainArtist.facts.length > 0)
+                ? mainArtist.facts
+                : ["Эксклюзивный исполнитель закрытого каталога Dark Music."];
+            const featFacts = (featArtist && Array.isArray(featArtist.facts) && featArtist.facts.length > 0)
+                ? featArtist.facts
+                : [];
+
+            const maxLen = Math.max(mainFacts.length, featFacts.length);
+            for (let i = 0; i < maxLen; i++) {
+                if (i < mainFacts.length) {
+                    pool.push({ artistName: mainArtist.name, text: mainFacts[i] });
+                }
+                if (featArtist && i < featFacts.length) {
+                    pool.push({ artistName: featArtist.name, text: featFacts[i] });
+                }
+            }
+            return pool;
+        }
+
         function renderArtistFactInPlayer(artist, forceAnimate = false) {
             const headerEl = document.getElementById("playerFactHeader");
             const textEl = document.getElementById("playerFactText");
-            if (!headerEl || !textEl || !artist) return;
+            if (!headerEl || !textEl) return;
 
-            headerEl.textContent = `ИНТЕРЕСНЫЙ ФАКТ • ${artist.name}`;
-            const facts = Array.isArray(artist.facts) && artist.facts.length > 0
-                ? artist.facts
-                : ["Эксклюзивный исполнитель закрытого каталога Dark Music."];
-            const idx = (factIndexMap[artist.id] || 0) % facts.length;
-            const factSignature = `${artist.id}|${idx}|${facts[idx]}`;
+            const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0] || null;
+            const pool = buildTrackFactsPool(track, artist);
+            if (pool.length === 0) return;
+
+            const idx = currentTrackFactCursor % pool.length;
+            const item = pool[idx];
+            const factSignature = `${track ? track.id : 'none'}|${idx}|${item.artistName}|${item.text}`;
+
+            headerEl.textContent = `ИНТЕРЕСНЫЙ ФАКТ • ${item.artistName}`;
 
             if (!forceAnimate && textEl._lastFactSignature === factSignature) {
                 return;
@@ -3597,16 +3768,29 @@
 
             textEl.classList.remove("fact-animate");
             void textEl.offsetWidth;
-            textEl.textContent = facts[idx];
+            textEl.textContent = item.text;
             textEl.classList.add("fact-animate");
         }
 
-        function cycleArtistFact() {
+        function cycleArtistFact(manualClick = true) {
             const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0];
             const artist = track ? ARTISTS[track.artistId] : ARTISTS.mc_geich;
-            if (!artist) return;
-            factIndexMap[artist.id] = ((factIndexMap[artist.id] || 0) + 1) % Math.max(1, artist.facts.length);
+            const pool = buildTrackFactsPool(track, artist);
+            if (pool.length === 0) return;
+
+            currentTrackFactCursor = (currentTrackFactCursor + 1) % pool.length;
             renderArtistFactInPlayer(artist, true);
+
+            if (manualClick) {
+                resetFactAutoRotationTimer();
+            }
+        }
+
+        function resetFactAutoRotationTimer() {
+            if (factRotationTimer) clearInterval(factRotationTimer);
+            factRotationTimer = setInterval(() => {
+                cycleArtistFact(false);
+            }, 10000);
         }
 
         function toggleLikeCurrent() {
@@ -3661,6 +3845,14 @@
             const track = TRACKS.find(t => t.id === currentTrackId);
             closeFullPlayer();
             if (track) openArtistProfile(track.artistId);
+        }
+
+        function openCurrentTrackFeatArtist() {
+            const track = TRACKS.find(t => t.id === currentTrackId);
+            if (track && track.featArtistId && ARTISTS[track.featArtistId]) {
+                closeFullPlayer();
+                openArtistProfile(track.featArtistId);
+            }
         }
 
         function openCurrentTrackAlbum() {
@@ -3853,32 +4045,46 @@
             const select = document.getElementById("newTrackAlbum");
             if (!select) return;
 
-            const artistAlbums = Object.values(ALBUMS).filter(a => a.artistId === artistId);
-            let html = artistAlbums.map(a => `<option value="${a.id}">${a.title} (${a.year || 2025})</option>`).join("");
-            html += `<option value="__create_new__">+ Создать новый альбом...</option>`;
+            const artistAlbums = Object.values(ALBUMS).filter(a => albumHasArtist(a, artistId));
+            let html = artistAlbums.map(a => `<option value="${a.id}">${a.title} — ${getAlbumArtistsLabel(a)} (${a.year || 2025})</option>`).join("");
+            html += `<option value="__create_new__">+ Создать новый альбом / сингл...</option>`;
             html += `<option value="">Без альбома (Сингл)</option>`;
             select.innerHTML = html;
             handleAlbumSelectChange();
+        }
+
+        function syncInlineAlbumFeatSelect() {
+            const trackFeat = document.getElementById("newTrackFeatArtist")?.value || "";
+            const inlineAlbFeat = document.getElementById("inlineAlbumFeatArtist");
+            if (inlineAlbFeat) {
+                inlineAlbFeat.value = trackFeat;
+            }
         }
 
         function handleAlbumSelectChange() {
             const val = document.getElementById("newTrackAlbum")?.value;
             const box = document.getElementById("inlineNewAlbumBox");
             if (!box) return;
-            if (val === "__create_new__") box.classList.remove("hidden");
-            else box.classList.add("hidden");
+            if (val === "__create_new__") {
+                box.classList.remove("hidden");
+                syncInlineAlbumFeatSelect();
+            } else {
+                box.classList.add("hidden");
+            }
         }
 
         async function createNewOwnerAlbum() {
             const title = document.getElementById("newAlbumTitleInput").value.trim();
             const artistId = document.getElementById("newAlbumArtistSelect").value;
+            let featArtistId = document.getElementById("newAlbumFeatArtistSelect")?.value || "";
+            if (featArtistId === artistId) featArtistId = "";
             const type = document.getElementById("newAlbumTypeSelect").value;
             const year = parseInt(document.getElementById("newAlbumYearInput").value, 10) || 2025;
             const coverFile = document.getElementById("newAlbumCoverInput").value.trim();
             const isExplicit = Boolean(document.getElementById("newAlbumExplicitInput")?.checked);
 
             if (!title) {
-                showToast("Введите название альбома", "ВНИМАНИЕ");
+                showToast("Введите название альбома или сингла", "ВНИМАНИЕ");
                 return;
             }
 
@@ -3887,6 +4093,7 @@
                 id: newId,
                 title,
                 artistId,
+                featArtistId,
                 type,
                 year,
                 isExplicit,
@@ -3900,14 +4107,17 @@
             populateAlbumSelectForArtist();
             document.getElementById("newAlbumTitleInput").value = "";
             document.getElementById("newAlbumCoverInput").value = "";
+            if (document.getElementById("newAlbumFeatArtistSelect")) document.getElementById("newAlbumFeatArtistSelect").value = "";
             if (document.getElementById("newAlbumExplicitInput")) document.getElementById("newAlbumExplicitInput").checked = false;
             await persistSettingsToCloud();
-            showToast(`Альбом «${title}» создан и сохранён!`, "НОВЫЙ АЛЬБОМ");
+            showToast(`Релиз «${title}» создан и сохранён!`, "НОВЫЙ РЕЛИЗ");
         }
 
         async function addOwnerTrack() {
             const title = document.getElementById("newTrackTitle").value.trim();
             const artistId = document.getElementById("newTrackArtist").value;
+            let featArtistId = document.getElementById("newTrackFeatArtist")?.value || "";
+            if (featArtistId === artistId) featArtistId = "";
             let albumId = document.getElementById("newTrackAlbum").value;
             const filePath = document.getElementById("newTrackFile").value.trim();
             const coverFile = document.getElementById("newTrackCover").value.trim();
@@ -3923,11 +4133,14 @@
 
             if (albumId === "__create_new__") {
                 const inlineTitle = document.getElementById("inlineAlbumTitle").value.trim();
+                const inlineType = document.getElementById("inlineAlbumType")?.value || "АЛЬБОМ";
+                let inlineFeat = document.getElementById("inlineAlbumFeatArtist")?.value || featArtistId || "";
+                if (inlineFeat === artistId) inlineFeat = "";
                 const inlineCover = document.getElementById("inlineAlbumCover").value.trim();
                 const inlineYear = parseInt(document.getElementById("inlineAlbumYear").value, 10) || year;
                 const inlineExplicit = Boolean(document.getElementById("inlineAlbumExplicit")?.checked);
                 if (!inlineTitle) {
-                    showToast("Введите название нового альбома", "ВНИМАНИЕ");
+                    showToast("Введите название нового альбома / сингла", "ВНИМАНИЕ");
                     return;
                 }
                 albumId = "alb_" + Date.now();
@@ -3935,7 +4148,8 @@
                     id: albumId,
                     title: inlineTitle,
                     artistId,
-                    type: "АЛЬБОМ",
+                    featArtistId: inlineFeat,
+                    type: inlineType,
                     year: inlineYear,
                     isExplicit: inlineExplicit,
                     coverFile: inlineCover || coverFile || `covers/${albumId}.jpg`,
@@ -3947,6 +4161,7 @@
                 id: "trk_" + Date.now(),
                 title,
                 artistId,
+                featArtistId,
                 albumId: albumId || "",
                 filePath,
                 coverFile,
@@ -3965,6 +4180,7 @@
             document.getElementById("newTrackTitle").value = "";
             document.getElementById("newTrackFile").value = "";
             document.getElementById("newTrackCover").value = "";
+            if (document.getElementById("newTrackFeatArtist")) document.getElementById("newTrackFeatArtist").value = "";
             if (document.getElementById("newTrackIsExplicit")) document.getElementById("newTrackIsExplicit").checked = false;
 
             await saveCustomTrackToCloud(newTrack);
@@ -4037,13 +4253,13 @@
                     setContainerHtmlIfChanged(albumsContainer, `<p class="text-[11px] text-zinc-500">Альбомов пока нет</p>`);
                 } else {
                     const html = albumsArr.map(alb => {
-                        const art = ARTISTS[alb.artistId]?.name || "";
+                        const art = getAlbumArtistsLabel(alb);
                         return `
                             <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-2">
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-center gap-1.5">
                                         <span class="text-xs font-bold text-white truncate">${alb.title}</span>
-                                        <span class="text-[10px] text-purple-400 shrink-0">(${alb.year || 2025})</span>
+                                        <span class="text-[10px] text-purple-400 shrink-0">(${alb.type || 'АЛЬБОМ'} • ${alb.year || 2025})</span>
                                         ${alb.isExplicit ? `<span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>` : ''}
                                     </div>
                                     <div class="text-[10px] text-zinc-400 truncate">${art} • ${alb.coverFile || 'Без обложки'}</div>
@@ -4069,7 +4285,7 @@
                     setContainerHtmlIfChanged(tracksContainer, `<p class="text-[11px] text-zinc-500">Треков пока нет</p>`);
                 } else {
                     const html = TRACKS.map(trk => {
-                        const art = ARTISTS[trk.artistId]?.name || "";
+                        const art = getTrackArtistsLabel(trk);
                         const alb = ALBUMS[trk.albumId]?.title || "Сингл";
                         return `
                             <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-2">
@@ -4381,12 +4597,33 @@
         function openEditAlbumModal(albumId) {
             const alb = ALBUMS[albumId];
             if (!alb) return;
-            document.getElementById("editModalHeader").textContent = "Редактировать альбом";
+            document.getElementById("editModalHeader").textContent = "Редактировать альбом / сингл";
             document.getElementById("editModalBody").innerHTML = `
                 <div class="space-y-2.5">
                     <div>
-                        <label class="text-[10px] text-zinc-400 block mb-1">Название альбома</label>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Название альбома / сингла</label>
                         <input id="editAlbTitle" type="text" value="${alb.title.replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Основной артист</label>
+                            <select id="editAlbArtist" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
+                                <option value="mc_geich" ${alb.artistId === 'mc_geich' ? 'selected' : ''}>МС ГЕИЧ</option>
+                                <option value="mc_makaka" ${alb.artistId === 'mc_makaka' ? 'selected' : ''}>МС МАКАКА</option>
+                                <option value="mc_ezdit" ${alb.artistId === 'mc_ezdit' ? 'selected' : ''}>МС ЕЗДИТЬ</option>
+                                <option value="mc_oparysh" ${alb.artistId === 'mc_oparysh' ? 'selected' : ''}>МС ОПАРЫШ</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-fuchsia-400 font-semibold block mb-1">Фит (2-й артист)</label>
+                            <select id="editAlbFeatArtist" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
+                                <option value="" ${!alb.featArtistId ? 'selected' : ''}>Без фита (Соло)</option>
+                                <option value="mc_geich" ${alb.featArtistId === 'mc_geich' ? 'selected' : ''}>МС ГЕИЧ</option>
+                                <option value="mc_makaka" ${alb.featArtistId === 'mc_makaka' ? 'selected' : ''}>МС МАКАКА</option>
+                                <option value="mc_ezdit" ${alb.featArtistId === 'mc_ezdit' ? 'selected' : ''}>МС ЕЗДИТЬ</option>
+                                <option value="mc_oparysh" ${alb.featArtistId === 'mc_oparysh' ? 'selected' : ''}>МС ОПАРЫШ</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
@@ -4408,10 +4645,10 @@
                     </div>
                     <label class="flex items-center gap-2 py-2 px-3 rounded-xl bg-zinc-900 border border-rose-500/40 text-xs text-rose-400 cursor-pointer">
                         <input id="editAlbExplicit" type="checkbox" ${alb.isExplicit ? 'checked' : ''} class="accent-rose-500 rounded">
-                        <span class="font-black">Плашка 18+ на альбоме</span>
+                        <span class="font-black">Плашка 18+ на альбоме / сингле</span>
                     </label>
                     <button onclick="saveEditedAlbum('${alb.id}')" class="w-full py-2.5 rounded-xl bg-amber-500 text-black font-extrabold text-xs spring-btn">
-                        Сохранить изменения альбома
+                        Сохранить изменения
                     </button>
                 </div>
             `;
@@ -4424,6 +4661,11 @@
             const idx = customAlbumsFromCloud.findIndex(a => a.id === albumId);
             if (idx === -1) return;
             customAlbumsFromCloud[idx].title = document.getElementById("editAlbTitle").value.trim() || customAlbumsFromCloud[idx].title;
+            const mainArt = document.getElementById("editAlbArtist")?.value || customAlbumsFromCloud[idx].artistId;
+            let featArt = document.getElementById("editAlbFeatArtist")?.value || "";
+            if (featArt === mainArt) featArt = "";
+            customAlbumsFromCloud[idx].artistId = mainArt;
+            customAlbumsFromCloud[idx].featArtistId = featArt;
             customAlbumsFromCloud[idx].year = parseInt(document.getElementById("editAlbYear").value, 10) || 2025;
             customAlbumsFromCloud[idx].type = document.getElementById("editAlbType").value;
             customAlbumsFromCloud[idx].coverFile = document.getElementById("editAlbCover").value.trim();
@@ -4434,14 +4676,14 @@
             renderAllViews();
             populateAlbumSelectForArtist();
             await persistSettingsToCloud();
-            showToast("Альбом обновлён!", "СОХРАНЕНО");
+            showToast("Релиз обновлён!", "СОХРАНЕНО");
         }
 
         function openEditTrackModal(trackId) {
             const trk = customTracksFromCloud.find(t => t.id === trackId);
             if (!trk) return;
             const albumsOptions = Object.values(ALBUMS).map(a =>
-                `<option value="${a.id}" ${trk.albumId === a.id ? 'selected' : ''}>${a.title} (${a.year || 2025})</option>`
+                `<option value="${a.id}" ${trk.albumId === a.id ? 'selected' : ''}>${a.title} — ${getAlbumArtistsLabel(a)} (${a.year || 2025})</option>`
             ).join("") + `<option value="" ${!trk.albumId ? 'selected' : ''}>Без альбома (Сингл)</option>`;
 
             document.getElementById("editModalHeader").textContent = "Редактировать трек";
@@ -4453,7 +4695,7 @@
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="text-[10px] text-zinc-400 block mb-1">Артист</label>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Основной артист</label>
                             <select id="editTrkArtist" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
                                 <option value="mc_geich" ${trk.artistId === 'mc_geich' ? 'selected' : ''}>МС ГЕИЧ</option>
                                 <option value="mc_makaka" ${trk.artistId === 'mc_makaka' ? 'selected' : ''}>МС МАКАКА</option>
@@ -4462,15 +4704,27 @@
                             </select>
                         </div>
                         <div>
+                            <label class="text-[10px] text-purple-400 font-semibold block mb-1">Фит (2-й артист)</label>
+                            <select id="editTrkFeatArtist" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
+                                <option value="" ${!trk.featArtistId ? 'selected' : ''}>Без фита (Соло)</option>
+                                <option value="mc_geich" ${trk.featArtistId === 'mc_geich' ? 'selected' : ''}>МС ГЕИЧ</option>
+                                <option value="mc_makaka" ${trk.featArtistId === 'mc_makaka' ? 'selected' : ''}>МС МАКАКА</option>
+                                <option value="mc_ezdit" ${trk.featArtistId === 'mc_ezdit' ? 'selected' : ''}>МС ЕЗДИТЬ</option>
+                                <option value="mc_oparysh" ${trk.featArtistId === 'mc_oparysh' ? 'selected' : ''}>МС ОПАРЫШ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Альбом</label>
+                            <select id="editTrkAlbum" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
+                                ${albumsOptions}
+                            </select>
+                        </div>
+                        <div>
                             <label class="text-[10px] text-zinc-400 block mb-1">Год релиза</label>
                             <input id="editTrkYear" type="number" value="${trk.year || 2025}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
                         </div>
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-zinc-400 block mb-1">Альбом</label>
-                        <select id="editTrkAlbum" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
-                            ${albumsOptions}
-                        </select>
                     </div>
                     <div>
                         <label class="text-[10px] text-zinc-400 block mb-1">Путь к MP3 файлу</label>
@@ -4504,7 +4758,11 @@
             const idx = customTracksFromCloud.findIndex(t => t.id === trackId);
             if (idx === -1) return;
             customTracksFromCloud[idx].title = document.getElementById("editTrkTitle").value.trim() || customTracksFromCloud[idx].title;
-            customTracksFromCloud[idx].artistId = document.getElementById("editTrkArtist").value;
+            const mainArt = document.getElementById("editTrkArtist").value;
+            let featArt = document.getElementById("editTrkFeatArtist")?.value || "";
+            if (featArt === mainArt) featArt = "";
+            customTracksFromCloud[idx].artistId = mainArt;
+            customTracksFromCloud[idx].featArtistId = featArt;
             customTracksFromCloud[idx].year = parseInt(document.getElementById("editTrkYear").value, 10) || 2025;
             customTracksFromCloud[idx].albumId = document.getElementById("editTrkAlbum").value;
             customTracksFromCloud[idx].filePath = document.getElementById("editTrkFile").value.trim();
@@ -4604,6 +4862,7 @@
             applyBroadcastAndForceUpdateUI();
             populateAlbumSelectForArtist();
             loadArtistBioAndFactsForm();
+            resetFactAutoRotationTimer();
             lastCatalogFingerprint = computeCatalogFingerprint(buildFullSyncPayload());
 
             fetchCatalogFromGitHubRepo(true);
