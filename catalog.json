@@ -65,17 +65,6 @@
       "type": "АЛЬБОМ",
       "title": "Мертворождённые",
       "coverFile": "covers/alb_mertvorozdennye.jpg"
-    },
-    {
-      "id": "alb_1793176376242",
-      "title": "Ламбада",
-      "artistId": "mc_geich",
-      "featArtistId": "mc_ezdit",
-      "type": "СИНГЛ",
-      "year": 2026,
-      "isExplicit": true,
-      "coverFile": "covers/alb_lambada.jpg",
-      "gradient": "from-purple-600 via-indigo-900 to-zinc-950"
     }
   ],
   "customTracks": [
@@ -380,7 +369,8 @@
   ],
   "customNews": [],
   "deletedCustomIds": [
-    "alb_1792597596794"
+    "alb_1792597596794",
+    "alb_1793176376242"
   ],
   "tempBroadcast": {
     "id": "tmp_1793051634442",
@@ -411,5 +401,5 @@
     "active": true,
     "updatedAt": 1793175130835
   },
-  "updatedAt": 1793176629019
+  "updatedAt": 1793176707323
 }
