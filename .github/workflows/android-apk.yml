@@ -592,6 +592,11 @@ jobs:
           }
           EOF
 
+      - name: Set up Gradle 8.2
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.2'
+
       - name: Build Debug APK with Gradle
         working-directory: android-project
         run: |
