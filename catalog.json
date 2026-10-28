@@ -85,7 +85,7 @@
       "featArtistId": "mc_ezdit",
       "albumId": "alb_1793176376242",
       "filePath": "tracks/mc_geich/T-Fest_and_Skriptonit_-_Lambada_43797726.mp3",
-      "coverFile": "covers/alb_lambada",
+      "coverFile": "covers/alb_lambada.jpg",
       "duration": "3:18",
       "year": 2026,
       "isNew": true,
@@ -410,5 +410,5 @@
     "active": true,
     "updatedAt": 1793175130835
   },
-  "updatedAt": 1793176394584
+  "updatedAt": 1793176402666
 }
