@@ -64,9 +64,34 @@
       "type": "АЛЬБОМ",
       "title": "Мертворождённые",
       "coverFile": "covers/alb_mertvorozdennye.jpg"
+    },
+    {
+      "id": "alb_1793176376242",
+      "title": "Ламбада",
+      "artistId": "mc_geich",
+      "featArtistId": "mc_ezdit",
+      "type": "СИНГЛ",
+      "year": 2026,
+      "isExplicit": true,
+      "coverFile": "covers/alb_lambada",
+      "gradient": "from-purple-600 via-indigo-900 to-zinc-950"
     }
   ],
   "customTracks": [
+    {
+      "id": "trk_1793176376243",
+      "title": "Ламбада",
+      "artistId": "mc_geich",
+      "featArtistId": "mc_ezdit",
+      "albumId": "alb_1793176376242",
+      "filePath": "tracks/mc_geich/T-Fest_and_Skriptonit_-_Lambada_43797726.mp3",
+      "coverFile": "covers/alb_lambada",
+      "duration": "3:18",
+      "year": 2026,
+      "isNew": true,
+      "isExplicit": true,
+      "createdAt": 1793176376243
+    },
     {
       "id": "trk_1792613045145",
       "title": "Я",
@@ -385,5 +410,5 @@
     "active": true,
     "updatedAt": 1793175130835
   },
-  "updatedAt": 1793176224902
+  "updatedAt": 1793176376296
 }
