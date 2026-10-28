@@ -73,7 +73,7 @@
       "type": "СИНГЛ",
       "year": 2026,
       "isExplicit": true,
-      "coverFile": "covers/alb_lambada",
+      "coverFile": "covers/alb_lambada.jpg",
       "gradient": "from-purple-600 via-indigo-900 to-zinc-950"
     }
   ],
@@ -410,5 +410,5 @@
     "active": true,
     "updatedAt": 1793175130835
   },
-  "updatedAt": 1793176376296
+  "updatedAt": 1793176394584
 }
