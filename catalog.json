@@ -298,19 +298,6 @@
       "title": "Кто в говнище"
     },
     {
-      "createdAt": 1792603726620,
-      "id": "trk_1792603726620",
-      "filePath": "tracks/mc_ezdit/МС ЕЗДИТЬ - ПЕРЕЗВОН.MP3",
-      "coverFile": "covers/alb_perezvon.jpg",
-      "isExplicit": false,
-      "artistId": "mc_ezdit",
-      "isNew": false,
-      "duration": "9:23",
-      "year": 2026,
-      "title": "Перезвон",
-      "albumId": ""
-    },
-    {
       "year": 2026,
       "title": "МАМА ПАПА",
       "isExplicit": true,
@@ -368,7 +355,8 @@
     "trk_1793176376243",
     "art_eunrrenkrpkikprr_1793264041633",
     "art_ms_dolboeb_1793263987131",
-    "mc_oparysh"
+    "mc_oparysh",
+    "trk_1792603726620"
   ],
   "systemPushBroadcast": {
     "id": "",
@@ -407,5 +395,5 @@
     "active": true,
     "updatedAt": 1793264523866
   },
-  "updatedAt": 1793289839848
+  "updatedAt": 1793289895064
 }
