@@ -13,7 +13,6 @@
     "mc_makaka": "МС МАКАКА",
     "mc_ezdit": "МС ЕЗДИТЬ",
     "mc_oparysh": "МС ОПАРЫШ",
-    "art_ms_kiber_1793263753371": "МС КИБЕР",
     "art_ms_dolboeb_1793263987131": "МС ДОЛБОЕБ"
   },
   "artistBios": {
@@ -64,7 +63,6 @@
     "mc_makaka": "from-emerald-600 via-teal-900 to-zinc-950",
     "mc_ezdit": "from-rose-600 via-red-900 to-zinc-950",
     "mc_oparysh": "from-amber-600 via-orange-950 to-zinc-950",
-    "art_ms_kiber_1793263753371": "from-purple-600 via-indigo-900 to-zinc-950",
     "art_ms_dolboeb_1793263987131": "from-amber-600 via-orange-950 to-zinc-950"
   },
   "artistIcons": {
@@ -72,7 +70,6 @@
     "mc_makaka": "fa-crown",
     "mc_ezdit": "fa-gauge-high",
     "mc_oparysh": "fa-biohazard",
-    "art_ms_kiber_1793263753371": "fa-microphone-lines",
     "art_ms_dolboeb_1793263987131": "fa-fire"
   },
   "customArtists": [
