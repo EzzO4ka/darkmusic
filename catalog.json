@@ -428,12 +428,12 @@
     "art_eunrrenkrpkikprr_1793264041633"
   ],
   "systemPushBroadcast": {
-    "id": "push_1793263749810",
+    "id": "push_1793264690535",
     "title": "Dark Music: Новый релиз!",
     "message": "Слушайте новый трек прямо сейчас в приложении!",
     "imageFile": "logo.png",
     "active": true,
-    "createdAt": 1793263749811
+    "createdAt": 1793264690535
   },
   "tempBroadcast": {
     "id": "tmp_1793051634442",
@@ -464,5 +464,5 @@
     "active": true,
     "updatedAt": 1793264523866
   },
-  "updatedAt": 1793264523867
+  "updatedAt": 1793264690537
 }
