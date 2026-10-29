@@ -428,12 +428,12 @@
     "art_eunrrenkrpkikprr_1793264041633"
   ],
   "systemPushBroadcast": {
-    "id": "push_1793265213594",
+    "id": "push_1793265655340",
     "title": "Dark Music: Новый релиз!",
-    "message": "огромная пизда!",
+    "message": "Леша гей",
     "imageFile": "logo.png",
     "active": true,
-    "createdAt": 1793265213594
+    "createdAt": 1793265655340
   },
   "tempBroadcast": {
     "id": "tmp_1793051634442",
@@ -464,5 +464,5 @@
     "active": true,
     "updatedAt": 1793264523866
   },
-  "updatedAt": 1793265213603
+  "updatedAt": 1793265655355
 }
