@@ -428,12 +428,12 @@
     "art_eunrrenkrpkikprr_1793264041633"
   ],
   "systemPushBroadcast": {
-    "id": "",
+    "id": "push_1793265213594",
     "title": "Dark Music: Новый релиз!",
     "message": "огромная пизда!",
     "imageFile": "logo.png",
-    "active": false,
-    "createdAt": 1793264909177
+    "active": true,
+    "createdAt": 1793265213594
   },
   "tempBroadcast": {
     "id": "tmp_1793051634442",
@@ -464,5 +464,5 @@
     "active": true,
     "updatedAt": 1793264523866
   },
-  "updatedAt": 1793264909178
+  "updatedAt": 1793265213603
 }
