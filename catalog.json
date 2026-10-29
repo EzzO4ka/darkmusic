@@ -379,12 +379,12 @@
     "trk_1793176376243"
   ],
   "systemPushBroadcast": {
-    "id": "push_1793264380154",
+    "id": "",
     "title": "Dark Music",
     "message": "Привет",
     "imageFile": "logo.png",
-    "active": true,
-    "createdAt": 1793264380154
+    "active": false,
+    "createdAt": 1793264395016
   },
   "tempBroadcast": {
     "id": "tmp_1793051634442",
@@ -415,5 +415,5 @@
     "active": true,
     "updatedAt": 1793175130835
   },
-  "updatedAt": 1793264380169
+  "updatedAt": 1793264395018
 }
