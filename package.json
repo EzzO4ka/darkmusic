@@ -4,6 +4,8 @@
   "private": true,
   "description": "Dark Music Android app wrapper for the existing HTML app",
   "scripts": {
+    "dev": "python3 -m http.server 3000 --bind 0.0.0.0",
+    "build": "node -e \"console.log('Dark Music build ready')\"",
     "android:sync": "cap sync android",
     "android:open": "cap open android"
   },

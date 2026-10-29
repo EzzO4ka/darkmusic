@@ -428,6 +428,16 @@ jobs:
                       NotificationManager nm = getSystemService(NotificationManager.class);
                       if (nm != null) {
                           nm.createNotificationChannel(channel);
+                          NotificationChannel pushChannel = new NotificationChannel(
+                                  "dark_music_push_channel",
+                                  "Dark Music Уведомления",
+                                  NotificationManager.IMPORTANCE_HIGH
+                          );
+                          pushChannel.setDescription("Системные push-уведомления от владельца Dark Music");
+                          pushChannel.enableVibration(true);
+                          pushChannel.setShowBadge(true);
+                          pushChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                          nm.createNotificationChannel(pushChannel);
                       }
                   }
               }
@@ -455,9 +465,15 @@ jobs:
 
           import android.Manifest;
           import android.app.Activity;
+          import android.app.Notification;
+          import android.app.NotificationChannel;
+          import android.app.NotificationManager;
+          import android.app.PendingIntent;
           import android.content.Context;
           import android.content.Intent;
           import android.content.pm.PackageManager;
+          import android.graphics.Bitmap;
+          import android.graphics.BitmapFactory;
           import android.net.Uri;
           import android.os.Build;
           import android.os.Bundle;
@@ -470,8 +486,13 @@ jobs:
           import android.webkit.WebView;
           import android.webkit.WebViewClient;
 
+          import java.io.InputStream;
+          import java.net.HttpURLConnection;
+          import java.net.URL;
+
           public class MainActivity extends Activity {
               private static WebView staticWebView;
+              public static final String PUSH_CHANNEL_ID = "dark_music_push_channel";
 
               public static class BackgroundAudioWebView extends WebView {
                   public BackgroundAudioWebView(Context context) {
@@ -487,6 +508,22 @@ jobs:
               @Override
               protected void onCreate(Bundle savedInstanceState) {
                   super.onCreate(savedInstanceState);
+
+                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                      NotificationManager nm = getSystemService(NotificationManager.class);
+                      if (nm != null) {
+                          NotificationChannel pushChannel = new NotificationChannel(
+                                  PUSH_CHANNEL_ID,
+                                  "Dark Music Уведомления",
+                                  NotificationManager.IMPORTANCE_HIGH
+                          );
+                          pushChannel.setDescription("Системные push-уведомления от владельца Dark Music");
+                          pushChannel.enableVibration(true);
+                          pushChannel.setShowBadge(true);
+                          pushChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                          nm.createNotificationChannel(pushChannel);
+                      }
+                  }
 
                   if (Build.VERSION.SDK_INT >= 33) {
                       if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -578,6 +615,62 @@ jobs:
                               context.startService(serviceIntent);
                           }
                       } catch (Exception ignored) {}
+                  }
+
+                  @JavascriptInterface
+                  public void showSystemPushNotification(final String title, final String message, final String imageUrl, final String pushId) {
+                      new Thread(() -> {
+                          try {
+                              NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                              if (nm == null) return;
+
+                              Intent openIntent = new Intent(context, MainActivity.class);
+                              openIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                              PendingIntent contentPendingIntent = PendingIntent.getActivity(
+                                      context, 9001, openIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                              );
+
+                              Notification.Builder builder;
+                              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                  builder = new Notification.Builder(context, PUSH_CHANNEL_ID);
+                              } else {
+                                  builder = new Notification.Builder(context)
+                                          .setPriority(Notification.PRIORITY_HIGH)
+                                          .setDefaults(Notification.DEFAULT_ALL);
+                              }
+
+                              builder.setContentTitle(title != null && !title.isEmpty() ? title : "Dark Music")
+                                      .setContentText(message != null ? message : "")
+                                      .setStyle(new Notification.BigTextStyle().bigText(message != null ? message : ""))
+                                      .setSmallIcon(android.R.drawable.ic_popup_reminder)
+                                      .setContentIntent(contentPendingIntent)
+                                      .setAutoCancel(true)
+                                      .setVisibility(Notification.VISIBILITY_PUBLIC);
+
+                              if (imageUrl != null && !imageUrl.isEmpty() && imageUrl.startsWith("http")) {
+                                  try {
+                                      URL url = new URL(imageUrl);
+                                      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                      conn.setConnectTimeout(5000);
+                                      conn.setReadTimeout(5000);
+                                      conn.setDoInput(true);
+                                      conn.connect();
+                                      InputStream is = conn.getInputStream();
+                                      Bitmap bmp = BitmapFactory.decodeStream(is);
+                                      is.close();
+                                      if (bmp != null) {
+                                          builder.setLargeIcon(bmp);
+                                      }
+                                  } catch (Exception ignored) {}
+                              }
+
+                              int notifId = (pushId != null && !pushId.isEmpty()) ? Math.abs(pushId.hashCode()) : (int) (System.currentTimeMillis() & 0xfffffff);
+                              if (notifId == MediaPlaybackService.NOTIFICATION_ID) {
+                                  notifId += 100;
+                              }
+                              nm.notify(notifId, builder.build());
+                          } catch (Exception ignored) {}
+                      }).start();
                   }
               }
 

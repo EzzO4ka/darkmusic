@@ -417,7 +417,7 @@
                             <h2 class="text-sm font-black tracking-tight text-white">Артисты лейбла</h2>
                             <p class="text-[10px] text-zinc-500">Эксклюзивный состав Dark Music</p>
                         </div>
-                        <button onclick="switchTab('artists')" class="text-[11px] font-bold text-purple-400 hover:text-purple-300 spring-btn">
+                        <button id="homeArtistsCountBtn" onclick="switchTab('artists')" class="text-[11px] font-bold text-purple-400 hover:text-purple-300 spring-btn">
                             Все 4 <i class="fa-solid fa-arrow-right text-[9px] ml-0.5"></i>
                         </button>
                     </div>
@@ -589,6 +589,38 @@
                             <span>Уведомления и Обновление для всех</span>
                         </h3>
                         <span class="text-[9px] font-bold text-zinc-500">LIVE PUSH</span>
+                    </div>
+
+                    <!-- 0-PUSH) Системное Push-уведомление в шторку устройств (Android / ОС) -->
+                    <div class="p-3.5 rounded-xl bg-gradient-to-br from-emerald-950/35 via-zinc-900/90 to-zinc-950 border border-emerald-500/40 space-y-2.5 shadow-lg shadow-emerald-950/20">
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-1.5">
+                                <i class="fa-solid fa-mobile-screen-button text-emerald-400 text-xs"></i>
+                                <span class="text-[11px] font-extrabold text-emerald-300">Системный Push в шторку устройств</span>
+                            </div>
+                            <span id="systemPushStatusBadge" class="text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">Готово</span>
+                        </div>
+                        <p class="text-[10px] text-zinc-400 leading-relaxed">
+                            Отправляет системное уведомление прямо в шторку уведомлений Android и браузеров всех подключённых устройств.
+                        </p>
+                        <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-zinc-950/90 border border-zinc-800/90">
+                            <span id="devicePushPermText" class="text-[10px] text-zinc-400 font-semibold leading-tight">Статус шторки: проверка...</span>
+                            <button type="button" onclick="requestDeviceNotificationPermission()" class="px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold shrink-0 spring-btn">
+                                Разрешить шторку
+                            </button>
+                        </div>
+                        <input id="ownerSystemPushTitle" type="text" placeholder="Заголовок в шторке (например: 🎵 Dark Music — Новый дроп!)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        <textarea id="ownerSystemPushMsg" rows="2" placeholder="Текст системного уведомления (придёт в шторку уведомлений телефонов и ПК)..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500"></textarea>
+                        <input id="ownerSystemPushImage" type="text" placeholder="Обложка / иконка уведомления (необязательно: logo.png или covers/...)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        <div class="grid grid-cols-2 gap-2">
+                            <button type="button" onclick="sendOwnerSystemPushNotification(true)" class="py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-[11px] flex items-center justify-center gap-1.5 spring-btn">
+                                <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                                <span>Разослать в шторку</span>
+                            </button>
+                            <button type="button" onclick="sendOwnerSystemPushNotification(false)" class="py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold text-[11px] spring-btn">
+                                Отключить рассылку
+                            </button>
+                        </div>
                     </div>
 
                     <!-- А) Всплывающее уведомление на 20 секунд -->
@@ -848,10 +880,58 @@
                     </div>
                 </div>
 
+                <!-- 3.5. Добавление и управление артистами лейбла -->
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-sky-500/30 space-y-3">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-sky-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-user-plus"></i>
+                        <span>4. Добавить нового артиста и управление составом</span>
+                    </h3>
+                    <div class="space-y-2.5">
+                        <input id="newArtistNameInput" type="text" placeholder="Имя нового артиста (например: МС ТЁМНЫЙ)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-sky-500">
+                        <input id="newArtistRoleInput" type="text" placeholder="Жанр / статус под именем (например: Phonk / Cyber Rap)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-sky-500">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[10px] text-zinc-400 block mb-1">Цветовая тема карточки</label>
+                                <select id="newArtistGradientSelect" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
+                                    <option value="from-purple-600 via-indigo-900 to-zinc-950">Фиолетовый Неон</option>
+                                    <option value="from-emerald-600 via-teal-900 to-zinc-950">Изумрудный Бас</option>
+                                    <option value="from-rose-600 via-red-900 to-zinc-950">Кровавый Дрифт</option>
+                                    <option value="from-amber-600 via-orange-950 to-zinc-950">Янтарный Бункер</option>
+                                    <option value="from-sky-600 via-blue-950 to-zinc-950">Кибер Лёд</option>
+                                    <option value="from-fuchsia-600 via-purple-950 to-zinc-950">Ультра Фуксия</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-zinc-400 block mb-1">Иконка профиля</label>
+                                <select id="newArtistIconSelect" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
+                                    <option value="fa-microphone-lines">🎙️ Микрофон</option>
+                                    <option value="fa-user-astronaut">🚀 Астронавт</option>
+                                    <option value="fa-crown">👑 Корона</option>
+                                    <option value="fa-gauge-high">🏎️ Тахометр</option>
+                                    <option value="fa-biohazard">☣️ Биохазард</option>
+                                    <option value="fa-fire">🔥 Огонь</option>
+                                    <option value="fa-bolt">⚡ Молния</option>
+                                    <option value="fa-skull">💀 Андеграунд</option>
+                                </select>
+                            </div>
+                        </div>
+                        <input id="newArtistAvatarInput" type="text" placeholder="Путь к аватарке или ссылка (например: avatars/mc_temny.jpg)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-sky-500">
+                        <textarea id="newArtistBioInput" rows="2" placeholder="Биография артиста (отображается в профиле исполнителя)..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-sky-500"></textarea>
+                        <input id="newArtistFactInput" type="text" placeholder="Первый интересный факт для плеера (необязательно)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-sky-500">
+                        <button type="button" onclick="addNewOwnerArtist()" class="w-full py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-black font-extrabold text-xs spring-btn">
+                            + Добавить нового артиста в каталог
+                        </button>
+                    </div>
+                    <div class="pt-2 border-t border-zinc-900 space-y-2">
+                        <div class="text-[10px] font-bold text-zinc-400 uppercase">Все артисты в каталоге:</div>
+                        <div id="ownerArtistsManageList" class="space-y-2 max-h-96 overflow-y-auto no-scrollbar"></div>
+                    </div>
+                </div>
+
                 <!-- 4. Фотографии артистов -->
                 <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 space-y-3">
-                    <h3 class="text-xs font-black uppercase tracking-wider text-sky-400">4. Фотографии артистов</h3>
-                    <div class="grid grid-cols-1 gap-2">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-sky-400">4Б. Быстрая смена фотографий артистов</h3>
+                    <div id="ownerArtistAvatarsList" class="grid grid-cols-1 gap-2">
                         <div class="flex items-center gap-2">
                             <span class="text-[11px] font-bold w-24 text-zinc-300 shrink-0">МС ГЕИЧ:</span>
                             <input id="avatar_mc_geich" type="text" value="avatars/mc_geich.jpg" class="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white">
@@ -1221,16 +1301,42 @@
             </div>
         </div>
 
-        <!-- МОДАЛЬНОЕ ОКНО РЕДАКТИРОВАНИЯ ТРЕКА / АЛЬБОМА -->
+        <!-- МОДАЛЬНОЕ ОКНО РЕДАКТИРОВАНИЯ ТРЕКА / АЛЬБОМА / АРТИСТА -->
         <div id="editModal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-xl items-center justify-center p-4">
-            <div class="w-full max-w-[380px] rounded-3xl bg-zinc-950 border border-zinc-800 p-5 space-y-4 shadow-2xl">
+            <div class="w-full max-w-[380px] rounded-3xl bg-zinc-950 border border-zinc-800 p-5 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto no-scrollbar">
                 <div class="flex items-center justify-between">
                     <h3 id="editModalHeader" class="text-sm font-black text-white">Редактировать</h3>
-                    <button onclick="closeEditModal()" class="w-8 h-8 rounded-xl bg-zinc-900 text-zinc-400 flex items-center justify-center">
+                    <button onclick="closeEditModal()" aria-label="Закрыть окно редактирования" class="w-8 h-8 rounded-xl bg-zinc-900 text-zinc-400 flex items-center justify-center">
                         <i class="fa-solid fa-xmark text-xs"></i>
                     </button>
                 </div>
                 <div id="editModalBody" class="space-y-3"></div>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ (ДЛЯ ПАНЕЛИ ВЛАДЕЛЬЦА) -->
+        <div id="deleteConfirmModal" role="dialog" aria-modal="true" aria-labelledby="deleteConfirmTitle" class="fixed inset-0 z-[85] hidden bg-black/90 backdrop-blur-2xl items-center justify-center p-5">
+            <div class="w-full max-w-[345px] rounded-3xl bg-zinc-950 border border-rose-500/40 p-6 text-center space-y-4 shadow-2xl shadow-rose-950/50 relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-rose-600/20 blur-2xl pointer-events-none"></div>
+                <div class="w-14 h-14 rounded-2xl bg-rose-500/15 border border-rose-500/40 mx-auto flex items-center justify-center text-rose-400 shadow-lg shadow-rose-950/50">
+                    <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+                </div>
+                <div class="space-y-1.5">
+                    <span id="deleteConfirmTypeBadge" class="px-2.5 py-0.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[9px] font-black uppercase tracking-widest">ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ</span>
+                    <h3 id="deleteConfirmTitle" class="text-base font-black text-white leading-snug pt-1">Удалить элемент?</h3>
+                    <p id="deleteConfirmDesc" class="text-xs text-zinc-400 leading-relaxed">
+                        Это действие удалит выбранный объект из каталога Dark Music на всех синхронизированных устройствах.
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 gap-2.5 pt-2">
+                    <button type="button" id="cancelDeleteActionBtn" onclick="closeDeleteConfirmModal()" class="py-3 px-4 rounded-2xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-extrabold text-zinc-300 spring-btn">
+                        Отмена
+                    </button>
+                    <button type="button" id="confirmDeleteActionBtn" onclick="executeConfirmedDelete()" class="py-3 px-4 rounded-2xl bg-rose-600 hover:bg-rose-500 text-xs font-black text-white shadow-lg shadow-rose-600/30 flex items-center justify-center gap-1.5 spring-btn">
+                        <i class="fa-solid fa-trash text-[10px]"></i>
+                        <span>Удалить</span>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -1274,7 +1380,8 @@
         // Текущая версия установленного файла приложения
         let currentAppBuildVersion = Number(window.__APP_BUILD_VERSION__) || 2.0;
 
-        // Состояние глобальных уведомлений, окна «Что нового» и принудительного обновления
+        // Состояние глобальных уведомлений, системного Push в шторку, окна «Что нового» и принудительного обновления
+        let systemPushData = { id: "", title: "", message: "", imageFile: "logo.png", active: false, createdAt: 0 };
         let tempBroadcastData = { id: "", title: "", message: "", active: false, createdAt: 0 };
         let pinnedBroadcastData = { id: "", title: "", message: "", active: false, updatedAt: 0 };
         let forceUpdateData = { active: false, requiredVersion: 2.0, downloadUrl: "", message: "", updatedAt: 0 };
@@ -1305,8 +1412,8 @@
             return true;
         }
 
-        // 4 Эксклюзивных артиста лейбла Dark Music
-        const ARTISTS = {
+        // Базовые артисты лейбла Dark Music (плюс любые артисты, добавленные через панель владельца)
+        const DEFAULT_ARTISTS = {
             mc_geich: {
                 id: "mc_geich",
                 name: "МС ГЕИЧ",
@@ -1365,6 +1472,14 @@
             }
         };
 
+        const ARTISTS = JSON.parse(JSON.stringify(DEFAULT_ARTISTS));
+
+        function getFallbackArtist() {
+            const keys = Object.keys(ARTISTS);
+            if (keys.length > 0) return ARTISTS[keys[0]];
+            return DEFAULT_ARTISTS.mc_geich;
+        }
+
         // Список старых демо-ID для полной очистки, чтобы они никогда не появлялись вновь
         const LEGACY_MOCK_ALBUM_IDS = new Set([
             "alb_terminal", "alb_kody", "alb_liany", "alb_banana_bass",
@@ -1378,6 +1493,7 @@
         let TRACKS = [];
         let VIDEOS = [];
         let NEWS = [];
+        let customArtistsFromCloud = [];
         let customTracksFromCloud = [];
         let customAlbumsFromCloud = [];
         let customVideosFromCloud = [];
@@ -1410,6 +1526,17 @@
             el.className = isSuccess
                 ? "text-[10px] text-emerald-400 font-semibold"
                 : "text-[10px] text-amber-400 font-semibold";
+        }
+
+        function cleanValidArtists(artistsArr) {
+            if (!Array.isArray(artistsArr)) return [];
+            const seen = new Set();
+            return artistsArr.filter(a => {
+                if (!a || !a.id || !a.name || deletedCustomIds.has(a.id)) return false;
+                if (seen.has(a.id)) return false;
+                seen.add(a.id);
+                return true;
+            });
         }
 
         function cleanValidAlbums(albumsArr) {
@@ -1460,11 +1587,18 @@
             const artistBios = {};
             const artistRoles = {};
             const artistFacts = {};
+            const artistNames = {};
+            const artistGradients = {};
+            const artistIcons = {};
             const avatars = {};
             Object.keys(ARTISTS).forEach(k => {
+                if (deletedCustomIds.has(k)) return;
+                artistNames[k] = ARTISTS[k].name;
                 artistBios[k] = ARTISTS[k].bio;
                 artistRoles[k] = ARTISTS[k].role;
                 artistFacts[k] = ARTISTS[k].facts;
+                artistGradients[k] = ARTISTS[k].gradient;
+                artistIcons[k] = ARTISTS[k].icon;
                 avatars[k] = ARTISTS[k].avatarFile;
             });
 
@@ -1472,14 +1606,19 @@
                 githubRepoPath,
                 githubBranch,
                 avatars,
+                artistNames,
                 artistBios,
                 artistRoles,
                 artistFacts,
+                artistGradients,
+                artistIcons,
+                customArtists: cleanValidArtists(customArtistsFromCloud),
                 customAlbums: cleanValidAlbums(customAlbumsFromCloud),
                 customTracks: cleanValidTracks(customTracksFromCloud),
                 customVideos: cleanValidVideos(customVideosFromCloud),
                 customNews: cleanValidNews(customNewsFromCloud),
                 deletedCustomIds: Array.from(deletedCustomIds),
+                systemPushBroadcast: systemPushData,
                 tempBroadcast: tempBroadcastData,
                 pinnedBroadcast: pinnedBroadcastData,
                 forceUpdate: forceUpdateData,
@@ -1491,14 +1630,18 @@
         function computeCatalogFingerprint(data) {
             try {
                 return JSON.stringify({
+                    ca: (data.customArtists || []).map(x => `${x.id}_${x.name}_${x.role}_${x.avatarFile}_${x.gradient}_${x.icon}`),
                     t: (data.customTracks || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.featArtistId || ''}_${x.albumId}_${x.filePath}_${x.coverFile}_${x.year}_${x.duration}_${x.isNew}_${Boolean(x.isExplicit)}`),
                     a: (data.customAlbums || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.featArtistId || ''}_${x.type}_${x.coverFile}_${x.year}_${Boolean(x.isExplicit)}`),
                     v: (data.customVideos || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.previewFile}_${x.videoSource}_${x.year}_${Boolean(x.isExplicit)}`),
                     n: (data.customNews || []).map(x => `${x.id}_${x.title}_${x.targetId}_${x.dateText}_${x.imageFile}_${x.content}`),
+                    del: data.deletedCustomIds || [],
+                    an: data.artistNames || {},
                     av: data.avatars || {},
                     b: data.artistBios || {},
                     r: data.artistRoles || {},
                     f: data.artistFacts || {},
+                    sp: data.systemPushBroadcast || {},
                     tb: data.tempBroadcast || {},
                     pb: data.pinnedBroadcast || {},
                     fu: data.forceUpdate || {},
@@ -1514,7 +1657,10 @@
             const incomingIsNewer = (data.updatedAt || 0) >= (localUpdatedAt || 0);
 
             if (Array.isArray(data.deletedCustomIds)) {
-                data.deletedCustomIds.forEach(id => deletedCustomIds.add(id));
+                data.deletedCustomIds.forEach(id => {
+                    deletedCustomIds.add(id);
+                    if (ARTISTS[id]) delete ARTISTS[id];
+                });
             }
 
             if (data.githubRepoPath && data.githubRepoPath !== "dark-music/vault") {
@@ -1524,6 +1670,11 @@
             }
             if (data.githubBranch) githubBranch = data.githubBranch;
 
+            if (data.systemPushBroadcast && typeof data.systemPushBroadcast === "object") {
+                if (incomingIsNewer || !systemPushData.createdAt) {
+                    systemPushData = { ...systemPushData, ...data.systemPushBroadcast };
+                }
+            }
             if (data.tempBroadcast && typeof data.tempBroadcast === "object") {
                 if (incomingIsNewer || !tempBroadcastData.createdAt) {
                     tempBroadcastData = { ...tempBroadcastData, ...data.tempBroadcast };
@@ -1545,6 +1696,72 @@
                 }
             }
 
+            if (Array.isArray(data.customArtists)) {
+                const incomingArtists = cleanValidArtists(data.customArtists);
+                if (mergeMode || incomingArtists.length === 0) {
+                    const artMap = new Map();
+                    if (incomingIsNewer) {
+                        customArtistsFromCloud.forEach(a => { if (!deletedCustomIds.has(a.id)) artMap.set(a.id, a); });
+                        incomingArtists.forEach(a => { if (!deletedCustomIds.has(a.id)) artMap.set(a.id, a); });
+                    } else {
+                        incomingArtists.forEach(a => { if (!deletedCustomIds.has(a.id)) artMap.set(a.id, a); });
+                        customArtistsFromCloud.forEach(a => { if (!deletedCustomIds.has(a.id)) artMap.set(a.id, a); });
+                    }
+                    customArtistsFromCloud = cleanValidArtists(Array.from(artMap.values()));
+                } else {
+                    customArtistsFromCloud = incomingArtists;
+                }
+                customArtistsFromCloud.forEach(ca => {
+                    if (!deletedCustomIds.has(ca.id)) {
+                        ARTISTS[ca.id] = {
+                            id: ca.id,
+                            name: ca.name,
+                            role: ca.role || "Эксклюзивный артист • Dark Music",
+                            gradient: ca.gradient || "from-purple-600 via-indigo-900 to-zinc-950",
+                            icon: ca.icon || "fa-microphone-lines",
+                            avatarFile: ca.avatarFile || `avatars/${ca.id}.jpg`,
+                            bio: ca.bio || `${ca.name} — резидент каталога Dark Music.`,
+                            facts: Array.isArray(ca.facts) && ca.facts.length > 0 ? ca.facts : [`${ca.name} выпускает эксклюзивные релизы в Dark Music.`],
+                            isCustom: true,
+                            createdAt: ca.createdAt || Date.now()
+                        };
+                        ARTIST_ALBUM_GRADIENTS[ca.id] = ARTISTS[ca.id].gradient;
+                    }
+                });
+            }
+
+            if (data.artistNames) {
+                Object.keys(data.artistNames).forEach(k => {
+                    if (deletedCustomIds.has(k)) return;
+                    if (!ARTISTS[k] && data.artistNames[k]) {
+                        ARTISTS[k] = {
+                            id: k,
+                            name: data.artistNames[k],
+                            role: (data.artistRoles && data.artistRoles[k]) || "Эксклюзивный артист",
+                            gradient: (data.artistGradients && data.artistGradients[k]) || "from-purple-600 via-indigo-900 to-zinc-950",
+                            icon: (data.artistIcons && data.artistIcons[k]) || "fa-microphone-lines",
+                            avatarFile: (data.avatars && data.avatars[k]) || `avatars/${k}.jpg`,
+                            bio: (data.artistBios && data.artistBios[k]) || "",
+                            facts: (data.artistFacts && Array.isArray(data.artistFacts[k])) ? data.artistFacts[k] : ["Резидент лейбла Dark Music."]
+                        };
+                    } else if (ARTISTS[k] && typeof data.artistNames[k] === "string" && data.artistNames[k].trim() !== "") {
+                        ARTISTS[k].name = data.artistNames[k].trim();
+                    }
+                });
+            }
+            if (data.artistGradients) {
+                Object.keys(data.artistGradients).forEach(k => {
+                    if (ARTISTS[k] && data.artistGradients[k]) {
+                        ARTISTS[k].gradient = data.artistGradients[k];
+                        ARTIST_ALBUM_GRADIENTS[k] = data.artistGradients[k];
+                    }
+                });
+            }
+            if (data.artistIcons) {
+                Object.keys(data.artistIcons).forEach(k => {
+                    if (ARTISTS[k] && data.artistIcons[k]) ARTISTS[k].icon = data.artistIcons[k];
+                });
+            }
             if (data.avatars) {
                 Object.keys(data.avatars).forEach(k => {
                     if (ARTISTS[k] && data.avatars[k]) ARTISTS[k].avatarFile = data.avatars[k];
@@ -1792,6 +2009,22 @@
                 }
             }
 
+            // Проверка и показ системного Push-уведомления в шторке устройства
+            if (systemPushData && systemPushData.active && systemPushData.id && systemPushData.message) {
+                const seenPushKey = "dark_music_seen_sys_push_" + systemPushData.id;
+                const alreadyDispatchedInSession = window._lastDispatchedSysPushId === systemPushData.id;
+                let seenPushBefore = false;
+                try {
+                    seenPushBefore = Boolean(localStorage.getItem(seenPushKey));
+                } catch (e) {}
+
+                if (!alreadyDispatchedInSession && !seenPushBefore) {
+                    window._lastDispatchedSysPushId = systemPushData.id;
+                    try { localStorage.setItem(seenPushKey, "1"); } catch (e) {}
+                    dispatchSystemPushToDeviceShade(systemPushData);
+                }
+            }
+
             if (tempBroadcastData && tempBroadcastData.active && tempBroadcastData.id) {
                 const seenKey = "dark_music_seen_temp_notif_" + tempBroadcastData.id;
                 const alreadyShownInThisSession = window._lastShownTempBroadcastId === tempBroadcastData.id;
@@ -1871,6 +2104,167 @@
             updateOwnerNotificationsFormUI();
         }
 
+        function updateDevicePushPermissionBadge() {
+            const statusEl = document.getElementById("devicePushPermText");
+            if (!statusEl) return;
+            if (window.AndroidMediaBridge && typeof window.AndroidMediaBridge.showSystemPushNotification === "function") {
+                statusEl.textContent = "Шторка Android APK: активна ✓";
+                statusEl.className = "text-[10px] text-emerald-400 font-bold leading-tight";
+                return;
+            }
+            if (!("Notification" in window)) {
+                statusEl.textContent = "Канал шторки: синхронизация активна ✓";
+                statusEl.className = "text-[10px] text-emerald-400 font-semibold leading-tight";
+                return;
+            }
+            if (Notification.permission === "granted") {
+                statusEl.textContent = "Шторка уведомлений: разрешена ✓";
+                statusEl.className = "text-[10px] text-emerald-400 font-bold leading-tight";
+            } else if (Notification.permission === "denied") {
+                statusEl.textContent = "Канал APK активен • Браузер: в настройках";
+                statusEl.className = "text-[10px] text-emerald-300 font-semibold leading-tight";
+            } else {
+                statusEl.textContent = "Шторка: нажмите «Разрешить шторку» →";
+                statusEl.className = "text-[10px] text-amber-300 font-semibold leading-tight";
+            }
+        }
+
+        async function requestDeviceNotificationPermission() {
+            if (window.AndroidMediaBridge && typeof window.AndroidMediaBridge.showSystemPushNotification === "function") {
+                updateDevicePushPermissionBadge();
+                showToast("Нативный канал уведомлений Android активен!", "ШТОРКА АКТИВНА");
+                return true;
+            }
+            if (!("Notification" in window)) {
+                showToast("Системный Push будет доставлен через APK / фоновый сервис", "PUSH-КАНАЛ");
+                return false;
+            }
+            try {
+                const perm = await Notification.requestPermission();
+                updateDevicePushPermissionBadge();
+                if (perm === "granted") {
+                    showToast("Системные уведомления в шторку устройства разрешены!", "ШТОРКА АКТИВНА");
+                    return true;
+                } else {
+                    showToast("Разрешите уведомления в настройках браузера/телефона", "ВНИМАНИЕ");
+                    return false;
+                }
+            } catch (e) {
+                updateDevicePushPermissionBadge();
+                return false;
+            }
+        }
+
+        async function dispatchSystemPushToDeviceShade(pushObj) {
+            if (!pushObj || !pushObj.message) return false;
+            const title = pushObj.title || "Dark Music";
+            const message = pushObj.message || "";
+            const imgPath = pushObj.imageFile || "logo.png";
+            const iconUrl = getRawUrl(imgPath) || getRawUrl("logo.png");
+            const pushTag = pushObj.id || ("dark-music-push-" + Date.now());
+            let sentToNativeOrOS = false;
+
+            // 1. Нативный мост Android APK (NotificationManager в шторку статуса Android)
+            if (window.AndroidMediaBridge && typeof window.AndroidMediaBridge.showSystemPushNotification === "function") {
+                try {
+                    window.AndroidMediaBridge.showSystemPushNotification(
+                        String(title),
+                        String(message),
+                        String(iconUrl || ""),
+                        String(pushTag)
+                    );
+                    sentToNativeOrOS = true;
+                } catch (e) {}
+            }
+
+            // 2. Service Worker (шторка уведомлений Android Chrome / PWA / мобильных браузеров)
+            if ("serviceWorker" in navigator && "Notification" in window) {
+                try {
+                    if (Notification.permission === "default") {
+                        await Notification.requestPermission().catch(() => {});
+                    }
+                    if (Notification.permission === "granted") {
+                        const reg = await navigator.serviceWorker.getRegistration();
+                        if (reg && typeof reg.showNotification === "function") {
+                            await reg.showNotification(title, {
+                                body: message,
+                                icon: iconUrl,
+                                badge: iconUrl,
+                                tag: pushTag,
+                                renotify: true,
+                                vibrate: [200, 100, 200]
+                            });
+                            sentToNativeOrOS = true;
+                        } else if (navigator.serviceWorker.controller) {
+                            navigator.serviceWorker.controller.postMessage({
+                                type: "SHOW_SYSTEM_PUSH",
+                                title,
+                                message,
+                                icon: iconUrl,
+                                badge: iconUrl,
+                                tag: pushTag
+                            });
+                            sentToNativeOrOS = true;
+                        }
+                    }
+                } catch (swErr) {}
+            }
+
+            // 3. Прямой Web Notification API (Десктоп и мобильные браузеры без SW)
+            if (!sentToNativeOrOS && "Notification" in window) {
+                try {
+                    if (Notification.permission === "granted") {
+                        new Notification(title, {
+                            body: message,
+                            icon: iconUrl,
+                            tag: pushTag
+                        });
+                        sentToNativeOrOS = true;
+                    }
+                } catch (notifErr) {}
+            }
+
+            updateDevicePushPermissionBadge();
+            return sentToNativeOrOS;
+        }
+
+        async function sendOwnerSystemPushNotification(enable) {
+            const title = document.getElementById("ownerSystemPushTitle")?.value.trim() || "🎵 Dark Music";
+            const message = document.getElementById("ownerSystemPushMsg")?.value.trim() || "";
+            const imageFile = document.getElementById("ownerSystemPushImage")?.value.trim() || "logo.png";
+
+            if (enable && !message) {
+                showToast("Введите текст push-уведомления для отправки в шторку", "ВНИМАНИЕ");
+                return;
+            }
+
+            const pushId = enable ? "push_" + Date.now() : "";
+            systemPushData = {
+                id: pushId,
+                title,
+                message,
+                imageFile,
+                active: Boolean(enable),
+                createdAt: Date.now()
+            };
+
+            if (enable) {
+                window._lastDispatchedSysPushId = pushId;
+                try { localStorage.setItem("dark_music_seen_sys_push_" + pushId, "1"); } catch (e) {}
+                await dispatchSystemPushToDeviceShade(systemPushData);
+            }
+
+            saveStateToLocalStorage(true);
+            applyBroadcastAndForceUpdateUI();
+            await persistSettingsToCloud();
+            showToast(
+                enable
+                    ? "Системное Push-уведомление разослано в шторку всех устройств!"
+                    : "Рассылка системного Push-уведомления отключена",
+                "PUSH В ШТОРКУ"
+            );
+        }
+
         function dismissWhatsNewModal() {
             const wnModal = document.getElementById("whatsNewModal");
             if (wnModal) {
@@ -1948,6 +2342,22 @@
         function updateOwnerNotificationsFormUI() {
             const curLocalVer = document.getElementById("ownerCurrentLocalVersion");
             if (curLocalVer) curLocalVer.value = `v${currentAppBuildVersion.toFixed(1)}`;
+
+            updateDevicePushPermissionBadge();
+
+            const sysPushBadge = document.getElementById("systemPushStatusBadge");
+            if (sysPushBadge) {
+                sysPushBadge.textContent = systemPushData.active ? "Разослано" : "Выкл";
+                sysPushBadge.className = systemPushData.active
+                    ? "text-[9px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                    : "text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400";
+            }
+            const spTitle = document.getElementById("ownerSystemPushTitle");
+            const spMsg = document.getElementById("ownerSystemPushMsg");
+            const spImg = document.getElementById("ownerSystemPushImage");
+            if (spTitle && document.activeElement !== spTitle && systemPushData.title) spTitle.value = systemPushData.title;
+            if (spMsg && document.activeElement !== spMsg && systemPushData.message) spMsg.value = systemPushData.message;
+            if (spImg && document.activeElement !== spImg && systemPushData.imageFile) spImg.value = systemPushData.imageFile;
 
             const tempBadge = document.getElementById("tempNotifStatusBadge");
             if (tempBadge) {
@@ -2484,8 +2894,65 @@
             });
         }
 
+        function buildArtistSelectOptionsHtml(selectedId = "", includeEmptyFeatOption = false, includeAppNewsOption = false) {
+            let html = "";
+            if (includeEmptyFeatOption) {
+                html += `<option value="" ${!selectedId ? "selected" : ""}>Без фита (Соло)</option>`;
+            }
+            if (includeAppNewsOption) {
+                html += `<option value="app" ${selectedId === "app" ? "selected" : ""}>⚡ Общая новость приложения</option>`;
+            }
+            Object.values(ARTISTS).forEach(artist => {
+                const isSelected = selectedId === artist.id ? "selected" : "";
+                html += `<option value="${artist.id}" ${isSelected}>${artist.name}</option>`;
+            });
+            return html;
+        }
+
+        function refreshAllArtistSelects() {
+            const selectConfigs = [
+                { id: "newAlbumArtistSelect", feat: false, app: false },
+                { id: "newAlbumFeatArtistSelect", feat: true, app: false },
+                { id: "newTrackArtist", feat: false, app: false },
+                { id: "newTrackFeatArtist", feat: true, app: false },
+                { id: "inlineAlbumFeatArtist", feat: true, app: false },
+                { id: "bioEditorArtistSelect", feat: false, app: false },
+                { id: "newVideoArtist", feat: false, app: false },
+                { id: "newNewsTarget", feat: false, app: true }
+            ];
+            const firstArtistId = Object.keys(ARTISTS)[0] || "mc_geich";
+
+            selectConfigs.forEach(cfg => {
+                const sel = document.getElementById(cfg.id);
+                if (!sel) return;
+                const prevVal = sel.value;
+                const fallbackVal = cfg.feat ? "" : (cfg.app ? "app" : firstArtistId);
+                const validVal = (prevVal && (ARTISTS[prevVal] || (cfg.app && prevVal === "app"))) ? prevVal : fallbackVal;
+                const newHtml = buildArtistSelectOptionsHtml(validVal, cfg.feat, cfg.app);
+                if (sel._lastOptionsHtml !== newHtml) {
+                    sel._lastOptionsHtml = newHtml;
+                    sel.innerHTML = newHtml;
+                    sel.value = validVal;
+                }
+            });
+        }
+
+        function renderOwnerArtistAvatarsInputs() {
+            const container = document.getElementById("ownerArtistAvatarsList");
+            if (!container) return;
+            const html = Object.values(ARTISTS).map(artist => `
+                <div class="flex items-center gap-2">
+                    <span class="text-[11px] font-bold w-28 text-zinc-300 truncate shrink-0" title="${artist.name}">${artist.name}:</span>
+                    <input id="avatar_${artist.id}" type="text" value="${(artist.avatarFile || '').replace(/"/g, '&quot;')}" class="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white">
+                </div>
+            `).join("");
+            setContainerHtmlIfChanged(container, html);
+        }
+
         function renderAllViews() {
             rebuildCatalogInMemory();
+            refreshAllArtistSelects();
+            renderOwnerArtistAvatarsInputs();
             const logoImg = document.getElementById("appHeaderLogoImg");
             if (logoImg) {
                 const targetLogoUrl = getRawUrl("logo.png");
@@ -2524,8 +2991,13 @@
 
         function renderHomeArtists() {
             const container = document.getElementById("homeArtistsGrid");
+            const countBtn = document.getElementById("homeArtistsCountBtn");
+            const artistsList = Object.values(ARTISTS);
+            if (countBtn) {
+                countBtn.innerHTML = `Все ${artistsList.length} <i class="fa-solid fa-arrow-right text-[9px] ml-0.5"></i>`;
+            }
             if (!container) return;
-            const html = Object.values(ARTISTS).map((artist) => `
+            const html = artistsList.map((artist) => `
                 <div onclick="openArtistProfile('${artist.id}')" class="p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 flex items-center gap-2.5 cursor-pointer spring-btn">
                     ${renderAvatarBox(artist, "w-11 h-11 rounded-xl", "text-sm")}
                     <div class="min-w-0 flex-1">
@@ -2533,7 +3005,7 @@
                             <span class="text-xs font-extrabold text-white truncate">${artist.name}</span>
                             <i class="fa-solid fa-circle-check text-sky-400 text-[10px] shrink-0"></i>
                         </div>
-                        <p class="text-[10px] text-zinc-500 truncate">Эксклюзивный артист</p>
+                        <p class="text-[10px] text-zinc-500 truncate">${artist.role || 'Эксклюзивный артист'}</p>
                     </div>
                 </div>
             `).join("");
@@ -4215,11 +4687,22 @@
             row.innerHTML = `
                 <span class="text-[10px] font-bold text-amber-400 w-5 shrink-0">#${count}</span>
                 <input type="text" value="${existingText.replace(/"/g, '&quot;')}" placeholder="Введите интересный факт об артисте..." class="fact-input-row flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500">
-                <button type="button" onclick="this.parentElement.remove()" class="w-7 h-7 rounded-lg bg-zinc-900 text-rose-400 hover:bg-rose-500/20 flex items-center justify-center shrink-0">
+                <button type="button" onclick="confirmRemoveFactRow(this)" aria-label="Удалить факт" class="w-7 h-7 rounded-lg bg-zinc-900 text-rose-400 hover:bg-rose-500/20 flex items-center justify-center shrink-0">
                     <i class="fa-solid fa-xmark text-xs"></i>
                 </button>
             `;
             container.appendChild(row);
+        }
+
+        function confirmRemoveFactRow(btnEl) {
+            const row = btnEl ? btnEl.parentElement : null;
+            if (!row) return;
+            const inp = row.querySelector(".fact-input-row");
+            const factPreview = (inp && inp.value.trim()) ? inp.value.trim() : "Выбранная строка факта";
+            openDeleteConfirmModal("fact", "fact_row", factPreview, () => {
+                row.remove();
+                showToast("Факт удалён (нажмите «Сохранить биографию и факты»)", "ФАКТЫ");
+            });
         }
 
         async function saveArtistBioAndFacts() {
@@ -4239,13 +4722,316 @@
             if (newBio) artist.bio = newBio;
             if (newFacts.length > 0) artist.facts = newFacts;
 
+            const customIdx = customArtistsFromCloud.findIndex(a => a.id === artistId);
+            if (customIdx !== -1) {
+                customArtistsFromCloud[customIdx] = {
+                    ...customArtistsFromCloud[customIdx],
+                    role: artist.role,
+                    bio: artist.bio,
+                    facts: artist.facts
+                };
+            }
+
             saveStateToLocalStorage(true);
             renderAllViews();
             await persistSettingsToCloud();
             showToast(`Биография и факты ${artist.name} сохранены!`, "СОХРАНЕНО");
         }
 
+        // =========================================================================
+        // ДОБАВЛЕНИЕ, РЕДАКТИРОВАНИЕ И УДАЛЕНИЕ АРТИСТОВ В ПАНЕЛИ ВЛАДЕЛЬЦА
+        // =========================================================================
+
+        function generateNewArtistSlugId(name) {
+            const map = {
+                а: "a", б: "b", в: "v", г: "g", д: "d", е: "e", ё: "e", ж: "zh", з: "z",
+                и: "i", й: "y", к: "k", л: "l", м: "m", н: "n", о: "o", п: "p", р: "r",
+                с: "s", т: "t", у: "u", ф: "f", х: "h", ц: "ts", ч: "ch", ш: "sh", щ: "sch",
+                ъ: "", ы: "y", ь: "", э: "e", ю: "yu", я: "ya"
+            };
+            const slug = String(name || "")
+                .trim()
+                .toLowerCase()
+                .split("")
+                .map(c => (map[c] !== undefined ? map[c] : c))
+                .join("")
+                .replace(/[^a-z0-9]+/g, "_")
+                .replace(/^_+|_+$/g, "");
+            return "art_" + (slug || "artist") + "_" + Date.now();
+        }
+
+        async function addNewOwnerArtist() {
+            const name = document.getElementById("newArtistNameInput")?.value.trim() || "";
+            const role = document.getElementById("newArtistRoleInput")?.value.trim() || "Эксклюзивный артист • Dark Music";
+            const gradient = document.getElementById("newArtistGradientSelect")?.value || "from-purple-600 via-indigo-900 to-zinc-950";
+            const icon = document.getElementById("newArtistIconSelect")?.value || "fa-microphone-lines";
+            const avatarInput = document.getElementById("newArtistAvatarInput")?.value.trim() || "";
+            const bioInput = document.getElementById("newArtistBioInput")?.value.trim() || "";
+            const firstFact = document.getElementById("newArtistFactInput")?.value.trim() || "";
+
+            if (!name) {
+                showToast("Введите имя нового артиста", "ВНИМАНИЕ");
+                return;
+            }
+
+            const newId = generateNewArtistSlugId(name);
+            const newArtistObj = {
+                id: newId,
+                name,
+                role,
+                gradient,
+                icon,
+                avatarFile: avatarInput || `avatars/${newId}.jpg`,
+                bio: bioInput || `${name} — эксклюзивный исполнитель и резидент закрытого каталога Dark Music.`,
+                facts: firstFact ? [firstFact] : [`${name} записывает эксклюзивные треки специально для каталога Dark Music.`],
+                isCustom: true,
+                createdAt: Date.now()
+            };
+
+            deletedCustomIds.delete(newId);
+            ARTISTS[newId] = { ...newArtistObj };
+            ARTIST_ALBUM_GRADIENTS[newId] = gradient;
+            customArtistsFromCloud.push(newArtistObj);
+
+            saveStateToLocalStorage(true);
+            renderAllViews();
+            populateAlbumSelectForArtist();
+            loadArtistBioAndFactsForm();
+
+            if (document.getElementById("newArtistNameInput")) document.getElementById("newArtistNameInput").value = "";
+            if (document.getElementById("newArtistRoleInput")) document.getElementById("newArtistRoleInput").value = "";
+            if (document.getElementById("newArtistAvatarInput")) document.getElementById("newArtistAvatarInput").value = "";
+            if (document.getElementById("newArtistBioInput")) document.getElementById("newArtistBioInput").value = "";
+            if (document.getElementById("newArtistFactInput")) document.getElementById("newArtistFactInput").value = "";
+
+            await persistSettingsToCloud();
+            showToast(`Артист «${name}» добавлен в каталог Dark Music!`, "НОВЫЙ АРТИСТ");
+        }
+
+        function openEditArtistModal(artistId) {
+            const artist = ARTISTS[artistId];
+            if (!artist) return;
+            document.getElementById("editModalHeader").textContent = "Редактировать профиль артиста";
+            document.getElementById("editModalBody").innerHTML = `
+                <div class="space-y-2.5">
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Имя артиста</label>
+                        <input id="editArtistName" type="text" value="${artist.name.replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Жанр / статус под именем</label>
+                        <input id="editArtistRole" type="text" value="${(artist.role || '').replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Путь к аватарке или URL</label>
+                        <input id="editArtistAvatar" type="text" value="${(artist.avatarFile || '').replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Цветовая тема карточки</label>
+                        <select id="editArtistGradient" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
+                            <option value="from-purple-600 via-indigo-900 to-zinc-950" ${artist.gradient.includes('purple-600') ? 'selected' : ''}>Фиолетовый Неон</option>
+                            <option value="from-emerald-600 via-teal-900 to-zinc-950" ${artist.gradient.includes('emerald-600') ? 'selected' : ''}>Изумрудный Бас</option>
+                            <option value="from-rose-600 via-red-900 to-zinc-950" ${artist.gradient.includes('rose-600') ? 'selected' : ''}>Кровавый Дрифт</option>
+                            <option value="from-amber-600 via-orange-950 to-zinc-950" ${artist.gradient.includes('amber-600') ? 'selected' : ''}>Янтарный Бункер</option>
+                            <option value="from-sky-600 via-blue-950 to-zinc-950" ${artist.gradient.includes('sky-600') ? 'selected' : ''}>Кибер Лёд</option>
+                            <option value="from-fuchsia-600 via-purple-950 to-zinc-950" ${artist.gradient.includes('fuchsia-600') ? 'selected' : ''}>Ультра Фуксия</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-zinc-400 block mb-1">Биография</label>
+                        <textarea id="editArtistBio" rows="3" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">${artist.bio || ''}</textarea>
+                    </div>
+                    <button type="button" onclick="saveEditedArtist('${artist.id}')" class="w-full py-2.5 rounded-xl bg-sky-500 text-black font-extrabold text-xs spring-btn">
+                        Сохранить артиста
+                    </button>
+                </div>
+            `;
+            const modal = document.getElementById("editModal");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        async function saveEditedArtist(artistId) {
+            const artist = ARTISTS[artistId];
+            if (!artist) return;
+            const newName = document.getElementById("editArtistName")?.value.trim();
+            const newRole = document.getElementById("editArtistRole")?.value.trim();
+            const newAvatar = document.getElementById("editArtistAvatar")?.value.trim();
+            const newGradient = document.getElementById("editArtistGradient")?.value;
+            const newBio = document.getElementById("editArtistBio")?.value.trim();
+
+            if (newName) artist.name = newName;
+            if (newRole) artist.role = newRole;
+            if (newAvatar) artist.avatarFile = newAvatar;
+            if (newGradient) {
+                artist.gradient = newGradient;
+                ARTIST_ALBUM_GRADIENTS[artistId] = newGradient;
+            }
+            if (newBio) artist.bio = newBio;
+
+            const cIdx = customArtistsFromCloud.findIndex(a => a.id === artistId);
+            if (cIdx !== -1) {
+                customArtistsFromCloud[cIdx] = { ...customArtistsFromCloud[cIdx], ...artist };
+            } else {
+                customArtistsFromCloud.push({ ...artist, isCustom: true });
+            }
+
+            closeEditModal();
+            saveStateToLocalStorage(true);
+            renderAllViews();
+            populateAlbumSelectForArtist();
+            loadArtistBioAndFactsForm();
+            await persistSettingsToCloud();
+            showToast(`Профиль артиста «${artist.name}» обновлён!`, "СОХРАНЕНО");
+        }
+
+        // =========================================================================
+        // МОДАЛЬНОЕ ОКНО ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ (ДЛЯ ВСЕХ ЭЛЕМЕНТОВ В ПАНЕЛИ ВЛАДЕЛЬЦА)
+        // =========================================================================
+
+        let pendingDeleteActionCallback = null;
+
+        function getDeleteModalStrings(entityType, itemTitle) {
+            const cleanTitle = String(itemTitle || "").trim() || "Без названия";
+            if (entityType === "artist") {
+                return {
+                    badge: "УДАЛЕНИЕ АРТИСТА",
+                    title: `Удалить артиста «${cleanTitle}»?`,
+                    desc: "Профиль исполнителя будет удалён из каталога Dark Music на всех синхронизированных устройствах. Вы уверены?"
+                };
+            }
+            if (entityType === "album") {
+                return {
+                    badge: "УДАЛЕНИЕ РЕЛИЗА",
+                    title: `Удалить альбом «${cleanTitle}»?`,
+                    desc: "Альбом / сингл будет безвозвратно удалён из каталога на всех устройствах."
+                };
+            }
+            if (entityType === "track") {
+                return {
+                    badge: "УДАЛЕНИЕ ТРЕКА",
+                    title: `Удалить трек «${cleanTitle}»?`,
+                    desc: "Трек исчезнет из общего списка, чарта и профилей артистов на всех устройствах."
+                };
+            }
+            if (entityType === "video") {
+                return {
+                    badge: "УДАЛЕНИЕ ВИДЕОКЛИПА",
+                    title: `Удалить видеоклип «${cleanTitle}»?`,
+                    desc: "Видеоклип будет удалён с главной страницы и из карточки исполнителя."
+                };
+            }
+            if (entityType === "news") {
+                return {
+                    badge: "УДАЛЕНИЕ НОВОСТИ",
+                    title: `Удалить новость «${cleanTitle}»?`,
+                    desc: "Публикация будет удалена из ленты новостей и анонсов приложения."
+                };
+            }
+            return {
+                badge: "ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ",
+                title: `Удалить «${cleanTitle}»?`,
+                desc: "Выбранный элемент будет удалён из панели владельца."
+            };
+        }
+
+        function openDeleteConfirmModal(entityType, entityId, itemTitle, onConfirmCallback) {
+            const modal = document.getElementById("deleteConfirmModal");
+            const badgeEl = document.getElementById("deleteConfirmTypeBadge");
+            const titleEl = document.getElementById("deleteConfirmTitle");
+            const descEl = document.getElementById("deleteConfirmDesc");
+            if (!modal) {
+                if (typeof onConfirmCallback === "function") onConfirmCallback();
+                return;
+            }
+            const copy = getDeleteModalStrings(entityType, itemTitle);
+            if (badgeEl) badgeEl.textContent = copy.badge;
+            if (titleEl) titleEl.textContent = copy.title;
+            if (descEl) descEl.textContent = copy.desc;
+
+            pendingDeleteActionCallback = onConfirmCallback;
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        function closeDeleteConfirmModal() {
+            pendingDeleteActionCallback = null;
+            const modal = document.getElementById("deleteConfirmModal");
+            if (modal) {
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
+            }
+        }
+
+        async function executeConfirmedDelete() {
+            const cb = pendingDeleteActionCallback;
+            closeDeleteConfirmModal();
+            if (typeof cb === "function") {
+                await cb();
+            }
+        }
+
+        function removeArtistFromCatalog(artistId) {
+            const artist = ARTISTS[artistId];
+            if (!artist) return;
+            if (Object.keys(ARTISTS).length <= 1) {
+                showToast("В каталоге должен оставаться хотя бы один артист", "ВНИМАНИЕ");
+                return;
+            }
+            openDeleteConfirmModal("artist", artistId, artist.name, async () => {
+                const removedName = artist.name;
+                deletedCustomIds.add(artistId);
+                delete ARTISTS[artistId];
+                customArtistsFromCloud = customArtistsFromCloud.filter(a => a.id !== artistId);
+                if (activeArtistFilter === artistId) activeArtistFilter = "all";
+                if (activeNewsFilter === artistId) activeNewsFilter = "all";
+
+                saveStateToLocalStorage(true);
+                renderAllViews();
+                populateAlbumSelectForArtist();
+                loadArtistBioAndFactsForm();
+                await persistSettingsToCloud();
+                showToast(`Артист «${removedName}» удалён из каталога`, "КАТАЛОГ");
+            });
+        }
+
         function renderOwnerManageLists() {
+            const artistsContainer = document.getElementById("ownerArtistsManageList");
+            if (artistsContainer) {
+                const artistsArr = Object.values(ARTISTS);
+                if (artistsArr.length === 0) {
+                    setContainerHtmlIfChanged(artistsContainer, `<p class="text-[11px] text-zinc-500">Артистов пока нет</p>`);
+                } else {
+                    const html = artistsArr.map(art => {
+                        const tCount = TRACKS.filter(t => trackHasArtist(t, art.id)).length;
+                        const aCount = Object.values(ALBUMS).filter(a => albumHasArtist(a, art.id)).length;
+                        return `
+                            <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-2">
+                                <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                                    ${renderAvatarBox(art, "w-9 h-9 rounded-xl", "text-xs")}
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="text-xs font-bold text-white truncate">${art.name}</span>
+                                            <span class="text-[9px] text-sky-400 font-bold shrink-0">Треков: ${tCount} • Альб: ${aCount}</span>
+                                        </div>
+                                        <div class="text-[10px] text-zinc-400 truncate">${art.role || 'Эксклюзивный артист'}</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <button type="button" onclick="openEditArtistModal('${art.id}')" aria-label="Редактировать артиста ${art.name.replace(/"/g, '&quot;')}" class="w-7 h-7 rounded-lg bg-zinc-800 text-sky-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-pen text-[10px]"></i>
+                                    </button>
+                                    <button type="button" onclick="removeArtistFromCatalog('${art.id}')" aria-label="Удалить артиста ${art.name.replace(/"/g, '&quot;')}" class="w-7 h-7 rounded-lg bg-zinc-800 text-rose-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-trash text-[10px]"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join("");
+                    setContainerHtmlIfChanged(artistsContainer, html);
+                }
+            }
+
             const albumsContainer = document.getElementById("ownerAlbumsManageList");
             if (albumsContainer) {
                 const albumsArr = Object.values(ALBUMS);
@@ -4265,10 +5051,10 @@
                                     <div class="text-[10px] text-zinc-400 truncate">${art} • ${alb.coverFile || 'Без обложки'}</div>
                                 </div>
                                 <div class="flex items-center gap-1.5 shrink-0">
-                                    <button onclick="openEditAlbumModal('${alb.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-amber-400 flex items-center justify-center">
+                                    <button type="button" onclick="openEditAlbumModal('${alb.id}')" aria-label="Редактировать альбом ${alb.title.replace(/"/g, '&quot;')}" class="w-7 h-7 rounded-lg bg-zinc-800 text-amber-400 flex items-center justify-center">
                                         <i class="fa-solid fa-pen text-[10px]"></i>
                                     </button>
-                                    <button onclick="removeAlbumFromCatalog('${alb.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-rose-400 flex items-center justify-center">
+                                    <button type="button" onclick="removeAlbumFromCatalog('${alb.id}')" aria-label="Удалить альбом ${alb.title.replace(/"/g, '&quot;')}" class="w-7 h-7 rounded-lg bg-zinc-800 text-rose-400 flex items-center justify-center">
                                         <i class="fa-solid fa-trash text-[10px]"></i>
                                     </button>
                                 </div>
@@ -4298,10 +5084,10 @@
                                     <div class="text-[10px] text-zinc-400 truncate">${art} • ${alb} • ${trk.filePath}</div>
                                 </div>
                                 <div class="flex items-center gap-1.5 shrink-0">
-                                    <button onclick="openEditTrackModal('${trk.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-purple-400 flex items-center justify-center">
+                                    <button type="button" onclick="openEditTrackModal('${trk.id}')" aria-label="Редактировать трек ${trk.title.replace(/"/g, '&quot;')}" class="w-7 h-7 rounded-lg bg-zinc-800 text-purple-400 flex items-center justify-center">
                                         <i class="fa-solid fa-pen text-[10px]"></i>
                                     </button>
-                                    <button onclick="removeTrackFromCatalog('${trk.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-rose-400 flex items-center justify-center">
+                                    <button type="button" onclick="removeTrackFromCatalog('${trk.id}')" aria-label="Удалить трек ${trk.title.replace(/"/g, '&quot;')}" class="w-7 h-7 rounded-lg bg-zinc-800 text-rose-400 flex items-center justify-center">
                                         <i class="fa-solid fa-trash text-[10px]"></i>
                                     </button>
                                 </div>
@@ -4330,10 +5116,10 @@
                                     <div class="text-[10px] text-zinc-400 truncate">${art} • ${v.videoSource}</div>
                                 </div>
                                 <div class="flex items-center gap-1.5 shrink-0">
-                                    <button onclick="openEditVideoModal('${v.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-purple-400 flex items-center justify-center">
+                                    <button type="button" onclick="openEditVideoModal('${v.id}')" aria-label="Редактировать клип ${v.title.replace(/"/g, '&quot;')}" class="w-7 h-7 rounded-lg bg-zinc-800 text-purple-400 flex items-center justify-center">
                                         <i class="fa-solid fa-pen text-[10px]"></i>
                                     </button>
-                                    <button onclick="removeVideoFromCatalog('${v.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-rose-400 flex items-center justify-center">
+                                    <button type="button" onclick="removeVideoFromCatalog('${v.id}')" aria-label="Удалить клип ${v.title.replace(/"/g, '&quot;')}" class="w-7 h-7 rounded-lg bg-zinc-800 text-rose-400 flex items-center justify-center">
                                         <i class="fa-solid fa-trash text-[10px]"></i>
                                     </button>
                                 </div>
@@ -4361,10 +5147,10 @@
                                     <div class="text-[10px] text-zinc-400 truncate">${n.content}</div>
                                 </div>
                                 <div class="flex items-center gap-1.5 shrink-0">
-                                    <button onclick="openEditNewsModal('${n.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-amber-400 flex items-center justify-center">
+                                    <button type="button" onclick="openEditNewsModal('${n.id}')" aria-label="Редактировать новость ${n.title.replace(/"/g, '&quot;')}" class="w-7 h-7 rounded-lg bg-zinc-800 text-amber-400 flex items-center justify-center">
                                         <i class="fa-solid fa-pen text-[10px]"></i>
                                     </button>
-                                    <button onclick="removeNewsFromCatalog('${n.id}')" class="w-7 h-7 rounded-lg bg-zinc-800 text-rose-400 flex items-center justify-center">
+                                    <button type="button" onclick="removeNewsFromCatalog('${n.id}')" aria-label="Удалить новость ${n.title.replace(/"/g, '&quot;')}" class="w-7 h-7 rounded-lg bg-zinc-800 text-rose-400 flex items-center justify-center">
                                         <i class="fa-solid fa-trash text-[10px]"></i>
                                     </button>
                                 </div>
@@ -4379,7 +5165,7 @@
         // УПРАВЛЕНИЕ ВИДЕОКЛИПАМИ В ПАНЕЛИ ВЛАДЕЛЬЦА
         async function addOwnerVideoClip() {
             const title = document.getElementById("newVideoTitle")?.value.trim();
-            const artistId = document.getElementById("newVideoArtist")?.value || "mc_geich";
+            const artistId = document.getElementById("newVideoArtist")?.value || getFallbackArtist().id;
             const year = parseInt(document.getElementById("newVideoYear")?.value, 10) || 2025;
             const previewFile = document.getElementById("newVideoPreview")?.value.trim() || "";
             const videoSource = document.getElementById("newVideoSource")?.value.trim() || "";
@@ -4430,10 +5216,7 @@
                         <div>
                             <label class="text-[10px] text-zinc-400 block mb-1">Артист</label>
                             <select id="editVidArtist" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
-                                <option value="mc_geich" ${vid.artistId === 'mc_geich' ? 'selected' : ''}>МС ГЕИЧ</option>
-                                <option value="mc_makaka" ${vid.artistId === 'mc_makaka' ? 'selected' : ''}>МС МАКАКА</option>
-                                <option value="mc_ezdit" ${vid.artistId === 'mc_ezdit' ? 'selected' : ''}>МС ЕЗДИТЬ</option>
-                                <option value="mc_oparysh" ${vid.artistId === 'mc_oparysh' ? 'selected' : ''}>МС ОПАРЫШ</option>
+                                ${buildArtistSelectOptionsHtml(vid.artistId, false, false)}
                             </select>
                         </div>
                         <div>
@@ -4480,13 +5263,17 @@
             showToast("Видеоклип обновлён!", "СОХРАНЕНО");
         }
 
-        async function removeVideoFromCatalog(videoId) {
-            deletedCustomIds.add(videoId);
-            customVideosFromCloud = customVideosFromCloud.filter(v => v.id !== videoId);
-            saveStateToLocalStorage(true);
-            renderAllViews();
-            await persistSettingsToCloud();
-            showToast("Видеоклип удалён", "КАТАЛОГ");
+        function removeVideoFromCatalog(videoId) {
+            const vid = VIDEOS.find(v => v.id === videoId) || customVideosFromCloud.find(v => v.id === videoId);
+            const title = vid ? vid.title : "Видеоклип";
+            openDeleteConfirmModal("video", videoId, title, async () => {
+                deletedCustomIds.add(videoId);
+                customVideosFromCloud = customVideosFromCloud.filter(v => v.id !== videoId);
+                saveStateToLocalStorage(true);
+                renderAllViews();
+                await persistSettingsToCloud();
+                showToast("Видеоклип удалён", "КАТАЛОГ");
+            });
         }
 
         // УПРАВЛЕНИЕ НОВОСТЯМИ В ПАНЕЛИ ВЛАДЕЛЬЦА
@@ -4539,11 +5326,7 @@
                         <div>
                             <label class="text-[10px] text-zinc-400 block mb-1">Категория / Артист</label>
                             <select id="editNewsTarget" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
-                                <option value="app" ${n.targetId === 'app' ? 'selected' : ''}>⚡ Приложение</option>
-                                <option value="mc_geich" ${n.targetId === 'mc_geich' ? 'selected' : ''}>МС ГЕИЧ</option>
-                                <option value="mc_makaka" ${n.targetId === 'mc_makaka' ? 'selected' : ''}>МС МАКАКА</option>
-                                <option value="mc_ezdit" ${n.targetId === 'mc_ezdit' ? 'selected' : ''}>МС ЕЗДИТЬ</option>
-                                <option value="mc_oparysh" ${n.targetId === 'mc_oparysh' ? 'selected' : ''}>МС ОПАРЫШ</option>
+                                ${buildArtistSelectOptionsHtml(n.targetId, false, true)}
                             </select>
                         </div>
                         <div>
@@ -4585,13 +5368,17 @@
             showToast("Новость обновлена!", "СОХРАНЕНО");
         }
 
-        async function removeNewsFromCatalog(newsId) {
-            deletedCustomIds.add(newsId);
-            customNewsFromCloud = customNewsFromCloud.filter(n => n.id !== newsId);
-            saveStateToLocalStorage(true);
-            renderAllViews();
-            await persistSettingsToCloud();
-            showToast("Новость удалена", "НОВОСТИ");
+        function removeNewsFromCatalog(newsId) {
+            const n = NEWS.find(x => x.id === newsId) || customNewsFromCloud.find(x => x.id === newsId);
+            const title = n ? n.title : "Новость";
+            openDeleteConfirmModal("news", newsId, title, async () => {
+                deletedCustomIds.add(newsId);
+                customNewsFromCloud = customNewsFromCloud.filter(item => item.id !== newsId);
+                saveStateToLocalStorage(true);
+                renderAllViews();
+                await persistSettingsToCloud();
+                showToast("Новость удалена", "НОВОСТИ");
+            });
         }
 
         function openEditAlbumModal(albumId) {
@@ -4608,20 +5395,13 @@
                         <div>
                             <label class="text-[10px] text-zinc-400 block mb-1">Основной артист</label>
                             <select id="editAlbArtist" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
-                                <option value="mc_geich" ${alb.artistId === 'mc_geich' ? 'selected' : ''}>МС ГЕИЧ</option>
-                                <option value="mc_makaka" ${alb.artistId === 'mc_makaka' ? 'selected' : ''}>МС МАКАКА</option>
-                                <option value="mc_ezdit" ${alb.artistId === 'mc_ezdit' ? 'selected' : ''}>МС ЕЗДИТЬ</option>
-                                <option value="mc_oparysh" ${alb.artistId === 'mc_oparysh' ? 'selected' : ''}>МС ОПАРЫШ</option>
+                                ${buildArtistSelectOptionsHtml(alb.artistId, false, false)}
                             </select>
                         </div>
                         <div>
                             <label class="text-[10px] text-fuchsia-400 font-semibold block mb-1">Фит (2-й артист)</label>
                             <select id="editAlbFeatArtist" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
-                                <option value="" ${!alb.featArtistId ? 'selected' : ''}>Без фита (Соло)</option>
-                                <option value="mc_geich" ${alb.featArtistId === 'mc_geich' ? 'selected' : ''}>МС ГЕИЧ</option>
-                                <option value="mc_makaka" ${alb.featArtistId === 'mc_makaka' ? 'selected' : ''}>МС МАКАКА</option>
-                                <option value="mc_ezdit" ${alb.featArtistId === 'mc_ezdit' ? 'selected' : ''}>МС ЕЗДИТЬ</option>
-                                <option value="mc_oparysh" ${alb.featArtistId === 'mc_oparysh' ? 'selected' : ''}>МС ОПАРЫШ</option>
+                                ${buildArtistSelectOptionsHtml(alb.featArtistId || "", true, false)}
                             </select>
                         </div>
                     </div>
@@ -4697,20 +5477,13 @@
                         <div>
                             <label class="text-[10px] text-zinc-400 block mb-1">Основной артист</label>
                             <select id="editTrkArtist" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
-                                <option value="mc_geich" ${trk.artistId === 'mc_geich' ? 'selected' : ''}>МС ГЕИЧ</option>
-                                <option value="mc_makaka" ${trk.artistId === 'mc_makaka' ? 'selected' : ''}>МС МАКАКА</option>
-                                <option value="mc_ezdit" ${trk.artistId === 'mc_ezdit' ? 'selected' : ''}>МС ЕЗДИТЬ</option>
-                                <option value="mc_oparysh" ${trk.artistId === 'mc_oparysh' ? 'selected' : ''}>МС ОПАРЫШ</option>
+                                ${buildArtistSelectOptionsHtml(trk.artistId, false, false)}
                             </select>
                         </div>
                         <div>
                             <label class="text-[10px] text-purple-400 font-semibold block mb-1">Фит (2-й артист)</label>
                             <select id="editTrkFeatArtist" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
-                                <option value="" ${!trk.featArtistId ? 'selected' : ''}>Без фита (Соло)</option>
-                                <option value="mc_geich" ${trk.featArtistId === 'mc_geich' ? 'selected' : ''}>МС ГЕИЧ</option>
-                                <option value="mc_makaka" ${trk.featArtistId === 'mc_makaka' ? 'selected' : ''}>МС МАКАКА</option>
-                                <option value="mc_ezdit" ${trk.featArtistId === 'mc_ezdit' ? 'selected' : ''}>МС ЕЗДИТЬ</option>
-                                <option value="mc_oparysh" ${trk.featArtistId === 'mc_oparysh' ? 'selected' : ''}>МС ОПАРЫШ</option>
+                                ${buildArtistSelectOptionsHtml(trk.featArtistId || "", true, false)}
                             </select>
                         </div>
                     </div>
@@ -4784,24 +5557,33 @@
             modal.classList.remove("flex");
         }
 
-        async function removeTrackFromCatalog(trackId) {
-            deletedCustomIds.add(trackId);
-            customTracksFromCloud = customTracksFromCloud.filter(t => t.id !== trackId);
-            saveStateToLocalStorage(true);
-            renderAllViews();
-            await deleteCustomTrackFromCloud(trackId);
-            await persistSettingsToCloud();
-            showToast("Трек удалён на всех устройствах", "КАТАЛОГ");
+        function removeTrackFromCatalog(trackId) {
+            const trk = TRACKS.find(t => t.id === trackId) || customTracksFromCloud.find(t => t.id === trackId);
+            const title = trk ? trk.title : "Трек";
+            openDeleteConfirmModal("track", trackId, title, async () => {
+                deletedCustomIds.add(trackId);
+                customTracksFromCloud = customTracksFromCloud.filter(t => t.id !== trackId);
+                saveStateToLocalStorage(true);
+                renderAllViews();
+                await deleteCustomTrackFromCloud(trackId);
+                await persistSettingsToCloud();
+                showToast("Трек удалён на всех устройствах", "КАТАЛОГ");
+            });
         }
 
-        async function removeAlbumFromCatalog(albumId) {
-            deletedCustomIds.add(albumId);
-            delete ALBUMS[albumId];
-            customAlbumsFromCloud = customAlbumsFromCloud.filter(a => a.id !== albumId);
-            saveStateToLocalStorage(true);
-            renderAllViews();
-            await persistSettingsToCloud();
-            showToast("Альбом удалён на всех устройствах", "КАТАЛОГ");
+        function removeAlbumFromCatalog(albumId) {
+            const alb = ALBUMS[albumId] || customAlbumsFromCloud.find(a => a.id === albumId);
+            const title = alb ? alb.title : "Альбом";
+            openDeleteConfirmModal("album", albumId, title, async () => {
+                deletedCustomIds.add(albumId);
+                delete ALBUMS[albumId];
+                customAlbumsFromCloud = customAlbumsFromCloud.filter(a => a.id !== albumId);
+                saveStateToLocalStorage(true);
+                renderAllViews();
+                populateAlbumSelectForArtist();
+                await persistSettingsToCloud();
+                showToast("Альбом удалён на всех устройствах", "КАТАЛОГ");
+            });
         }
 
         let pendingCloudSyncQueue = false;
@@ -4855,7 +5637,14 @@
             }
         }
 
+        function registerSystemNotificationServiceWorker() {
+            if ("serviceWorker" in navigator && (window.location.protocol === "https:" || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) {
+                navigator.serviceWorker.register("./sw.js").catch(() => {});
+            }
+        }
+
         function initDarkMusicApp() {
+            registerSystemNotificationServiceWorker();
             loadStateFromLocalStorage();
             setupMediaSessionHandlers();
             renderAllViews();

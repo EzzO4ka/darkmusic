@@ -5,33 +5,19 @@
     "mc_geich": "avatars/mc_geich.jpg",
     "mc_makaka": "avatars/mc_makaka.jpg",
     "mc_ezdit": "avatars/mc_ezdit.jpg",
-    "mc_oparysh": "avatars/mc_oparysh.jpg",
-    "art_ms_kiber_1793263753371": "avatars/art_ms_kiber_1793263753371.jpg",
-    "art_ms_dolboeb_1793263987131": "avatars/art_ms_dolboeb_1793263987131.jpg"
-  },
-  "artistNames": {
-    "mc_geich": "МС ГЕИЧ",
-    "mc_makaka": "МС МАКАКА",
-    "mc_ezdit": "МС ЕЗДИТЬ",
-    "mc_oparysh": "МС ОПАРЫШ",
-    "art_ms_kiber_1793263753371": "МС КИБЕР",
-    "art_ms_dolboeb_1793263987131": "МС ДОЛБОЕБ"
+    "mc_oparysh": "avatars/mc_oparysh.jpg"
   },
   "artistBios": {
     "mc_geich": "Родился в Дрезне. Стал популярен благодаря \"Элиты\" Татьяны Леонидовны. Писал рофленные текста про Ахмада и себя. Продюсировал МС МАКАКУ.",
     "mc_makaka": "МС МАКАКА — самая взрывная энергия объединения Dark Music. Король школьного и дворового русского рэпа. Стал популярен в школе благодаря его продюсерам Максиму и Алексею. Обрёл известность в 2023 году после выхода первого альбома \"ЗАГЕЕВ\".",
     "mc_ezdit": "Рэп-исполнитель. Его главная фишка - записать вокал, одновременно выдумывая текст из головы. Все треки не имеют определённого смысла - так и нормально.",
-    "mc_oparysh": "Продюсер, рэп-исполнитель.",
-    "art_ms_kiber_1793263753371": "Секретный участник Dark Music.",
-    "art_ms_dolboeb_1793263987131": "долбоеб"
+    "mc_oparysh": "Продюсер, рэп-исполнитель."
   },
   "artistRoles": {
     "mc_geich": "Рэп",
     "mc_makaka": "Рэп",
     "mc_ezdit": "Рэп",
-    "mc_oparysh": "Пока пусто",
-    "art_ms_kiber_1793263753371": "Кибер-Фонк",
-    "art_ms_dolboeb_1793263987131": "долбоеб"
+    "mc_oparysh": "Пока пусто"
   },
   "artistFacts": {
     "mc_geich": [
@@ -57,60 +43,8 @@
       "Использует сэмплы настоящих индустриальных механизмов и эхо бетонных бункеров.",
       "Принципиально выпускает музыку только в закрытом каталоге без цензуры.",
       "Его саб-частоты опускаются ниже 28 Гц."
-    ],
-    "art_ms_kiber_1793263753371": [
-      "Записал альбом в серверной."
-    ],
-    "art_ms_dolboeb_1793263987131": [
-      "он долбоеб"
     ]
   },
-  "artistGradients": {
-    "mc_geich": "from-purple-600 via-indigo-900 to-zinc-950",
-    "mc_makaka": "from-emerald-600 via-teal-900 to-zinc-950",
-    "mc_ezdit": "from-rose-600 via-red-900 to-zinc-950",
-    "mc_oparysh": "from-amber-600 via-orange-950 to-zinc-950",
-    "art_ms_kiber_1793263753371": "from-purple-600 via-indigo-900 to-zinc-950",
-    "art_ms_dolboeb_1793263987131": "from-amber-600 via-orange-950 to-zinc-950"
-  },
-  "artistIcons": {
-    "mc_geich": "fa-user-astronaut",
-    "mc_makaka": "fa-crown",
-    "mc_ezdit": "fa-gauge-high",
-    "mc_oparysh": "fa-biohazard",
-    "art_ms_kiber_1793263753371": "fa-microphone-lines",
-    "art_ms_dolboeb_1793263987131": "fa-fire"
-  },
-  "customArtists": [
-    {
-      "id": "art_ms_kiber_1793263753371",
-      "name": "МС КИБЕР",
-      "role": "Кибер-Фонк",
-      "gradient": "from-purple-600 via-indigo-900 to-zinc-950",
-      "icon": "fa-microphone-lines",
-      "avatarFile": "avatars/art_ms_kiber_1793263753371.jpg",
-      "bio": "Секретный участник Dark Music.",
-      "facts": [
-        "Записал альбом в серверной."
-      ],
-      "isCustom": true,
-      "createdAt": 1793263753371
-    },
-    {
-      "id": "art_ms_dolboeb_1793263987131",
-      "name": "МС ДОЛБОЕБ",
-      "role": "долбоеб",
-      "gradient": "from-amber-600 via-orange-950 to-zinc-950",
-      "icon": "fa-fire",
-      "avatarFile": "avatars/art_ms_dolboeb_1793263987131.jpg",
-      "bio": "долбоеб",
-      "facts": [
-        "он долбоеб"
-      ],
-      "isCustom": true,
-      "createdAt": 1793263987131
-    }
-  ],
   "customAlbums": [
     {
       "isExplicit": true,
@@ -420,21 +354,12 @@
     }
   ],
   "customNews": [],
+  "customArtists": [],
   "deletedCustomIds": [
     "alb_1792597596794",
     "alb_1793176376242",
-    "trk_1793176376243",
-    "art_ms_kiber_1793263612957",
-    "art_eunrrenkrpkikprr_1793264041633"
+    "trk_1793176376243"
   ],
-  "systemPushBroadcast": {
-    "id": "push_1793263749810",
-    "title": "Dark Music: Новый релиз!",
-    "message": "Слушайте новый трек прямо сейчас в приложении!",
-    "imageFile": "logo.png",
-    "active": true,
-    "createdAt": 1793263749811
-  },
   "tempBroadcast": {
     "id": "tmp_1793051634442",
     "title": "Объявление Dark Music",
@@ -448,6 +373,14 @@
     "message": "Временно не работает фоновое воспроизведение и функционал переключения музыки и паузы. Исправляем баг.",
     "active": false,
     "updatedAt": 1792915286413
+  },
+  "systemPushBroadcast": {
+    "id": "",
+    "title": "Dark Music",
+    "message": "",
+    "imageUrl": "",
+    "active": false,
+    "createdAt": 0
   },
   "forceUpdate": {
     "active": false,
@@ -464,5 +397,5 @@
     "active": true,
     "updatedAt": 1793175130835
   },
-  "updatedAt": 1793264058558
+  "updatedAt": 1793182440967
 }
