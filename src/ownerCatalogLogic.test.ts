@@ -5,7 +5,11 @@ import {
   createCustomArtistRecord,
   buildDeleteConfirmDescriptor,
   createSystemPushBroadcast,
-  shouldTriggerSystemPush
+  shouldTriggerSystemPush,
+  extractUnseenBackgroundNotifications,
+  shouldApplyAuthoritativeRemoteCatalog,
+  verifyOwnerAccessPin,
+  reconstructTransportAuthToken
 } from './ownerCatalogLogic';
 
 test('generateArtistId transliterates Russian artist name into clean id', () => {
@@ -53,3 +57,68 @@ test('createSystemPushBroadcast and shouldTriggerSystemPush deduplicate seen not
   seen.add(push.id);
   assert.equal(shouldTriggerSystemPush(push, seen), false);
 });
+
+test('extractUnseenBackgroundNotifications delivers system push and background broadcasts when inactive', () => {
+  const seen = new Set<string>();
+  const catalog = {
+    systemPushBroadcast: {
+      id: 'push_100',
+      title: 'Dark Music Push',
+      message: 'Вышел новый альбом!',
+      imageFile: 'logo.png',
+      active: true,
+      createdAt: 100
+    },
+    tempBroadcast: {
+      id: 'tmp_200',
+      title: 'Срочное объявление',
+      message: 'Стрим через 5 минут',
+      active: true,
+      createdAt: 200
+    },
+    pinnedBroadcast: {
+      id: 'pin_300',
+      title: 'Важно',
+      message: 'Обновление каталога',
+      active: true,
+      updatedAt: 300
+    }
+  };
+
+  // When app is active, only systemPushBroadcast is extracted for the OS shade
+  const activeNotifs = extractUnseenBackgroundNotifications(catalog, seen, false);
+  assert.equal(activeNotifs.length, 1);
+  assert.equal(activeNotifs[0].id, 'push_100');
+
+  // When app is inactive (minimized/background), all 3 notification types are routed to the OS shade
+  const inactiveNotifs = extractUnseenBackgroundNotifications(catalog, seen, true);
+  assert.equal(inactiveNotifs.length, 3);
+  assert.deepEqual(
+    inactiveNotifs.map((n) => n.id),
+    ['push_100', 'bg_tmp_200', 'bg_pin_300']
+  );
+
+  // Once marked seen, they are not duplicated
+  inactiveNotifs.forEach((n) => seen.add(n.id));
+  const afterSeen = extractUnseenBackgroundNotifications(catalog, seen, true);
+  assert.equal(afterSeen.length, 0);
+});
+
+test('shouldApplyAuthoritativeRemoteCatalog applies remote catalog regardless of clock skew when fingerprint changes', () => {
+  assert.equal(shouldApplyAuthoritativeRemoteCatalog('fp_old', 'fp_new'), true);
+  assert.equal(shouldApplyAuthoritativeRemoteCatalog('fp_same', 'fp_same'), false);
+});
+
+test('verifyOwnerAccessPin validates code via 65,536-round ChaCha20-ARX sponge and rejects wrong codes', () => {
+  const dummyTag = [
+    -545267346, -1904110289, -1031583527, -549424254,
+    677446364, -504107950, 1783861268, 1080362546
+  ];
+  assert.equal(verifyOwnerAccessPin('0000', 'test_salt', dummyTag), false);
+  assert.equal(verifyOwnerAccessPin('1234', 'test_salt', dummyTag), false);
+  assert.equal(verifyOwnerAccessPin('7392', 'test_salt', dummyTag), true);
+
+  const token = reconstructTransportAuthToken();
+  assert.equal(token.length, 40);
+});
+

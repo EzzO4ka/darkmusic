@@ -1,6 +1,6 @@
 {
   "name": "dark-music-android",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "private": true,
   "description": "Dark Music Android app wrapper for the existing HTML app",
   "scripts": {

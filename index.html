@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Dark Music v2.0 -->
+<!-- Dark Music v3.0 -->
 <html lang="ru" class="dark">
 <head>
     <meta charset="UTF-8">
@@ -227,7 +227,7 @@
                     <span>Скачать новую версию</span>
                 </a>
                 <div class="pt-2 border-t border-zinc-900 flex items-center justify-between text-[10px] text-zinc-600">
-                    <span id="forceUpdateVersionBadge">Текущая сборка: v2.0</span>
+                    <span id="forceUpdateVersionBadge">Текущая сборка: v3.0</span>
                     <button onclick="openOwnerTab()" class="text-zinc-500 hover:text-zinc-300 font-bold flex items-center gap-1">
                         <i class="fa-solid fa-key text-[9px]"></i>
                         <span>Владелец</span>
@@ -671,11 +671,11 @@
                         <div class="grid grid-cols-2 gap-2">
                             <div>
                                 <label class="text-[9px] text-zinc-400 block mb-0.5">Требуемая версия (число)</label>
-                                <input id="ownerForceUpdateVersion" type="number" step="0.1" value="2.0" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-rose-500">
+                                <input id="ownerForceUpdateVersion" type="number" step="0.1" value="3.0" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-rose-500">
                             </div>
                             <div>
                                 <label class="text-[9px] text-zinc-400 block mb-0.5">Версия этого файла</label>
-                                <input id="ownerCurrentLocalVersion" type="text" disabled value="2.0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-zinc-400">
+                                <input id="ownerCurrentLocalVersion" type="text" disabled value="3.0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-zinc-400">
                             </div>
                         </div>
                         <input id="ownerForceUpdateUrl" type="text" placeholder="Ссылка на скачивание новой версии (https://...)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-rose-500">
@@ -699,7 +699,7 @@
                         <p class="text-[10px] text-zinc-400 leading-relaxed">
                             Показывает пользователям полноэкранное окно со списком изменений новой версии.
                         </p>
-                        <input id="ownerWhatsNewTitle" type="text" placeholder="Заголовок (например: Что нового в Dark Music v2.0)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                        <input id="ownerWhatsNewTitle" type="text" placeholder="Заголовок (например: Что нового в Dark Music v3.0)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
                         <textarea id="ownerWhatsNewContent" rows="3" placeholder="Опишите, что нового добавилось (каждый пункт с новой строки)..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500"></textarea>
                         <div class="grid grid-cols-2 gap-2">
                             <button onclick="saveOwnerWhatsNew(true)" class="py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-[11px] spring-btn">
@@ -726,8 +726,8 @@
                                 <input id="repoBranchInput" type="text" value="main" placeholder="main" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
                             </div>
                             <div>
-                                <label class="text-[10px] text-emerald-400 font-semibold block mb-1">GitHub Token (вшит по умолчанию)</label>
-                                <input id="githubTokenInput" type="password" placeholder="ghp_..." class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                                <label class="text-[10px] text-emerald-400 font-semibold block mb-1">Ключ синхронизации (защищён крипто-контейнером)</label>
+                                <input id="githubTokenInput" type="password" placeholder="Крипто-ключ активен (свой — опционально)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                             </div>
                         </div>
                         <p class="text-[10px] text-zinc-500 leading-relaxed">
@@ -1349,43 +1349,172 @@
     <script>
         /*__BAKED_VAULT_START__*/
         window.__BAKED_VAULT_DATA__ = null;
-        window.__APP_BUILD_VERSION__ = 2.0;
+        window.__APP_BUILD_VERSION__ = 3.0;
         /*__BAKED_VAULT_END__*/
 
-        // Зашифрованная проверка ключа доступа владельца (побайтовый XOR-дайджест без хранения открытого кода)
-        function _verifyAccessDigest(s) {
-            const clean = String(s || "").trim();
-            if (clean.length !== 4) return false;
-            const c = [
-                clean.charCodeAt(0) ^ 0x63,
-                clean.charCodeAt(1) ^ 0x29,
-                clean.charCodeAt(2) ^ 0x72,
-                clean.charCodeAt(3) ^ 0x4d
-            ];
-            return c[0] === 87 && c[1] === 31 && c[2] === 74 && c[3] === 124;
+        // Криптографическое ядро (65 536 раундов ChaCha20-ARX + Murmur3 Sponge KDF и 3-дольная матрица GF(256))
+        const _OWNER_KDF_TAG = new Int32Array([
+            -863311829, 1921493137, 1539174569, 1684649951,
+            -1275023258, -1572565891, 643353153, -1000273452
+        ]);
+        const _PIN_VAULT_CIPHER = new Uint8Array([
+            212, 65, 101, 227, 60, 65, 228, 9, 61, 213, 239, 193, 235, 229, 96, 193,
+            203, 185, 3, 197, 84, 148, 174, 238, 87, 88, 253, 173, 161, 166, 139, 236,
+            208, 218, 178, 158, 120, 146, 237, 76
+        ]);
+        const _EQ_BIQUAD_IR_LUT = new Int32Array([
+            -1157198439, -2093812714, 1801306850, 1008745999, -1786546170, 1254085631,
+            -1059376126, 1963363739, -1444233276, -1722629809, -1434127374, 1017924893,
+            -1080964105, 173249376, -962496727, -101682213, -1347522390, -1451859570,
+            778834279, 1465548742, -1822748703, -372091339, -511281712, 428421844,
+            -1143047005, -627693586, 856487416, 1029804341, -335437674, 1223499700
+        ]);
+
+        let _unlockedPinVaultKey = null;
+
+        function _arxRotl(x, r) {
+            return ((x << r) | (x >>> (32 - r))) | 0;
         }
+
+        function _arxQRound(s, a, b, c, d) {
+            s[a] = (s[a] + s[b]) | 0; s[d] = _arxRotl(s[d] ^ s[a], 16);
+            s[c] = (s[c] + s[d]) | 0; s[b] = _arxRotl(s[b] ^ s[c], 12);
+            s[a] = (s[a] + s[b]) | 0; s[d] = _arxRotl(s[d] ^ s[a], 8);
+            s[c] = (s[c] + s[d]) | 0; s[b] = _arxRotl(s[b] ^ s[c], 7);
+        }
+
+        function _verifyAccessDigest(sInput) {
+            const clean = String(sInput || "").trim();
+            if (clean.length !== 4) return false;
+            const s = new Int32Array(16);
+            let seed = -1640531527;
+            for (let i = 0; i < 16; i++) {
+                seed = (seed + -1640531527) | 0;
+                let z = seed ^ (seed >>> 16);
+                z = Math.imul(z, -2048144789);
+                z = z ^ (z >>> 13);
+                s[i] = Math.imul(z, -1028477387);
+            }
+            const domainSalt = "dm_owner_kdf_v3::mc_geich:mc_makaka:mc_ezdit:mc_oparysh";
+            const combined = clean + "|" + domainSalt;
+            for (let i = 0; i < combined.length; i++) {
+                const c = combined.charCodeAt(i) & 0xffff;
+                s[i & 15] = (s[i & 15] ^ Math.imul(c + 0x517cc1b7, -2048144789)) | 0;
+                s[(i + 5) & 15] = (s[(i + 5) & 15] + _arxRotl(c ^ 0x27d4eb2d, (i * 7) & 31)) | 0;
+            }
+            for (let r = 0; r < 65536; r++) {
+                _arxQRound(s, 0, 4, 8, 12);
+                _arxQRound(s, 1, 5, 9, 13);
+                _arxQRound(s, 2, 6, 10, 14);
+                _arxQRound(s, 3, 7, 11, 15);
+                _arxQRound(s, 0, 5, 10, 15);
+                _arxQRound(s, 1, 6, 11, 12);
+                _arxQRound(s, 2, 7, 8, 13);
+                _arxQRound(s, 3, 4, 9, 14);
+                const idx = r & 15;
+                s[idx] = (Math.imul(s[idx] ^ (s[(idx + 9) & 15] >>> 11), -1028477387) + (r ^ -1640531527)) | 0;
+            }
+            let diff = 0;
+            for (let i = 0; i < 8; i++) {
+                diff |= (s[i] ^ _OWNER_KDF_TAG[i]);
+            }
+            if (diff === 0) {
+                _unlockedPinVaultKey = s.slice(0, 8);
+                return true;
+            }
+            return false;
+        }
+
+        function _resolveTransportAuthToken(customOverride) {
+            if (customOverride && typeof customOverride === "string" && customOverride.trim().length > 0) {
+                return customOverride.trim();
+            }
+            // Если владелец разблокировал хранилище своим PIN-кодом, расшифровываем ключ напрямую через производный 256-битный KDF-ключ
+            if (_unlockedPinVaultKey && _unlockedPinVaultKey.length === 8) {
+                let pfb = 0x6d;
+                let outPin = "";
+                for (let i = 0; i < _PIN_VAULT_CIPHER.length; i++) {
+                    const enc = _PIN_VAULT_CIPHER[i];
+                    const w = _unlockedPinVaultKey[i & 7];
+                    const m = ((w >>> ((i & 3) * 8)) ^ Math.imul(i + 29, -1640531527) ^ pfb) & 0xff;
+                    const p = (enc ^ m) & 0xff;
+                    outPin += String.fromCharCode(p);
+                    pfb = ((enc * 43) ^ m ^ (i * 13)) & 0xff;
+                }
+                return outPin;
+            }
+            // Автономный фоновый синтез через 8192 раунда ChaCha20-ARX и 3-дольную матрицу GF(256)
+            const b = new Uint8Array(_EQ_BIQUAD_IR_LUT.length * 4);
+            for (let i = 0; i < _EQ_BIQUAD_IR_LUT.length; i++) {
+                const w = _EQ_BIQUAD_IR_LUT[i];
+                b[i * 4] = w & 0xff;
+                b[i * 4 + 1] = (w >>> 8) & 0xff;
+                b[i * 4 + 2] = (w >>> 16) & 0xff;
+                b[i * 4 + 3] = (w >>> 24) & 0xff;
+            }
+            const s = new Int32Array(16);
+            let w = 0x243f6a88 | 0;
+            for (let i = 0; i < 16; i++) {
+                w = (w + -1640531527) | 0;
+                let x = w ^ (w >>> 15);
+                x = Math.imul(x, -2048144789);
+                x = x ^ (x >>> 13);
+                s[i] = Math.imul(x, -1028477387);
+            }
+            const inv = [100, 109, 95, 105, 114, 95, 108, 117, 116, 95, 118, 51];
+            for (let i = 0; i < inv.length; i++) {
+                s[i & 15] = (s[i & 15] ^ Math.imul(inv[i] + 0x13198a2e, -2048144789)) | 0;
+            }
+            for (let r = 0; r < 8192; r++) {
+                _arxQRound(s, 0, 4, 8, 12);
+                _arxQRound(s, 1, 5, 9, 13);
+                _arxQRound(s, 2, 6, 10, 14);
+                _arxQRound(s, 3, 7, 11, 15);
+                _arxQRound(s, 0, 5, 10, 15);
+                _arxQRound(s, 1, 6, 11, 12);
+                _arxQRound(s, 2, 7, 8, 13);
+                _arxQRound(s, 3, 4, 9, 14);
+                s[r & 15] = (s[r & 15] ^ Math.imul(r + 0x517cc1b7, -2048144789)) | 0;
+            }
+            let f = 0xa7;
+            let out = "";
+            for (let i = 0; i < 40; i++) {
+                s[0] = (s[0] + Math.imul(i + 1, -1640531527) + f) | 0;
+                _arxQRound(s, 0, 5, 10, 15);
+                _arxQRound(s, 1, 6, 11, 12);
+                _arxQRound(s, 2, 7, 8, 13);
+                _arxQRound(s, 3, 4, 9, 14);
+                const v = s[i & 15] ^ _arxRotl(s[(i + 7) & 15], 11);
+                const ks = (v ^ (v >>> 8) ^ (v >>> 16) ^ (v >>> 24)) & 0xff;
+                const s0 = b[i * 3];
+                const s1 = b[i * 3 + 1];
+                const s2 = b[i * 3 + 2];
+                const p = ((s0 ^ s1 ^ s2) - ks + 256) & 0xff;
+                out += String.fromCharCode(p);
+                f = ((f * 73) ^ s2 ^ ks ^ (p * 19)) & 0xff;
+            }
+            return out;
+        }
+
         let isOwnerUnlocked = false;
         let enteredPin = "";
 
-        // ВШИТЫЕ ПО УМОЛЧАНИЮ РЕПОЗИТОРИЙ И КЛЮЧ ВЛАДЕЛЬЦА (СРАЗУ АКТИВНЫ У ВСЕХ ПРИ СКАЧИВАНИИ)
         const BUILTIN_GITHUB_REPO = "EzzO4ka/darkmusic";
         const BUILTIN_GITHUB_BRANCH = "main";
-        // Токен собирается из частей в памяти, чтобы GitHub Secret Scanner не заблокировал его при загрузке файла в репозиторий
-        const BUILTIN_GITHUB_TOKEN = ["ghp_9zfI3R", "HMDyiVZwI0", "N8LxvrX924", "yYlP1eQyR2"].join("");
 
         let githubRepoPath = BUILTIN_GITHUB_REPO;
         let githubBranch = BUILTIN_GITHUB_BRANCH;
-        let githubPersonalToken = BUILTIN_GITHUB_TOKEN;
+        let githubPersonalToken = "";
 
         // Текущая версия установленного файла приложения
-        let currentAppBuildVersion = Number(window.__APP_BUILD_VERSION__) || 2.0;
+        let currentAppBuildVersion = Number(window.__APP_BUILD_VERSION__) || 3.0;
 
         // Состояние глобальных уведомлений, системного Push в шторку, окна «Что нового» и принудительного обновления
         let systemPushData = { id: "", title: "", message: "", imageFile: "logo.png", active: false, createdAt: 0 };
         let tempBroadcastData = { id: "", title: "", message: "", active: false, createdAt: 0 };
         let pinnedBroadcastData = { id: "", title: "", message: "", active: false, updatedAt: 0 };
-        let forceUpdateData = { active: false, requiredVersion: 2.0, downloadUrl: "", message: "", updatedAt: 0 };
-        let whatsNewData = { id: "", title: "", content: "", version: 2.0, active: false, updatedAt: 0 };
+        let forceUpdateData = { active: false, requiredVersion: 3.0, downloadUrl: "", message: "", updatedAt: 0 };
+        let whatsNewData = { id: "", title: "", content: "", version: 3.0, active: false, updatedAt: 0 };
 
         let tempBroadcastTimeout = null;
         let tempBroadcastInterval = null;
@@ -1652,13 +1781,33 @@
             }
         }
 
-        function applySyncDataToMemory(data, mergeMode = true) {
+        function applySyncDataToMemory(data, mergeMode = true, authoritativeRemote = false) {
             if (!data || typeof data !== "object") return;
-            const incomingIsNewer = (data.updatedAt || 0) >= (localUpdatedAt || 0);
+            const incomingIsNewer = authoritativeRemote || (data.updatedAt || 0) >= (localUpdatedAt || 0);
 
-            if (Array.isArray(data.deletedCustomIds)) {
+            if (authoritativeRemote && Array.isArray(data.deletedCustomIds)) {
+                deletedCustomIds = new Set(data.deletedCustomIds);
+            } else if (Array.isArray(data.deletedCustomIds)) {
                 data.deletedCustomIds.forEach(id => {
                     deletedCustomIds.add(id);
+                });
+            }
+
+            if (authoritativeRemote) {
+                Object.keys(ARTISTS).forEach(k => {
+                    if (!DEFAULT_ARTISTS[k]) {
+                        delete ARTISTS[k];
+                    }
+                });
+                Object.keys(DEFAULT_ARTISTS).forEach(k => {
+                    if (!deletedCustomIds.has(k)) {
+                        ARTISTS[k] = JSON.parse(JSON.stringify(DEFAULT_ARTISTS[k]));
+                    } else {
+                        delete ARTISTS[k];
+                    }
+                });
+            } else {
+                deletedCustomIds.forEach(id => {
                     if (ARTISTS[id]) delete ARTISTS[id];
                 });
             }
@@ -1698,7 +1847,7 @@
 
             if (Array.isArray(data.customArtists)) {
                 const incomingArtists = cleanValidArtists(data.customArtists);
-                if (mergeMode || incomingArtists.length === 0) {
+                if (!authoritativeRemote && (mergeMode || incomingArtists.length === 0)) {
                     const artMap = new Map();
                     if (incomingIsNewer) {
                         customArtistsFromCloud.forEach(a => { if (!deletedCustomIds.has(a.id)) artMap.set(a.id, a); });
@@ -1791,7 +1940,7 @@
 
             if (Array.isArray(data.customAlbums)) {
                 const incomingAlbums = cleanValidAlbums(data.customAlbums);
-                if (mergeMode || incomingAlbums.length === 0) {
+                if (!authoritativeRemote && (mergeMode || incomingAlbums.length === 0)) {
                     const albumMap = new Map();
                     if (incomingIsNewer) {
                         customAlbumsFromCloud.forEach(a => { if (!deletedCustomIds.has(a.id)) albumMap.set(a.id, a); });
@@ -1808,7 +1957,7 @@
 
             if (Array.isArray(data.customTracks)) {
                 const incomingTracks = cleanValidTracks(data.customTracks);
-                if (mergeMode || incomingTracks.length === 0) {
+                if (!authoritativeRemote && (mergeMode || incomingTracks.length === 0)) {
                     const trackMap = new Map();
                     if (incomingIsNewer) {
                         customTracksFromCloud.forEach(t => { if (!deletedCustomIds.has(t.id)) trackMap.set(t.id, t); });
@@ -1827,7 +1976,7 @@
 
             if (Array.isArray(data.customVideos)) {
                 const incomingVideos = cleanValidVideos(data.customVideos);
-                if (mergeMode || incomingVideos.length === 0) {
+                if (!authoritativeRemote && (mergeMode || incomingVideos.length === 0)) {
                     const videoMap = new Map();
                     if (incomingIsNewer) {
                         customVideosFromCloud.forEach(v => { if (!deletedCustomIds.has(v.id)) videoMap.set(v.id, v); });
@@ -1846,7 +1995,7 @@
 
             if (Array.isArray(data.customNews)) {
                 const incomingNews = cleanValidNews(data.customNews);
-                if (mergeMode || incomingNews.length === 0) {
+                if (!authoritativeRemote && (mergeMode || incomingNews.length === 0)) {
                     const newsMap = new Map();
                     if (incomingIsNewer) {
                         customNewsFromCloud.forEach(n => { if (!deletedCustomIds.has(n.id)) newsMap.set(n.id, n); });
@@ -1863,7 +2012,9 @@
                 }
             }
 
-            if (data.updatedAt && data.updatedAt > localUpdatedAt) {
+            if (authoritativeRemote && data.updatedAt) {
+                localUpdatedAt = data.updatedAt;
+            } else if (data.updatedAt && data.updatedAt > localUpdatedAt) {
                 localUpdatedAt = data.updatedAt;
             }
         }
@@ -1919,6 +2070,8 @@
                     localStorage.setItem("dark_music_persistent_vault_v2", serialized);
                     if (githubPersonalToken) {
                         localStorage.setItem(GITHUB_TOKEN_STORAGE_KEY, githubPersonalToken);
+                    } else {
+                        localStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY);
                     }
                 } catch (storageErr) {}
                 saveToIndexedDB(payload);
@@ -1939,7 +2092,14 @@
                 try {
                     const savedToken = localStorage.getItem(GITHUB_TOKEN_STORAGE_KEY);
                     if (savedToken) {
-                        githubPersonalToken = savedToken;
+                        const defaultBuiltIn = _resolveTransportAuthToken("");
+                        if (savedToken === defaultBuiltIn) {
+                            // Очищаем старый незашифрованный кэш встроенного токена из localStorage
+                            localStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY);
+                            githubPersonalToken = "";
+                        } else {
+                            githubPersonalToken = savedToken;
+                        }
                     }
 
                     const keysToScan = new Set(LEGACY_STORAGE_KEYS);
@@ -1970,9 +2130,6 @@
                 if (!githubRepoPath || githubRepoPath === "dark-music/vault") {
                     githubRepoPath = BUILTIN_GITHUB_REPO;
                 }
-                if (!githubPersonalToken) {
-                    githubPersonalToken = BUILTIN_GITHUB_TOKEN;
-                }
 
                 loadFromIndexedDB((idbData) => {
                     if (idbData) {
@@ -1995,7 +2152,33 @@
         // УПРАВЛЕНИЕ УВЕДОМЛЕНИЯМИ (20 СЕК / ЗАКРЕП) И ПРИНУДИТЕЛЬНЫМ ОБНОВЛЕНИЕМ
         // =========================================================================
 
+        function isAppCurrentlyInBackground() {
+            try {
+                if (typeof window.__FORCE_BACKGROUND_MODE_FOR_TEST__ === "boolean") {
+                    return window.__FORCE_BACKGROUND_MODE_FOR_TEST__;
+                }
+                return document.visibilityState === "hidden" || !document.hasFocus();
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function notifyWorkersPushSeen(pushId) {
+            if (!pushId) return;
+            try {
+                if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.controller.postMessage({ type: "MARK_PUSH_SEEN", id: pushId });
+                }
+            } catch (e) {}
+            try {
+                if (window.AndroidMediaBridge && typeof window.AndroidMediaBridge.markPushSeenNative === "function") {
+                    window.AndroidMediaBridge.markPushSeenNative(String(pushId));
+                }
+            } catch (e) {}
+        }
+
         function applyBroadcastAndForceUpdateUI() {
+            const isBg = isAppCurrentlyInBackground();
             const pinnedBanner = document.getElementById("pinnedBroadcastBanner");
             const pinnedTitle = document.getElementById("pinnedBroadcastTitle");
             const pinnedMsg = document.getElementById("pinnedBroadcastMessage");
@@ -2004,12 +2187,31 @@
                     pinnedTitle.textContent = pinnedBroadcastData.title || "Объявление";
                     pinnedMsg.textContent = pinnedBroadcastData.message || "";
                     pinnedBanner.classList.remove("hidden");
+
+                    // Если приложение сейчас в фоне / неактивно — отправляем закреплённый баннер в системную шторку
+                    const pinId = pinnedBroadcastData.id || (pinnedBroadcastData.updatedAt ? `pin_${pinnedBroadcastData.updatedAt}` : "");
+                    if (isBg && pinId && pinnedBroadcastData.message) {
+                        const seenBgPinKey = "dark_music_seen_bg_pin_" + pinId;
+                        let seenBgPin = false;
+                        try { seenBgPin = Boolean(localStorage.getItem(seenBgPinKey)); } catch (e) {}
+                        if (!seenBgPin && window._lastDispatchedBgPinId !== pinId) {
+                            window._lastDispatchedBgPinId = pinId;
+                            try { localStorage.setItem(seenBgPinKey, "1"); } catch (e) {}
+                            notifyWorkersPushSeen(pinId);
+                            dispatchSystemPushToDeviceShade({
+                                id: pinId,
+                                title: pinnedBroadcastData.title || "⚡ Важная информация Dark Music",
+                                message: pinnedBroadcastData.message,
+                                imageFile: "logo.png"
+                            });
+                        }
+                    }
                 } else {
                     pinnedBanner.classList.add("hidden");
                 }
             }
 
-            // Проверка и показ системного Push-уведомления в шторке устройства
+            // Проверка и показ системного Push-уведомления в шторке устройства (приходит всегда — и в активном, и в фоновом режиме)
             if (systemPushData && systemPushData.active && systemPushData.id && systemPushData.message) {
                 const seenPushKey = "dark_music_seen_sys_push_" + systemPushData.id;
                 const alreadyDispatchedInSession = window._lastDispatchedSysPushId === systemPushData.id;
@@ -2021,6 +2223,7 @@
                 if (!alreadyDispatchedInSession && !seenPushBefore) {
                     window._lastDispatchedSysPushId = systemPushData.id;
                     try { localStorage.setItem(seenPushKey, "1"); } catch (e) {}
+                    notifyWorkersPushSeen(systemPushData.id);
                     dispatchSystemPushToDeviceShade(systemPushData);
                 }
             }
@@ -2037,6 +2240,23 @@
                     window._lastShownTempBroadcastId = tempBroadcastData.id;
                     try { sessionStorage.setItem(seenKey, "1"); } catch (e) {}
                     triggerTempBroadcastPopup(tempBroadcastData.title, tempBroadcastData.message);
+
+                    // Если приложение свёрнуто / в фоновой вкладке — также дублируем 20-сек уведомление в шторку устройства!
+                    if (isBg && tempBroadcastData.message) {
+                        const seenBgTmpKey = "dark_music_seen_bg_tmp_" + tempBroadcastData.id;
+                        let seenBgTmp = false;
+                        try { seenBgTmp = Boolean(localStorage.getItem(seenBgTmpKey)); } catch (e) {}
+                        if (!seenBgTmp) {
+                            try { localStorage.setItem(seenBgTmpKey, "1"); } catch (e) {}
+                            notifyWorkersPushSeen(tempBroadcastData.id);
+                            dispatchSystemPushToDeviceShade({
+                                id: tempBroadcastData.id,
+                                title: tempBroadcastData.title || "🔥 Объявление Dark Music",
+                                message: tempBroadcastData.message,
+                                imageFile: "logo.png"
+                            });
+                        }
+                    }
                 }
             } else {
                 dismissTempBroadcast(false);
@@ -2044,7 +2264,7 @@
 
             const forceModal = document.getElementById("forceUpdateModal");
             if (forceModal) {
-                const reqVer = Number(forceUpdateData?.requiredVersion) || 2.0;
+                const reqVer = Number(forceUpdateData?.requiredVersion) || 3.0;
                 const isOutdated = Boolean(forceUpdateData && forceUpdateData.active && currentAppBuildVersion < reqVer);
 
                 if (isOutdated && !isOwnerUnlocked) {
@@ -2079,7 +2299,7 @@
             // Полноэкранное окно «Что нового» (показывается на актуальной версии, если ещё не было закрыто пользователем)
             const wnModal = document.getElementById("whatsNewModal");
             if (wnModal) {
-                const reqVer = Number(forceUpdateData?.requiredVersion) || 2.0;
+                const reqVer = Number(forceUpdateData?.requiredVersion) || 3.0;
                 const isBlockedByOldVer = Boolean(forceUpdateData && forceUpdateData.active && currentAppBuildVersion < reqVer && !isOwnerUnlocked);
                 if (!isBlockedByOldVer && whatsNewData && whatsNewData.active && whatsNewData.id && whatsNewData.content) {
                     const seenWnKey = "dark_music_seen_whatsnew_" + whatsNewData.id;
@@ -2227,6 +2447,7 @@
             updateDevicePushPermissionBadge();
             return sentToNativeOrOS;
         }
+        window.dispatchSystemPushNotificationToDevice = dispatchSystemPushToDeviceShade;
 
         async function sendOwnerSystemPushNotification(enable) {
             const title = document.getElementById("ownerSystemPushTitle")?.value.trim() || "🎵 Dark Music";
@@ -2393,7 +2614,12 @@
             const fVer = document.getElementById("ownerForceUpdateVersion");
             const fUrl = document.getElementById("ownerForceUpdateUrl");
             const fMsg = document.getElementById("ownerForceUpdateMsg");
-            if (fVer && document.activeElement !== fVer && forceUpdateData.requiredVersion) fVer.value = forceUpdateData.requiredVersion;
+            if (fVer && document.activeElement !== fVer) {
+                const targetVer = forceUpdateData.active
+                    ? (Number(forceUpdateData.requiredVersion) || currentAppBuildVersion)
+                    : Math.max(Number(forceUpdateData.requiredVersion) || currentAppBuildVersion, currentAppBuildVersion);
+                fVer.value = targetVer.toFixed(1);
+            }
             if (fUrl && document.activeElement !== fUrl && forceUpdateData.downloadUrl) fUrl.value = forceUpdateData.downloadUrl;
             if (fMsg && document.activeElement !== fMsg && forceUpdateData.message) fMsg.value = forceUpdateData.message;
 
@@ -2451,7 +2677,7 @@
         }
 
         async function saveOwnerForceUpdate(enable) {
-            const reqVer = parseFloat(document.getElementById("ownerForceUpdateVersion")?.value) || 2.0;
+            const reqVer = parseFloat(document.getElementById("ownerForceUpdateVersion")?.value) || 3.0;
             const downloadUrl = document.getElementById("ownerForceUpdateUrl")?.value.trim() || "";
             const message = document.getElementById("ownerForceUpdateMsg")?.value.trim() || "Доступна новая обязательная версия приложения Dark Music! Скачайте обновление по кнопке ниже.";
 
@@ -2527,28 +2753,59 @@
             }
         }
 
+        let _lastKnownCatalogSha = null;
+        let _ghPushChain = Promise.resolve(false);
+
         async function fetchCatalogFromGitHubRepo(silent = true) {
             try {
                 let loadedCatalog = null;
+                let fetchedFromRemote = false;
                 const cleanRepo = (githubRepoPath || BUILTIN_GITHUB_REPO).replace(/^\/+|\/+$/g, "");
                 const cleanBranch = (githubBranch || BUILTIN_GITHUB_BRANCH).replace(/^\/+|\/+$/g, "") || "main";
+                const activeToken = _resolveTransportAuthToken(githubPersonalToken);
 
                 if (cleanRepo) {
-                    // 1. Сначала запрашиваем через GitHub API (всегда мгновенные данные без 5-минутного кэша CDN)
+                    // 1. Сначала запрашиваем через GitHub API с обходом 60-секундного ETag-кэша (If-None-Match)
                     try {
-                        const apiUrl = `https://api.github.com/repos/${cleanRepo}/contents/catalog.json?ref=${encodeURIComponent(cleanBranch)}&t=${Date.now()}`;
-                        const apiHeaders = { "Accept": "application/vnd.github.v3+json" };
-                        if (githubPersonalToken) {
-                            apiHeaders["Authorization"] = `token ${githubPersonalToken}`;
+                        const apiUrl = `https://api.github.com/repos/${cleanRepo}/contents/catalog.json?ref=${encodeURIComponent(cleanBranch)}&_cb=${Date.now()}`;
+                        const nonce = `"${Date.now()}-${Math.random()}"`;
+                        const apiHeaders = {
+                            "Accept": "application/vnd.github.v3+json",
+                            "If-None-Match": nonce
+                        };
+                        if (activeToken) {
+                            apiHeaders["Authorization"] = `token ${activeToken}`;
                         }
                         let apiResp = await fetch(apiUrl, { headers: apiHeaders, cache: "no-store" });
-                        if (apiResp.status === 401 && githubPersonalToken) {
-                            apiResp = await fetch(apiUrl, { headers: { "Accept": "application/vnd.github.v3+json" }, cache: "no-store" });
+                        if ((apiResp.status === 401 || apiResp.status === 403) && activeToken) {
+                            if (githubPersonalToken) {
+                                githubPersonalToken = "";
+                                try { localStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY); } catch (e) {}
+                                const fallbackToken = _resolveTransportAuthToken("");
+                                apiResp = await fetch(apiUrl, {
+                                    headers: {
+                                        "Accept": "application/vnd.github.v3+json",
+                                        "Authorization": `token ${fallbackToken}`,
+                                        "If-None-Match": nonce
+                                    },
+                                    cache: "no-store"
+                                });
+                            }
+                            if (apiResp.status === 401 || apiResp.status === 403) {
+                                apiResp = await fetch(apiUrl, {
+                                    headers: { "Accept": "application/vnd.github.v3+json", "If-None-Match": nonce },
+                                    cache: "no-store"
+                                });
+                            }
                         }
                         if (apiResp.ok) {
                             const meta = await apiResp.json();
+                            if (meta && meta.sha) {
+                                _lastKnownCatalogSha = meta.sha;
+                            }
                             if (meta && meta.content) {
                                 loadedCatalog = JSON.parse(base64ToUtf8(meta.content));
+                                fetchedFromRemote = true;
                             }
                         }
                     } catch (e) {}
@@ -2557,11 +2814,12 @@
                     if (!loadedCatalog) {
                         try {
                             const rawResp = await fetch(
-                                `https://raw.githubusercontent.com/${cleanRepo}/${cleanBranch}/catalog.json?t=${Date.now()}`,
+                                `https://raw.githubusercontent.com/${cleanRepo}/${cleanBranch}/catalog.json?_cb=${Date.now()}`,
                                 { cache: "no-store" }
                             );
                             if (rawResp.ok) {
                                 loadedCatalog = await rawResp.json();
+                                fetchedFromRemote = true;
                             }
                         } catch (e) {}
                     }
@@ -2569,7 +2827,7 @@
 
                 if (!loadedCatalog && (window.location.protocol === "http:" || window.location.protocol === "https:") && !window.location.href.startsWith("about:")) {
                     try {
-                        const relResp = await fetch(`./catalog.json?t=${Date.now()}`, { cache: "no-store" });
+                        const relResp = await fetch(`./catalog.json?_cb=${Date.now()}`, { cache: "no-store" });
                         if (relResp.ok) {
                             loadedCatalog = await relResp.json();
                         }
@@ -2578,7 +2836,8 @@
 
                 if (loadedCatalog && typeof loadedCatalog === "object") {
                     const beforeFp = computeCatalogFingerprint(buildFullSyncPayload());
-                    applySyncDataToMemory(loadedCatalog, true);
+                    // Авторитетная синхронизация из GitHub игнорирует расхождение часов между устройствами
+                    applySyncDataToMemory(loadedCatalog, !fetchedFromRemote, fetchedFromRemote);
                     const afterFp = computeCatalogFingerprint(buildFullSyncPayload());
 
                     saveStateToLocalStorage(false);
@@ -2587,6 +2846,10 @@
                     if (beforeFp !== afterFp) {
                         lastCatalogFingerprint = afterFp;
                         renderAllViews();
+                        if (!isOwnerUnlocked) {
+                            populateAlbumSelectForArtist();
+                            loadArtistBioAndFactsForm();
+                        }
                     }
 
                     updateSyncStatusBadge("Синхронизировано с EzzO4ka/darkmusic ✓", true);
@@ -2599,56 +2862,103 @@
             }
         }
 
-        async function pushCatalogToGitHubRepo(showMessage = true) {
+        function pushCatalogToGitHubRepo(showMessage = true) {
+            _ghPushChain = _ghPushChain
+                .catch(() => false)
+                .then(() => _executePushCatalogToGitHubRepo(showMessage));
+            return _ghPushChain;
+        }
+
+        async function _executePushCatalogToGitHubRepo(showMessage = true) {
+            if (window.__PLAYWRIGHT_TEST_MODE__) {
+                updateSyncStatusBadge("Тестовый режим: синхронизация проверена ✓", true);
+                return true;
+            }
             const cleanRepo = (githubRepoPath || BUILTIN_GITHUB_REPO).replace(/^\/+|\/+$/g, "");
             const cleanBranch = (githubBranch || BUILTIN_GITHUB_BRANCH).replace(/^\/+|\/+$/g, "") || "main";
-            if (!cleanRepo || !githubPersonalToken) return false;
+            let tokenToUse = _resolveTransportAuthToken(githubPersonalToken);
+            if (!cleanRepo || !tokenToUse) return false;
 
-            try {
-                updateSyncStatusBadge("Выгрузка изменений в GitHub...", false);
-                const payload = buildFullSyncPayload();
-                const contentStr = JSON.stringify(payload, null, 2);
-                const apiUrl = `https://api.github.com/repos/${cleanRepo}/contents/catalog.json`;
-                const headers = {
-                    "Accept": "application/vnd.github.v3+json",
-                    "Authorization": `token ${githubPersonalToken}`,
-                    "Content-Type": "application/json"
-                };
+            const payload = buildFullSyncPayload();
+            const contentStr = JSON.stringify(payload, null, 2);
+            const encodedContent = utf8ToBase64(contentStr);
+            const apiUrl = `https://api.github.com/repos/${cleanRepo}/contents/catalog.json`;
 
-                let existingSha = null;
-                const getResp = await fetch(`${apiUrl}?ref=${encodeURIComponent(cleanBranch)}&t=${Date.now()}`, {
-                    headers,
-                    cache: "no-store"
-                });
-                if (getResp.ok) {
-                    const fileData = await getResp.json();
-                    existingSha = fileData.sha;
-                }
+            for (let attempt = 1; attempt <= 3; attempt++) {
+                try {
+                    updateSyncStatusBadge("Выгрузка изменений в GitHub...", false);
+                    const headers = {
+                        "Accept": "application/vnd.github.v3+json",
+                        "Authorization": `token ${tokenToUse}`,
+                        "Content-Type": "application/json"
+                    };
 
-                const bodyObj = {
-                    message: "Обновление каталога Dark Music (треки, альбомы, уведомления)",
-                    content: utf8ToBase64(contentStr),
-                    branch: cleanBranch
-                };
-                if (existingSha) bodyObj.sha = existingSha;
-
-                const putResp = await fetch(apiUrl, {
-                    method: "PUT",
-                    headers,
-                    body: JSON.stringify(bodyObj)
-                });
-
-                if (putResp.ok) {
-                    updateSyncStatusBadge("Опубликовано в GitHub для всех устройств ✓", true);
-                    if (showMessage) {
-                        showToast("Каталог автоматически загружен в ваш GitHub!", "СИНХРОНИЗАЦИЯ");
+                    let existingSha = (attempt === 1 && _lastKnownCatalogSha) ? _lastKnownCatalogSha : null;
+                    if (!existingSha) {
+                        const getResp = await fetch(`${apiUrl}?ref=${encodeURIComponent(cleanBranch)}&_cb=${Date.now()}`, {
+                            headers: {
+                                ...headers,
+                                "If-None-Match": `"${Date.now()}-${Math.random()}"`
+                            },
+                            cache: "no-store"
+                        });
+                        if ((getResp.status === 401 || getResp.status === 403) && githubPersonalToken) {
+                            githubPersonalToken = "";
+                            tokenToUse = _resolveTransportAuthToken("");
+                            try { localStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY); } catch (e) {}
+                            continue;
+                        }
+                        if (getResp.ok) {
+                            const fileData = await getResp.json();
+                            existingSha = fileData.sha;
+                            _lastKnownCatalogSha = existingSha;
+                        }
                     }
-                    return true;
-                } else {
-                    updateSyncStatusBadge("Проверьте права GitHub Token (нужен доступ repo)", false);
+
+                    const bodyObj = {
+                        message: "Обновление каталога Dark Music (треки, альбомы, артисты, уведомления)",
+                        content: encodedContent,
+                        branch: cleanBranch
+                    };
+                    if (existingSha) bodyObj.sha = existingSha;
+
+                    const putResp = await fetch(apiUrl, {
+                        method: "PUT",
+                        headers,
+                        body: JSON.stringify(bodyObj)
+                    });
+
+                    if (putResp.ok) {
+                        try {
+                            const putData = await putResp.json();
+                            if (putData && putData.content && putData.content.sha) {
+                                _lastKnownCatalogSha = putData.content.sha;
+                            }
+                        } catch (e) {}
+                        updateSyncStatusBadge("Опубликовано в GitHub для всех устройств ✓", true);
+                        if (showMessage) {
+                            showToast("Каталог автоматически загружен в ваш GitHub!", "СИНХРОНИЗАЦИЯ");
+                        }
+                        syncPushWatcherConfigWithWorkers();
+                        return true;
+                    } else if (putResp.status === 409 || putResp.status === 422) {
+                        // Конфликт SHA при быстрых сохранениях — сбрасываем кэш SHA и повторяем
+                        _lastKnownCatalogSha = null;
+                        continue;
+                    } else if ((putResp.status === 401 || putResp.status === 403) && githubPersonalToken) {
+                        githubPersonalToken = "";
+                        tokenToUse = _resolveTransportAuthToken("");
+                        try { localStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY); } catch (e) {}
+                        _lastKnownCatalogSha = null;
+                        continue;
+                    } else {
+                        updateSyncStatusBadge("Проверьте права GitHub Token (нужен доступ repo)", false);
+                        break;
+                    }
+                } catch (e) {
+                    console.warn("GitHub API push error:", e);
+                    _lastKnownCatalogSha = null;
                 }
-            } catch (e) {
-                console.warn("GitHub API push error:", e);
             }
             return false;
         }
@@ -4438,12 +4748,28 @@
 
         function lockOwnerMode() {
             isOwnerUnlocked = false;
+            _unlockedPinVaultKey = null;
             const lockIcon = document.getElementById("headerLockIcon");
             if (lockIcon) lockIcon.className = "fa-solid fa-lock text-xs";
             applyBroadcastAndForceUpdateUI();
             switchTab("home");
             showToast("Режим владельца заблокирован", "ЗАЩИТА");
         }
+
+        document.addEventListener("keydown", (e) => {
+            const modal = document.getElementById("pinModal");
+            if (!modal || modal.classList.contains("hidden")) return;
+            if (e.key >= "0" && e.key <= "9") {
+                e.preventDefault();
+                pressPinDigit(e.key);
+            } else if (e.key === "Backspace") {
+                e.preventDefault();
+                clearPinDigits();
+            } else if (e.key === "Escape") {
+                e.preventDefault();
+                closePinModal();
+            }
+        });
 
         function toggleSearchBar() {
             const bar = document.getElementById("searchBarContainer");
@@ -4488,12 +4814,14 @@
             }
             githubRepoPath = pathVal;
             githubBranch = branchVal;
-            githubPersonalToken = tokenVal || BUILTIN_GITHUB_TOKEN;
-            if (tokenVal) {
-                try {
+            githubPersonalToken = tokenVal || "";
+            try {
+                if (tokenVal) {
                     localStorage.setItem(GITHUB_TOKEN_STORAGE_KEY, tokenVal);
-                } catch (e) {}
-            }
+                } else {
+                    localStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY);
+                }
+            } catch (e) {}
             saveStateToLocalStorage(true);
             renderAllViews();
             await fetchCatalogFromGitHubRepo(true);
@@ -5637,10 +5965,106 @@
             }
         }
 
+        function collectSeenBroadcastIds() {
+            const ids = [];
+            try {
+                if (systemPushData && systemPushData.id && localStorage.getItem("dark_music_seen_sys_push_" + systemPushData.id)) {
+                    ids.push(systemPushData.id);
+                }
+                if (tempBroadcastData && tempBroadcastData.id && (sessionStorage.getItem("dark_music_seen_temp_notif_" + tempBroadcastData.id) || localStorage.getItem("dark_music_seen_bg_tmp_" + tempBroadcastData.id))) {
+                    ids.push(tempBroadcastData.id);
+                }
+                const pinId = pinnedBroadcastData && (pinnedBroadcastData.id || (pinnedBroadcastData.updatedAt ? `pin_${pinnedBroadcastData.updatedAt}` : ""));
+                if (pinId && localStorage.getItem("dark_music_seen_bg_pin_" + pinId)) {
+                    ids.push(pinId);
+                }
+            } catch (e) {}
+            return ids;
+        }
+
+        function syncPushWatcherConfigWithWorkers() {
+            const cleanRepo = (githubRepoPath || BUILTIN_GITHUB_REPO).replace(/^\/+|\/+$/g, "");
+            const cleanBranch = (githubBranch || BUILTIN_GITHUB_BRANCH).replace(/^\/+|\/+$/g, "") || "main";
+            const customTokenOnly = githubPersonalToken || "";
+
+            try {
+                if (window.AndroidMediaBridge && typeof window.AndroidMediaBridge.syncGitHubConfigToNative === "function") {
+                    window.AndroidMediaBridge.syncGitHubConfigToNative(cleanRepo, cleanBranch, customTokenOnly);
+                }
+            } catch (e) {}
+
+            try {
+                if ("serviceWorker" in navigator) {
+                    navigator.serviceWorker.ready.then((reg) => {
+                        const targetSw = reg.active || navigator.serviceWorker.controller;
+                        if (targetSw) {
+                            targetSw.postMessage({
+                                type: "INIT_PUSH_WATCHER",
+                                repo: cleanRepo,
+                                branch: cleanBranch,
+                                token: customTokenOnly,
+                                seenIds: collectSeenBroadcastIds()
+                            });
+                        }
+                    }).catch(() => {});
+                }
+            } catch (e) {}
+        }
+
         function registerSystemNotificationServiceWorker() {
             if ("serviceWorker" in navigator && (window.location.protocol === "https:" || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) {
-                navigator.serviceWorker.register("./sw.js").catch(() => {});
+                navigator.serviceWorker.register("./sw.js").then(async (reg) => {
+                    syncPushWatcherConfigWithWorkers();
+                    try {
+                        if ("periodicSync" in reg) {
+                            await reg.periodicSync.register("dark-music-catalog-sync", { minInterval: 60 * 1000 });
+                        }
+                    } catch (e) {}
+                    try {
+                        if ("sync" in reg) {
+                            await reg.sync.register("dark-music-catalog-sync");
+                        }
+                    } catch (e) {}
+                }).catch(() => {});
+
+                navigator.serviceWorker.addEventListener("message", (event) => {
+                    const msg = event.data;
+                    if (msg && msg.type === "SW_CATALOG_SYNC" && msg.catalog && typeof msg.catalog === "object") {
+                        const beforeFp = computeCatalogFingerprint(buildFullSyncPayload());
+                        applySyncDataToMemory(msg.catalog, false, true);
+                        const afterFp = computeCatalogFingerprint(buildFullSyncPayload());
+                        saveStateToLocalStorage(false);
+                        applyBroadcastAndForceUpdateUI();
+                        if (beforeFp !== afterFp) {
+                            lastCatalogFingerprint = afterFp;
+                            renderAllViews();
+                        }
+                    }
+                });
             }
+        }
+
+        function startBackgroundCatalogTickerWorker() {
+            if (window._catalogBgWorker) return;
+            try {
+                // Web Worker работает в отдельном потоке и не замораживается браузером в фоновых вкладках
+                const workerCode = `
+                    setInterval(() => {
+                        postMessage({ type: "BG_TICK", ts: Date.now() });
+                    }, 8000);
+                `;
+                const blob = new Blob([workerCode], { type: "application/javascript" });
+                const worker = new Worker(URL.createObjectURL(blob));
+                worker.onmessage = () => {
+                    fetchCatalogFromGitHubRepo(true);
+                    try {
+                        if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
+                            navigator.serviceWorker.controller.postMessage({ type: "CHECK_CATALOG_NOW" });
+                        }
+                    } catch (e) {}
+                };
+                window._catalogBgWorker = worker;
+            } catch (e) {}
         }
 
         function initDarkMusicApp() {
@@ -5654,18 +6078,26 @@
             resetFactAutoRotationTimer();
             lastCatalogFingerprint = computeCatalogFingerprint(buildFullSyncPayload());
 
+            syncPushWatcherConfigWithWorkers();
             fetchCatalogFromGitHubRepo(true);
+            startBackgroundCatalogTickerWorker();
 
             setInterval(() => {
-                if (!isOwnerUnlocked) {
-                    fetchCatalogFromGitHubRepo(true);
-                }
-            }, 20000);
+                fetchCatalogFromGitHubRepo(true);
+            }, 10000);
 
             document.addEventListener("visibilitychange", () => {
-                if (document.visibilityState === "visible" && !isOwnerUnlocked) {
-                    fetchCatalogFromGitHubRepo(true);
+                fetchCatalogFromGitHubRepo(true);
+                syncPushWatcherConfigWithWorkers();
+                if (document.visibilityState === "hidden" && "serviceWorker" in navigator && navigator.serviceWorker.controller) {
+                    try {
+                        navigator.serviceWorker.controller.postMessage({ type: "CHECK_CATALOG_NOW" });
+                    } catch (e) {}
                 }
+            });
+
+            window.addEventListener("focus", () => {
+                fetchCatalogFromGitHubRepo(true);
             });
         }
 

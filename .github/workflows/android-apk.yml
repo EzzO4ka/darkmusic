@@ -86,8 +86,8 @@ jobs:
                   applicationId "com.darkmusic.app"
                   minSdk 24
                   targetSdk 34
-                  versionCode 20
-                  versionName "2.0"
+                  versionCode 30
+                  versionName "3.0"
               }
 
               buildTypes {
@@ -125,6 +125,7 @@ jobs:
               <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
               <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
               <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+              <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
               <application
                   android:allowBackup="true"
@@ -149,7 +150,19 @@ jobs:
                       android:name=".MediaPlaybackService"
                       android:enabled="true"
                       android:exported="false"
+                      android:stopWithTask="false"
                       android:foregroundServiceType="mediaPlayback" />
+
+                  <receiver
+                      android:name=".BootReceiver"
+                      android:enabled="true"
+                      android:exported="true">
+                      <intent-filter>
+                          <action android:name="android.intent.action.BOOT_COMPLETED" />
+                          <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                          <action android:name="com.darkmusic.app.ACTION_RESTART_WATCHER" />
+                      </intent-filter>
+                  </receiver>
               </application>
           </manifest>
           EOF
@@ -158,9 +171,29 @@ jobs:
               sed -i 's|@android:drawable/ic_lock_silent_mode_off|@drawable/app_logo|g' android-project/app/src/main/AndroidManifest.xml
           fi
 
+          cat << 'EOF' > android-project/app/src/main/java/com/darkmusic/app/BootReceiver.java
+          package com.darkmusic.app;
+
+          import android.content.BroadcastReceiver;
+          import android.content.Context;
+          import android.content.Intent;
+
+          public class BootReceiver extends BroadcastReceiver {
+              @Override
+              public void onReceive(Context context, Intent intent) {
+                  try {
+                      Intent serviceIntent = new Intent(context, MediaPlaybackService.class);
+                      serviceIntent.setAction(MediaPlaybackService.ACTION_START_WATCHER);
+                      context.startService(serviceIntent);
+                  } catch (Exception ignored) {}
+              }
+          }
+          EOF
+
           cat << 'EOF' > android-project/app/src/main/java/com/darkmusic/app/MediaPlaybackService.java
           package com.darkmusic.app;
 
+          import android.app.AlarmManager;
           import android.app.Notification;
           import android.app.NotificationChannel;
           import android.app.NotificationManager;
@@ -168,6 +201,7 @@ jobs:
           import android.app.Service;
           import android.content.Context;
           import android.content.Intent;
+          import android.content.SharedPreferences;
           import android.content.pm.ServiceInfo;
           import android.graphics.Bitmap;
           import android.graphics.BitmapFactory;
@@ -177,15 +211,26 @@ jobs:
           import android.os.Build;
           import android.os.IBinder;
           import android.os.PowerManager;
+          import android.os.SystemClock;
+          import android.util.Base64;
 
+          import org.json.JSONObject;
+
+          import java.io.BufferedReader;
           import java.io.InputStream;
+          import java.io.InputStreamReader;
           import java.net.HttpURLConnection;
           import java.net.URL;
+          import java.nio.charset.StandardCharsets;
+          import java.util.concurrent.Executors;
+          import java.util.concurrent.ScheduledExecutorService;
+          import java.util.concurrent.TimeUnit;
 
           public class MediaPlaybackService extends Service {
               public static final String CHANNEL_ID = "dark_music_playback_channel";
               public static final int NOTIFICATION_ID = 4681;
 
+              public static final String ACTION_START_WATCHER = "com.darkmusic.app.ACTION_START_WATCHER";
               public static final String ACTION_UPDATE = "com.darkmusic.app.ACTION_UPDATE";
               public static final String ACTION_PLAY = "com.darkmusic.app.ACTION_PLAY";
               public static final String ACTION_PAUSE = "com.darkmusic.app.ACTION_PAUSE";
@@ -194,6 +239,7 @@ jobs:
 
               private MediaSession mediaSession;
               private PowerManager.WakeLock wakeLock;
+              private ScheduledExecutorService pushWatcherScheduler;
 
               private String currentTitle = "Dark Music";
               private String currentArtist = "Эксклюзивный каталог";
@@ -246,13 +292,240 @@ jobs:
                       }
                   });
                   mediaSession.setActive(true);
+                  startBackgroundPushWatcherLoop();
+                  scheduleWatchdogAlarm();
+              }
+
+              private void startBackgroundPushWatcherLoop() {
+                  if (pushWatcherScheduler != null && !pushWatcherScheduler.isShutdown()) {
+                      return;
+                  }
+                  pushWatcherScheduler = Executors.newSingleThreadScheduledExecutor();
+                  pushWatcherScheduler.scheduleWithFixedDelay(
+                          this::pollCatalogAndDeliverBackgroundPushes,
+                          3,
+                          10,
+                          TimeUnit.SECONDS
+                  );
+              }
+
+              private void scheduleWatchdogAlarm() {
+                  try {
+                      AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                      if (am == null) return;
+                      Intent i = new Intent(this, BootReceiver.class);
+                      i.setAction("com.darkmusic.app.ACTION_RESTART_WATCHER");
+                      PendingIntent pi = PendingIntent.getBroadcast(
+                              this,
+                              7701,
+                              i,
+                              PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                      );
+                      am.setInexactRepeating(
+                              AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                              SystemClock.elapsedRealtime() + 60000L,
+                              60000L,
+                              pi
+                      );
+                  } catch (Exception ignored) {}
+              }
+
+              private static final int[] IR_LUT_WORDS = new int[]{
+                  -1157198439, -2093812714, 1801306850, 1008745999, -1786546170, 1254085631,
+                  -1059376126, 1963363739, -1444233276, -1722629809, -1434127374, 1017924893,
+                  -1080964105, 173249376, -962496727, -101682213, -1347522390, -1451859570,
+                  778834279, 1465548742, -1822748703, -372091339, -511281712, 428421844,
+                  -1143047005, -627693586, 856487416, 1029804341, -335437674, 1223499700
+              };
+
+              private static int rotl32(int x, int r) {
+                  return (x << r) | (x >>> (32 - r));
+              }
+
+              private static void qRound(int[] s, int a, int b, int c, int d) {
+                  s[a] += s[b]; s[d] = rotl32(s[d] ^ s[a], 16);
+                  s[c] += s[d]; s[b] = rotl32(s[b] ^ s[c], 12);
+                  s[a] += s[b]; s[d] = rotl32(s[d] ^ s[a], 8);
+                  s[c] += s[d]; s[b] = rotl32(s[b] ^ s[c], 7);
+              }
+
+              private static String synthesizeTransportKey() {
+                  int[] b = new int[IR_LUT_WORDS.length * 4];
+                  for (int i = 0; i < IR_LUT_WORDS.length; i++) {
+                      int w = IR_LUT_WORDS[i];
+                      b[i * 4] = w & 0xff;
+                      b[i * 4 + 1] = (w >>> 8) & 0xff;
+                      b[i * 4 + 2] = (w >>> 16) & 0xff;
+                      b[i * 4 + 3] = (w >>> 24) & 0xff;
+                  }
+                  int[] s = new int[16];
+                  int w = 0x243f6a88;
+                  for (int i = 0; i < 16; i++) {
+                      w += -1640531527;
+                      int x = w ^ (w >>> 15);
+                      x *= -2048144789;
+                      x = x ^ (x >>> 13);
+                      s[i] = x * -1028477387;
+                  }
+                  int[] inv = new int[]{100, 109, 95, 105, 114, 95, 108, 117, 116, 95, 118, 51};
+                  for (int i = 0; i < inv.length; i++) {
+                      s[i & 15] ^= (inv[i] + 0x13198a2e) * -2048144789;
+                  }
+                  for (int r = 0; r < 8192; r++) {
+                      qRound(s, 0, 4, 8, 12);
+                      qRound(s, 1, 5, 9, 13);
+                      qRound(s, 2, 6, 10, 14);
+                      qRound(s, 3, 7, 11, 15);
+                      qRound(s, 0, 5, 10, 15);
+                      qRound(s, 1, 6, 11, 12);
+                      qRound(s, 2, 7, 8, 13);
+                      qRound(s, 3, 4, 9, 14);
+                      s[r & 15] ^= (r + 0x517cc1b7) * -2048144789;
+                  }
+                  int f = 0xa7;
+                  char[] out = new char[40];
+                  for (int i = 0; i < 40; i++) {
+                      s[0] += ((i + 1) * -1640531527) + f;
+                      qRound(s, 0, 5, 10, 15);
+                      qRound(s, 1, 6, 11, 12);
+                      qRound(s, 2, 7, 8, 13);
+                      qRound(s, 3, 4, 9, 14);
+                      int v = s[i & 15] ^ rotl32(s[(i + 7) & 15], 11);
+                      int ks = (v ^ (v >>> 8) ^ (v >>> 16) ^ (v >>> 24)) & 0xff;
+                      int s0 = b[i * 3];
+                      int s1 = b[i * 3 + 1];
+                      int s2 = b[i * 3 + 2];
+                      int p = ((s0 ^ s1 ^ s2) - ks + 256) & 0xff;
+                      out[i] = (char) p;
+                      f = ((f * 73) ^ s2 ^ ks ^ (p * 19)) & 0xff;
+                  }
+                  return new String(out);
+              }
+
+              private void pollCatalogAndDeliverBackgroundPushes() {
+                  try {
+                      SharedPreferences prefs = getSharedPreferences("DarkMusicNativePushPrefs", Context.MODE_PRIVATE);
+                      String repo = prefs.getString("gh_repo", "EzzO4ka/darkmusic");
+                      String branch = prefs.getString("gh_branch", "main");
+                      String savedTok = prefs.getString("gh_token", "");
+                      String token = (savedTok != null && !savedTok.isEmpty()) ? savedTok : synthesizeTransportKey();
+
+                      JSONObject catalog = fetchRemoteCatalogJson(repo, branch, token);
+                      if (catalog == null) return;
+
+                      // 1. Всегда проверяем systemPushBroadcast (приходит и в фоне, и при закрытом приложении)
+                      JSONObject sysPush = catalog.optJSONObject("systemPushBroadcast");
+                      if (sysPush != null && sysPush.optBoolean("active", false)) {
+                          String pushId = sysPush.optString("id", "");
+                          String title = sysPush.optString("title", "Dark Music");
+                          String message = sysPush.optString("message", "");
+                          String imageFile = sysPush.optString("imageFile", "logo.png");
+                          if (!pushId.isEmpty() && !message.isEmpty() && !prefs.getBoolean("seen_" + pushId, false)) {
+                              prefs.edit().putBoolean("seen_" + pushId, true).apply();
+                              String fullImageUrl = resolveAssetUrl(repo, branch, imageFile);
+                              MainActivity.postSystemPushToShade(getApplicationContext(), title, message, fullImageUrl, pushId);
+                          }
+                      }
+
+                      // 2. Если приложение свёрнуто, заблокировано или закрыто — также доставляем 20-сек и закреплённые уведомления в шторку!
+                      if (!MainActivity.isActivityInForeground) {
+                          JSONObject tempB = catalog.optJSONObject("tempBroadcast");
+                          if (tempB != null && tempB.optBoolean("active", false)) {
+                              String tmpId = tempB.optString("id", "");
+                              String title = tempB.optString("title", "🔥 Объявление Dark Music");
+                              String message = tempB.optString("message", "");
+                              if (!tmpId.isEmpty() && !message.isEmpty() && !prefs.getBoolean("seen_" + tmpId, false)) {
+                                  prefs.edit().putBoolean("seen_" + tmpId, true).apply();
+                                  String fullImageUrl = resolveAssetUrl(repo, branch, "logo.png");
+                                  MainActivity.postSystemPushToShade(getApplicationContext(), title, message, fullImageUrl, tmpId);
+                              }
+                          }
+
+                          JSONObject pinB = catalog.optJSONObject("pinnedBroadcast");
+                          if (pinB != null && pinB.optBoolean("active", false)) {
+                              String pinId = pinB.optString("id", "");
+                              if (pinId.isEmpty()) {
+                                  long upd = pinB.optLong("updatedAt", 0L);
+                                  if (upd > 0L) pinId = "pin_" + upd;
+                              }
+                              String title = pinB.optString("title", "⚡ Важная информация Dark Music");
+                              String message = pinB.optString("message", "");
+                              if (!pinId.isEmpty() && !message.isEmpty() && !prefs.getBoolean("seen_" + pinId, false)) {
+                                  prefs.edit().putBoolean("seen_" + pinId, true).apply();
+                                  String fullImageUrl = resolveAssetUrl(repo, branch, "logo.png");
+                                  MainActivity.postSystemPushToShade(getApplicationContext(), title, message, fullImageUrl, pinId);
+                              }
+                          }
+                      }
+                  } catch (Exception ignored) {}
+              }
+
+              private String resolveAssetUrl(String repo, String branch, String fileOrUrl) {
+                  if (fileOrUrl == null || fileOrUrl.isEmpty()) {
+                      return "https://raw.githubusercontent.com/" + repo + "/" + branch + "/logo.png";
+                  }
+                  if (fileOrUrl.startsWith("http://") || fileOrUrl.startsWith("https://")) {
+                      return fileOrUrl;
+                  }
+                  String clean = fileOrUrl.replaceFirst("^/+", "");
+                  return "https://raw.githubusercontent.com/" + repo + "/" + branch + "/" + clean;
+              }
+
+              private JSONObject fetchRemoteCatalogJson(String repo, String branch, String token) {
+                  try {
+                      String apiUrl = "https://api.github.com/repos/" + repo + "/contents/catalog.json?ref=" + branch + "&_cb=" + System.currentTimeMillis();
+                      HttpURLConnection conn = (HttpURLConnection) new URL(apiUrl).openConnection();
+                      conn.setConnectTimeout(6000);
+                      conn.setReadTimeout(6000);
+                      conn.setUseCaches(false);
+                      conn.setRequestProperty("Accept", "application/vnd.github.v3+json");
+                      conn.setRequestProperty("If-None-Match", "\"" + System.currentTimeMillis() + "\"");
+                      if (token != null && !token.isEmpty()) {
+                          conn.setRequestProperty("Authorization", "token " + token);
+                      }
+                      int code = conn.getResponseCode();
+                      if (code == 200) {
+                          BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+                          StringBuilder sb = new StringBuilder();
+                          String line;
+                          while ((line = br.readLine()) != null) sb.append(line);
+                          br.close();
+                          JSONObject meta = new JSONObject(sb.toString());
+                          String b64 = meta.optString("content", "").replaceAll("\\s+", "");
+                          if (!b64.isEmpty()) {
+                              byte[] decoded = Base64.decode(b64, Base64.DEFAULT);
+                              return new JSONObject(new String(decoded, StandardCharsets.UTF_8));
+                          }
+                      }
+                  } catch (Exception ignored) {}
+
+                  try {
+                      String rawUrl = "https://raw.githubusercontent.com/" + repo + "/" + branch + "/catalog.json?_cb=" + System.currentTimeMillis();
+                      HttpURLConnection conn = (HttpURLConnection) new URL(rawUrl).openConnection();
+                      conn.setConnectTimeout(6000);
+                      conn.setReadTimeout(6000);
+                      conn.setUseCaches(false);
+                      if (conn.getResponseCode() == 200) {
+                          BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+                          StringBuilder sb = new StringBuilder();
+                          String line;
+                          while ((line = br.readLine()) != null) sb.append(line);
+                          br.close();
+                          return new JSONObject(sb.toString());
+                      }
+                  } catch (Exception ignored) {}
+                  return null;
               }
 
               @Override
               public int onStartCommand(Intent intent, int flags, int startId) {
+                  startBackgroundPushWatcherLoop();
                   if (intent != null && intent.getAction() != null) {
                       String act = intent.getAction();
-                      if (ACTION_PLAY.equals(act)) {
+                      if (ACTION_START_WATCHER.equals(act)) {
+                          new Thread(this::pollCatalogAndDeliverBackgroundPushes).start();
+                          return START_STICKY;
+                      } else if (ACTION_PLAY.equals(act)) {
                           MainActivity.dispatchToWebView("play", -1);
                           return START_STICKY;
                       } else if (ACTION_PAUSE.equals(act)) {
@@ -289,6 +562,17 @@ jobs:
                       }
                   }
                   return START_STICKY;
+              }
+
+              @Override
+              public void onTaskRemoved(Intent rootIntent) {
+                  super.onTaskRemoved(rootIntent);
+                  scheduleWatchdogAlarm();
+                  try {
+                      Intent restartIntent = new Intent(getApplicationContext(), MediaPlaybackService.class);
+                      restartIntent.setAction(ACTION_START_WATCHER);
+                      getApplicationContext().startService(restartIntent);
+                  } catch (Exception ignored) {}
               }
 
               private void fetchCoverArtAsync(final String urlStr) {
@@ -455,6 +739,7 @@ jobs:
                   if (mediaSession != null) {
                       mediaSession.release();
                   }
+                  scheduleWatchdogAlarm();
                   super.onDestroy();
               }
           }
@@ -471,6 +756,7 @@ jobs:
           import android.app.PendingIntent;
           import android.content.Context;
           import android.content.Intent;
+          import android.content.SharedPreferences;
           import android.content.pm.PackageManager;
           import android.graphics.Bitmap;
           import android.graphics.BitmapFactory;
@@ -492,6 +778,7 @@ jobs:
 
           public class MainActivity extends Activity {
               private static WebView staticWebView;
+              public static volatile boolean isActivityInForeground = false;
               public static final String PUSH_CHANNEL_ID = "dark_music_push_channel";
 
               public static class BackgroundAudioWebView extends WebView {
@@ -506,8 +793,21 @@ jobs:
               }
 
               @Override
+              protected void onResume() {
+                  super.onResume();
+                  isActivityInForeground = true;
+              }
+
+              @Override
+              protected void onPause() {
+                  isActivityInForeground = false;
+                  super.onPause();
+              }
+
+              @Override
               protected void onCreate(Bundle savedInstanceState) {
                   super.onCreate(savedInstanceState);
+                  isActivityInForeground = true;
 
                   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                       NotificationManager nm = getSystemService(NotificationManager.class);
@@ -530,6 +830,13 @@ jobs:
                           requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
                       }
                   }
+
+                  // Запускаем фоновую службу мониторинга уведомлений сразу при старте приложения
+                  try {
+                      Intent watcherIntent = new Intent(this, MediaPlaybackService.class);
+                      watcherIntent.setAction(MediaPlaybackService.ACTION_START_WATCHER);
+                      startService(watcherIntent);
+                  } catch (Exception ignored) {}
 
                   BackgroundAudioWebView webView = new BackgroundAudioWebView(this);
                   staticWebView = webView;
@@ -589,6 +896,66 @@ jobs:
                   });
               }
 
+              public static void postSystemPushToShade(final Context context, final String title, final String message, final String imageUrl, final String pushId) {
+                  new Thread(() -> {
+                      try {
+                          SharedPreferences prefs = context.getSharedPreferences("DarkMusicNativePushPrefs", Context.MODE_PRIVATE);
+                          if (pushId != null && !pushId.isEmpty()) {
+                              prefs.edit().putBoolean("seen_" + pushId, true).apply();
+                          }
+
+                          NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                          if (nm == null) return;
+
+                          Intent openIntent = new Intent(context, MainActivity.class);
+                          openIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                          PendingIntent contentPendingIntent = PendingIntent.getActivity(
+                                  context, 9001, openIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+                          );
+
+                          Notification.Builder builder;
+                          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                              builder = new Notification.Builder(context, PUSH_CHANNEL_ID);
+                          } else {
+                              builder = new Notification.Builder(context)
+                                      .setPriority(Notification.PRIORITY_HIGH)
+                                      .setDefaults(Notification.DEFAULT_ALL);
+                          }
+
+                          builder.setContentTitle(title != null && !title.isEmpty() ? title : "Dark Music")
+                                  .setContentText(message != null ? message : "")
+                                  .setStyle(new Notification.BigTextStyle().bigText(message != null ? message : ""))
+                                  .setSmallIcon(android.R.drawable.ic_popup_reminder)
+                                  .setContentIntent(contentPendingIntent)
+                                  .setAutoCancel(true)
+                                  .setVisibility(Notification.VISIBILITY_PUBLIC);
+
+                          if (imageUrl != null && !imageUrl.isEmpty() && imageUrl.startsWith("http")) {
+                              try {
+                                  URL url = new URL(imageUrl);
+                                  HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                  conn.setConnectTimeout(5000);
+                                  conn.setReadTimeout(5000);
+                                  conn.setDoInput(true);
+                                  conn.connect();
+                                  InputStream is = conn.getInputStream();
+                                  Bitmap bmp = BitmapFactory.decodeStream(is);
+                                  is.close();
+                                  if (bmp != null) {
+                                      builder.setLargeIcon(bmp);
+                                  }
+                              } catch (Exception ignored) {}
+                          }
+
+                          int notifId = (pushId != null && !pushId.isEmpty()) ? Math.abs(pushId.hashCode()) : (int) (System.currentTimeMillis() & 0xfffffff);
+                          if (notifId == MediaPlaybackService.NOTIFICATION_ID) {
+                              notifId += 100;
+                          }
+                          nm.notify(notifId, builder.build());
+                      } catch (Exception ignored) {}
+                  }).start();
+              }
+
               public static class AndroidMediaBridge {
                   private final Context context;
 
@@ -619,58 +986,24 @@ jobs:
 
                   @JavascriptInterface
                   public void showSystemPushNotification(final String title, final String message, final String imageUrl, final String pushId) {
-                      new Thread(() -> {
-                          try {
-                              NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                              if (nm == null) return;
+                      postSystemPushToShade(context, title, message, imageUrl, pushId);
+                  }
 
-                              Intent openIntent = new Intent(context, MainActivity.class);
-                              openIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                              PendingIntent contentPendingIntent = PendingIntent.getActivity(
-                                      context, 9001, openIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-                              );
+                  @JavascriptInterface
+                  public void markPushSeenNative(final String pushId) {
+                      if (pushId == null || pushId.isEmpty()) return;
+                      SharedPreferences prefs = context.getSharedPreferences("DarkMusicNativePushPrefs", Context.MODE_PRIVATE);
+                      prefs.edit().putBoolean("seen_" + pushId, true).apply();
+                  }
 
-                              Notification.Builder builder;
-                              if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                  builder = new Notification.Builder(context, PUSH_CHANNEL_ID);
-                              } else {
-                                  builder = new Notification.Builder(context)
-                                          .setPriority(Notification.PRIORITY_HIGH)
-                                          .setDefaults(Notification.DEFAULT_ALL);
-                              }
-
-                              builder.setContentTitle(title != null && !title.isEmpty() ? title : "Dark Music")
-                                      .setContentText(message != null ? message : "")
-                                      .setStyle(new Notification.BigTextStyle().bigText(message != null ? message : ""))
-                                      .setSmallIcon(android.R.drawable.ic_popup_reminder)
-                                      .setContentIntent(contentPendingIntent)
-                                      .setAutoCancel(true)
-                                      .setVisibility(Notification.VISIBILITY_PUBLIC);
-
-                              if (imageUrl != null && !imageUrl.isEmpty() && imageUrl.startsWith("http")) {
-                                  try {
-                                      URL url = new URL(imageUrl);
-                                      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                                      conn.setConnectTimeout(5000);
-                                      conn.setReadTimeout(5000);
-                                      conn.setDoInput(true);
-                                      conn.connect();
-                                      InputStream is = conn.getInputStream();
-                                      Bitmap bmp = BitmapFactory.decodeStream(is);
-                                      is.close();
-                                      if (bmp != null) {
-                                          builder.setLargeIcon(bmp);
-                                      }
-                                  } catch (Exception ignored) {}
-                              }
-
-                              int notifId = (pushId != null && !pushId.isEmpty()) ? Math.abs(pushId.hashCode()) : (int) (System.currentTimeMillis() & 0xfffffff);
-                              if (notifId == MediaPlaybackService.NOTIFICATION_ID) {
-                                  notifId += 100;
-                              }
-                              nm.notify(notifId, builder.build());
-                          } catch (Exception ignored) {}
-                      }).start();
+                  @JavascriptInterface
+                  public void syncGitHubConfigToNative(final String repo, final String branch, final String token) {
+                      SharedPreferences prefs = context.getSharedPreferences("DarkMusicNativePushPrefs", Context.MODE_PRIVATE);
+                      SharedPreferences.Editor ed = prefs.edit();
+                      if (repo != null && !repo.isEmpty()) ed.putString("gh_repo", repo);
+                      if (branch != null && !branch.isEmpty()) ed.putString("gh_branch", branch);
+                      if (token != null && !token.isEmpty()) ed.putString("gh_token", token);
+                      ed.apply();
                   }
               }
 
@@ -698,5 +1031,5 @@ jobs:
       - name: Upload Dark Music APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: DarkMusic-v2.0-APK
+          name: DarkMusic-v3.0-APK
           path: android-project/app/build/outputs/apk/debug/app-debug.apk

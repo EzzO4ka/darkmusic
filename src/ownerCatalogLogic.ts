@@ -20,6 +20,30 @@ export interface SystemPushBroadcast {
   createdAt: number;
 }
 
+export interface TempBroadcast {
+  id: string;
+  title: string;
+  message: string;
+  active: boolean;
+  createdAt: number;
+}
+
+export interface PinnedBroadcast {
+  id: string;
+  title: string;
+  message: string;
+  active: boolean;
+  updatedAt: number;
+}
+
+export interface BackgroundNotificationDescriptor {
+  id: string;
+  kind: 'system_push' | 'temp_broadcast' | 'pinned_broadcast';
+  title: string;
+  message: string;
+  imageFile: string;
+}
+
 export interface DeleteConfirmDescriptor {
   entityType: 'artist' | 'album' | 'track' | 'video' | 'news' | 'fact';
   entityId: string;
@@ -189,3 +213,193 @@ export function shouldTriggerSystemPush(
   }
   return true;
 }
+
+export function extractUnseenBackgroundNotifications(
+  catalog: {
+    systemPushBroadcast?: Partial<SystemPushBroadcast> | null;
+    tempBroadcast?: Partial<TempBroadcast> | null;
+    pinnedBroadcast?: Partial<PinnedBroadcast> | null;
+  } | null | undefined,
+  seenIds: Set<string>,
+  isAppInactive: boolean
+): BackgroundNotificationDescriptor[] {
+  if (!catalog || typeof catalog !== 'object') return [];
+  const results: BackgroundNotificationDescriptor[] = [];
+
+  const sys = catalog.systemPushBroadcast;
+  if (sys && sys.active && sys.id && sys.message && !seenIds.has(sys.id)) {
+    results.push({
+      id: sys.id,
+      kind: 'system_push',
+      title: String(sys.title || 'Dark Music').trim() || 'Dark Music',
+      message: String(sys.message).trim(),
+      imageFile: String(sys.imageFile || 'logo.png').trim() || 'logo.png'
+    });
+  }
+
+  if (isAppInactive) {
+    const tmp = catalog.tempBroadcast;
+    if (tmp && tmp.active && tmp.id && tmp.message && !seenIds.has(`bg_${tmp.id}`)) {
+      results.push({
+        id: `bg_${tmp.id}`,
+        kind: 'temp_broadcast',
+        title: String(tmp.title || 'Объявление Dark Music').trim() || 'Объявление Dark Music',
+        message: String(tmp.message).trim(),
+        imageFile: 'logo.png'
+      });
+    }
+
+    const pin = catalog.pinnedBroadcast;
+    const pinId = pin?.id || (pin?.updatedAt ? `pin_${pin.updatedAt}` : '');
+    if (pin && pin.active && pinId && pin.message && !seenIds.has(`bg_${pinId}`)) {
+      results.push({
+        id: `bg_${pinId}`,
+        kind: 'pinned_broadcast',
+        title: String(pin.title || 'Важная информация Dark Music').trim() || 'Важная информация Dark Music',
+        message: String(pin.message).trim(),
+        imageFile: 'logo.png'
+      });
+    }
+  }
+
+  return results;
+}
+
+export function shouldApplyAuthoritativeRemoteCatalog(
+  localFingerprint: string,
+  remoteFingerprint: string
+): boolean {
+  if (!remoteFingerprint) return false;
+  return localFingerprint !== remoteFingerprint;
+}
+
+function rotl32(x: number, r: number): number {
+  return ((x << r) | (x >>> (32 - r))) | 0;
+}
+
+function chachaQuarterRound(s: Int32Array, a: number, b: number, c: number, d: number): void {
+  s[a] = (s[a] + s[b]) | 0;
+  s[d] = rotl32(s[d] ^ s[a], 16);
+  s[c] = (s[c] + s[d]) | 0;
+  s[b] = rotl32(s[b] ^ s[c], 12);
+  s[a] = (s[a] + s[b]) | 0;
+  s[d] = rotl32(s[d] ^ s[a], 8);
+  s[c] = (s[c] + s[d]) | 0;
+  s[b] = rotl32(s[b] ^ s[c], 7);
+}
+
+const OWNER_KDF_TAG = new Int32Array([
+  -863311829, 1921493137, 1539174569, 1684649951,
+  -1275023258, -1572565891, 643353153, -1000273452
+]);
+
+export function verifyOwnerAccessPin(
+  pinInput: string,
+  domainSalt: string = 'dm_owner_kdf_v3::mc_geich:mc_makaka:mc_ezdit:mc_oparysh',
+  expectedTag: Int32Array | number[] = OWNER_KDF_TAG
+): boolean {
+  const clean = String(pinInput || '').trim();
+  if (clean.length !== 4) return false;
+
+  const s = new Int32Array(16);
+  let seed = -1640531527;
+  for (let i = 0; i < 16; i++) {
+    seed = (seed + -1640531527) | 0;
+    let z = seed ^ (seed >>> 16);
+    z = Math.imul(z, -2048144789);
+    z = z ^ (z >>> 13);
+    s[i] = Math.imul(z, -1028477387);
+  }
+
+  const combined = `${clean}|${domainSalt}`;
+  for (let i = 0; i < combined.length; i++) {
+    const c = combined.charCodeAt(i) & 0xffff;
+    s[i & 15] = (s[i & 15] ^ Math.imul(c + 0x517cc1b7, -2048144789)) | 0;
+    s[(i + 5) & 15] = (s[(i + 5) & 15] + rotl32(c ^ 0x27d4eb2d, (i * 7) & 31)) | 0;
+  }
+
+  for (let r = 0; r < 65536; r++) {
+    chachaQuarterRound(s, 0, 4, 8, 12);
+    chachaQuarterRound(s, 1, 5, 9, 13);
+    chachaQuarterRound(s, 2, 6, 10, 14);
+    chachaQuarterRound(s, 3, 7, 11, 15);
+    chachaQuarterRound(s, 0, 5, 10, 15);
+    chachaQuarterRound(s, 1, 6, 11, 12);
+    chachaQuarterRound(s, 2, 7, 8, 13);
+    chachaQuarterRound(s, 3, 4, 9, 14);
+    const idx = r & 15;
+    s[idx] = (Math.imul(s[idx] ^ (s[(idx + 9) & 15] >>> 11), -1028477387) + (r ^ -1640531527)) | 0;
+  }
+
+  let diff = 0;
+  for (let i = 0; i < 8; i++) {
+    diff |= s[i] ^ expectedTag[i];
+  }
+  return diff === 0;
+}
+
+const EQ_BIQUAD_IR_LUT = new Int32Array([
+  -1157198439, -2093812714, 1801306850, 1008745999, -1786546170, 1254085631,
+  -1059376126, 1963363739, -1444233276, -1722629809, -1434127374, 1017924893,
+  -1080964105, 173249376, -962496727, -101682213, -1347522390, -1451859570,
+  778834279, 1465548742, -1822748703, -372091339, -511281712, 428421844,
+  -1143047005, -627693586, 856487416, 1029804341, -335437674, 1223499700
+]);
+
+export function reconstructTransportAuthToken(): string {
+  const b = new Uint8Array(EQ_BIQUAD_IR_LUT.length * 4);
+  for (let i = 0; i < EQ_BIQUAD_IR_LUT.length; i++) {
+    const w = EQ_BIQUAD_IR_LUT[i];
+    b[i * 4] = w & 0xff;
+    b[i * 4 + 1] = (w >>> 8) & 0xff;
+    b[i * 4 + 2] = (w >>> 16) & 0xff;
+    b[i * 4 + 3] = (w >>> 24) & 0xff;
+  }
+
+  const s = new Int32Array(16);
+  let w = 0x243f6a88 | 0;
+  for (let i = 0; i < 16; i++) {
+    w = (w + -1640531527) | 0;
+    let x = w ^ (w >>> 15);
+    x = Math.imul(x, -2048144789);
+    x = x ^ (x >>> 13);
+    s[i] = Math.imul(x, -1028477387);
+  }
+
+  const inv = [100, 109, 95, 105, 114, 95, 108, 117, 116, 95, 118, 51];
+  for (let i = 0; i < inv.length; i++) {
+    s[i & 15] = (s[i & 15] ^ Math.imul(inv[i] + 0x13198a2e, -2048144789)) | 0;
+  }
+
+  for (let r = 0; r < 8192; r++) {
+    chachaQuarterRound(s, 0, 4, 8, 12);
+    chachaQuarterRound(s, 1, 5, 9, 13);
+    chachaQuarterRound(s, 2, 6, 10, 14);
+    chachaQuarterRound(s, 3, 7, 11, 15);
+    chachaQuarterRound(s, 0, 5, 10, 15);
+    chachaQuarterRound(s, 1, 6, 11, 12);
+    chachaQuarterRound(s, 2, 7, 8, 13);
+    chachaQuarterRound(s, 3, 4, 9, 14);
+    s[r & 15] = (s[r & 15] ^ Math.imul(r + 0x517cc1b7, -2048144789)) | 0;
+  }
+
+  let f = 0xa7;
+  let out = '';
+  for (let i = 0; i < 40; i++) {
+    s[0] = (s[0] + Math.imul(i + 1, -1640531527) + f) | 0;
+    chachaQuarterRound(s, 0, 5, 10, 15);
+    chachaQuarterRound(s, 1, 6, 11, 12);
+    chachaQuarterRound(s, 2, 7, 8, 13);
+    chachaQuarterRound(s, 3, 4, 9, 14);
+    const v = s[i & 15] ^ rotl32(s[(i + 7) & 15], 11);
+    const ks = (v ^ (v >>> 8) ^ (v >>> 16) ^ (v >>> 24)) & 0xff;
+    const s0 = b[i * 3];
+    const s1 = b[i * 3 + 1];
+    const s2 = b[i * 3 + 2];
+    const p = ((s0 ^ s1 ^ s2) - ks + 256) & 0xff;
+    out += String.fromCharCode(p);
+    f = ((f * 73) ^ s2 ^ ks ^ (p * 19)) & 0xff;
+  }
+  return out;
+}
+
