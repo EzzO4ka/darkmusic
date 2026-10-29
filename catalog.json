@@ -73,9 +73,34 @@
       "type": "АЛЬБОМ",
       "title": "Мертворождённые",
       "coverFile": "covers/alb_mertvorozdennye.jpg"
+    },
+    {
+      "id": "alb_1793291266274",
+      "title": "ПЕРЕЗВОН",
+      "artistId": "mc_ezdit",
+      "featArtistId": "",
+      "type": "СИНГЛ",
+      "year": 2026,
+      "isExplicit": false,
+      "coverFile": "covers/alb_perezvon.jpg",
+      "gradient": "from-rose-600 via-red-900 to-zinc-950"
     }
   ],
   "customTracks": [
+    {
+      "id": "trk_1793291266274",
+      "title": "ПЕРЕЗВОН",
+      "artistId": "mc_ezdit",
+      "featArtistId": "",
+      "albumId": "alb_1793291266274",
+      "filePath": "tracks/mc_ezdit/МС ЕЗДИТЬ - ПЕРЕЗВОН.MP3",
+      "coverFile": "",
+      "duration": "9:23",
+      "year": 2026,
+      "isNew": false,
+      "isExplicit": false,
+      "createdAt": 1793291266274
+    },
     {
       "id": "trk_1792613045145",
       "title": "Я",
@@ -395,5 +420,5 @@
     "active": true,
     "updatedAt": 1793290258747
   },
-  "updatedAt": 1793290816664
+  "updatedAt": 1793291266341
 }
