@@ -7,6 +7,12 @@
     "mc_ezdit": "avatars/mc_ezdit.jpg",
     "mc_oparysh": "avatars/mc_oparysh.jpg"
   },
+  "artistNames": {
+    "mc_geich": "МС ГЕИЧ",
+    "mc_makaka": "МС МАКАКА",
+    "mc_ezdit": "МС ЕЗДИТЬ",
+    "mc_oparysh": "МС ОПАРЫШ"
+  },
   "artistBios": {
     "mc_geich": "Родился в Дрезне. Стал популярен благодаря \"Элиты\" Татьяны Леонидовны. Писал рофленные текста про Ахмада и себя. Продюсировал МС МАКАКУ.",
     "mc_makaka": "МС МАКАКА — самая взрывная энергия объединения Dark Music. Король школьного и дворового русского рэпа. Стал популярен в школе благодаря его продюсерам Максиму и Алексею. Обрёл известность в 2023 году после выхода первого альбома \"ЗАГЕЕВ\".",
@@ -45,6 +51,19 @@
       "Его саб-частоты опускаются ниже 28 Гц."
     ]
   },
+  "artistGradients": {
+    "mc_geich": "from-purple-600 via-indigo-900 to-zinc-950",
+    "mc_makaka": "from-emerald-600 via-teal-900 to-zinc-950",
+    "mc_ezdit": "from-rose-600 via-red-900 to-zinc-950",
+    "mc_oparysh": "from-amber-600 via-orange-950 to-zinc-950"
+  },
+  "artistIcons": {
+    "mc_geich": "fa-user-astronaut",
+    "mc_makaka": "fa-crown",
+    "mc_ezdit": "fa-gauge-high",
+    "mc_oparysh": "fa-biohazard"
+  },
+  "customArtists": [],
   "customAlbums": [
     {
       "isExplicit": true,
@@ -354,12 +373,19 @@
     }
   ],
   "customNews": [],
-  "customArtists": [],
   "deletedCustomIds": [
     "alb_1792597596794",
     "alb_1793176376242",
     "trk_1793176376243"
   ],
+  "systemPushBroadcast": {
+    "id": "",
+    "title": "Dark Music",
+    "message": "",
+    "imageFile": "logo.png",
+    "active": false,
+    "createdAt": 1793264368109
+  },
   "tempBroadcast": {
     "id": "tmp_1793051634442",
     "title": "Объявление Dark Music",
@@ -373,14 +399,6 @@
     "message": "Временно не работает фоновое воспроизведение и функционал переключения музыки и паузы. Исправляем баг.",
     "active": false,
     "updatedAt": 1792915286413
-  },
-  "systemPushBroadcast": {
-    "id": "",
-    "title": "Dark Music",
-    "message": "",
-    "imageUrl": "",
-    "active": false,
-    "createdAt": 0
   },
   "forceUpdate": {
     "active": false,
@@ -397,5 +415,5 @@
     "active": true,
     "updatedAt": 1793175130835
   },
-  "updatedAt": 1793182440967
+  "updatedAt": 1793264368110
 }
