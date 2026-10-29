@@ -5,29 +5,25 @@
     "mc_geich": "avatars/mc_geich.jpg",
     "mc_makaka": "avatars/mc_makaka.jpg",
     "mc_ezdit": "avatars/mc_ezdit.jpg",
-    "mc_oparysh": "avatars/mc_oparysh.jpg",
-    "art_ms_kiber_1793263612957": "avatars/art_ms_kiber_1793263612957.jpg"
+    "mc_oparysh": "avatars/mc_oparysh.jpg"
   },
   "artistNames": {
     "mc_geich": "МС ГЕИЧ",
     "mc_makaka": "МС МАКАКА",
     "mc_ezdit": "МС ЕЗДИТЬ",
-    "mc_oparysh": "МС ОПАРЫШ",
-    "art_ms_kiber_1793263612957": "МС КИБЕР"
+    "mc_oparysh": "МС ОПАРЫШ"
   },
   "artistBios": {
     "mc_geich": "Родился в Дрезне. Стал популярен благодаря \"Элиты\" Татьяны Леонидовны. Писал рофленные текста про Ахмада и себя. Продюсировал МС МАКАКУ.",
     "mc_makaka": "МС МАКАКА — самая взрывная энергия объединения Dark Music. Король школьного и дворового русского рэпа. Стал популярен в школе благодаря его продюсерам Максиму и Алексею. Обрёл известность в 2023 году после выхода первого альбома \"ЗАГЕЕВ\".",
     "mc_ezdit": "Рэп-исполнитель. Его главная фишка - записать вокал, одновременно выдумывая текст из головы. Все треки не имеют определённого смысла - так и нормально.",
-    "mc_oparysh": "Продюсер, рэп-исполнитель.",
-    "art_ms_kiber_1793263612957": "Секретный участник Dark Music."
+    "mc_oparysh": "Продюсер, рэп-исполнитель."
   },
   "artistRoles": {
     "mc_geich": "Рэп",
     "mc_makaka": "Рэп",
     "mc_ezdit": "Рэп",
-    "mc_oparysh": "Пока пусто",
-    "art_ms_kiber_1793263612957": "Кибер-Фонк"
+    "mc_oparysh": "Пока пусто"
   },
   "artistFacts": {
     "mc_geich": [
@@ -53,41 +49,21 @@
       "Использует сэмплы настоящих индустриальных механизмов и эхо бетонных бункеров.",
       "Принципиально выпускает музыку только в закрытом каталоге без цензуры.",
       "Его саб-частоты опускаются ниже 28 Гц."
-    ],
-    "art_ms_kiber_1793263612957": [
-      "Записал альбом в серверной."
     ]
   },
   "artistGradients": {
     "mc_geich": "from-purple-600 via-indigo-900 to-zinc-950",
     "mc_makaka": "from-emerald-600 via-teal-900 to-zinc-950",
     "mc_ezdit": "from-rose-600 via-red-900 to-zinc-950",
-    "mc_oparysh": "from-amber-600 via-orange-950 to-zinc-950",
-    "art_ms_kiber_1793263612957": "from-purple-600 via-indigo-900 to-zinc-950"
+    "mc_oparysh": "from-amber-600 via-orange-950 to-zinc-950"
   },
   "artistIcons": {
     "mc_geich": "fa-user-astronaut",
     "mc_makaka": "fa-crown",
     "mc_ezdit": "fa-gauge-high",
-    "mc_oparysh": "fa-biohazard",
-    "art_ms_kiber_1793263612957": "fa-microphone-lines"
+    "mc_oparysh": "fa-biohazard"
   },
-  "customArtists": [
-    {
-      "id": "art_ms_kiber_1793263612957",
-      "name": "МС КИБЕР",
-      "role": "Кибер-Фонк",
-      "gradient": "from-purple-600 via-indigo-900 to-zinc-950",
-      "icon": "fa-microphone-lines",
-      "avatarFile": "avatars/art_ms_kiber_1793263612957.jpg",
-      "bio": "Секретный участник Dark Music.",
-      "facts": [
-        "Записал альбом в серверной."
-      ],
-      "isCustom": true,
-      "createdAt": 1793263612957
-    }
-  ],
+  "customArtists": [],
   "customAlbums": [
     {
       "isExplicit": true,
@@ -400,7 +376,8 @@
   "deletedCustomIds": [
     "alb_1792597596794",
     "alb_1793176376242",
-    "trk_1793176376243"
+    "trk_1793176376243",
+    "art_ms_kiber_1793263612957"
   ],
   "systemPushBroadcast": {
     "id": "push_1793263609191",
@@ -439,5 +416,5 @@
     "active": true,
     "updatedAt": 1793175130835
   },
-  "updatedAt": 1793263612962
+  "updatedAt": 1793263620888
 }
