@@ -380,12 +380,12 @@
     "art_ms_kiber_1793263612957"
   ],
   "systemPushBroadcast": {
-    "id": "push_1793263609191",
+    "id": "push_1793263749810",
     "title": "Dark Music: Новый релиз!",
     "message": "Слушайте новый трек прямо сейчас в приложении!",
     "imageFile": "logo.png",
     "active": true,
-    "createdAt": 1793263609191
+    "createdAt": 1793263749811
   },
   "tempBroadcast": {
     "id": "tmp_1793051634442",
@@ -416,5 +416,5 @@
     "active": true,
     "updatedAt": 1793175130835
   },
-  "updatedAt": 1793263620888
+  "updatedAt": 1793263749817
 }
