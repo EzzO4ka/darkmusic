@@ -7,7 +7,8 @@
     "mc_ezdit": "avatars/mc_ezdit.jpg",
     "mc_oparysh": "avatars/mc_oparysh.jpg",
     "art_ms_kiber_1793263753371": "avatars/art_ms_kiber_1793263753371.jpg",
-    "art_ms_dolboeb_1793263987131": "avatars/art_ms_dolboeb_1793263987131.jpg"
+    "art_ms_dolboeb_1793263987131": "avatars/art_ms_dolboeb_1793263987131.jpg",
+    "art_eunrrenkrpkikprr_1793264041633": "avatars/art_eunrrenkrpkikprr_1793264041633.jpg"
   },
   "artistNames": {
     "mc_geich": "МС ГЕИЧ",
@@ -15,7 +16,8 @@
     "mc_ezdit": "МС ЕЗДИТЬ",
     "mc_oparysh": "МС ОПАРЫШ",
     "art_ms_kiber_1793263753371": "МС КИБЕР",
-    "art_ms_dolboeb_1793263987131": "МС ДОЛБОЕБ"
+    "art_ms_dolboeb_1793263987131": "МС ДОЛБОЕБ",
+    "art_eunrrenkrpkikprr_1793264041633": "еунрренкрпкикпрр"
   },
   "artistBios": {
     "mc_geich": "Родился в Дрезне. Стал популярен благодаря \"Элиты\" Татьяны Леонидовны. Писал рофленные текста про Ахмада и себя. Продюсировал МС МАКАКУ.",
@@ -23,7 +25,8 @@
     "mc_ezdit": "Рэп-исполнитель. Его главная фишка - записать вокал, одновременно выдумывая текст из головы. Все треки не имеют определённого смысла - так и нормально.",
     "mc_oparysh": "Продюсер, рэп-исполнитель.",
     "art_ms_kiber_1793263753371": "Секретный участник Dark Music.",
-    "art_ms_dolboeb_1793263987131": "долбоеб"
+    "art_ms_dolboeb_1793263987131": "долбоеб",
+    "art_eunrrenkrpkikprr_1793264041633": "еунрренкрпкикпрр — эксклюзивный исполнитель и резидент закрытого каталога Dark Music."
   },
   "artistRoles": {
     "mc_geich": "Рэп",
@@ -31,7 +34,8 @@
     "mc_ezdit": "Рэп",
     "mc_oparysh": "Пока пусто",
     "art_ms_kiber_1793263753371": "Кибер-Фонк",
-    "art_ms_dolboeb_1793263987131": "долбоеб"
+    "art_ms_dolboeb_1793263987131": "долбоеб",
+    "art_eunrrenkrpkikprr_1793264041633": "Эксклюзивный артист • Dark Music"
   },
   "artistFacts": {
     "mc_geich": [
@@ -63,6 +67,9 @@
     ],
     "art_ms_dolboeb_1793263987131": [
       "он долбоеб"
+    ],
+    "art_eunrrenkrpkikprr_1793264041633": [
+      "еунрренкрпкикпрр записывает эксклюзивные треки специально для каталога Dark Music."
     ]
   },
   "artistGradients": {
@@ -71,7 +78,8 @@
     "mc_ezdit": "from-rose-600 via-red-900 to-zinc-950",
     "mc_oparysh": "from-amber-600 via-orange-950 to-zinc-950",
     "art_ms_kiber_1793263753371": "from-purple-600 via-indigo-900 to-zinc-950",
-    "art_ms_dolboeb_1793263987131": "from-amber-600 via-orange-950 to-zinc-950"
+    "art_ms_dolboeb_1793263987131": "from-amber-600 via-orange-950 to-zinc-950",
+    "art_eunrrenkrpkikprr_1793264041633": "from-amber-600 via-orange-950 to-zinc-950"
   },
   "artistIcons": {
     "mc_geich": "fa-user-astronaut",
@@ -79,7 +87,8 @@
     "mc_ezdit": "fa-gauge-high",
     "mc_oparysh": "fa-biohazard",
     "art_ms_kiber_1793263753371": "fa-microphone-lines",
-    "art_ms_dolboeb_1793263987131": "fa-fire"
+    "art_ms_dolboeb_1793263987131": "fa-fire",
+    "art_eunrrenkrpkikprr_1793264041633": "fa-fire"
   },
   "customArtists": [
     {
@@ -109,6 +118,20 @@
       ],
       "isCustom": true,
       "createdAt": 1793263987131
+    },
+    {
+      "id": "art_eunrrenkrpkikprr_1793264041633",
+      "name": "еунрренкрпкикпрр",
+      "role": "Эксклюзивный артист • Dark Music",
+      "gradient": "from-amber-600 via-orange-950 to-zinc-950",
+      "icon": "fa-fire",
+      "avatarFile": "avatars/art_eunrrenkrpkikprr_1793264041633.jpg",
+      "bio": "еунрренкрпкикпрр — эксклюзивный исполнитель и резидент закрытого каталога Dark Music.",
+      "facts": [
+        "еунрренкрпкикпрр записывает эксклюзивные треки специально для каталога Dark Music."
+      ],
+      "isCustom": true,
+      "createdAt": 1793264041633
     }
   ],
   "customAlbums": [
@@ -463,5 +486,5 @@
     "active": true,
     "updatedAt": 1793175130835
   },
-  "updatedAt": 1793263987134
+  "updatedAt": 1793264041636
 }
