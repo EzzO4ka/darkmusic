@@ -384,12 +384,12 @@
     "trk_1792603726620"
   ],
   "systemPushBroadcast": {
-    "id": "push_1793347398753",
+    "id": "",
     "title": "Dark Music: Новый релиз!",
     "message": "Хуй",
     "imageFile": "logo.png",
-    "active": true,
-    "createdAt": 1793347398753
+    "active": false,
+    "createdAt": 1793454011906
   },
   "tempBroadcast": {
     "id": "tmp_1793051634442",
@@ -420,5 +420,5 @@
     "active": true,
     "updatedAt": 1793290258747
   },
-  "updatedAt": 1793347398761
+  "updatedAt": 1793454011910
 }
