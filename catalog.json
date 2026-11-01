@@ -104,7 +104,7 @@
       "artistId": "mc_ezdit",
       "featArtistId": "mc_geich",
       "albumId": "alb_1793566754812",
-      "filePath": "tracks/mc_geich/ЛИРИКА ЖИТУХИ.MP3",
+      "filePath": "tracks/mc_ezdit/ЛИРИКА ЖИТУХИ.MP3",
       "coverFile": "",
       "duration": "2:57",
       "year": 2026,
@@ -445,5 +445,5 @@
     "active": true,
     "updatedAt": 1793290258747
   },
-  "updatedAt": 1793567056752
+  "updatedAt": 1793567067448
 }
