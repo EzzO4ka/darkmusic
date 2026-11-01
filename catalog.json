@@ -420,12 +420,12 @@
     "trk_1792603726620"
   ],
   "systemPushBroadcast": {
-    "id": "push_1793567471357",
+    "id": "push_1793568521820",
     "title": "Dark Music: Новый релиз!",
     "message": "МС ЕЗДИТЬ, МС ГЕИЧ - Лирика Житухи",
     "imageFile": "logo.png",
     "active": true,
-    "createdAt": 1793567471357
+    "createdAt": 1793568521820
   },
   "tempBroadcast": {
     "id": "tmp_1793051634442",
@@ -456,5 +456,5 @@
     "active": true,
     "updatedAt": 1793290258747
   },
-  "updatedAt": 1793568474780
+  "updatedAt": 1793568521859
 }
