@@ -46,7 +46,7 @@
   "artistGradients": {
     "mc_geich": "from-amber-600 via-orange-950 to-zinc-950",
     "mc_makaka": "from-sky-600 via-blue-950 to-zinc-950",
-    "mc_ezdit": "from-purple-600 via-indigo-900 to-zinc-950"
+    "mc_ezdit": "from-fuchsia-600 via-purple-950 to-zinc-950"
   },
   "artistIcons": {
     "mc_geich": "fa-user-astronaut",
@@ -94,7 +94,7 @@
       "id": "mc_ezdit",
       "name": "МС ЕЗДИТЬ",
       "role": "Рэп",
-      "gradient": "from-purple-600 via-indigo-900 to-zinc-950",
+      "gradient": "from-fuchsia-600 via-purple-950 to-zinc-950",
       "icon": "fa-gauge-high",
       "avatarFile": "avatars/mc_ezdit.jpg",
       "bio": "Питерский рэп-исполнитель. Его главная фишка - записать вокал, одновременно выдумывая текст из головы. Все треки не имеют определённого смысла - и так нормально.",
@@ -104,7 +104,8 @@
         "Даже Бетховен в ахуе - Как он мог без остановки записать вокал на 9 минут в треке \"Перезвон\".",
         "Впервые за 2 года детально поработал в новом релизе \"Лирика Житухи\" над текстом, записью вокала и сведением с битом – а раньше сразу во время записи выдумывал с головы."
       ],
-      "isCustom": true
+      "isCustom": true,
+      "createdAt": 1793576432923
     }
   ],
   "customAlbums": [
@@ -529,5 +530,5 @@
     "active": true,
     "updatedAt": 1793290258747
   },
-  "updatedAt": 1793576414589
+  "updatedAt": 1793576436858
 }
