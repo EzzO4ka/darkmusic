@@ -84,9 +84,34 @@
       "isExplicit": false,
       "coverFile": "covers/alb_perezvon.jpg",
       "gradient": "from-rose-600 via-red-900 to-zinc-950"
+    },
+    {
+      "id": "alb_1793566754812",
+      "title": "Лирика Житухи",
+      "artistId": "mc_ezdit",
+      "featArtistId": "mc_geich",
+      "type": "СИНГЛ",
+      "year": 2026,
+      "isExplicit": true,
+      "coverFile": "covers/alb_sosiska.jpg",
+      "gradient": "from-rose-600 via-red-900 to-zinc-950"
     }
   ],
   "customTracks": [
+    {
+      "id": "trk_1793566754812",
+      "title": "Лирика Житухи",
+      "artistId": "mc_ezdit",
+      "featArtistId": "mc_geich",
+      "albumId": "alb_1793566754812",
+      "filePath": "tracks/ЛИРИКА ЖИТУХИ.MP3",
+      "coverFile": "",
+      "duration": "2:57",
+      "year": 2026,
+      "isNew": true,
+      "isExplicit": true,
+      "createdAt": 1793566754812
+    },
     {
       "id": "trk_1793291266274",
       "title": "ПЕРЕЗВОН",
@@ -420,5 +445,5 @@
     "active": true,
     "updatedAt": 1793290258747
   },
-  "updatedAt": 1793454011910
+  "updatedAt": 1793566755047
 }
