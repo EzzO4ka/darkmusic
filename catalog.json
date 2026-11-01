@@ -44,7 +44,7 @@
     ]
   },
   "artistGradients": {
-    "mc_geich": "from-rose-600 via-red-900 to-zinc-950",
+    "mc_geich": "from-amber-600 via-orange-950 to-zinc-950",
     "mc_makaka": "from-amber-600 via-orange-950 to-zinc-950",
     "mc_ezdit": "from-purple-600 via-indigo-900 to-zinc-950"
   },
@@ -58,7 +58,7 @@
       "id": "mc_geich",
       "name": "МС ГЕИЧ",
       "role": "Рэп",
-      "gradient": "from-rose-600 via-red-900 to-zinc-950",
+      "gradient": "from-amber-600 via-orange-950 to-zinc-950",
       "icon": "fa-user-astronaut",
       "avatarFile": "avatars/mc_geich.jpg",
       "bio": "Российский рэп исполнитель, продюсер, контентмейкер. Стал популярен благодаря \"Элиты\" Татьяны Леонидовны. Писал рофленные текста про Ахмада и себя. Продюсировал МС МАКАКУ.",
@@ -67,7 +67,8 @@
         "Совмещает реальность с рофлом - Получилось круто",
         "Спустя 2 года вернулся к прежнему контентмейкингу, исполнению и продюсерству."
       ],
-      "isCustom": true
+      "isCustom": true,
+      "createdAt": 1793576408969
     },
     {
       "id": "mc_makaka",
@@ -527,5 +528,5 @@
     "active": true,
     "updatedAt": 1793290258747
   },
-  "updatedAt": 1793576344454
+  "updatedAt": 1793576410842
 }
