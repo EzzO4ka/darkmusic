@@ -4,22 +4,26 @@
   "avatars": {
     "mc_geich": "avatars/mc_geich.jpg",
     "mc_makaka": "avatars/mc_makaka.jpg",
-    "mc_ezdit": "avatars/mc_ezdit.jpg"
+    "mc_ezdit": "avatars/mc_ezdit.jpg",
+    "art_ms_oparysh_1793609173461": "avatars/art_ms_oparysh_1793609173461.jpg"
   },
   "artistNames": {
     "mc_geich": "МС ГЕИЧ",
     "mc_makaka": "МС МАКАКА",
-    "mc_ezdit": "МС ЕЗДИТЬ"
+    "mc_ezdit": "МС ЕЗДИТЬ",
+    "art_ms_oparysh_1793609173461": "МС ОПАРЫШ"
   },
   "artistBios": {
     "mc_geich": "Российский рэп исполнитель, продюсер, контентмейкер. Стал популярен благодаря \"Элиты\" Татьяны Леонидовны. Писал рофленные текста про Ахмада и себя. Продюсировал МС МАКАКУ.",
     "mc_makaka": "МС МАКАКА — самая взрывная энергия объединения Dark Music. Король школьного и дворового русского рэпа. Стал популярен в школе благодаря его продюсерам Максиму и Алексею. Обрёл известность в 2023 году после выхода первого альбома \"ЗАГЕЕВ\".",
-    "mc_ezdit": "Питерский рэп-исполнитель. Его главная фишка - записать вокал, одновременно выдумывая текст из головы. Все треки не имеют определённого смысла - и так нормально."
+    "mc_ezdit": "Питерский рэп-исполнитель. Его главная фишка - записать вокал, одновременно выдумывая текст из головы. Все треки не имеют определённого смысла - и так нормально.",
+    "art_ms_oparysh_1793609173461": "МС ОПАРЫШ — эксклюзивный исполнитель и резидент закрытого каталога Dark Music."
   },
   "artistRoles": {
     "mc_geich": "Рэп",
     "mc_makaka": "Рэп",
-    "mc_ezdit": "Рэп"
+    "mc_ezdit": "Рэп",
+    "art_ms_oparysh_1793609173461": "Рэп"
   },
   "artistFacts": {
     "mc_geich": [
@@ -41,17 +45,22 @@
       "Все треки не имеют определённого смысла - и так нормально.",
       "Даже Бетховен в ахуе - Как он мог без остановки записать вокал на 9 минут в треке \"Перезвон\".",
       "Впервые за 2 года детально поработал в новом релизе \"Лирика Житухи\" над текстом, записью вокала и сведением с битом – а раньше сразу во время записи выдумывал с головы."
+    ],
+    "art_ms_oparysh_1793609173461": [
+      "МС ОПАРЫШ записывает эксклюзивные треки специально для каталога Dark Music."
     ]
   },
   "artistGradients": {
     "mc_geich": "from-amber-600 via-orange-950 to-zinc-950",
     "mc_makaka": "from-sky-600 via-blue-950 to-zinc-950",
-    "mc_ezdit": "from-fuchsia-600 via-purple-950 to-zinc-950"
+    "mc_ezdit": "from-fuchsia-600 via-purple-950 to-zinc-950",
+    "art_ms_oparysh_1793609173461": "from-purple-600 via-indigo-900 to-zinc-950"
   },
   "artistIcons": {
     "mc_geich": "fa-user-astronaut",
     "mc_makaka": "fa-crown",
-    "mc_ezdit": "fa-gauge-high"
+    "mc_ezdit": "fa-gauge-high",
+    "art_ms_oparysh_1793609173461": "fa-skull"
   },
   "customArtists": [
     {
@@ -106,6 +115,20 @@
       ],
       "isCustom": true,
       "createdAt": 1793576432923
+    },
+    {
+      "id": "art_ms_oparysh_1793609173461",
+      "name": "МС ОПАРЫШ",
+      "role": "Рэп",
+      "gradient": "from-purple-600 via-indigo-900 to-zinc-950",
+      "icon": "fa-skull",
+      "avatarFile": "avatars/art_ms_oparysh_1793609173461.jpg",
+      "bio": "МС ОПАРЫШ — эксклюзивный исполнитель и резидент закрытого каталога Dark Music.",
+      "facts": [
+        "МС ОПАРЫШ записывает эксклюзивные треки специально для каталога Dark Music."
+      ],
+      "isCustom": true,
+      "createdAt": 1793609173461
     }
   ],
   "customAlbums": [
@@ -541,5 +564,5 @@
     "active": true,
     "updatedAt": 1793290258747
   },
-  "updatedAt": 1793609112656
+  "updatedAt": 1793609173472
 }
