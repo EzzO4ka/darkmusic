@@ -441,4 +441,35 @@ export function isVersionBlockedByForceUpdate(
   return currentVersion < reqVer - 0.0001 || isExplicitlyBlocked;
 }
 
+export function nextMonotonicTimestamp(
+  now: number,
+  ...knownTimestamps: Array<number | undefined | null>
+): number {
+  let maxKnown = 0;
+  for (const ts of knownTimestamps) {
+    const num = Number(ts) || 0;
+    if (num > maxKnown) {
+      maxKnown = num;
+    }
+  }
+  return now > maxKnown ? now : maxKnown + 1000;
+}
+
+export function shouldPopulateOwnerFormField(params: {
+  isFocused: boolean;
+  isUserDirty: boolean;
+  isOwnerUnlockedAndInitialized: boolean;
+  lastSyncedSignature: string;
+  incomingSignature: string;
+}): boolean {
+  if (params.isFocused) return false;
+  if (params.isUserDirty) return false;
+  if (params.isOwnerUnlockedAndInitialized) return false;
+  if (params.lastSyncedSignature && params.lastSyncedSignature === params.incomingSignature) {
+    return false;
+  }
+  return true;
+}
+
+
 

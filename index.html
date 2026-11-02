@@ -1843,6 +1843,25 @@
             }
         }
 
+        let _lastLocalOwnerEditTime = 0;
+        let _activeGitHubPushCount = 0;
+
+        function getNextMonotonicTimestamp() {
+            const maxKnown = Math.max(
+                Number(localUpdatedAt) || 0,
+                Number(systemPushData && systemPushData.createdAt) || 0,
+                Number(tempBroadcastData && tempBroadcastData.createdAt) || 0,
+                Number(pinnedBroadcastData && pinnedBroadcastData.updatedAt) || 0,
+                Number(forceUpdateData && forceUpdateData.updatedAt) || 0,
+                Number(whatsNewData && whatsNewData.updatedAt) || 0
+            );
+            const now = Date.now();
+            const nextTs = now > maxKnown ? now : maxKnown + 1;
+            localUpdatedAt = nextTs;
+            _lastLocalOwnerEditTime = now;
+            return nextTs;
+        }
+
         function applySyncDataToMemory(data, mergeMode = true, authoritativeRemote = false) {
             if (!data || typeof data !== "object") return;
             const incomingIsNewer = authoritativeRemote || (data.updatedAt || 0) >= (localUpdatedAt || 0);
@@ -1882,29 +1901,37 @@
             if (data.githubBranch) githubBranch = data.githubBranch;
 
             if (data.systemPushBroadcast && typeof data.systemPushBroadcast === "object") {
-                if (incomingIsNewer || !systemPushData.createdAt) {
+                const incomingSpTime = Number(data.systemPushBroadcast.createdAt) || Number(data.updatedAt) || 0;
+                const localSpTime = Number(systemPushData.createdAt) || 0;
+                if (incomingSpTime >= localSpTime || !localSpTime) {
                     systemPushData = { ...systemPushData, ...data.systemPushBroadcast };
                 }
             }
             if (data.tempBroadcast && typeof data.tempBroadcast === "object") {
-                if (incomingIsNewer || !tempBroadcastData.createdAt) {
+                const incomingTbTime = Number(data.tempBroadcast.createdAt) || Number(data.updatedAt) || 0;
+                const localTbTime = Number(tempBroadcastData.createdAt) || 0;
+                if (incomingTbTime >= localTbTime || !localTbTime) {
                     tempBroadcastData = { ...tempBroadcastData, ...data.tempBroadcast };
                 }
             }
             if (data.pinnedBroadcast && typeof data.pinnedBroadcast === "object") {
-                if (incomingIsNewer || !pinnedBroadcastData.updatedAt) {
+                const incomingPbTime = Number(data.pinnedBroadcast.updatedAt) || Number(data.updatedAt) || 0;
+                const localPbTime = Number(pinnedBroadcastData.updatedAt) || 0;
+                if (incomingPbTime >= localPbTime || !localPbTime) {
                     pinnedBroadcastData = { ...pinnedBroadcastData, ...data.pinnedBroadcast };
                 }
             }
             if (data.forceUpdate && typeof data.forceUpdate === "object") {
                 const incomingFuTime = Number(data.forceUpdate.updatedAt) || Number(data.updatedAt) || 0;
-                if (authoritativeRemote || incomingIsNewer || incomingFuTime >= (forceUpdateData.updatedAt || 0) || !forceUpdateData.updatedAt) {
+                const localFuTime = Number(forceUpdateData.updatedAt) || 0;
+                if (incomingFuTime >= localFuTime || !localFuTime) {
                     forceUpdateData = { ...forceUpdateData, ...data.forceUpdate };
                 }
             }
             if (data.whatsNew && typeof data.whatsNew === "object") {
                 const incomingWnTime = Number(data.whatsNew.updatedAt) || Number(data.updatedAt) || 0;
-                if (authoritativeRemote || incomingIsNewer || incomingWnTime >= (whatsNewData.updatedAt || 0) || !whatsNewData.updatedAt) {
+                const localWnTime = Number(whatsNewData.updatedAt) || 0;
+                if (incomingWnTime >= localWnTime || !localWnTime) {
                     whatsNewData = { ...whatsNewData, ...data.whatsNew };
                 }
             }
@@ -2076,7 +2103,7 @@
                 }
             }
 
-            if (authoritativeRemote && data.updatedAt) {
+            if (authoritativeRemote && data.updatedAt && data.updatedAt > localUpdatedAt) {
                 localUpdatedAt = data.updatedAt;
             } else if (data.updatedAt && data.updatedAt > localUpdatedAt) {
                 localUpdatedAt = data.updatedAt;
@@ -2125,7 +2152,7 @@
         function saveStateToLocalStorage(bumpTimestamp = true) {
             try {
                 if (bumpTimestamp) {
-                    localUpdatedAt = Date.now();
+                    localUpdatedAt = getNextMonotonicTimestamp();
                 }
                 const payload = buildFullSyncPayload();
                 const serialized = JSON.stringify(payload);
@@ -2524,25 +2551,36 @@
         }
         window.dispatchSystemPushNotificationToDevice = dispatchSystemPushToDeviceShade;
 
-        async function sendOwnerSystemPushNotification(enable) {
-            const title = document.getElementById("ownerSystemPushTitle")?.value.trim() || "🎵 Dark Music";
-            const message = document.getElementById("ownerSystemPushMsg")?.value.trim() || "";
-            const imageFile = document.getElementById("ownerSystemPushImage")?.value.trim() || "logo.png";
+        async function sendOwnerSystemPushNotification(enable = true) {
+            const spTitleEl = document.getElementById("ownerSystemPushTitle");
+            const spMsgEl = document.getElementById("ownerSystemPushMsg");
+            const spImgEl = document.getElementById("ownerSystemPushImage");
+            const title = spTitleEl?.value.trim() || "🎵 Dark Music";
+            const message = spMsgEl?.value.trim() || "";
+            const imageFile = spImgEl?.value.trim() || "logo.png";
 
             if (enable && !message) {
                 showToast("Введите текст push-уведомления для отправки в шторку", "ВНИМАНИЕ");
                 return;
             }
 
-            const pushId = enable ? "push_" + Date.now() : "";
+            const ts = getNextMonotonicTimestamp();
+            const pushId = enable ? "push_" + ts : "";
             systemPushData = {
                 id: pushId,
                 title,
                 message,
                 imageFile,
                 active: Boolean(enable),
-                createdAt: Date.now()
+                createdAt: ts
             };
+
+            [spTitleEl, spMsgEl, spImgEl].forEach(el => {
+                if (el) {
+                    el.dataset.userDirty = "0";
+                    el.dataset.ownerInitialized = "1";
+                }
+            });
 
             if (enable) {
                 window._lastDispatchedSysPushId = pushId;
@@ -2551,6 +2589,7 @@
             }
 
             saveStateToLocalStorage(true);
+            updateOwnerNotificationsFormUI(true);
             applyBroadcastAndForceUpdateUI();
             await persistSettingsToCloud();
             showToast(
@@ -2635,7 +2674,41 @@
             }, 380);
         }
 
-        function updateOwnerNotificationsFormUI() {
+        function syncOwnerInputFieldIfClean(el, newValue, syncSig, forceSync = false) {
+            if (!el) return;
+            if (!el._dirtyListenerAttached) {
+                el._dirtyListenerAttached = true;
+                const markDirty = () => {
+                    el.dataset.userDirty = "1";
+                    el.dataset.ownerInitialized = "1";
+                    _lastLocalOwnerEditTime = Date.now();
+                };
+                el.addEventListener("input", markDirty);
+                el.addEventListener("change", markDirty);
+            }
+            if (forceSync) {
+                el.value = newValue || "";
+                el.dataset.userDirty = "0";
+                el.dataset.ownerInitialized = "1";
+                el.dataset.lastSyncSig = String(syncSig || "");
+                return;
+            }
+            // Никогда не перезаписываем поле, если пользователь его редактировал или сейчас держит в фокусе
+            if (document.activeElement === el || el.dataset.userDirty === "1") {
+                return;
+            }
+            // Если панель владельца разблокирована и поле уже было инициализировано — фоновый опрос не сбрасывает текст
+            if (isOwnerUnlocked && el.dataset.ownerInitialized === "1") {
+                return;
+            }
+            if (newValue && el.dataset.lastSyncSig !== String(syncSig || "")) {
+                el.value = newValue;
+                el.dataset.lastSyncSig = String(syncSig || "");
+                el.dataset.ownerInitialized = "1";
+            }
+        }
+
+        function updateOwnerNotificationsFormUI(forceSync = false) {
             const curLocalVer = document.getElementById("ownerCurrentLocalVersion");
             if (curLocalVer) curLocalVer.value = `v${currentAppBuildVersion.toFixed(1)}`;
 
@@ -2651,9 +2724,10 @@
             const spTitle = document.getElementById("ownerSystemPushTitle");
             const spMsg = document.getElementById("ownerSystemPushMsg");
             const spImg = document.getElementById("ownerSystemPushImage");
-            if (spTitle && document.activeElement !== spTitle && systemPushData.title) spTitle.value = systemPushData.title;
-            if (spMsg && document.activeElement !== spMsg && systemPushData.message) spMsg.value = systemPushData.message;
-            if (spImg && document.activeElement !== spImg && systemPushData.imageFile) spImg.value = systemPushData.imageFile;
+            const spSig = `${systemPushData.id || ""}|${systemPushData.createdAt || 0}|${systemPushData.title || ""}|${systemPushData.message || ""}`;
+            syncOwnerInputFieldIfClean(spTitle, systemPushData.title, spSig, forceSync);
+            syncOwnerInputFieldIfClean(spMsg, systemPushData.message, spSig, forceSync);
+            syncOwnerInputFieldIfClean(spImg, systemPushData.imageFile, spSig, forceSync);
 
             const tempBadge = document.getElementById("tempNotifStatusBadge");
             if (tempBadge) {
@@ -2664,8 +2738,9 @@
             }
             const tTitle = document.getElementById("ownerTempNotifTitle");
             const tMsg = document.getElementById("ownerTempNotifMsg");
-            if (tTitle && document.activeElement !== tTitle && tempBroadcastData.title) tTitle.value = tempBroadcastData.title;
-            if (tMsg && document.activeElement !== tMsg && tempBroadcastData.message) tMsg.value = tempBroadcastData.message;
+            const tSig = `${tempBroadcastData.id || ""}|${tempBroadcastData.createdAt || 0}|${tempBroadcastData.title || ""}|${tempBroadcastData.message || ""}`;
+            syncOwnerInputFieldIfClean(tTitle, tempBroadcastData.title, tSig, forceSync);
+            syncOwnerInputFieldIfClean(tMsg, tempBroadcastData.message, tSig, forceSync);
 
             const pinBadge = document.getElementById("pinnedNotifStatusBadge");
             if (pinBadge) {
@@ -2676,8 +2751,9 @@
             }
             const pTitle = document.getElementById("ownerPinnedNotifTitle");
             const pMsg = document.getElementById("ownerPinnedNotifMsg");
-            if (pTitle && document.activeElement !== pTitle && pinnedBroadcastData.title) pTitle.value = pinnedBroadcastData.title;
-            if (pMsg && document.activeElement !== pMsg && pinnedBroadcastData.message) pMsg.value = pinnedBroadcastData.message;
+            const pSig = `${pinnedBroadcastData.id || ""}|${pinnedBroadcastData.updatedAt || 0}|${pinnedBroadcastData.title || ""}|${pinnedBroadcastData.message || ""}`;
+            syncOwnerInputFieldIfClean(pTitle, pinnedBroadcastData.title, pSig, forceSync);
+            syncOwnerInputFieldIfClean(pMsg, pinnedBroadcastData.message, pSig, forceSync);
 
             const fBadge = document.getElementById("forceUpdateStatusBadge");
             if (fBadge) {
@@ -2699,8 +2775,9 @@
                     syncBlockedPastVersionsCheckboxesFromInput();
                 }
             }
-            if (fUrl && document.activeElement !== fUrl && forceUpdateData.downloadUrl) fUrl.value = forceUpdateData.downloadUrl;
-            if (fMsg && document.activeElement !== fMsg && forceUpdateData.message) fMsg.value = forceUpdateData.message;
+            const fSig = `${forceUpdateData.updatedAt || 0}|${forceUpdateData.downloadUrl || ""}|${forceUpdateData.message || ""}`;
+            syncOwnerInputFieldIfClean(fUrl, forceUpdateData.downloadUrl, fSig, forceSync);
+            syncOwnerInputFieldIfClean(fMsg, forceUpdateData.message, fSig, forceSync);
             updateBlockedVersionsSummaryBadge();
 
             const wnBadge = document.getElementById("whatsNewStatusBadge");
@@ -2712,8 +2789,9 @@
             }
             const wnTitle = document.getElementById("ownerWhatsNewTitle");
             const wnContent = document.getElementById("ownerWhatsNewContent");
-            if (wnTitle && document.activeElement !== wnTitle && whatsNewData.title) wnTitle.value = whatsNewData.title;
-            if (wnContent && document.activeElement !== wnContent && whatsNewData.content) wnContent.value = whatsNewData.content;
+            const wnSig = `${whatsNewData.id || ""}|${whatsNewData.updatedAt || 0}|${whatsNewData.title || ""}|${whatsNewData.content || ""}`;
+            syncOwnerInputFieldIfClean(wnTitle, whatsNewData.title, wnSig, forceSync);
+            syncOwnerInputFieldIfClean(wnContent, whatsNewData.content, wnSig, forceSync);
         }
 
         function getSelectedBlockedPastVersions() {
@@ -2765,47 +2843,57 @@
             }
         }
 
-        async function sendOwnerTempNotification(enable) {
-            const title = document.getElementById("ownerTempNotifTitle")?.value.trim() || "🔥 Объявление Dark Music";
-            const message = document.getElementById("ownerTempNotifMsg")?.value.trim() || "";
+        async function sendOwnerTempNotification(enable = true) {
+            const tTitleEl = document.getElementById("ownerTempNotifTitle");
+            const tMsgEl = document.getElementById("ownerTempNotifMsg");
+            const title = tTitleEl?.value.trim() || "🔥 Объявление Dark Music";
+            const message = tMsgEl?.value.trim() || "";
             if (enable && !message) {
                 showToast("Введите текст всплывающего уведомления", "ВНИМАНИЕ");
                 return;
             }
+            const ts = getNextMonotonicTimestamp();
             tempBroadcastData = {
-                id: enable ? "tmp_" + Date.now() : "",
+                id: enable ? "tmp_" + ts : "",
                 title,
                 message,
                 active: Boolean(enable),
-                createdAt: Date.now()
+                createdAt: ts
             };
+            [tTitleEl, tMsgEl].forEach(el => { if (el) el.dataset.userDirty = "0"; });
             saveStateToLocalStorage(true);
+            updateOwnerNotificationsFormUI(true);
             applyBroadcastAndForceUpdateUI();
             await persistSettingsToCloud();
             showToast(enable ? "20-секундное уведомление отправлено всем!" : "Всплывающее уведомление отключено", "LIVE PUSH");
         }
 
-        async function saveOwnerPinnedNotification(enable) {
-            const title = document.getElementById("ownerPinnedNotifTitle")?.value.trim() || "⚡ Важная информация";
-            const message = document.getElementById("ownerPinnedNotifMsg")?.value.trim() || "";
+        async function saveOwnerPinnedNotification(enable = true) {
+            const pTitleEl = document.getElementById("ownerPinnedNotifTitle");
+            const pMsgEl = document.getElementById("ownerPinnedNotifMsg");
+            const title = pTitleEl?.value.trim() || "⚡ Важная информация";
+            const message = pMsgEl?.value.trim() || "";
             if (enable && !message) {
                 showToast("Введите текст закреплённого баннера", "ВНИМАНИЕ");
                 return;
             }
+            const ts = getNextMonotonicTimestamp();
             pinnedBroadcastData = {
-                id: enable ? "pin_" + Date.now() : "",
+                id: enable ? "pin_" + ts : "",
                 title,
                 message,
                 active: Boolean(enable),
-                updatedAt: Date.now()
+                updatedAt: ts
             };
+            [pTitleEl, pMsgEl].forEach(el => { if (el) el.dataset.userDirty = "0"; });
             saveStateToLocalStorage(true);
+            updateOwnerNotificationsFormUI(true);
             applyBroadcastAndForceUpdateUI();
             await persistSettingsToCloud();
             showToast(enable ? "Баннер закреплён вверху у всех пользователей!" : "Закреплённый баннер снят", "LIVE PUSH");
         }
 
-        async function saveOwnerForceUpdate(enable) {
+        async function saveOwnerForceUpdate(enable = true) {
             let reqVer = parseFloat(document.getElementById("ownerForceUpdateVersion")?.value) || currentAppBuildVersion;
             const selectedBlocked = getSelectedBlockedPastVersions();
             if (enable && selectedBlocked.length > 0) {
@@ -2816,45 +2904,55 @@
                     if (fVer) fVer.value = reqVer.toFixed(1);
                 }
             }
-            const downloadUrl = document.getElementById("ownerForceUpdateUrl")?.value.trim() || `https://github.com/${githubRepoPath}/releases/tag/v.${reqVer.toFixed(1)}`;
-            const message = document.getElementById("ownerForceUpdateMsg")?.value.trim() || "Доступна новая обязательная версия приложения Dark Music! Скачайте обновление по кнопке ниже.";
+            const fUrlEl = document.getElementById("ownerForceUpdateUrl");
+            const fMsgEl = document.getElementById("ownerForceUpdateMsg");
+            const downloadUrl = fUrlEl?.value.trim() || `https://github.com/${githubRepoPath}/releases/tag/v.${reqVer.toFixed(1)}`;
+            const message = fMsgEl?.value.trim() || "Доступна новая обязательная версия приложения Dark Music! Скачайте обновление по кнопке ниже.";
 
             if (enable && reqVer > currentAppBuildVersion) {
                 currentAppBuildVersion = reqVer;
                 window.__APP_BUILD_VERSION__ = reqVer;
             }
 
+            const ts = getNextMonotonicTimestamp();
             forceUpdateData = {
                 active: Boolean(enable),
                 requiredVersion: reqVer,
                 blockedVersions: selectedBlocked,
                 downloadUrl,
                 message,
-                updatedAt: Date.now()
+                updatedAt: ts
             };
+            [fUrlEl, fMsgEl].forEach(el => { if (el) el.dataset.userDirty = "0"; });
 
             saveStateToLocalStorage(true);
+            updateOwnerNotificationsFormUI(true);
             applyBroadcastAndForceUpdateUI();
             await persistSettingsToCloud();
             showToast(enable ? `Старые версии (ниже v${reqVer.toFixed(1)}) заблокированы! Актуальная v${currentAppBuildVersion.toFixed(1)} работает свободно.` : "Блокировка старых версий снята", "ОБНОВЛЕНИЕ");
         }
 
-        async function saveOwnerWhatsNew(enable) {
-            const title = document.getElementById("ownerWhatsNewTitle")?.value.trim() || `Что нового в Dark Music v${currentAppBuildVersion.toFixed(1)}`;
-            const content = document.getElementById("ownerWhatsNewContent")?.value.trim() || "";
+        async function saveOwnerWhatsNew(enable = true) {
+            const wnTitleEl = document.getElementById("ownerWhatsNewTitle");
+            const wnContentEl = document.getElementById("ownerWhatsNewContent");
+            const title = wnTitleEl?.value.trim() || `Что нового в Dark Music v${currentAppBuildVersion.toFixed(1)}`;
+            const content = wnContentEl?.value.trim() || "";
             if (enable && !content) {
                 showToast("Введите текст изменений для окна «Что нового»", "ВНИМАНИЕ");
                 return;
             }
+            const ts = getNextMonotonicTimestamp();
             whatsNewData = {
-                id: enable ? "wn_" + Date.now() : "",
+                id: enable ? "wn_" + ts : "",
                 title,
                 content,
                 version: currentAppBuildVersion,
                 active: Boolean(enable),
-                updatedAt: Date.now()
+                updatedAt: ts
             };
+            [wnTitleEl, wnContentEl].forEach(el => { if (el) el.dataset.userDirty = "0"; });
             saveStateToLocalStorage(true);
+            updateOwnerNotificationsFormUI(true);
             applyBroadcastAndForceUpdateUI();
             await persistSettingsToCloud();
             showToast(enable ? "Окно «Что нового» включено для всех пользователей!" : "Окно «Что нового» отключено", "ЧТО НОВОГО");
@@ -2891,6 +2989,9 @@
         let _ghPushChain = Promise.resolve(false);
 
         async function fetchCatalogFromGitHubRepo(silent = true) {
+            if (silent && (_activeGitHubPushCount > 0 || (Date.now() - _lastLocalOwnerEditTime < 15000))) {
+                return;
+            }
             try {
                 let loadedCatalog = null;
                 let fetchedFromRemote = false;
@@ -2968,6 +3069,10 @@
                     } catch (e) {}
                 }
 
+                if (silent && (_activeGitHubPushCount > 0 || (Date.now() - _lastLocalOwnerEditTime < 15000))) {
+                    return;
+                }
+
                 if (loadedCatalog && typeof loadedCatalog === "object") {
                     const beforeFp = computeCatalogFingerprint(buildFullSyncPayload());
                     // Авторитетная синхронизация из GitHub игнорирует расхождение часов между устройствами
@@ -2997,9 +3102,15 @@
         }
 
         function pushCatalogToGitHubRepo(showMessage = true) {
+            _activeGitHubPushCount++;
+            _lastLocalOwnerEditTime = Date.now();
             _ghPushChain = _ghPushChain
                 .catch(() => false)
-                .then(() => _executePushCatalogToGitHubRepo(showMessage));
+                .then(() => _executePushCatalogToGitHubRepo(showMessage))
+                .finally(() => {
+                    _activeGitHubPushCount = Math.max(0, _activeGitHubPushCount - 1);
+                    _lastLocalOwnerEditTime = Date.now();
+                });
             return _ghPushChain;
         }
 
@@ -6325,6 +6436,9 @@
                 navigator.serviceWorker.addEventListener("message", (event) => {
                     const msg = event.data;
                     if (msg && msg.type === "SW_CATALOG_SYNC" && msg.catalog && typeof msg.catalog === "object") {
+                        if (_activeGitHubPushCount > 0 || (Date.now() - _lastLocalOwnerEditTime < 15000)) {
+                            return;
+                        }
                         const beforeFp = computeCatalogFingerprint(buildFullSyncPayload());
                         applySyncDataToMemory(msg.catalog, false, true);
                         const afterFp = computeCatalogFingerprint(buildFullSyncPayload());

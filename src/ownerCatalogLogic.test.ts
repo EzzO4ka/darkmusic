@@ -12,7 +12,9 @@ import {
   reconstructTransportAuthToken,
   formatCollaborationArtistsLabel,
   entityHasArtist,
-  isVersionBlockedByForceUpdate
+  isVersionBlockedByForceUpdate,
+  nextMonotonicTimestamp,
+  shouldPopulateOwnerFormField
 } from './ownerCatalogLogic';
 
 test('generateArtistId transliterates Russian artist name into clean id', () => {
@@ -148,6 +150,50 @@ test('isVersionBlockedByForceUpdate blocks v1.0, v2.0, v3.0 and allows current v
   assert.equal(isVersionBlockedByForceUpdate(3.1, forceConfig, false), false);
   assert.equal(isVersionBlockedByForceUpdate(3.0, forceConfig, true), false);
 });
+
+test('nextMonotonicTimestamp always advances past future catalog timestamps and shouldPopulateOwnerFormField never overwrites dirty or unlocked owner inputs', () => {
+  // Real device clock (e.g., 1746000000000) vs catalog timestamp (1793614922360)
+  const ts = nextMonotonicTimestamp(1746000000000, 1793614911364, 1793614922360);
+  assert.equal(ts, 1793614923360);
+  assert.ok(ts > 1793614922360);
+
+  // Dirty input (user typed new push text) is never overwritten by background sync
+  assert.equal(
+    shouldPopulateOwnerFormField({
+      isFocused: false,
+      isUserDirty: true,
+      isOwnerUnlockedAndInitialized: false,
+      lastSyncedSignature: 'old_sig',
+      incomingSignature: 'new_sig'
+    }),
+    false
+  );
+
+  // Unlocked and initialized owner field is never overwritten by background sync
+  assert.equal(
+    shouldPopulateOwnerFormField({
+      isFocused: false,
+      isUserDirty: false,
+      isOwnerUnlockedAndInitialized: true,
+      lastSyncedSignature: 'old_sig',
+      incomingSignature: 'new_sig'
+    }),
+    false
+  );
+
+  // Clean uninitialized field is populated once on startup
+  assert.equal(
+    shouldPopulateOwnerFormField({
+      isFocused: false,
+      isUserDirty: false,
+      isOwnerUnlockedAndInitialized: false,
+      lastSyncedSignature: '',
+      incomingSignature: 'init_sig'
+    }),
+    true
+  );
+});
+
 
 
 
