@@ -560,7 +560,7 @@
     ],
     "downloadUrl": "https://github.com/EzzO4ka/darkmusic/releases/tag/v.3.1",
     "message": "Обновите приложение. Старая версия больше не работает. Перед обновлением, удалите старое приложение.",
-    "updatedAt": 1793614922358
+    "updatedAt": 1793615670069
   },
   "whatsNew": {
     "id": "wn_1793290258747",
@@ -570,5 +570,5 @@
     "active": true,
     "updatedAt": 1793290258747
   },
-  "updatedAt": 1793615413637
+  "updatedAt": 1793615670072
 }
