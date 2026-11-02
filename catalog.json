@@ -537,11 +537,11 @@
     "createdAt": 1793615413634
   },
   "tempBroadcast": {
-    "id": "tmp_1793051634442",
+    "id": "",
     "title": "Объявление Dark Music",
     "message": "Некоторые клипы получится посмотреть только с VPN - потому что эти клипы транслируются через YouTube.",
-    "active": true,
-    "createdAt": 1793051634443
+    "active": false,
+    "createdAt": 1793615799053
   },
   "pinnedBroadcast": {
     "id": "",
@@ -570,5 +570,5 @@
     "active": true,
     "updatedAt": 1793615692737
   },
-  "updatedAt": 1793615692739
+  "updatedAt": 1793615799056
 }
