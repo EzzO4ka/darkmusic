@@ -466,14 +466,15 @@
   "customVideos": [
     {
       "id": "vid_1793567359361",
-      "title": "Лирика Житухи (feat. МС ГЕИЧ)",
+      "title": "Лирика Житухи",
       "artistId": "mc_ezdit",
       "year": 2026,
       "previewFile": "covers/alb_rkn.jpg",
       "videoSource": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/f4ocRn42FcU?si=acqaj-mIwZdBkhKt\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
       "duration": "2:57",
       "isExplicit": true,
-      "createdAt": 1793567359361
+      "createdAt": 1793567359361,
+      "featArtistId": "mc_geich"
     },
     {
       "id": "vid_1793051455024",
@@ -564,5 +565,5 @@
     "active": true,
     "updatedAt": 1793290258747
   },
-  "updatedAt": 1793609173472
+  "updatedAt": 1793611836724
 }
