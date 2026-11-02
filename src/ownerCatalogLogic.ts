@@ -421,4 +421,24 @@ export function entityHasArtist(
   return entity.artistId === artistId || (Boolean(entity.featArtistId) && entity.featArtistId === artistId);
 }
 
+export function isVersionBlockedByForceUpdate(
+  currentVersion: number,
+  forceUpdate: {
+    active?: boolean;
+    requiredVersion?: number;
+    blockedVersions?: number[];
+  } | null | undefined,
+  isOwnerUnlocked: boolean = false
+): boolean {
+  if (!forceUpdate || !forceUpdate.active || isOwnerUnlocked) {
+    return false;
+  }
+  const reqVer = Number(forceUpdate.requiredVersion) || 3.1;
+  const blockedList = Array.isArray(forceUpdate.blockedVersions)
+    ? forceUpdate.blockedVersions.map((v) => Number(v)).filter((v) => !Number.isNaN(v))
+    : [];
+  const isExplicitlyBlocked = blockedList.some((bv) => Math.abs(bv - currentVersion) < 0.0001);
+  return currentVersion < reqVer - 0.0001 || isExplicitlyBlocked;
+}
+
 

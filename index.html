@@ -227,7 +227,7 @@
                     <span>Скачать новую версию</span>
                 </a>
                 <div class="pt-2 border-t border-zinc-900 flex items-center justify-between text-[10px] text-zinc-600">
-                    <span id="forceUpdateVersionBadge">Текущая сборка: v3.0</span>
+                    <span id="forceUpdateVersionBadge">Текущая сборка: v3.1</span>
                     <button onclick="openOwnerTab()" class="text-zinc-500 hover:text-zinc-300 font-bold flex items-center gap-1">
                         <i class="fa-solid fa-key text-[9px]"></i>
                         <span>Владелец</span>
@@ -667,26 +667,49 @@
                     </div>
 
                     <!-- В) Принудительное обновление (блокировка старой версии) -->
-                    <div class="p-3 rounded-xl bg-rose-950/20 border border-rose-500/30 space-y-2">
+                    <div class="p-3 rounded-xl bg-rose-950/20 border border-rose-500/30 space-y-2.5">
                         <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-extrabold text-rose-400">3. Принудительное обновление (блокировка входа)</span>
+                            <span class="text-[11px] font-extrabold text-rose-400">3. Принудительное обновление (блокировка старых версий)</span>
                             <span id="forceUpdateStatusBadge" class="text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">Выкл</span>
                         </div>
                         <p class="text-[10px] text-zinc-400 leading-relaxed">
-                            Когда включено, пользователи старой версии (ниже указанной) не смогут пользоваться приложением, пока не нажмут кнопку скачивания новой версии по вашей ссылке.
+                            Когда включено, пользователи прошлых версий (v1.0, v2.0, v3.0 и любых ниже актуальной v3.1) не смогут войти в приложение, пока не скачают обновление по вашей ссылке.
                         </p>
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="text-[9px] text-zinc-400 block mb-0.5">Требуемая версия (число)</label>
-                                <input id="ownerForceUpdateVersion" type="number" step="0.1" value="3.0" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-rose-500">
+                                <label class="text-[9px] text-zinc-400 block mb-0.5">Минимальная рабочая версия</label>
+                                <input id="ownerForceUpdateVersion" type="number" step="0.1" value="3.1" oninput="syncBlockedPastVersionsCheckboxesFromInput()" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-rose-500">
                             </div>
                             <div>
-                                <label class="text-[9px] text-zinc-400 block mb-0.5">Версия этого файла</label>
-                                <input id="ownerCurrentLocalVersion" type="text" disabled value="3.0" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-zinc-400">
+                                <label class="text-[9px] text-zinc-400 block mb-0.5">Актуальная версия (этот файл)</label>
+                                <input id="ownerCurrentLocalVersion" type="text" disabled value="v3.1" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-emerald-400 font-bold">
                             </div>
                         </div>
-                        <input id="ownerForceUpdateUrl" type="text" placeholder="Ссылка на скачивание новой версии (https://...)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-rose-500">
-                        <textarea id="ownerForceUpdateMsg" rows="2" placeholder="Сообщение (например: Вышло глобальное обновление Dark Music! Скачайте новую версию для продолжения работы.)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-rose-500"></textarea>
+                        <div class="p-2.5 rounded-xl bg-zinc-950/90 border border-zinc-800/90 space-y-2">
+                            <div class="flex items-center justify-between gap-2">
+                                <span class="text-[10px] font-bold text-zinc-300">Выберите старые версии для блокировки:</span>
+                                <button type="button" onclick="selectAllPastVersionsForBlock()" class="text-[9px] font-extrabold text-rose-400 hover:text-rose-300 underline">Выбрать все &lt; v3.1</button>
+                            </div>
+                            <div id="ownerBlockedVersionsGrid" class="grid grid-cols-3 gap-1.5">
+                                <label class="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-zinc-900 border border-rose-500/30 text-[10px] font-bold text-zinc-200 cursor-pointer">
+                                    <input type="checkbox" data-block-ver="1.0" checked class="accent-rose-500 rounded" onchange="updateBlockedVersionsSummaryBadge()">
+                                    <span>v1.0</span>
+                                </label>
+                                <label class="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-zinc-900 border border-rose-500/30 text-[10px] font-bold text-zinc-200 cursor-pointer">
+                                    <input type="checkbox" data-block-ver="2.0" checked class="accent-rose-500 rounded" onchange="updateBlockedVersionsSummaryBadge()">
+                                    <span>v2.0</span>
+                                </label>
+                                <label class="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-zinc-900 border border-rose-500/30 text-[10px] font-bold text-zinc-200 cursor-pointer">
+                                    <input type="checkbox" data-block-ver="3.0" checked class="accent-rose-500 rounded" onchange="updateBlockedVersionsSummaryBadge()">
+                                    <span>v3.0</span>
+                                </label>
+                            </div>
+                            <div id="blockedVersionsListBadge" class="text-[10px] font-semibold text-rose-300 leading-tight">
+                                Под блокировкой: v1.0, v2.0, v3.0 (все версии ниже v3.1)
+                            </div>
+                        </div>
+                        <input id="ownerForceUpdateUrl" type="text" placeholder="Ссылка на скачивание новой версии v3.1 (https://...)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-rose-500">
+                        <textarea id="ownerForceUpdateMsg" rows="2" placeholder="Сообщение (например: Обновите приложение до версии 3.1. Старые версии больше не работают.)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-rose-500"></textarea>
                         <div class="grid grid-cols-2 gap-2">
                             <button onclick="saveOwnerForceUpdate(true)" class="py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-extrabold text-[11px] spring-btn">
                                 Заблокировать старые версии
@@ -706,7 +729,7 @@
                         <p class="text-[10px] text-zinc-400 leading-relaxed">
                             Показывает пользователям полноэкранное окно со списком изменений новой версии.
                         </p>
-                        <input id="ownerWhatsNewTitle" type="text" placeholder="Заголовок (например: Что нового в Dark Music v3.0)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                        <input id="ownerWhatsNewTitle" type="text" placeholder="Заголовок (например: Что нового в Dark Music v3.1)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500">
                         <textarea id="ownerWhatsNewContent" rows="3" placeholder="Опишите, что нового добавилось (каждый пункт с новой строки)..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500"></textarea>
                         <div class="grid grid-cols-2 gap-2">
                             <button onclick="saveOwnerWhatsNew(true)" class="py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-[11px] spring-btn">
@@ -1373,7 +1396,7 @@
     <script>
         /*__BAKED_VAULT_START__*/
         window.__BAKED_VAULT_DATA__ = null;
-        window.__APP_BUILD_VERSION__ = 3.0;
+        window.__APP_BUILD_VERSION__ = 3.1;
         /*__BAKED_VAULT_END__*/
 
         // Криптографическое ядро (65 536 раундов ChaCha20-ARX + Murmur3 Sponge KDF и 3-дольная матрица GF(256))
@@ -1531,14 +1554,14 @@
         let githubPersonalToken = "";
 
         // Текущая версия установленного файла приложения
-        let currentAppBuildVersion = Number(window.__APP_BUILD_VERSION__) || 3.0;
+        let currentAppBuildVersion = Number(window.__APP_BUILD_VERSION__) || 3.1;
 
         // Состояние глобальных уведомлений, системного Push в шторку, окна «Что нового» и принудительного обновления
         let systemPushData = { id: "", title: "", message: "", imageFile: "logo.png", active: false, createdAt: 0 };
         let tempBroadcastData = { id: "", title: "", message: "", active: false, createdAt: 0 };
         let pinnedBroadcastData = { id: "", title: "", message: "", active: false, updatedAt: 0 };
-        let forceUpdateData = { active: false, requiredVersion: 3.0, downloadUrl: "", message: "", updatedAt: 0 };
-        let whatsNewData = { id: "", title: "", content: "", version: 3.0, active: false, updatedAt: 0 };
+        let forceUpdateData = { active: false, requiredVersion: 3.1, blockedVersions: [1.0, 2.0, 3.0], downloadUrl: "", message: "", updatedAt: 0 };
+        let whatsNewData = { id: "", title: "", content: "", version: 3.1, active: false, updatedAt: 0 };
 
         let tempBroadcastTimeout = null;
         let tempBroadcastInterval = null;
@@ -1859,12 +1882,14 @@
                 }
             }
             if (data.forceUpdate && typeof data.forceUpdate === "object") {
-                if (incomingIsNewer || !forceUpdateData.updatedAt) {
+                const incomingFuTime = Number(data.forceUpdate.updatedAt) || Number(data.updatedAt) || 0;
+                if (authoritativeRemote || incomingIsNewer || incomingFuTime >= (forceUpdateData.updatedAt || 0) || !forceUpdateData.updatedAt) {
                     forceUpdateData = { ...forceUpdateData, ...data.forceUpdate };
                 }
             }
             if (data.whatsNew && typeof data.whatsNew === "object") {
-                if (incomingIsNewer || !whatsNewData.updatedAt) {
+                const incomingWnTime = Number(data.whatsNew.updatedAt) || Number(data.updatedAt) || 0;
+                if (authoritativeRemote || incomingIsNewer || incomingWnTime >= (whatsNewData.updatedAt || 0) || !whatsNewData.updatedAt) {
                     whatsNewData = { ...whatsNewData, ...data.whatsNew };
                 }
             }
@@ -2287,17 +2312,25 @@
             }
 
             const forceModal = document.getElementById("forceUpdateModal");
-            if (forceModal) {
-                const reqVer = Number(forceUpdateData?.requiredVersion) || 3.0;
-                const isOutdated = Boolean(forceUpdateData && forceUpdateData.active && currentAppBuildVersion < reqVer);
+            const reqVer = Number(forceUpdateData?.requiredVersion) || 3.1;
+            const blockedList = Array.isArray(forceUpdateData?.blockedVersions)
+                ? forceUpdateData.blockedVersions.map(v => Number(v)).filter(v => !isNaN(v))
+                : [];
+            const isExplicitlyBlocked = blockedList.some(bv => Math.abs(bv - currentAppBuildVersion) < 0.0001);
+            const isOutdated = Boolean(
+                forceUpdateData &&
+                forceUpdateData.active &&
+                (currentAppBuildVersion < reqVer - 0.0001 || isExplicitlyBlocked)
+            );
 
+            if (forceModal) {
                 if (isOutdated && !isOwnerUnlocked) {
                     const msgEl = document.getElementById("forceUpdateMessage");
                     const btnEl = document.getElementById("forceUpdateDownloadBtn");
                     const verBadge = document.getElementById("forceUpdateVersionBadge");
 
                     if (msgEl) {
-                        msgEl.textContent = forceUpdateData.message || "Ваша версия приложения устарела. Скачайте новую версию для продолжения прослушивания.";
+                        msgEl.textContent = forceUpdateData.message || "Ваша версия приложения устарела. Скачайте новую версию v3.1 для продолжения прослушивания.";
                     }
                     if (btnEl) {
                         btnEl.href = forceUpdateData.downloadUrl || `https://github.com/${githubRepoPath}/releases`;
@@ -2323,8 +2356,7 @@
             // Полноэкранное окно «Что нового» (показывается на актуальной версии, если ещё не было закрыто пользователем)
             const wnModal = document.getElementById("whatsNewModal");
             if (wnModal) {
-                const reqVer = Number(forceUpdateData?.requiredVersion) || 3.0;
-                const isBlockedByOldVer = Boolean(forceUpdateData && forceUpdateData.active && currentAppBuildVersion < reqVer && !isOwnerUnlocked);
+                const isBlockedByOldVer = Boolean(isOutdated && !isOwnerUnlocked);
                 if (!isBlockedByOldVer && whatsNewData && whatsNewData.active && whatsNewData.id && whatsNewData.content) {
                     const seenWnKey = "dark_music_seen_whatsnew_" + whatsNewData.id;
                     let seenWn = false;
@@ -2630,7 +2662,8 @@
 
             const fBadge = document.getElementById("forceUpdateStatusBadge");
             if (fBadge) {
-                fBadge.textContent = forceUpdateData.active ? `Блок < v${forceUpdateData.requiredVersion}` : "Выкл";
+                const dispVer = Number(forceUpdateData.requiredVersion || currentAppBuildVersion).toFixed(1);
+                fBadge.textContent = forceUpdateData.active ? `Блок < v${dispVer}` : "Выкл";
                 fBadge.className = forceUpdateData.active
                     ? "text-[9px] font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/40"
                     : "text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400";
@@ -2639,13 +2672,17 @@
             const fUrl = document.getElementById("ownerForceUpdateUrl");
             const fMsg = document.getElementById("ownerForceUpdateMsg");
             if (fVer && document.activeElement !== fVer) {
-                const targetVer = forceUpdateData.active
-                    ? (Number(forceUpdateData.requiredVersion) || currentAppBuildVersion)
-                    : Math.max(Number(forceUpdateData.requiredVersion) || currentAppBuildVersion, currentAppBuildVersion);
-                fVer.value = targetVer.toFixed(1);
+                const targetVer = Math.max(Number(forceUpdateData.requiredVersion) || currentAppBuildVersion, currentAppBuildVersion);
+                const sig = `${forceUpdateData.active}|${forceUpdateData.requiredVersion}|${currentAppBuildVersion}`;
+                if (fVer._lastSyncSig !== sig) {
+                    fVer._lastSyncSig = sig;
+                    fVer.value = targetVer.toFixed(1);
+                    syncBlockedPastVersionsCheckboxesFromInput();
+                }
             }
             if (fUrl && document.activeElement !== fUrl && forceUpdateData.downloadUrl) fUrl.value = forceUpdateData.downloadUrl;
             if (fMsg && document.activeElement !== fMsg && forceUpdateData.message) fMsg.value = forceUpdateData.message;
+            updateBlockedVersionsSummaryBadge();
 
             const wnBadge = document.getElementById("whatsNewStatusBadge");
             if (wnBadge) {
@@ -2658,6 +2695,55 @@
             const wnContent = document.getElementById("ownerWhatsNewContent");
             if (wnTitle && document.activeElement !== wnTitle && whatsNewData.title) wnTitle.value = whatsNewData.title;
             if (wnContent && document.activeElement !== wnContent && whatsNewData.content) wnContent.value = whatsNewData.content;
+        }
+
+        function getSelectedBlockedPastVersions() {
+            const checkboxes = document.querySelectorAll("#ownerBlockedVersionsGrid input[data-block-ver]");
+            const selected = [];
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    const v = parseFloat(cb.getAttribute("data-block-ver"));
+                    if (!isNaN(v)) selected.push(v);
+                }
+            });
+            return selected;
+        }
+
+        function syncBlockedPastVersionsCheckboxesFromInput() {
+            const reqVer = parseFloat(document.getElementById("ownerForceUpdateVersion")?.value) || currentAppBuildVersion;
+            const checkboxes = document.querySelectorAll("#ownerBlockedVersionsGrid input[data-block-ver]");
+            checkboxes.forEach(cb => {
+                const v = parseFloat(cb.getAttribute("data-block-ver"));
+                if (!isNaN(v)) {
+                    cb.checked = v < reqVer - 0.0001;
+                }
+            });
+            updateBlockedVersionsSummaryBadge();
+        }
+
+        function selectAllPastVersionsForBlock() {
+            const fVer = document.getElementById("ownerForceUpdateVersion");
+            if (fVer) {
+                fVer.value = currentAppBuildVersion.toFixed(1);
+            }
+            const checkboxes = document.querySelectorAll("#ownerBlockedVersionsGrid input[data-block-ver]");
+            checkboxes.forEach(cb => {
+                cb.checked = true;
+            });
+            updateBlockedVersionsSummaryBadge();
+        }
+
+        function updateBlockedVersionsSummaryBadge() {
+            const badge = document.getElementById("blockedVersionsListBadge");
+            if (!badge) return;
+            const reqVer = parseFloat(document.getElementById("ownerForceUpdateVersion")?.value) || currentAppBuildVersion;
+            const checked = getSelectedBlockedPastVersions();
+            const labels = checked.map(v => `v${v.toFixed(1)}`);
+            if (labels.length > 0) {
+                badge.textContent = `Под блокировкой: ${labels.join(", ")} (все версии ниже v${reqVer.toFixed(1)})`;
+            } else {
+                badge.textContent = `Все версии ниже v${reqVer.toFixed(1)} будут заблокированы`;
+            }
         }
 
         async function sendOwnerTempNotification(enable) {
@@ -2701,14 +2787,18 @@
         }
 
         async function saveOwnerForceUpdate(enable) {
-            const reqVer = parseFloat(document.getElementById("ownerForceUpdateVersion")?.value) || 3.0;
-            const downloadUrl = document.getElementById("ownerForceUpdateUrl")?.value.trim() || "";
-            const message = document.getElementById("ownerForceUpdateMsg")?.value.trim() || "Доступна новая обязательная версия приложения Dark Music! Скачайте обновление по кнопке ниже.";
-
-            if (enable && !downloadUrl) {
-                showToast("Укажите ссылку на скачивание новой версии", "ВНИМАНИЕ");
-                return;
+            let reqVer = parseFloat(document.getElementById("ownerForceUpdateVersion")?.value) || currentAppBuildVersion;
+            const selectedBlocked = getSelectedBlockedPastVersions();
+            if (enable && selectedBlocked.length > 0) {
+                const maxBlocked = Math.max(...selectedBlocked);
+                if (reqVer <= maxBlocked) {
+                    reqVer = Math.max(currentAppBuildVersion, Number((maxBlocked + 0.1).toFixed(1)));
+                    const fVer = document.getElementById("ownerForceUpdateVersion");
+                    if (fVer) fVer.value = reqVer.toFixed(1);
+                }
             }
+            const downloadUrl = document.getElementById("ownerForceUpdateUrl")?.value.trim() || `https://github.com/${githubRepoPath}/releases/tag/v.${reqVer.toFixed(1)}`;
+            const message = document.getElementById("ownerForceUpdateMsg")?.value.trim() || "Доступна новая обязательная версия приложения Dark Music! Скачайте обновление по кнопке ниже.";
 
             if (enable && reqVer > currentAppBuildVersion) {
                 currentAppBuildVersion = reqVer;
@@ -2718,6 +2808,7 @@
             forceUpdateData = {
                 active: Boolean(enable),
                 requiredVersion: reqVer,
+                blockedVersions: selectedBlocked,
                 downloadUrl,
                 message,
                 updatedAt: Date.now()
@@ -2726,7 +2817,7 @@
             saveStateToLocalStorage(true);
             applyBroadcastAndForceUpdateUI();
             await persistSettingsToCloud();
-            showToast(enable ? `Старые версии (ниже v${reqVer}) заблокированы! Новая версия v${reqVer} работает свободно.` : "Блокировка старых версий снята", "ОБНОВЛЕНИЕ");
+            showToast(enable ? `Старые версии (ниже v${reqVer.toFixed(1)}) заблокированы! Актуальная v${currentAppBuildVersion.toFixed(1)} работает свободно.` : "Блокировка старых версий снята", "ОБНОВЛЕНИЕ");
         }
 
         async function saveOwnerWhatsNew(enable) {

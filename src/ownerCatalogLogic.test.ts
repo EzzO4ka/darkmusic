@@ -11,7 +11,8 @@ import {
   verifyOwnerAccessPin,
   reconstructTransportAuthToken,
   formatCollaborationArtistsLabel,
-  entityHasArtist
+  entityHasArtist,
+  isVersionBlockedByForceUpdate
 } from './ownerCatalogLogic';
 
 test('generateArtistId transliterates Russian artist name into clean id', () => {
@@ -134,5 +135,19 @@ test('formatCollaborationArtistsLabel joins artists with a comma without feat an
   assert.equal(entityHasArtist(videoClip, 'mc_makaka'), true);
   assert.equal(entityHasArtist(videoClip, 'mc_ezdit'), false);
 });
+
+test('isVersionBlockedByForceUpdate blocks v1.0, v2.0, v3.0 and allows current v3.1', () => {
+  const forceConfig = {
+    active: true,
+    requiredVersion: 3.1,
+    blockedVersions: [1.0, 2.0, 3.0]
+  };
+  assert.equal(isVersionBlockedByForceUpdate(1.0, forceConfig, false), true);
+  assert.equal(isVersionBlockedByForceUpdate(2.0, forceConfig, false), true);
+  assert.equal(isVersionBlockedByForceUpdate(3.0, forceConfig, false), true);
+  assert.equal(isVersionBlockedByForceUpdate(3.1, forceConfig, false), false);
+  assert.equal(isVersionBlockedByForceUpdate(3.0, forceConfig, true), false);
+});
+
 
 
