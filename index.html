@@ -481,6 +481,10 @@
                         </div>
                         <span id="totalVideosBadge" class="px-2.5 py-0.5 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] font-bold text-zinc-400">0</span>
                     </div>
+                    <div class="p-3 rounded-xl bg-purple-500/10 border border-purple-500/25 flex items-start gap-2.5">
+                        <i class="fa-solid fa-thumbtack text-purple-400 text-xs mt-0.5 shrink-0"></i>
+                        <p class="text-[11px] font-medium text-zinc-200 leading-snug">Некоторые клипы возможно посмотреть только с VPN - потому что эти клипы транслируются через YouTube.</p>
+                    </div>
                     <div id="homeVideosList" class="grid grid-cols-1 gap-3"></div>
                 </div>
 
@@ -1011,19 +1015,34 @@
                     <div class="space-y-2.5">
                         <input id="newVideoTitle" type="text" placeholder="Название видеоклипа" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
                         <div class="grid grid-cols-2 gap-2">
-                            <select id="newVideoArtist" class="bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
-                                <option value="mc_geich">МС ГЕИЧ</option>
-                                <option value="mc_makaka">МС МАКАКА</option>
-                                <option value="mc_ezdit">МС ЕЗДИТЬ</option>
-                                <option value="mc_oparysh">МС ОПАРЫШ</option>
-                            </select>
+                            <div>
+                                <label class="text-[10px] text-zinc-400 block mb-1">Основной артист</label>
+                                <select id="newVideoArtist" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
+                                    <option value="mc_geich">МС ГЕИЧ</option>
+                                    <option value="mc_makaka">МС МАКАКА</option>
+                                    <option value="mc_ezdit">МС ЕЗДИТЬ</option>
+                                    <option value="mc_oparysh">МС ОПАРЫШ</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-purple-400 font-semibold block mb-1">Фит (2-й артист)</label>
+                                <select id="newVideoFeatArtist" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                                    <option value="">Без фита (Соло)</option>
+                                    <option value="mc_geich">МС ГЕИЧ</option>
+                                    <option value="mc_makaka">МС МАКАКА</option>
+                                    <option value="mc_ezdit">МС ЕЗДИТЬ</option>
+                                    <option value="mc_oparysh">МС ОПАРЫШ</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
                             <input id="newVideoYear" type="number" value="2025" placeholder="Год (2025)" class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            <input id="newVideoDuration" type="text" value="3:10" placeholder="Длит. (3:10)" class="bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
                         </div>
                         <input id="newVideoPreview" type="text" placeholder="Превью-картинка (например: covers/clip1.jpg или https://...)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
                         <textarea id="newVideoSource" rows="2" placeholder="Ссылка на видео (mp4 / YouTube / VK) ИЛИ код плеера (<iframe ...>)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500"></textarea>
                         <div class="flex items-center justify-between gap-2">
-                            <input id="newVideoDuration" type="text" value="3:10" placeholder="Длит. (3:10)" class="w-1/2 bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
-                            <label class="w-1/2 flex items-center gap-2 py-2 px-3 rounded-xl bg-zinc-900 border border-rose-500/40 text-xs text-rose-400 cursor-pointer justify-center">
+                            <label class="w-full flex items-center gap-2 py-2 px-3 rounded-xl bg-zinc-900 border border-rose-500/40 text-xs text-rose-400 cursor-pointer justify-center">
                                 <input id="newVideoIsExplicit" type="checkbox" class="accent-rose-500 rounded">
                                 <span class="text-[11px] font-black">Клип 18+</span>
                             </label>
@@ -1120,7 +1139,10 @@
                             <p id="miniTitle" class="text-xs font-extrabold text-white truncate">Выберите трек</p>
                             <span id="miniExplicitBadge" class="hidden px-1 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>
                         </div>
-                        <p id="miniArtist" class="text-[10px] text-zinc-400 truncate">Dark Music</p>
+                        <div class="flex items-center gap-1.5 mt-0.5 min-w-0">
+                            <div id="miniArtistAvatar" class="w-4 h-4 rounded-full overflow-hidden shrink-0 flex items-center justify-center"></div>
+                            <p id="miniArtist" class="text-[10px] text-zinc-400 truncate">Dark Music</p>
+                        </div>
                     </div>
                 </div>
                 <div class="flex items-center gap-1.5 shrink-0">
@@ -1177,12 +1199,9 @@
                 </div>
             </div>
 
-            <!-- Квадратная обложка трека/альбома -->
+            <!-- Квадратная обложка трека/альбома (без текста поверх обложки) -->
             <div class="my-3 flex justify-center">
                 <div id="playerCoverCard" class="w-64 h-64 sm:w-72 sm:h-72 rounded-3xl bg-gradient-to-br from-purple-700 via-indigo-950 to-black border border-white/15 shadow-2xl shadow-purple-950/60 relative overflow-hidden flex items-center justify-center cover-playing">
-                    <span id="playerCoverBadge" class="absolute top-3 left-3 z-20 px-2.5 py-1 rounded-lg bg-black/65 backdrop-blur-md border border-white/10 text-[9px] font-black uppercase tracking-widest text-zinc-200">
-                        ALBUM TRACK
-                    </span>
                     <div id="playerCoverInner" class="w-full h-full flex items-center justify-center">
                         <i class="fa-solid fa-compact-disc text-6xl text-white/30"></i>
                     </div>
@@ -1197,13 +1216,15 @@
                         <span id="playerExplicitBadge" class="hidden px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/50 text-rose-400 text-[9px] font-black uppercase shrink-0">18+</span>
                         <span id="playerNewBadge" class="hidden px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[9px] font-black uppercase shrink-0">NEW</span>
                     </div>
-                    <div class="flex items-center flex-wrap gap-1.5 mt-0.5">
-                        <button id="playerArtistBtn" onclick="openCurrentTrackArtist()" class="flex items-center gap-1 text-xs font-bold text-zinc-400 hover:text-white spring-btn">
+                    <div class="flex items-center flex-wrap gap-1.5 mt-1">
+                        <button id="playerArtistBtn" onclick="openCurrentTrackArtist()" class="flex items-center gap-1.5 text-xs font-bold text-zinc-300 hover:text-white spring-btn">
+                            <span id="playerArtistAvatar" class="w-5 h-5 rounded-full overflow-hidden shrink-0 inline-flex items-center justify-center"></span>
                             <span id="playerArtist">МС ГЕИЧ</span>
                             <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
                         </button>
-                        <span id="playerFeatDivider" class="hidden px-1.5 py-0.2 rounded bg-purple-500/20 border border-purple-500/40 text-purple-300 text-[9px] font-black uppercase">feat.</span>
-                        <button id="playerFeatArtistBtn" onclick="openCurrentTrackFeatArtist()" class="hidden items-center gap-1 text-xs font-bold text-purple-300 hover:text-white spring-btn">
+                        <span id="playerFeatDivider" class="hidden text-xs font-bold text-zinc-400 -ml-1 mr-0.5">,</span>
+                        <button id="playerFeatArtistBtn" onclick="openCurrentTrackFeatArtist()" class="hidden items-center gap-1.5 text-xs font-bold text-zinc-300 hover:text-white spring-btn">
+                            <span id="playerFeatArtistAvatar" class="w-5 h-5 rounded-full overflow-hidden shrink-0 inline-flex items-center justify-center"></span>
                             <span id="playerFeatArtist">МС МАКАКА</span>
                             <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
                         </button>
@@ -1762,7 +1783,7 @@
                     ca: (data.customArtists || []).map(x => `${x.id}_${x.name}_${x.role}_${x.avatarFile}_${x.gradient}_${x.icon}`),
                     t: (data.customTracks || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.featArtistId || ''}_${x.albumId}_${x.filePath}_${x.coverFile}_${x.year}_${x.duration}_${x.isNew}_${Boolean(x.isExplicit)}`),
                     a: (data.customAlbums || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.featArtistId || ''}_${x.type}_${x.coverFile}_${x.year}_${Boolean(x.isExplicit)}`),
-                    v: (data.customVideos || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.previewFile}_${x.videoSource}_${x.year}_${Boolean(x.isExplicit)}`),
+                    v: (data.customVideos || []).map(x => `${x.id}_${x.title}_${x.artistId}_${x.featArtistId || ''}_${x.previewFile}_${x.videoSource}_${x.year}_${Boolean(x.isExplicit)}`),
                     n: (data.customNews || []).map(x => `${x.id}_${x.title}_${x.targetId}_${x.dateText}_${x.imageFile}_${x.content}`),
                     del: data.deletedCustomIds || [],
                     an: data.artistNames || {},
@@ -3094,12 +3115,12 @@
             return track.artistId === artistId || (Boolean(track.featArtistId) && track.featArtistId === artistId);
         }
 
-        // Формирование строки имени артиста (или дуэта при наличии фита)
+        // Формирование строки имени артиста (или дуэта через запятую)
         function getTrackArtistsLabel(track) {
             if (!track) return "Dark Music";
             const mainArtist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
             const featArtist = (track.featArtistId && track.featArtistId !== track.artistId) ? ARTISTS[track.featArtistId] : null;
-            return featArtist ? `${mainArtist.name} feat. ${featArtist.name}` : mainArtist.name;
+            return featArtist ? `${mainArtist.name}, ${featArtist.name}` : mainArtist.name;
         }
 
         // Проверка принадлежности альбома / сингла артисту (учитывает основного артиста и фит)
@@ -3108,20 +3129,36 @@
             return album.artistId === artistId || (Boolean(album.featArtistId) && album.featArtistId === artistId);
         }
 
-        // Формирование строки артистов для альбома / EP / сингла
+        // Формирование строки артистов для альбома / EP / сингла (через запятую)
         function getAlbumArtistsLabel(album) {
             if (!album) return "Dark Music";
             const mainArtist = ARTISTS[album.artistId] || ARTISTS.mc_geich;
             const featArtist = (album.featArtistId && album.featArtistId !== album.artistId) ? ARTISTS[album.featArtistId] : null;
-            return featArtist ? `${mainArtist.name} feat. ${featArtist.name}` : mainArtist.name;
+            return featArtist ? `${mainArtist.name}, ${featArtist.name}` : mainArtist.name;
         }
 
-        function renderAvatarBox(artist, sizeClasses = "w-11 h-11 rounded-xl", iconSize = "text-sm") {
-            const url = getRawUrl(artist.avatarFile);
+        // Проверка принадлежности видеоклипа артисту (учитывает основного артиста и фит)
+        function videoHasArtist(video, artistId) {
+            if (!video || !artistId) return false;
+            return video.artistId === artistId || (Boolean(video.featArtistId) && video.featArtistId === artistId);
+        }
+
+        // Формирование строки артистов для видеоклипа (через запятую)
+        function getVideoArtistsLabel(video) {
+            if (!video) return "Dark Music";
+            const mainArtist = ARTISTS[video.artistId] || ARTISTS.mc_geich;
+            const featArtist = (video.featArtistId && video.featArtistId !== video.artistId) ? ARTISTS[video.featArtistId] : null;
+            return featArtist ? `${mainArtist.name}, ${featArtist.name}` : mainArtist.name;
+        }
+
+        function renderAvatarBox(artist, sizeClasses = "w-11 h-11 rounded-full", iconSize = "text-sm") {
+            const safeArtist = artist || getFallbackArtist();
+            const url = getRawUrl(safeArtist.avatarFile);
+            const normalizedClasses = String(sizeClasses || "w-11 h-11").replace(/\brounded-(?:none|sm|md|lg|xl|2xl|3xl)\b/g, "").trim() + " rounded-full";
             return `
-                <div class="${sizeClasses} bg-gradient-to-br ${artist.gradient} flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
-                    <i class="fa-solid ${artist.icon} ${iconSize} text-white/85"></i>
-                    <img src="${url}" alt="${artist.name}" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                <div class="${normalizedClasses} bg-gradient-to-br ${safeArtist.gradient} flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
+                    <i class="fa-solid ${safeArtist.icon} ${iconSize} text-white/85"></i>
+                    <img src="${url}" alt="${safeArtist.name}" decoding="async" class="absolute inset-0 w-full h-full object-cover rounded-full" onerror="this.style.display='none'">
                 </div>
             `;
         }
@@ -3228,6 +3265,7 @@
                 { id: "inlineAlbumFeatArtist", feat: true, app: false },
                 { id: "bioEditorArtistSelect", feat: false, app: false },
                 { id: "newVideoArtist", feat: false, app: false },
+                { id: "newVideoFeatArtist", feat: true, app: false },
                 { id: "newNewsTarget", feat: false, app: true }
             ];
             const firstArtistId = Object.keys(ARTISTS)[0] || "mc_geich";
@@ -3309,7 +3347,7 @@
             if (!container) return;
             const html = artistsList.map((artist) => `
                 <div onclick="openArtistProfile('${artist.id}')" class="p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 flex items-center gap-2.5 cursor-pointer spring-btn">
-                    ${renderAvatarBox(artist, "w-11 h-11 rounded-xl", "text-sm")}
+                    ${renderAvatarBox(artist, "w-11 h-11 rounded-full", "text-sm")}
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-1">
                             <span class="text-xs font-extrabold text-white truncate">${artist.name}</span>
@@ -3398,11 +3436,8 @@
                 const artistsLabel = getAlbumArtistsLabel(alb);
                 return `
                     <div onclick="openAlbumDetail('${alb.id}')" class="w-36 shrink-0 p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2 spring-btn">
-                        <div class="relative">
-                            ${renderCoverBox(alb, "w-full h-32 rounded-xl", "text-2xl")}
-                            <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-black/70 backdrop-blur-md text-[8px] font-black uppercase tracking-wider text-purple-300 border border-white/10">
-                                ${alb.type || 'АЛЬБОМ'}
-                            </span>
+                        <div class="relative aspect-square w-full overflow-hidden rounded-xl">
+                            ${renderCoverBox(alb, "w-full h-full aspect-square rounded-xl", "text-2xl")}
                             ${alb.isExplicit ? `<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-rose-600/90 text-white text-[8px] font-black uppercase shadow">18+</span>` : ''}
                         </div>
                         <div>
@@ -3484,6 +3519,8 @@
 
         function renderVideoCard(video) {
             const artist = ARTISTS[video.artistId] || ARTISTS.mc_geich;
+            const featArtist = (video.featArtistId && video.featArtistId !== video.artistId) ? ARTISTS[video.featArtistId] : null;
+            const artistsLabel = getVideoArtistsLabel(video);
             const previewUrl = video.previewFile ? getRawUrl(video.previewFile) : "";
             return `
                 <div onclick="openVideoPlayerModal('${video.id}')" class="rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 overflow-hidden cursor-pointer group spring-btn">
@@ -3495,9 +3532,6 @@
                                 <i class="fa-solid fa-play text-sm ml-0.5"></i>
                             </div>
                         </div>
-                        <span class="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-black/75 backdrop-blur-md text-[9px] font-black uppercase tracking-wider text-purple-300 border border-white/10">
-                            КЛИП • ${video.year || 2025}
-                        </span>
                         ${video.isExplicit ? `<span class="absolute top-2.5 right-2.5 px-1.5 py-0.5 rounded bg-rose-600 text-white text-[8px] font-black uppercase shadow">18+</span>` : ""}
                         ${video.duration ? `<span class="absolute bottom-2 right-2.5 px-1.5 py-0.5 rounded bg-black/80 text-white text-[9px] font-bold">${video.duration}</span>` : ""}
                     </div>
@@ -3507,7 +3541,13 @@
                                 <h3 class="text-xs font-extrabold text-white truncate">${video.title}</h3>
                                 ${video.isExplicit ? `<span class="px-1.5 py-0.2 rounded bg-zinc-900 border border-rose-500/50 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>` : ""}
                             </div>
-                            <p class="text-[10px] text-zinc-400 truncate mt-0.5">${artist.name} • Официальный видеоклип</p>
+                            <div class="flex items-center gap-1.5 mt-1 min-w-0">
+                                <div class="flex items-center -space-x-1 shrink-0">
+                                    ${renderAvatarBox(artist, "w-4 h-4 rounded-full", "text-[8px]")}
+                                    ${featArtist ? renderAvatarBox(featArtist, "w-4 h-4 rounded-full", "text-[8px]") : ""}
+                                </div>
+                                <p class="text-[10px] text-zinc-400 truncate">${artistsLabel} • ${video.year || 2025}</p>
+                            </div>
                         </div>
                         <span class="text-[10px] font-bold text-purple-400 shrink-0">Смотреть</span>
                     </div>
@@ -3575,7 +3615,7 @@
             }
 
             document.getElementById("videoModalTitle").textContent = video.title;
-            document.getElementById("videoModalArtist").textContent = `${artist.name} • ${video.year || 2025}`;
+            document.getElementById("videoModalArtist").textContent = `${getVideoArtistsLabel(video)} • ${video.year || 2025}`;
             const expBadge = document.getElementById("videoModalExplicit");
             if (expBadge) {
                 if (video.isExplicit) expBadge.classList.remove("hidden");
@@ -3710,7 +3750,7 @@
                 return `
                     <div onclick="openArtistProfile('${artist.id}')" class="p-3.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 flex items-center justify-between gap-3 cursor-pointer spring-btn">
                         <div class="flex items-center gap-3 min-w-0 flex-1">
-                            ${renderAvatarBox(artist, "w-14 h-14 rounded-2xl", "text-lg")}
+                            ${renderAvatarBox(artist, "w-14 h-14 rounded-full", "text-lg")}
                             <div class="min-w-0 flex-1">
                                 <div class="flex items-center gap-1.5">
                                     <h3 class="text-sm font-black text-white truncate">${artist.name}</h3>
@@ -3740,7 +3780,7 @@
             const artistTracks = TRACKS.filter(t => trackHasArtist(t, artistId));
             const newReleases = artistTracks.filter(t => t.isNew);
             const artistAlbums = Object.values(ALBUMS).filter(a => albumHasArtist(a, artistId));
-            const artistVideos = VIDEOS.filter(v => v.artistId === artistId);
+            const artistVideos = VIDEOS.filter(v => videoHasArtist(v, artistId));
             const artistNews = NEWS.filter(n => n.targetId === artistId);
 
             const content = document.getElementById("artistProfileContent");
@@ -3748,7 +3788,7 @@
                 <!-- Шапка артиста -->
                 <div class="rounded-3xl bg-gradient-to-br ${artist.gradient} p-5 border border-white/10 shadow-2xl space-y-4">
                     <div class="flex items-center gap-4">
-                        ${renderAvatarBox(artist, "w-20 h-20 rounded-2xl shadow-xl", "text-2xl")}
+                        ${renderAvatarBox(artist, "w-20 h-20 rounded-full shadow-xl", "text-2xl")}
                         <div class="min-w-0 flex-1">
                             <span class="px-2 py-0.5 rounded-md bg-black/40 text-[9px] font-black uppercase tracking-widest text-purple-300">АРТИСТ DARK MUSIC</span>
                             <div class="flex items-center gap-1.5 mt-1">
@@ -3793,8 +3833,8 @@
                         <div class="grid grid-cols-2 gap-2.5">
                             ${artistAlbums.map((alb) => `
                                 <div onclick="openAlbumDetail('${alb.id}')" class="p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2 spring-btn">
-                                    <div class="relative">
-                                        ${renderCoverBox(alb, "w-full h-28 rounded-xl", "text-xl")}
+                                    <div class="relative aspect-square w-full overflow-hidden rounded-xl">
+                                        ${renderCoverBox(alb, "w-full h-full aspect-square rounded-xl", "text-2xl")}
                                         ${alb.isExplicit ? `<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-rose-600/90 text-white text-[8px] font-black uppercase shadow">18+</span>` : ''}
                                     </div>
                                     <div>
@@ -3827,6 +3867,10 @@
                         <i class="fa-solid fa-clapperboard"></i>
                         <span>ВИДЕОКЛИПЫ АРТИСТА (${artistVideos.length})</span>
                     </h2>
+                    <div class="p-3 rounded-xl bg-purple-500/10 border border-purple-500/25 flex items-start gap-2.5">
+                        <i class="fa-solid fa-thumbtack text-purple-400 text-xs mt-0.5 shrink-0"></i>
+                        <p class="text-[11px] font-medium text-zinc-200 leading-snug">Некоторые клипы возможно посмотреть только с VPN - потому что эти клипы транслируются через YouTube.</p>
+                    </div>
                     ${artistVideos.length > 0 ? `
                         <div class="grid grid-cols-1 gap-2.5">
                             ${artistVideos.map(v => renderVideoCard(v)).join("")}
@@ -3883,13 +3927,15 @@
                             </div>
                             <h1 class="text-lg font-black text-white truncate">${album.title}</h1>
                             <div class="flex items-center flex-wrap gap-1.5 pt-0.5">
-                                <button onclick="openArtistProfile('${artist.id}')" class="text-xs font-bold text-zinc-300 hover:text-white flex items-center gap-1 spring-btn">
+                                <button onclick="openArtistProfile('${artist.id}')" class="text-xs font-bold text-zinc-300 hover:text-white flex items-center gap-1.5 spring-btn">
+                                    ${renderAvatarBox(artist, "w-5 h-5 rounded-full", "text-[9px]")}
                                     <span>${artist.name}</span>
                                     <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
                                 </button>
                                 ${featArtist ? `
-                                    <span class="px-1.5 py-0.2 rounded bg-fuchsia-500/20 border border-fuchsia-500/40 text-fuchsia-300 text-[9px] font-black uppercase">feat.</span>
-                                    <button onclick="openArtistProfile('${featArtist.id}')" class="text-xs font-bold text-fuchsia-300 hover:text-white flex items-center gap-1 spring-btn">
+                                    <span class="text-xs font-bold text-zinc-400 -ml-1 mr-0.5">,</span>
+                                    <button onclick="openArtistProfile('${featArtist.id}')" class="text-xs font-bold text-zinc-300 hover:text-white flex items-center gap-1.5 spring-btn">
+                                        ${renderAvatarBox(featArtist, "w-5 h-5 rounded-full", "text-[9px]")}
                                         <span>${featArtist.name}</span>
                                         <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
                                     </button>
@@ -4438,6 +4484,12 @@
 
             document.getElementById("miniTitle").textContent = track.title;
             document.getElementById("miniArtist").textContent = artistsLabel;
+            const miniArtistAvatarEl = document.getElementById("miniArtistAvatar");
+            const artistAvatarSignature = `${artist.id}|${artist.avatarFile}|${artist.gradient}`;
+            if (miniArtistAvatarEl && miniArtistAvatarEl._lastAvatarSig !== artistAvatarSignature) {
+                miniArtistAvatarEl._lastAvatarSig = artistAvatarSignature;
+                miniArtistAvatarEl.innerHTML = renderAvatarBox(artist, "w-4 h-4 rounded-full", "text-[8px]");
+            }
             const miniExpBadge = document.getElementById("miniExplicitBadge");
             if (miniExpBadge) {
                 if (isExplicit) miniExpBadge.classList.remove("hidden");
@@ -4453,12 +4505,23 @@
 
             document.getElementById("playerTitle").textContent = track.title;
             document.getElementById("playerArtist").textContent = artist.name;
+            const playerArtistAvatarEl = document.getElementById("playerArtistAvatar");
+            if (playerArtistAvatarEl && playerArtistAvatarEl._lastAvatarSig !== artistAvatarSignature) {
+                playerArtistAvatarEl._lastAvatarSig = artistAvatarSignature;
+                playerArtistAvatarEl.innerHTML = renderAvatarBox(artist, "w-5 h-5 rounded-full", "text-[9px]");
+            }
 
             const featDivider = document.getElementById("playerFeatDivider");
             const featBtn = document.getElementById("playerFeatArtistBtn");
             const featNameEl = document.getElementById("playerFeatArtist");
+            const featAvatarEl = document.getElementById("playerFeatArtistAvatar");
             if (featArtist && featDivider && featBtn && featNameEl) {
                 featNameEl.textContent = featArtist.name;
+                const featAvatarSignature = `${featArtist.id}|${featArtist.avatarFile}|${featArtist.gradient}`;
+                if (featAvatarEl && featAvatarEl._lastAvatarSig !== featAvatarSignature) {
+                    featAvatarEl._lastAvatarSig = featAvatarSignature;
+                    featAvatarEl.innerHTML = renderAvatarBox(featArtist, "w-5 h-5 rounded-full", "text-[9px]");
+                }
                 featDivider.classList.remove("hidden");
                 featBtn.classList.remove("hidden");
                 featBtn.classList.add("flex");
@@ -4470,11 +4533,6 @@
 
             // Если трек не входит в альбом, под «СЕЙЧАС ИГРАЕТ» пишем название самого трека
             document.getElementById("playerAlbumTopBtn").textContent = album ? album.title : track.title;
-
-            const coverBadge = document.getElementById("playerCoverBadge");
-            if (coverBadge) {
-                coverBadge.textContent = album ? "ALBUM TRACK" : "SINGLE TRACK";
-            }
 
             const expBadge = document.getElementById("playerExplicitBadge");
             if (expBadge) {
@@ -5336,7 +5394,7 @@
                         return `
                             <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-2">
                                 <div class="flex items-center gap-2.5 min-w-0 flex-1">
-                                    ${renderAvatarBox(art, "w-9 h-9 rounded-xl", "text-xs")}
+                                    ${renderAvatarBox(art, "w-9 h-9 rounded-full", "text-xs")}
                                     <div class="min-w-0 flex-1">
                                         <div class="flex items-center gap-1.5">
                                             <span class="text-xs font-bold text-white truncate">${art.name}</span>
@@ -5432,7 +5490,7 @@
                     setContainerHtmlIfChanged(videosContainer, `<p class="text-[11px] text-zinc-500">Видеоклипов пока нет</p>`);
                 } else {
                     const html = VIDEOS.map(v => {
-                        const art = ARTISTS[v.artistId]?.name || "";
+                        const art = getVideoArtistsLabel(v);
                         return `
                             <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-2">
                                 <div class="min-w-0 flex-1">
@@ -5494,6 +5552,8 @@
         async function addOwnerVideoClip() {
             const title = document.getElementById("newVideoTitle")?.value.trim();
             const artistId = document.getElementById("newVideoArtist")?.value || getFallbackArtist().id;
+            let featArtistId = document.getElementById("newVideoFeatArtist")?.value || "";
+            if (featArtistId === artistId) featArtistId = "";
             const year = parseInt(document.getElementById("newVideoYear")?.value, 10) || 2025;
             const previewFile = document.getElementById("newVideoPreview")?.value.trim() || "";
             const videoSource = document.getElementById("newVideoSource")?.value.trim() || "";
@@ -5509,6 +5569,7 @@
                 id: "vid_" + Date.now(),
                 title,
                 artistId,
+                featArtistId,
                 year,
                 previewFile,
                 videoSource,
@@ -5524,6 +5585,7 @@
             document.getElementById("newVideoTitle").value = "";
             document.getElementById("newVideoPreview").value = "";
             document.getElementById("newVideoSource").value = "";
+            if (document.getElementById("newVideoFeatArtist")) document.getElementById("newVideoFeatArtist").value = "";
             if (document.getElementById("newVideoIsExplicit")) document.getElementById("newVideoIsExplicit").checked = false;
 
             await persistSettingsToCloud();
@@ -5542,14 +5604,26 @@
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="text-[10px] text-zinc-400 block mb-1">Артист</label>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Основной артист</label>
                             <select id="editVidArtist" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
                                 ${buildArtistSelectOptionsHtml(vid.artistId, false, false)}
                             </select>
                         </div>
                         <div>
+                            <label class="text-[10px] text-purple-400 font-semibold block mb-1">Фит (2-й артист)</label>
+                            <select id="editVidFeatArtist" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-2 text-xs text-white">
+                                ${buildArtistSelectOptionsHtml(vid.featArtistId || "", true, false)}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
                             <label class="text-[10px] text-zinc-400 block mb-1">Год</label>
                             <input id="editVidYear" type="number" value="${vid.year || 2025}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-zinc-400 block mb-1">Длительность</label>
+                            <input id="editVidDuration" type="text" value="${(vid.duration || '3:10').replace(/"/g, '&quot;')}" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white">
                         </div>
                     </div>
                     <div>
@@ -5578,8 +5652,15 @@
             const idx = customVideosFromCloud.findIndex(v => v.id === videoId);
             if (idx === -1) return;
             customVideosFromCloud[idx].title = document.getElementById("editVidTitle").value.trim() || customVideosFromCloud[idx].title;
-            customVideosFromCloud[idx].artistId = document.getElementById("editVidArtist").value;
+            const mainArt = document.getElementById("editVidArtist").value;
+            let featArt = document.getElementById("editVidFeatArtist")?.value || "";
+            if (featArt === mainArt) featArt = "";
+            customVideosFromCloud[idx].artistId = mainArt;
+            customVideosFromCloud[idx].featArtistId = featArt;
             customVideosFromCloud[idx].year = parseInt(document.getElementById("editVidYear").value, 10) || 2025;
+            if (document.getElementById("editVidDuration")) {
+                customVideosFromCloud[idx].duration = document.getElementById("editVidDuration").value.trim() || "3:10";
+            }
             customVideosFromCloud[idx].previewFile = document.getElementById("editVidPreview").value.trim();
             customVideosFromCloud[idx].videoSource = document.getElementById("editVidSource").value.trim();
             customVideosFromCloud[idx].isExplicit = Boolean(document.getElementById("editVidExplicit")?.checked);

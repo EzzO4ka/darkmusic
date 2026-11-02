@@ -403,3 +403,22 @@ export function reconstructTransportAuthToken(): string {
   return out;
 }
 
+export function formatCollaborationArtistsLabel(
+  mainArtistName: string,
+  featArtistName?: string | null
+): string {
+  const main = String(mainArtistName || '').trim() || 'Dark Music';
+  const feat = String(featArtistName || '').trim();
+  if (!feat || feat === main) return main;
+  return `${main}, ${feat}`;
+}
+
+export function entityHasArtist(
+  entity: { artistId?: string; featArtistId?: string } | null | undefined,
+  artistId: string
+): boolean {
+  if (!entity || !artistId) return false;
+  return entity.artistId === artistId || (Boolean(entity.featArtistId) && entity.featArtistId === artistId);
+}
+
+

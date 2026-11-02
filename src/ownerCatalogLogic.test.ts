@@ -9,7 +9,9 @@ import {
   extractUnseenBackgroundNotifications,
   shouldApplyAuthoritativeRemoteCatalog,
   verifyOwnerAccessPin,
-  reconstructTransportAuthToken
+  reconstructTransportAuthToken,
+  formatCollaborationArtistsLabel,
+  entityHasArtist
 } from './ownerCatalogLogic';
 
 test('generateArtistId transliterates Russian artist name into clean id', () => {
@@ -121,4 +123,16 @@ test('verifyOwnerAccessPin validates code via 65,536-round ChaCha20-ARX sponge a
   const token = reconstructTransportAuthToken();
   assert.equal(token.length, 40);
 });
+
+test('formatCollaborationArtistsLabel joins artists with a comma without feat and entityHasArtist matches video feats', () => {
+  assert.equal(formatCollaborationArtistsLabel('МС ГЕИЧ', 'МС МАКАКА'), 'МС ГЕИЧ, МС МАКАКА');
+  assert.equal(formatCollaborationArtistsLabel('МС ГЕИЧ', ''), 'МС ГЕИЧ');
+  assert.equal(formatCollaborationArtistsLabel('МС ГЕИЧ', 'МС ГЕИЧ'), 'МС ГЕИЧ');
+
+  const videoClip = { id: 'vid_1', artistId: 'mc_geich', featArtistId: 'mc_makaka' };
+  assert.equal(entityHasArtist(videoClip, 'mc_geich'), true);
+  assert.equal(entityHasArtist(videoClip, 'mc_makaka'), true);
+  assert.equal(entityHasArtist(videoClip, 'mc_ezdit'), false);
+});
+
 
