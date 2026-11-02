@@ -1,4 +1,4 @@
-// Dark Music Service Worker — Autonomous Background Push & Catalog Sync Engine
+// Dark Music Service Worker v3.1 — Autonomous Background Push & Catalog Sync Engine
 const SW_DB_NAME = 'DarkMusicSWPushDB';
 const SW_STORE_NAME = 'sw_state';
 const DEFAULT_GITHUB_REPO = 'EzzO4ka/darkmusic';
@@ -339,7 +339,12 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   ensureSwBackgroundPollingLoop();
   event.waitUntil(
-    self.clients.claim().then(() => checkAndDispatchBackgroundNotifications(true))
+    Promise.all([
+      self.clients.claim(),
+      typeof caches !== 'undefined'
+        ? caches.keys().then((keys) => Promise.all(keys.map((k) => caches.delete(k))))
+        : Promise.resolve()
+    ]).then(() => checkAndDispatchBackgroundNotifications(true))
   );
 });
 

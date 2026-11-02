@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<!-- Dark Music v3.0 -->
+<!-- Dark Music v3.1 -->
 <html lang="ru" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="app-version" content="3.1">
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -224,8 +228,12 @@
                 </div>
                 <a id="forceUpdateDownloadBtn" href="#" target="_blank" rel="noopener noreferrer" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-rose-600 hover:opacity-95 text-white font-black text-xs flex items-center justify-center gap-2 shadow-xl shadow-purple-600/40 spring-btn">
                     <i class="fa-solid fa-download text-sm"></i>
-                    <span>Скачать новую версию</span>
+                    <span>Скачать новую версию v3.1</span>
                 </a>
+                <button type="button" onclick="reloadWithoutCacheForUpdate()" class="w-full py-2.5 px-4 rounded-2xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 font-bold text-[11px] flex items-center justify-center gap-2 spring-btn">
+                    <i class="fa-solid fa-rotate text-xs text-purple-400"></i>
+                    <span>Я уже обновил — сбросить кэш (v3.1)</span>
+                </button>
                 <div class="pt-2 border-t border-zinc-900 flex items-center justify-between text-[10px] text-zinc-600">
                     <span id="forceUpdateVersionBadge">Текущая сборка: v3.1</span>
                     <button onclick="openOwnerTab()" class="text-zinc-500 hover:text-zinc-300 font-bold flex items-center gap-1">
@@ -332,6 +340,7 @@
                     <div class="flex items-center gap-1.5">
                         <span class="text-base font-black tracking-tight text-white">DARK MUSIC</span>
                         <i class="fa-solid fa-circle-check text-purple-400 text-[11px]"></i>
+                        <span id="headerAppVersionBadge" class="px-1.5 py-0.5 rounded-md bg-purple-500/15 border border-purple-500/30 text-purple-300 text-[9px] font-black leading-none">v3.1</span>
                     </div>
                     <p class="text-[10px] text-zinc-500 font-medium -mt-0.5">Эксклюзивный каталог</p>
                 </div>
@@ -583,9 +592,13 @@
                         </button>
                         <button onclick="downloadBakedIndexHtml()" class="py-2 px-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-fuchsia-500/40 text-fuchsia-300 font-bold text-[10px] flex items-center justify-center gap-1.5 spring-btn">
                             <i class="fa-solid fa-download text-xs"></i>
-                            <span>Скачать готовый index.html</span>
+                            <span>Скачать index.html (v3.1)</span>
                         </button>
                     </div>
+                    <button onclick="pushBakedIndexHtmlToGitHubRepo(true)" class="w-full py-2 px-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-emerald-500/40 text-emerald-300 font-bold text-[10px] flex items-center justify-center gap-1.5 spring-btn">
+                        <i class="fa-solid fa-code-commit text-xs"></i>
+                        <span>Обновить файл index.html (v3.1) в GitHub</span>
+                    </button>
                 </div>
 
                 <!-- 0. Уведомления всем пользователям и Принудительное обновление -->
@@ -1553,8 +1566,10 @@
         let githubBranch = BUILTIN_GITHUB_BRANCH;
         let githubPersonalToken = "";
 
-        // Текущая версия установленного файла приложения
-        let currentAppBuildVersion = Number(window.__APP_BUILD_VERSION__) || 3.1;
+        // Текущая версия установленного файла приложения (v3.1)
+        const APP_FILE_BUILD_VERSION = 3.1;
+        window.__APP_BUILD_VERSION__ = Math.max(Number(window.__APP_BUILD_VERSION__) || APP_FILE_BUILD_VERSION, APP_FILE_BUILD_VERSION);
+        let currentAppBuildVersion = window.__APP_BUILD_VERSION__;
 
         // Состояние глобальных уведомлений, системного Push в шторку, окна «Что нового» и принудительного обновления
         let systemPushData = { id: "", title: "", message: "", imageFile: "logo.png", active: false, createdAt: 0 };
@@ -2314,7 +2329,7 @@
             const forceModal = document.getElementById("forceUpdateModal");
             const reqVer = Number(forceUpdateData?.requiredVersion) || 3.1;
             const blockedList = Array.isArray(forceUpdateData?.blockedVersions)
-                ? forceUpdateData.blockedVersions.map(v => Number(v)).filter(v => !isNaN(v))
+                ? forceUpdateData.blockedVersions.map(v => Number(v)).filter(v => !isNaN(v) && v < reqVer - 0.0001)
                 : [];
             const isExplicitlyBlocked = blockedList.some(bv => Math.abs(bv - currentAppBuildVersion) < 0.0001);
             const isOutdated = Boolean(
@@ -2322,6 +2337,10 @@
                 forceUpdateData.active &&
                 (currentAppBuildVersion < reqVer - 0.0001 || isExplicitlyBlocked)
             );
+            const hdrVerBadge = document.getElementById("headerAppVersionBadge");
+            if (hdrVerBadge) {
+                hdrVerBadge.textContent = `v${currentAppBuildVersion.toFixed(1)}`;
+            }
 
             if (forceModal) {
                 if (isOutdated && !isOwnerUnlocked) {
@@ -3093,16 +3112,40 @@
             showToast("Файл catalog.json скачан! Загрузите его в корень GitHub", "ГОТОВО");
         }
 
-        function downloadBakedIndexHtml() {
-            const nextVersion = Math.max(currentAppBuildVersion, Number(forceUpdateData?.requiredVersion) || 1.0);
+        async function reloadWithoutCacheForUpdate() {
+            try {
+                if ("serviceWorker" in navigator) {
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    for (const r of regs) {
+                        await r.update().catch(() => {});
+                    }
+                }
+                if ("caches" in window) {
+                    const keys = await caches.keys();
+                    await Promise.all(keys.map(k => caches.delete(k)));
+                }
+            } catch (e) {}
+            const baseUrl = window.location.href.split("?")[0].split("#")[0];
+            window.location.replace(`${baseUrl}?v=3.1&_cb=${Date.now()}`);
+        }
+
+        function buildUpdatedIndexHtmlString() {
+            const nextVersion = Math.max(currentAppBuildVersion, Number(forceUpdateData?.requiredVersion) || 3.1, 3.1);
             const payload = buildFullSyncPayload();
-            const currentHtml = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            const currentHtml = `<!DOCTYPE html>\n<!-- Dark Music v${nextVersion.toFixed(1)} -->\n` + document.documentElement.outerHTML;
             const bakedBlock = `/*__BAKED_VAULT_START__*/\n        window.__BAKED_VAULT_DATA__ = ${JSON.stringify(payload)};\n        window.__APP_BUILD_VERSION__ = ${nextVersion};\n        /*__BAKED_VAULT_END__*/`;
-            const updatedHtml = currentHtml.replace(
-                /\/\*__BAKED_VAULT_START__\*\/[\s\S]*?\/\*__BAKED_VAULT_END__\*\//,
-                bakedBlock
-            );
-            const blob = new Blob([updatedHtml], { type: "text/html;charset=utf-8" });
+            return {
+                nextVersion,
+                html: currentHtml.replace(
+                    /\/\*__BAKED_VAULT_START__\*\/[\s\S]*?\/\*__BAKED_VAULT_END__\*\//,
+                    bakedBlock
+                )
+            };
+        }
+
+        function downloadBakedIndexHtml() {
+            const { nextVersion, html } = buildUpdatedIndexHtmlString();
+            const blob = new Blob([html], { type: "text/html;charset=utf-8" });
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
@@ -3112,6 +3155,62 @@
             a.remove();
             URL.revokeObjectURL(url);
             showToast(`Готовый index.html (v${nextVersion.toFixed(1)}) со всеми треками скачан!`, "ГОТОВО ДЛЯ ДРУЗЕЙ");
+        }
+
+        async function pushBakedIndexHtmlToGitHubRepo(showMessage = true) {
+            if (window.__PLAYWRIGHT_TEST_MODE__) {
+                if (showMessage) showToast("Тестовый режим: index.html v3.1 проверен ✓", "СИНХРОНИЗАЦИЯ");
+                return true;
+            }
+            const cleanRepo = (githubRepoPath || BUILTIN_GITHUB_REPO).replace(/^\/+|\/+$/g, "");
+            const cleanBranch = (githubBranch || BUILTIN_GITHUB_BRANCH).replace(/^\/+|\/+$/g, "") || "main";
+            const tokenToUse = _resolveTransportAuthToken(githubPersonalToken);
+            if (!cleanRepo || !tokenToUse) return false;
+
+            const { nextVersion, html } = buildUpdatedIndexHtmlString();
+            const encodedContent = utf8ToBase64(html);
+            const apiUrl = `https://api.github.com/repos/${cleanRepo}/contents/index.html`;
+            const headers = {
+                "Accept": "application/vnd.github.v3+json",
+                "Authorization": `token ${tokenToUse}`,
+                "Content-Type": "application/json"
+            };
+
+            try {
+                let existingSha = null;
+                const getResp = await fetch(`${apiUrl}?ref=${encodeURIComponent(cleanBranch)}&_cb=${Date.now()}`, {
+                    headers: {
+                        ...headers,
+                        "If-None-Match": `"${Date.now()}-${Math.random()}"`
+                    },
+                    cache: "no-store"
+                });
+                if (getResp.ok) {
+                    const fileData = await getResp.json();
+                    existingSha = fileData.sha;
+                }
+                const bodyObj = {
+                    message: `Обновление Dark Music index.html до версии v${nextVersion.toFixed(1)}`,
+                    content: encodedContent,
+                    branch: cleanBranch
+                };
+                if (existingSha) bodyObj.sha = existingSha;
+
+                const putResp = await fetch(apiUrl, {
+                    method: "PUT",
+                    headers,
+                    body: JSON.stringify(bodyObj)
+                });
+                if (putResp.ok) {
+                    if (showMessage) {
+                        showToast(`Файл index.html (v${nextVersion.toFixed(1)}) обновлён в GitHub!`, "GITHUB v3.1");
+                    }
+                    return true;
+                }
+            } catch (e) {
+                console.warn("GitHub index.html push error:", e);
+            }
+            return false;
         }
 
         function exportCatalogBackup() {

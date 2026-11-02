@@ -435,7 +435,7 @@ export function isVersionBlockedByForceUpdate(
   }
   const reqVer = Number(forceUpdate.requiredVersion) || 3.1;
   const blockedList = Array.isArray(forceUpdate.blockedVersions)
-    ? forceUpdate.blockedVersions.map((v) => Number(v)).filter((v) => !Number.isNaN(v))
+    ? forceUpdate.blockedVersions.map((v) => Number(v)).filter((v) => !Number.isNaN(v) && v < reqVer - 0.0001)
     : [];
   const isExplicitlyBlocked = blockedList.some((bv) => Math.abs(bv - currentVersion) < 0.0001);
   return currentVersion < reqVer - 0.0001 || isExplicitlyBlocked;
