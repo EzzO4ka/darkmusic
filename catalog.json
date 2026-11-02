@@ -150,17 +150,6 @@
       "isExplicit": true,
       "coverFile": "covers/alb_sosiska.jpg",
       "gradient": "from-rose-600 via-red-900 to-zinc-950"
-    },
-    {
-      "id": "alb_1793609112638",
-      "title": "РЕАБИЛИТАЦИЯ",
-      "artistId": "mc_makaka",
-      "featArtistId": "",
-      "type": "АЛЬБОМ",
-      "year": 2026,
-      "isExplicit": true,
-      "coverFile": "covers/alb_rehabilitation.jpg",
-      "gradient": "from-sky-600 via-blue-950 to-zinc-950"
     }
   ],
   "customTracks": [
@@ -504,7 +493,8 @@
     "art_ms_dolboeb_1793263987131",
     "mc_oparysh",
     "trk_1792603726620",
-    "art_ms_oparysh_1793609173461"
+    "art_ms_oparysh_1793609173461",
+    "alb_1793609112638"
   ],
   "systemPushBroadcast": {
     "id": "push_1793617368193",
@@ -548,5 +538,5 @@
     "active": true,
     "updatedAt": 1793615692737
   },
-  "updatedAt": 1793617497788
+  "updatedAt": 1793617504932
 }
