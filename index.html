@@ -268,7 +268,10 @@
                             <span id="videoModalExplicit" class="hidden px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase">18+</span>
                         </div>
                         <h3 id="videoModalTitle" class="text-sm font-black text-white truncate mt-1">Название клипа</h3>
-                        <p id="videoModalArtist" class="text-[11px] text-zinc-400 truncate">Артист</p>
+                        <div class="flex items-center gap-1.5 mt-0.5 min-w-0">
+                            <div id="videoModalAvatars" class="flex items-center -space-x-1 shrink-0"></div>
+                            <p id="videoModalArtist" class="text-[11px] text-zinc-400 truncate">Артист</p>
+                        </div>
                     </div>
                     <button onclick="closeVideoPlayerModal()" class="w-9 h-9 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 flex items-center justify-center shrink-0 spring-btn">
                         <i class="fa-solid fa-xmark text-sm"></i>
@@ -1140,7 +1143,7 @@
                             <span id="miniExplicitBadge" class="hidden px-1 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>
                         </div>
                         <div class="flex items-center gap-1.5 mt-0.5 min-w-0">
-                            <div id="miniArtistAvatar" class="w-4 h-4 rounded-full overflow-hidden shrink-0 flex items-center justify-center"></div>
+                            <div id="miniArtistAvatar" class="flex items-center -space-x-1 shrink-0"></div>
                             <p id="miniArtist" class="text-[10px] text-zinc-400 truncate">Dark Music</p>
                         </div>
                     </div>
@@ -3109,17 +3112,26 @@
             return `https://raw.githubusercontent.com/${cleanRepo}/${cleanBranch}/${encodedPath}`;
         }
 
+        function getTrackFeatArtist(track) {
+            if (!track) return null;
+            const album = track.albumId ? ALBUMS[track.albumId] : null;
+            const featId = track.featArtistId || (album && album.featArtistId) || "";
+            if (!featId || featId === track.artistId) return null;
+            return ARTISTS[featId] || null;
+        }
+
         // Проверка принадлежности трека артисту (учитывает основной профиль и участие на фите)
         function trackHasArtist(track, artistId) {
             if (!track || !artistId) return false;
-            return track.artistId === artistId || (Boolean(track.featArtistId) && track.featArtistId === artistId);
+            const featArtist = getTrackFeatArtist(track);
+            return track.artistId === artistId || Boolean(featArtist && featArtist.id === artistId);
         }
 
         // Формирование строки имени артиста (или дуэта через запятую)
         function getTrackArtistsLabel(track) {
             if (!track) return "Dark Music";
-            const mainArtist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
-            const featArtist = (track.featArtistId && track.featArtistId !== track.artistId) ? ARTISTS[track.featArtistId] : null;
+            const mainArtist = ARTISTS[track.artistId] || getFallbackArtist();
+            const featArtist = getTrackFeatArtist(track);
             return featArtist ? `${mainArtist.name}, ${featArtist.name}` : mainArtist.name;
         }
 
@@ -3604,7 +3616,8 @@
         function openVideoPlayerModal(videoId) {
             const video = VIDEOS.find(v => v.id === videoId);
             if (!video) return;
-            const artist = ARTISTS[video.artistId] || ARTISTS.mc_geich;
+            const artist = ARTISTS[video.artistId] || getFallbackArtist();
+            const featArtist = (video.featArtistId && video.featArtistId !== video.artistId) ? ARTISTS[video.featArtistId] : null;
 
             // Ставим музыку на паузу во время просмотра клипа
             if (isPlaying) {
@@ -3616,6 +3629,12 @@
 
             document.getElementById("videoModalTitle").textContent = video.title;
             document.getElementById("videoModalArtist").textContent = `${getVideoArtistsLabel(video)} • ${video.year || 2025}`;
+            const videoModalAvatarsEl = document.getElementById("videoModalAvatars");
+            if (videoModalAvatarsEl) {
+                videoModalAvatarsEl.innerHTML =
+                    renderAvatarBox(artist, "w-4 h-4 rounded-full", "text-[8px]") +
+                    (featArtist ? renderAvatarBox(featArtist, "w-4 h-4 rounded-full", "text-[8px]") : "");
+            }
             const expBadge = document.getElementById("videoModalExplicit");
             if (expBadge) {
                 if (video.isExplicit) expBadge.classList.remove("hidden");
@@ -4472,8 +4491,8 @@
 
             if (!track) return;
 
-            const artist = ARTISTS[track.artistId] || ARTISTS.mc_geich;
-            const featArtist = (track.featArtistId && track.featArtistId !== track.artistId) ? ARTISTS[track.featArtistId] : null;
+            const artist = ARTISTS[track.artistId] || getFallbackArtist();
+            const featArtist = getTrackFeatArtist(track);
             const artistsLabel = getTrackArtistsLabel(track);
             const album = ALBUMS[track.albumId];
             const isExplicit = Boolean(track.isExplicit || (album && album.isExplicit));
@@ -4486,9 +4505,13 @@
             document.getElementById("miniArtist").textContent = artistsLabel;
             const miniArtistAvatarEl = document.getElementById("miniArtistAvatar");
             const artistAvatarSignature = `${artist.id}|${artist.avatarFile}|${artist.gradient}`;
-            if (miniArtistAvatarEl && miniArtistAvatarEl._lastAvatarSig !== artistAvatarSignature) {
-                miniArtistAvatarEl._lastAvatarSig = artistAvatarSignature;
-                miniArtistAvatarEl.innerHTML = renderAvatarBox(artist, "w-4 h-4 rounded-full", "text-[8px]");
+            const featAvatarSignature = featArtist ? `${featArtist.id}|${featArtist.avatarFile}|${featArtist.gradient}` : "";
+            const miniAvatarsComboSig = `${artistAvatarSignature}||${featAvatarSignature}`;
+            if (miniArtistAvatarEl && miniArtistAvatarEl._lastAvatarSig !== miniAvatarsComboSig) {
+                miniArtistAvatarEl._lastAvatarSig = miniAvatarsComboSig;
+                miniArtistAvatarEl.innerHTML =
+                    renderAvatarBox(artist, "w-4 h-4 rounded-full", "text-[8px]") +
+                    (featArtist ? renderAvatarBox(featArtist, "w-4 h-4 rounded-full", "text-[8px]") : "");
             }
             const miniExpBadge = document.getElementById("miniExplicitBadge");
             if (miniExpBadge) {
@@ -4689,9 +4712,10 @@
 
         function openCurrentTrackFeatArtist() {
             const track = TRACKS.find(t => t.id === currentTrackId);
-            if (track && track.featArtistId && ARTISTS[track.featArtistId]) {
+            const featArtist = getTrackFeatArtist(track);
+            if (featArtist) {
                 closeFullPlayer();
-                openArtistProfile(track.featArtistId);
+                openArtistProfile(featArtist.id);
             }
         }
 
