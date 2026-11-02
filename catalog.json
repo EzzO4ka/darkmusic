@@ -551,16 +551,11 @@
     "updatedAt": 1792915286413
   },
   "forceUpdate": {
-    "active": true,
+    "active": false,
     "requiredVersion": 3.1,
-    "blockedVersions": [
-      1,
-      2,
-      3
-    ],
     "downloadUrl": "https://github.com/EzzO4ka/darkmusic/releases/tag/v.3.1",
     "message": "Обновите приложение. Старая версия больше не работает. Перед обновлением, удалите старое приложение.",
-    "updatedAt": 1793612500000
+    "updatedAt": 1793614757879
   },
   "whatsNew": {
     "id": "wn_1793290258747",
@@ -570,5 +565,5 @@
     "active": true,
     "updatedAt": 1793290258747
   },
-  "updatedAt": 1793612500000
+  "updatedAt": 1793614757883
 }
