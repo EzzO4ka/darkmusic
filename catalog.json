@@ -489,12 +489,12 @@
     "news_1793576344447"
   ],
   "systemPushBroadcast": {
-    "id": "push_1793617368193",
+    "id": "push_1793668381097",
     "title": "Обновите приложение",
     "message": "Перейдите в приложения для скачивания новой версии.",
     "imageFile": "logo.png",
     "active": true,
-    "createdAt": 1793617368193
+    "createdAt": 1793668381097
   },
   "tempBroadcast": {
     "id": "",
@@ -530,5 +530,5 @@
     "active": true,
     "updatedAt": 1793615692737
   },
-  "updatedAt": 1793617518539
+  "updatedAt": 1793668381107
 }
