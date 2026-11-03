@@ -130,17 +130,6 @@
       "coverFile": "covers/alb_mertvorozdennye.jpg"
     },
     {
-      "id": "alb_1793291266274",
-      "title": "ПЕРЕЗВОН",
-      "artistId": "mc_ezdit",
-      "featArtistId": "",
-      "type": "СИНГЛ",
-      "year": 2026,
-      "isExplicit": false,
-      "coverFile": "covers/alb_perezvon.jpg",
-      "gradient": "from-rose-600 via-red-900 to-zinc-950"
-    },
-    {
       "id": "alb_1793566754812",
       "title": "Лирика Житухи",
       "artistId": "mc_ezdit",
@@ -486,7 +475,8 @@
     "trk_1792603726620",
     "art_ms_oparysh_1793609173461",
     "alb_1793609112638",
-    "news_1793576344447"
+    "news_1793576344447",
+    "alb_1793291266274"
   ],
   "systemPushBroadcast": {
     "id": "push_1793668381097",
@@ -530,5 +520,5 @@
     "active": true,
     "updatedAt": 1793615692737
   },
-  "updatedAt": 1793668381107
+  "updatedAt": 1793673010186
 }
