@@ -8,7 +8,7 @@
   },
   "artistBanners": {
     "mc_geich": "banners/mc_geich2.jpg",
-    "mc_makaka": "",
+    "mc_makaka": "banners/mc_makaka2.jpg",
     "mc_ezdit": ""
   },
   "artistNames": {
@@ -95,7 +95,7 @@
       ],
       "isCustom": true,
       "createdAt": 1793576412861,
-      "bannerFile": ""
+      "bannerFile": "banners/mc_makaka2.jpg"
     },
     {
       "id": "mc_ezdit",
@@ -515,5 +515,5 @@
     "active": false,
     "updatedAt": 1793807219869
   },
-  "updatedAt": 1793807219871
+  "updatedAt": 1793807935138
 }
