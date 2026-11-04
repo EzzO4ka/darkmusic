@@ -1561,8 +1561,8 @@
                     </button>
                 </div>
 
-                <!-- Карточка «Об исполнителе» как в правой колонке Spotify -->
-                <div id="deskRightArtistCard" class="rounded-2xl bg-zinc-900/70 border border-zinc-800/90 p-3.5 space-y-2.5">
+                <!-- Карточки «Об исполнителе» как в правой колонке Spotify (при фите — 1-й блок про 1-го артиста, ниже 2-й блок про 2-го артиста) -->
+                <div id="deskRightArtistCard" class="space-y-2.5">
                 </div>
 
                 <!-- Интересный факт об артисте -->
@@ -6365,35 +6365,47 @@
             }
 
             if (artistCard) {
-                const countTracks = TRACKS.filter(t => trackHasArtist(t, artist.id)).length;
-                const rightBannerUrl = artist.bannerFile ? getRawUrl(artist.bannerFile) : "";
-                const bioCardHtml = `
-                    ${rightBannerUrl ? `
-                        <div onclick="openArtistProfile('${artist.id}')" class="relative -mx-3.5 -mt-3.5 mb-2.5 h-28 rounded-t-2xl overflow-hidden cursor-pointer group">
-                            <img src="${rightBannerUrl}" alt="${artist.name.replace(/"/g, '&quot;')}" decoding="async" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" onerror="this.parentElement.style.display='none'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/35 to-black/20"></div>
-                            <span class="absolute top-2.5 left-3 text-[10px] font-black uppercase tracking-wider text-white/90 drop-shadow">Об исполнителе</span>
-                        </div>
-                    ` : `
-                        <div class="flex items-center justify-between">
-                            <span class="text-[10px] font-black uppercase tracking-wider text-zinc-400">Об исполнителе</span>
-                            <button onclick="openArtistProfile('${artist.id}')" class="text-[10px] font-bold text-purple-400 hover:text-purple-300">Профиль →</button>
-                        </div>
-                    `}
-                    <div onclick="openArtistProfile('${artist.id}')" class="flex items-center gap-3 cursor-pointer group">
-                        ${renderAvatarBox(artist, "w-12 h-12 rounded-full", "text-base")}
-                        <div class="min-w-0 flex-1">
-                            <div class="flex items-center gap-1">
-                                <h4 class="text-xs font-black text-white group-hover:text-purple-300 truncate">${artist.name}</h4>
-                                <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
+                const sidebarArtists = [artist];
+                if (featArtist && featArtist.id && featArtist.id !== artist.id) {
+                    sidebarArtists.push(featArtist);
+                }
+
+                const buildSingleArtistBlockHtml = (artObj) => {
+                    const countTracks = TRACKS.filter(t => trackHasArtist(t, artObj.id)).length;
+                    const rightBannerUrl = artObj.bannerFile ? getRawUrl(artObj.bannerFile) : "";
+                    return `
+                        <div class="rounded-2xl bg-zinc-900/70 border border-zinc-800/90 p-3.5 space-y-2.5 overflow-hidden">
+                            ${rightBannerUrl ? `
+                                <div onclick="openArtistProfile('${artObj.id}')" class="relative -mx-3.5 -mt-3.5 mb-2.5 h-28 rounded-t-2xl overflow-hidden cursor-pointer group">
+                                    <img src="${rightBannerUrl}" alt="${artObj.name.replace(/"/g, '&quot;')}" decoding="async" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" onerror="this.parentElement.style.display='none'">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/35 to-black/25"></div>
+                                    <span class="absolute top-2.5 left-3 text-[10px] font-black uppercase tracking-wider text-white/90 drop-shadow">Об исполнителе</span>
+                                    <span class="absolute top-2.5 right-3 text-[10px] font-bold text-purple-300 group-hover:text-white drop-shadow">Профиль →</span>
+                                </div>
+                            ` : `
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] font-black uppercase tracking-wider text-zinc-400">Об исполнителе</span>
+                                    <button onclick="openArtistProfile('${artObj.id}')" class="text-[10px] font-bold text-purple-400 hover:text-purple-300">Профиль →</button>
+                                </div>
+                            `}
+                            <div onclick="openArtistProfile('${artObj.id}')" class="flex items-center gap-3 cursor-pointer group">
+                                ${renderAvatarBox(artObj, "w-12 h-12 rounded-full", "text-base")}
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center gap-1">
+                                        <h4 class="text-xs font-black text-white group-hover:text-purple-300 truncate">${artObj.name}</h4>
+                                        <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
+                                    </div>
+                                    <p class="text-[10px] text-zinc-400 truncate">${artObj.role || 'Артист Dark Music'}</p>
+                                    <p class="text-[10px] font-bold text-purple-400 mt-0.5">Треков в каталоге: ${countTracks}</p>
+                                </div>
                             </div>
-                            <p class="text-[10px] text-zinc-400 truncate">${artist.role || 'Артист Dark Music'}</p>
-                            <p class="text-[10px] font-bold text-purple-400 mt-0.5">Треков в каталоге: ${countTracks}</p>
+                            <p class="text-[11px] text-zinc-400 leading-relaxed line-clamp-3">${artObj.bio || ''}</p>
                         </div>
-                    </div>
-                    <p class="text-[11px] text-zinc-400 leading-relaxed line-clamp-3">${artist.bio || ''}</p>
-                `;
-                setContainerHtmlIfChanged(artistCard, bioCardHtml);
+                    `;
+                };
+
+                const bioCardsHtml = sidebarArtists.map(a => buildSingleArtistBlockHtml(a)).join("");
+                setContainerHtmlIfChanged(artistCard, bioCardsHtml);
             }
 
             if (queueCont && TRACKS.length > 0) {
@@ -6589,12 +6601,11 @@
                 coverInner.innerHTML = renderCoverBox(track, "w-full h-full", "text-6xl");
             }
 
-            // Обновляем приглушённую большую обложку из карточки артиста на фоне полноэкранного плеера (как в Spotify на ПК)
+            // Обновляем приглушённую большую обложку 1-го артиста на фоне полноэкранного плеера (как в Spotify на ПК)
             const backdropBannerImg = document.getElementById("playerBackdropBannerImg");
             if (backdropBannerImg) {
                 const rawBannerPath =
                     (artist && artist.bannerFile) ||
-                    (featArtist && featArtist.bannerFile) ||
                     (artist && artist.avatarFile) ||
                     coverPath ||
                     "";

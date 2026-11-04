@@ -26,7 +26,8 @@ import {
   resolveDesktopRightSidebarLayout,
   isValidGitHubTokenFormat,
   resolveFullscreenPlayerBackdropUrl,
-  shouldProtectOwnerCatalogFromStaleSync
+  shouldProtectOwnerCatalogFromStaleSync,
+  resolveRightSidebarArtistCards
 } from './ownerCatalogLogic';
 
 test('generateArtistId transliterates Russian artist name into clean id', () => {
@@ -311,10 +312,10 @@ test('buildTrackActionsDescriptor and resolveDesktopRightSidebarLayout return ac
   assert.equal(
     resolveFullscreenPlayerBackdropUrl({
       mainArtistBanner: '',
-      featArtistBanner: 'banners/mc_ezdit.jpg',
-      mainArtistAvatar: 'avatars/mc_geich.jpg'
+      featArtistBanner: 'banners/mc_geich2.jpg',
+      mainArtistAvatar: 'avatars/mc_ezdit.jpg'
     }),
-    'banners/mc_ezdit.jpg'
+    'avatars/mc_ezdit.jpg'
   );
   assert.equal(
     resolveFullscreenPlayerBackdropUrl({
@@ -356,4 +357,20 @@ test('buildTrackActionsDescriptor and resolveDesktopRightSidebarLayout return ac
     }),
     false
   );
+
+  const art1 = { id: 'mc_ezdit', name: 'МС ЕЗДИТЬ' };
+  const art2 = { id: 'mc_geich', name: 'МС ГЕИЧ' };
+  assert.deepEqual(
+    resolveRightSidebarArtistCards(art1, null).map((a) => a.id),
+    ['mc_ezdit']
+  );
+  assert.deepEqual(
+    resolveRightSidebarArtistCards(art1, art1).map((a) => a.id),
+    ['mc_ezdit']
+  );
+  assert.deepEqual(
+    resolveRightSidebarArtistCards(art1, art2).map((a) => a.id),
+    ['mc_ezdit', 'mc_geich']
+  );
 });
+

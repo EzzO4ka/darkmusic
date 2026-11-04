@@ -651,7 +651,6 @@ export function resolveFullscreenPlayerBackdropUrl(params: {
 }): string {
   const candidates = [
     params.mainArtistBanner,
-    params.featArtistBanner,
     params.mainArtistAvatar,
     params.trackCover
   ];
@@ -683,4 +682,19 @@ export function shouldProtectOwnerCatalogFromStaleSync(params: {
   }
   return false;
 }
+
+export function resolveRightSidebarArtistCards<T extends { id: string }>(
+  mainArtist: T | null | undefined,
+  featArtist?: T | null | undefined
+): T[] {
+  const cards: T[] = [];
+  if (mainArtist && mainArtist.id) {
+    cards.push(mainArtist);
+  }
+  if (featArtist && featArtist.id && (!mainArtist || featArtist.id !== mainArtist.id)) {
+    cards.push(featArtist);
+  }
+  return cards;
+}
+
 
