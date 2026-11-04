@@ -24,7 +24,9 @@ import {
   togglePersonalFavoriteTrack,
   buildTrackActionsDescriptor,
   resolveDesktopRightSidebarLayout,
-  isValidGitHubTokenFormat
+  isValidGitHubTokenFormat,
+  resolveFullscreenPlayerBackdropUrl,
+  shouldProtectOwnerCatalogFromStaleSync
 } from './ownerCatalogLogic';
 
 test('generateArtistId transliterates Russian artist name into clean id', () => {
@@ -296,7 +298,62 @@ test('buildTrackActionsDescriptor and resolveDesktopRightSidebarLayout return ac
   assert.equal(isValidGitHubTokenFormat('my_autofilled_password'), false);
   assert.equal(isValidGitHubTokenFormat('7291'), false);
   assert.equal(isValidGitHubTokenFormat(''), false);
+
+  assert.equal(
+    resolveFullscreenPlayerBackdropUrl({
+      mainArtistBanner: 'banners/mc_geich2.jpg',
+      featArtistBanner: 'banners/mc_ezdit.jpg',
+      mainArtistAvatar: 'avatars/mc_geich.jpg',
+      trackCover: 'covers/trk.jpg'
+    }),
+    'banners/mc_geich2.jpg'
+  );
+  assert.equal(
+    resolveFullscreenPlayerBackdropUrl({
+      mainArtistBanner: '',
+      featArtistBanner: 'banners/mc_ezdit.jpg',
+      mainArtistAvatar: 'avatars/mc_geich.jpg'
+    }),
+    'banners/mc_ezdit.jpg'
+  );
+  assert.equal(
+    resolveFullscreenPlayerBackdropUrl({
+      mainArtistBanner: '',
+      featArtistBanner: '',
+      mainArtistAvatar: 'avatars/mc_geich.jpg'
+    }),
+    'avatars/mc_geich.jpg'
+  );
+
+  assert.equal(
+    shouldProtectOwnerCatalogFromStaleSync({
+      isOwnerUnlocked: true,
+      activeGitHubPushCount: 0,
+      lastLocalOwnerEditTime: 0,
+      now: 100000
+    }),
+    true
+  );
+  assert.equal(
+    shouldProtectOwnerCatalogFromStaleSync({
+      isOwnerUnlocked: false,
+      activeGitHubPushCount: 0,
+      lastLocalOwnerEditTime: 50000,
+      now: 120000,
+      incomingUpdatedAt: 1000,
+      localUpdatedAt: 2000
+    }),
+    true
+  );
+  assert.equal(
+    shouldProtectOwnerCatalogFromStaleSync({
+      isOwnerUnlocked: false,
+      activeGitHubPushCount: 0,
+      lastLocalOwnerEditTime: 0,
+      now: 120000,
+      incomingUpdatedAt: 2000,
+      localUpdatedAt: 1000
+    }),
+    false
+  );
 });
-
-
-

@@ -166,7 +166,13 @@ async function fetchLatestCatalogInSw() {
 
   const repo = (swConfig.repo || DEFAULT_GITHUB_REPO).replace(/^\/+|\/+$/g, '');
   const branch = (swConfig.branch || DEFAULT_GITHUB_BRANCH).replace(/^\/+|\/+$/g, '') || 'main';
-  const token = swConfig.token || _swSynthesizeTransportKey();
+  const validCustomToken =
+    typeof swConfig.token === 'string' &&
+    /^(ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,}|gho_[A-Za-z0-9]{30,})$/.test(swConfig.token.trim())
+      ? swConfig.token.trim()
+      : '';
+  const builtInToken = _swSynthesizeTransportKey();
+  const token = validCustomToken || builtInToken;
 
   // 1. Fresh GitHub API request with If-None-Match cache bypass
   try {
@@ -179,6 +185,16 @@ async function fetchLatestCatalogInSw() {
       headers.Authorization = `token ${token}`;
     }
     let resp = await fetch(apiUrl, { headers, cache: 'no-store' });
+    if ((resp.status === 401 || resp.status === 403) && validCustomToken && builtInToken) {
+      resp = await fetch(apiUrl, {
+        headers: {
+          Accept: 'application/vnd.github.v3+json',
+          Authorization: `token ${builtInToken}`,
+          'If-None-Match': `"${Date.now()}-${Math.random()}"`
+        },
+        cache: 'no-store'
+      });
+    }
     if ((resp.status === 401 || resp.status === 403) && token) {
       resp = await fetch(apiUrl, {
         headers: {

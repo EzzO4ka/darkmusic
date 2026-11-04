@@ -643,3 +643,44 @@ export function isValidGitHubTokenFormat(tokenStr?: string | null): boolean {
   return /^(ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,}|gho_[A-Za-z0-9]{30,})$/.test(clean);
 }
 
+export function resolveFullscreenPlayerBackdropUrl(params: {
+  mainArtistBanner?: string | null;
+  featArtistBanner?: string | null;
+  mainArtistAvatar?: string | null;
+  trackCover?: string | null;
+}): string {
+  const candidates = [
+    params.mainArtistBanner,
+    params.featArtistBanner,
+    params.mainArtistAvatar,
+    params.trackCover
+  ];
+  for (const c of candidates) {
+    if (typeof c === 'string' && c.trim().length > 0) {
+      return c.trim();
+    }
+  }
+  return '';
+}
+
+export function shouldProtectOwnerCatalogFromStaleSync(params: {
+  isOwnerUnlocked: boolean;
+  activeGitHubPushCount: number;
+  lastLocalOwnerEditTime: number;
+  now: number;
+  incomingUpdatedAt?: number | null;
+  localUpdatedAt?: number | null;
+}): boolean {
+  if (params.activeGitHubPushCount > 0) return true;
+  if (params.isOwnerUnlocked) return true;
+  if (params.lastLocalOwnerEditTime > 0 && params.now - params.lastLocalOwnerEditTime < 45000) {
+    return true;
+  }
+  const incTs = Number(params.incomingUpdatedAt) || 0;
+  const locTs = Number(params.localUpdatedAt) || 0;
+  if (params.lastLocalOwnerEditTime > 0 && locTs > 0 && incTs > 0 && incTs < locTs) {
+    return true;
+  }
+  return false;
+}
+

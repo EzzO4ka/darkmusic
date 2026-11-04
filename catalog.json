@@ -507,5 +507,9 @@
     "active": true,
     "updatedAt": 1793615692737
   },
-  "updatedAt": 1793673013241
+  "updatedAt": 1793792282342,
+  "version": 3.1,
+  "artistBanners": {
+    "mc_geich": "banners/mc_geich2.jpg"
+  }
 }

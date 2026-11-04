@@ -121,6 +121,63 @@
             animation: playerSheetClose 0.28s cubic-bezier(0.4, 0, 1, 1) forwards;
         }
 
+        /* Плавное выезжание нижней шторки меню 3 точек (как в Яндекс Музыке) */
+        @keyframes trackBackdropFadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        @keyframes trackBackdropFadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        @keyframes trackSheetSlideUp {
+            0% {
+                opacity: 0.4;
+                transform: translateY(100%);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes trackSheetSlideDown {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100%);
+            }
+        }
+        .track-backdrop-enter {
+            animation: trackBackdropFadeIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .track-backdrop-exit {
+            animation: trackBackdropFadeOut 0.25s cubic-bezier(0.4, 0, 1, 1) forwards;
+        }
+        .track-sheet-enter {
+            animation: trackSheetSlideUp 0.36s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        .track-sheet-exit {
+            animation: trackSheetSlideDown 0.25s cubic-bezier(0.32, 0, 0.67, 0) forwards;
+        }
+
+        /* Плавное появление приглушённой большой обложки артиста на фоне полноэкранного плеера (Spotify Fullscreen) */
+        @keyframes playerBannerReveal {
+            0% {
+                opacity: 0;
+                transform: scale(1.06);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .player-banner-animate {
+            animation: playerBannerReveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
         /* Плавное масштабирование обложки в плеере без сброса слоев */
         .cover-playing {
             transform: scale(1);
@@ -1670,8 +1727,11 @@
 
         <!-- ПОЛНОЭКРАННЫЙ ПЛЕЕР (ВО ВЕСЬ ЭКРАН КАК SPOTIFY FULLSCREEN MODE НА ПК И ТЕЛЕФОНАХ, БЕЗ ГРУБОГО РАСТЯГИВАНИЯ) -->
         <div id="playerModal" class="fixed inset-0 z-[60] hidden bg-zinc-950/95 backdrop-blur-3xl flex-col justify-between w-full h-full overflow-y-auto no-scrollbar select-none">
-            <!-- Атмосферное фоновое свечение полноэкранного режима -->
-            <div class="pointer-events-none fixed inset-0 overflow-hidden z-0">
+            <!-- Большая приглушённая обложка из карточки артиста на весь экран (как в Spotify на ПК) -->
+            <div id="playerBackdropBannerWrap" class="pointer-events-none fixed inset-0 overflow-hidden z-0">
+                <img id="playerBackdropBannerImg" src="" alt="" decoding="async" class="hidden w-full h-full object-cover object-center opacity-35 lg:opacity-45 brightness-[0.48] saturate-[1.15] scale-105 transition-all duration-700" onerror="this.classList.add('hidden')">
+                <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/65 to-zinc-950/45"></div>
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_15%,rgba(9,9,11,0.82)_100%)]"></div>
                 <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-purple-700/20 blur-[130px]"></div>
                 <div class="absolute bottom-0 right-0 w-[440px] h-[440px] rounded-full bg-fuchsia-700/15 blur-[150px]"></div>
             </div>
@@ -1877,15 +1937,13 @@
             </div>
         </div>
 
-        <!-- МЕНЮ ДЕЙСТВИЙ ТРЕКА (ПО КНОПКЕ 3 ТОЧКИ •••) -->
-        <div id="trackActionsModal" onclick="closeTrackActionsMenu(event)" class="fixed inset-0 z-[75] hidden bg-black/80 backdrop-blur-xl items-end sm:items-center justify-center p-3 sm:p-4 select-none">
-            <div onclick="event.stopPropagation()" class="w-full max-w-[360px] rounded-3xl bg-zinc-950 border border-zinc-800/90 p-4 space-y-3 shadow-2xl shadow-purple-950/50 relative overflow-hidden">
-                <div class="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-purple-600/15 blur-2xl pointer-events-none"></div>
-                <div id="trackActionsHeader" class="flex items-center gap-3 pb-3 border-b border-zinc-900"></div>
-                <div id="trackActionsList" class="space-y-1.5"></div>
-                <button type="button" onclick="closeTrackActionsMenu()" class="w-full py-2.5 rounded-2xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-extrabold text-zinc-400 hover:text-white spring-btn">
-                    Закрыть
-                </button>
+        <!-- МЕНЮ ДЕЙСТВИЙ ТРЕКА (ПЛАВНО ВЫЕЗЖАЮЩАЯ ШТОРКА СНИЗУ КАК В ЯНДЕКС МУЗЫКЕ ПО КНОПКЕ 3 ТОЧКИ •••) -->
+        <div id="trackActionsModal" onclick="closeTrackActionsMenu(event)" class="fixed inset-0 z-[75] hidden bg-black/65 backdrop-blur-[3px] items-end justify-center sm:px-4 select-none">
+            <div id="trackActionsSheet" onclick="event.stopPropagation()" class="w-full max-w-[430px] rounded-t-[28px] sm:rounded-[28px] sm:mb-3 bg-[#18181c] border-t border-white/[0.08] sm:border px-4 pt-2.5 pb-6 shadow-[0_-16px_50px_rgba(0,0,0,0.85)] max-h-[88vh] overflow-y-auto no-scrollbar relative">
+                <!-- Верхняя полоска-ручка шторки -->
+                <div onclick="closeTrackActionsMenu(event)" class="w-10 h-1 rounded-full bg-zinc-600/80 mx-auto mb-3.5 cursor-pointer hover:bg-zinc-400 transition-colors"></div>
+                <div id="trackActionsHeader"></div>
+                <div id="trackActionsList" class="mt-1"></div>
             </div>
         </div>
 
@@ -2107,7 +2165,7 @@
                 gradient: "from-purple-600 via-indigo-900 to-zinc-950",
                 icon: "fa-user-astronaut",
                 avatarFile: "avatars/mc_geich.jpg",
-                bannerFile: "",
+                bannerFile: "banners/mc_geich2.jpg",
                 bio: "МС ГЕИЧ — главный архитектор тёмного звучания Dark Music. Записывает свои куплеты в закрытой серверной студии, совмещая глубокий аналоговый саб-бас и бескомпромиссный речитатив.",
                 facts: [
                     "Первые биты МС ГЕИЧ собирал на кастомном синтезаторе в ночную смену.",
@@ -2458,6 +2516,13 @@
                 }
                 customArtistsFromCloud.forEach(ca => {
                     if (!deletedCustomIds.has(ca.id)) {
+                        const prevBanner = (ARTISTS[ca.id] && ARTISTS[ca.id].bannerFile) || (DEFAULT_ARTISTS[ca.id] && DEFAULT_ARTISTS[ca.id].bannerFile) || "";
+                        const resolvedBanner =
+                            (typeof ca.bannerFile === "string" && ca.bannerFile.trim())
+                                ? ca.bannerFile.trim()
+                                : ((data.artistBanners && typeof data.artistBanners[ca.id] === "string" && data.artistBanners[ca.id].trim())
+                                    ? data.artistBanners[ca.id].trim()
+                                    : prevBanner);
                         ARTISTS[ca.id] = {
                             id: ca.id,
                             name: ca.name,
@@ -2465,12 +2530,13 @@
                             gradient: ca.gradient || "from-purple-600 via-indigo-900 to-zinc-950",
                             icon: ca.icon || "fa-microphone-lines",
                             avatarFile: ca.avatarFile || `avatars/${ca.id}.jpg`,
-                            bannerFile: ca.bannerFile || "",
+                            bannerFile: resolvedBanner,
                             bio: ca.bio || `${ca.name} — резидент каталога Dark Music.`,
                             facts: Array.isArray(ca.facts) && ca.facts.length > 0 ? ca.facts : [`${ca.name} выпускает эксклюзивные релизы в Dark Music.`],
                             isCustom: true,
                             createdAt: ca.createdAt || Date.now()
                         };
+                        ca.bannerFile = resolvedBanner;
                         ARTIST_ALBUM_GRADIENTS[ca.id] = ARTISTS[ca.id].gradient;
                     }
                 });
@@ -2516,7 +2582,7 @@
             }
             if (data.artistBanners) {
                 Object.keys(data.artistBanners).forEach(k => {
-                    if (ARTISTS[k] && typeof data.artistBanners[k] === "string") {
+                    if (ARTISTS[k] && typeof data.artistBanners[k] === "string" && data.artistBanners[k].trim()) {
                         ARTISTS[k].bannerFile = data.artistBanners[k].trim();
                     }
                 });
@@ -3513,7 +3579,7 @@
         let _ghPushChain = Promise.resolve(false);
 
         async function fetchCatalogFromGitHubRepo(silent = true) {
-            if (silent && (_activeGitHubPushCount > 0 || (Date.now() - _lastLocalOwnerEditTime < 15000))) {
+            if (silent && (isOwnerUnlocked || _activeGitHubPushCount > 0 || (Date.now() - _lastLocalOwnerEditTime < 45000))) {
                 return;
             }
             try {
@@ -3593,11 +3659,15 @@
                     } catch (e) {}
                 }
 
-                if (silent && (_activeGitHubPushCount > 0 || (Date.now() - _lastLocalOwnerEditTime < 15000))) {
+                if (silent && (isOwnerUnlocked || _activeGitHubPushCount > 0 || (Date.now() - _lastLocalOwnerEditTime < 45000))) {
                     return;
                 }
 
                 if (loadedCatalog && typeof loadedCatalog === "object") {
+                    const incTs = Number(loadedCatalog.updatedAt) || 0;
+                    if (silent && _lastLocalOwnerEditTime > 0 && localUpdatedAt > 0 && incTs > 0 && incTs < localUpdatedAt) {
+                        return;
+                    }
                     const beforeFp = computeCatalogFingerprint(buildFullSyncPayload());
                     // Авторитетная синхронизация из GitHub игнорирует расхождение часов между устройствами
                     applySyncDataToMemory(loadedCatalog, !fetchedFromRemote, fetchedFromRemote);
@@ -4429,9 +4499,24 @@
         }
 
         // =========================================================================
-        // МЕНЮ ДЕЙСТВИЙ ТРЕКА (ПО КНОПКЕ 3 ТОЧКИ •••)
+        // МЕНЮ ДЕЙСТВИЙ ТРЕКА (ПЛАВНАЯ ШТОРКА КАК В ЯНДЕКС МУЗЫКЕ ПО КНОПКЕ 3 ТОЧКИ •••)
         // =========================================================================
         let activeTrackActionsId = null;
+        let _trackActionsCloseTimer = null;
+
+        function downloadTrackAudioFile(trackId) {
+            const track = TRACKS.find(t => t.id === trackId);
+            if (!track) return;
+            const url = getRawUrl(track.filePath);
+            const a = document.createElement("a");
+            a.href = url;
+            a.target = "_blank";
+            a.download = `${getTrackArtistsLabel(track)} - ${track.title}.mp3`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            showToast(`Скачивание «${track.title}» запущено`, "СКАЧАТЬ");
+        }
 
         function openTrackActionsMenu(trackId, event) {
             if (event && typeof event.stopPropagation === "function") {
@@ -4441,106 +4526,129 @@
             const track = TRACKS.find(t => t.id === cleanId);
             if (!track) return;
             activeTrackActionsId = cleanId;
+            if (_trackActionsCloseTimer) {
+                clearTimeout(_trackActionsCloseTimer);
+                _trackActionsCloseTimer = null;
+            }
 
             const modal = document.getElementById("trackActionsModal");
+            const sheet = document.getElementById("trackActionsSheet");
             const headerEl = document.getElementById("trackActionsHeader");
             const listEl = document.getElementById("trackActionsList");
             if (!modal || !headerEl || !listEl) return;
 
-            const artistsLabel = getTrackArtistsLabel(track);
             const album = ALBUMS[track.albumId];
             const isExplicit = Boolean(track.isExplicit || (album && album.isExplicit));
             const isLiked = likedTrackIds.has(track.id);
-            const mainArtist = ARTISTS[track.artistId];
+            const mainArtist = ARTISTS[track.artistId] || getFallbackArtist();
             const featArtist = getTrackFeatArtist(track);
+            const durationStr = track.duration || "2:45";
+
+            const artistChipsHtml = [mainArtist, featArtist].filter(Boolean).map(art => `
+                <button type="button" onclick="handleTrackActionMenuClick('artist', '${art.id}', event)" class="inline-flex items-center gap-2 pl-1 pr-3 py-1 rounded-full bg-zinc-800/95 hover:bg-zinc-700/90 text-xs font-semibold text-zinc-100 transition-colors active:scale-95">
+                    ${renderAvatarBox(art, "w-6 h-6 rounded-full", "text-[9px]")}
+                    <span class="truncate max-w-[150px]">${art.name}</span>
+                </button>
+            `).join("");
 
             headerEl.innerHTML = `
-                ${renderCoverBox(track, "w-12 h-12 rounded-2xl shrink-0", "text-sm")}
-                <div class="min-w-0 flex-1">
-                    <div class="flex items-center gap-1.5">
-                        <h4 class="text-sm font-black text-white truncate">${track.title}</h4>
-                        ${isExplicit ? `<span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>` : ''}
+                <!-- Шапка трека (обложка + название + длительность + стрелка) -->
+                <div onclick="handleTrackActionMenuClick('${album ? 'album' : 'open_player'}', '${album ? album.id : track.id}', event)" class="flex items-center gap-3.5 cursor-pointer group py-0.5">
+                    ${renderCoverBox(track, "w-14 h-14 rounded-xl shrink-0 shadow-md", "text-base")}
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <h4 class="text-[16px] font-bold text-white group-hover:text-purple-300 leading-snug truncate transition-colors">${track.title}</h4>
+                            ${isExplicit ? `<span class="inline-flex items-center justify-center px-1.5 py-0.2 rounded bg-zinc-700/80 text-zinc-200 text-[9px] font-bold shrink-0">18+</span>` : ''}
+                        </div>
+                        <p class="text-xs text-zinc-400 mt-0.5 tabular-nums">${durationStr}</p>
                     </div>
-                    <p class="text-[11px] text-zinc-400 truncate mt-0.5">${artistsLabel}</p>
+                    <i class="fa-solid fa-chevron-right text-xs text-zinc-500 group-hover:text-zinc-300 shrink-0 pr-1"></i>
+                </div>
+
+                <!-- Плашки артистов с круглыми аватарками как в Яндекс Музыке -->
+                <div class="flex items-center flex-wrap gap-2 mt-3">
+                    ${artistChipsHtml}
+                </div>
+
+                ${isExplicit ? `<p class="text-xs text-zinc-400 mt-2.5">Возрастное ограничение 18+</p>` : ''}
+
+                <!-- Кнопка «Моя волна по треку» -->
+                <button type="button" onclick="handleTrackActionMenuClick('wave_by_track', '${track.id}', event)" class="w-full mt-3.5 py-3 px-4 rounded-2xl bg-gradient-to-r from-zinc-800/95 via-zinc-700/80 to-zinc-800/95 hover:from-zinc-700/95 hover:to-zinc-700/95 border border-white/[0.08] flex flex-col items-center justify-center text-center transition-all active:scale-[0.98]">
+                    <span class="text-[11px] font-medium text-zinc-300">Моя волна по треку</span>
+                    <span class="text-[13px] font-bold text-white flex items-center justify-center gap-1.5 mt-0.5 max-w-full truncate">
+                        <i class="fa-solid fa-play text-[10px]"></i>
+                        <span class="truncate">${track.title}</span>
+                    </span>
+                </button>
+
+                <!-- 3 круглые кнопки быстрых действий (Нравится / Скачать / Плеер) -->
+                <div class="grid grid-cols-3 gap-3 mt-4 pb-3 border-b border-white/[0.07]">
+                    <button type="button" onclick="handleTrackActionMenuClick('toggle_like', '${track.id}', event)" class="flex flex-col items-center group">
+                        <div class="w-13 h-13 w-[52px] h-[52px] rounded-full bg-zinc-800/95 group-hover:bg-zinc-700/90 flex items-center justify-center transition-all group-active:scale-95">
+                            <i class="fa-solid fa-heart text-lg ${isLiked ? 'text-rose-500' : 'text-zinc-200'}"></i>
+                        </div>
+                        <span class="text-xs font-medium text-zinc-200 mt-1.5">${isLiked ? 'В любимых' : 'Нравится'}</span>
+                    </button>
+                    <button type="button" onclick="handleTrackActionMenuClick('download', '${track.id}', event)" class="flex flex-col items-center group">
+                        <div class="w-13 h-13 w-[52px] h-[52px] rounded-full bg-zinc-800/95 group-hover:bg-zinc-700/90 flex items-center justify-center transition-all group-active:scale-95">
+                            <i class="fa-solid fa-arrow-down text-base text-zinc-200"></i>
+                        </div>
+                        <span class="text-xs font-medium text-zinc-200 mt-1.5">Скачать</span>
+                    </button>
+                    <button type="button" onclick="handleTrackActionMenuClick('open_player', '${track.id}', event)" class="flex flex-col items-center group">
+                        <div class="w-13 h-13 w-[52px] h-[52px] rounded-full bg-zinc-800/95 group-hover:bg-zinc-700/90 flex items-center justify-center transition-all group-active:scale-95">
+                            <i class="fa-solid fa-wave-square text-base text-zinc-200"></i>
+                        </div>
+                        <span class="text-xs font-medium text-zinc-200 mt-1.5">В плеер</span>
+                    </button>
                 </div>
             `;
 
             const actions = [];
             actions.push(`
-                <button type="button" onclick="handleTrackActionMenuClick('play_next', '${track.id}', event)" class="w-full p-3 rounded-2xl bg-zinc-900/80 hover:bg-zinc-900 border border-zinc-800/80 hover:border-purple-500/40 flex items-center gap-3 text-left spring-btn">
-                    <div class="w-8 h-8 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-forward-step text-xs"></i>
-                    </div>
-                    <div class="min-w-0 flex-1">
-                        <div class="text-xs font-extrabold text-white">Играть следующим</div>
-                        <div class="text-[10px] text-zinc-400">Поставить трек первым в очередь</div>
-                    </div>
+                <button type="button" onclick="handleTrackActionMenuClick('share', '${track.id}', event)" class="w-full px-2 py-3 rounded-xl hover:bg-white/[0.06] active:bg-white/[0.1] flex items-center gap-4 text-left transition-colors">
+                    <i class="fa-solid fa-arrow-up-from-bracket text-base text-zinc-300 w-6 text-center shrink-0"></i>
+                    <span class="text-[15px] font-medium text-zinc-100">Поделиться</span>
                 </button>
             `);
 
             actions.push(`
-                <button type="button" onclick="handleTrackActionMenuClick('toggle_like', '${track.id}', event)" class="w-full p-3 rounded-2xl bg-zinc-900/80 hover:bg-zinc-900 border ${isLiked ? 'border-rose-500/40' : 'border-zinc-800/80'} flex items-center gap-3 text-left spring-btn">
-                    <div class="w-8 h-8 rounded-xl ${isLiked ? 'bg-rose-500/20 border-rose-500/40 text-rose-400' : 'bg-zinc-800 border-zinc-700 text-zinc-300'} border flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-heart text-xs"></i>
-                    </div>
-                    <div class="min-w-0 flex-1">
-                        <div class="text-xs font-extrabold ${isLiked ? 'text-rose-300' : 'text-white'}">${isLiked ? 'Убрать из Любимых треков' : 'Добавить в Любимые треки'}</div>
-                        <div class="text-[10px] text-zinc-400">${isLiked ? 'Трек уже находится в избранном' : 'Сохранить в плейлист Избранное'}</div>
-                    </div>
+                <button type="button" onclick="handleTrackActionMenuClick('play_next', '${track.id}', event)" class="w-full px-2 py-3 rounded-xl hover:bg-white/[0.06] active:bg-white/[0.1] flex items-center gap-4 text-left transition-colors">
+                    <i class="fa-solid fa-forward-step text-base text-zinc-300 w-6 text-center shrink-0"></i>
+                    <span class="text-[15px] font-medium text-zinc-100">Играть следующим</span>
                 </button>
             `);
 
             actions.push(`
-                <button type="button" onclick="handleTrackActionMenuClick('share', '${track.id}', event)" class="w-full p-3 rounded-2xl bg-zinc-900/80 hover:bg-zinc-900 border border-zinc-800/80 flex items-center gap-3 text-left spring-btn">
-                    <div class="w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-400 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-share-nodes text-xs"></i>
-                    </div>
-                    <div class="min-w-0 flex-1">
-                        <div class="text-xs font-extrabold text-white">Поделиться треком</div>
-                        <div class="text-[10px] text-zinc-400">Скопировать прямую ссылку на трек</div>
-                    </div>
+                <button type="button" onclick="handleTrackActionMenuClick('add_to_queue', '${track.id}', event)" class="w-full px-2 py-3 rounded-xl hover:bg-white/[0.06] active:bg-white/[0.1] flex items-center gap-4 text-left transition-colors">
+                    <i class="fa-solid fa-bars-staggered text-base text-zinc-300 w-6 text-center shrink-0"></i>
+                    <span class="text-[15px] font-medium text-zinc-100">Добавить в очередь</span>
                 </button>
             `);
-
-            if (mainArtist) {
-                actions.push(`
-                    <button type="button" onclick="handleTrackActionMenuClick('artist', '${mainArtist.id}', event)" class="w-full p-2.5 rounded-2xl bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800/60 flex items-center gap-3 text-left spring-btn">
-                        ${renderAvatarBox(mainArtist, "w-8 h-8 rounded-full", "text-[10px]")}
-                        <div class="min-w-0 flex-1">
-                            <div class="text-xs font-bold text-zinc-200 truncate">Перейти к артисту: ${mainArtist.name}</div>
-                        </div>
-                        <i class="fa-solid fa-chevron-right text-[10px] text-zinc-500"></i>
-                    </button>
-                `);
-            }
-
-            if (featArtist) {
-                actions.push(`
-                    <button type="button" onclick="handleTrackActionMenuClick('artist', '${featArtist.id}', event)" class="w-full p-2.5 rounded-2xl bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800/60 flex items-center gap-3 text-left spring-btn">
-                        ${renderAvatarBox(featArtist, "w-8 h-8 rounded-full", "text-[10px]")}
-                        <div class="min-w-0 flex-1">
-                            <div class="text-xs font-bold text-zinc-200 truncate">Перейти к артисту: ${featArtist.name}</div>
-                        </div>
-                        <i class="fa-solid fa-chevron-right text-[10px] text-zinc-500"></i>
-                    </button>
-                `);
-            }
 
             if (album) {
                 actions.push(`
-                    <button type="button" onclick="handleTrackActionMenuClick('album', '${album.id}', event)" class="w-full p-2.5 rounded-2xl bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800/60 flex items-center gap-3 text-left spring-btn">
-                        ${renderCoverBox(album, "w-8 h-8 rounded-lg", "text-[10px]")}
-                        <div class="min-w-0 flex-1">
-                            <div class="text-xs font-bold text-zinc-200 truncate">Перейти к релизу: ${album.title}</div>
-                        </div>
-                        <i class="fa-solid fa-chevron-right text-[10px] text-zinc-500"></i>
+                    <button type="button" onclick="handleTrackActionMenuClick('album', '${album.id}', event)" class="w-full px-2 py-3 rounded-xl hover:bg-white/[0.06] active:bg-white/[0.1] flex items-center gap-4 text-left transition-colors">
+                        <i class="fa-solid fa-compact-disc text-base text-zinc-300 w-6 text-center shrink-0"></i>
+                        <span class="text-[15px] font-medium text-zinc-100 truncate">Перейти к релизу «${album.title}»</span>
                     </button>
                 `);
             }
 
+            actions.push(`
+                <button type="button" onclick="handleTrackActionMenuClick('track_info', '${track.id}', event)" class="w-full px-2 py-3 rounded-xl border-t border-white/[0.06] mt-1 pt-3.5 hover:bg-white/[0.06] active:bg-white/[0.1] flex items-center gap-4 text-left transition-colors">
+                    <i class="fa-regular fa-circle-question text-base text-zinc-400 w-6 text-center shrink-0"></i>
+                    <span class="text-[15px] font-medium text-zinc-300">О треке</span>
+                </button>
+            `);
+
             listEl.innerHTML = actions.join("");
-            modal.classList.remove("hidden");
-            modal.classList.add("flex");
+            modal.classList.remove("hidden", "track-backdrop-exit");
+            modal.classList.add("flex", "track-backdrop-enter");
+            if (sheet) {
+                sheet.classList.remove("track-sheet-exit");
+                sheet.classList.add("track-sheet-enter");
+            }
         }
 
         function closeTrackActionsMenu(event) {
@@ -4549,10 +4657,22 @@
             }
             activeTrackActionsId = null;
             const modal = document.getElementById("trackActionsModal");
-            if (modal) {
-                modal.classList.add("hidden");
-                modal.classList.remove("flex");
+            const sheet = document.getElementById("trackActionsSheet");
+            if (!modal || modal.classList.contains("hidden")) return;
+
+            modal.classList.remove("track-backdrop-enter");
+            modal.classList.add("track-backdrop-exit");
+            if (sheet) {
+                sheet.classList.remove("track-sheet-enter");
+                sheet.classList.add("track-sheet-exit");
             }
+            if (_trackActionsCloseTimer) clearTimeout(_trackActionsCloseTimer);
+            _trackActionsCloseTimer = setTimeout(() => {
+                modal.classList.add("hidden");
+                modal.classList.remove("flex", "track-backdrop-exit");
+                if (sheet) sheet.classList.remove("track-sheet-exit");
+                _trackActionsCloseTimer = null;
+            }, 250);
         }
 
         function handleTrackActionMenuClick(actionType, targetId, event) {
@@ -4562,6 +4682,30 @@
             closeTrackActionsMenu();
             if (actionType === "play_next") {
                 queueTrackPlayNext(targetId);
+            } else if (actionType === "add_to_queue") {
+                if (!playNextQueue.includes(targetId)) {
+                    playNextQueue.push(targetId);
+                }
+                updatePlayerUI();
+                const trk = TRACKS.find(t => t.id === targetId);
+                showToast(trk ? `«${trk.title}» добавлен в очередь` : "Добавлено в очередь", "ОЧЕРЕДЬ");
+            } else if (actionType === "wave_by_track") {
+                isShuffle = true;
+                playTrackById(targetId);
+                updatePlayerUI();
+            } else if (actionType === "open_player") {
+                if (currentTrackId !== targetId) {
+                    playTrackById(targetId);
+                }
+                openFullPlayer();
+            } else if (actionType === "download") {
+                downloadTrackAudioFile(targetId);
+            } else if (actionType === "track_info") {
+                const trk = TRACKS.find(t => t.id === targetId);
+                if (trk) {
+                    const alb = ALBUMS[trk.albumId];
+                    showToast(`${getTrackArtistsLabel(trk)} • ${alb ? alb.title : 'Сингл'} (${trk.year || 2025}) • ${trk.duration || '2:45'}`, "О ТРЕКЕ");
+                }
             } else if (actionType === "toggle_like") {
                 toggleLikeTrack(targetId);
             } else if (actionType === "share") {
@@ -4674,9 +4818,45 @@
             });
         }
 
+        function handleOwnerArtistAssetInput(artistId, fieldType, rawVal) {
+            const artist = ARTISTS[artistId];
+            if (!artist) return;
+            _lastLocalOwnerEditTime = Date.now();
+            const cleanVal = String(rawVal || "").trim();
+            if (fieldType === "avatar") {
+                if (cleanVal) artist.avatarFile = cleanVal;
+            } else if (fieldType === "banner") {
+                artist.bannerFile = cleanVal;
+            }
+            const cIdx = customArtistsFromCloud.findIndex(a => a.id === artistId);
+            if (cIdx !== -1) {
+                customArtistsFromCloud[cIdx].avatarFile = artist.avatarFile;
+                customArtistsFromCloud[cIdx].bannerFile = artist.bannerFile || "";
+            } else {
+                customArtistsFromCloud.push({ ...artist, isCustom: true });
+            }
+            saveStateToLocalStorage(true);
+        }
+
         function renderOwnerArtistAvatarsInputs() {
             const container = document.getElementById("ownerArtistAvatarsList");
             if (!container) return;
+            if (container.contains(document.activeElement)) return;
+            const artistIdsKey = Object.keys(ARTISTS).join("|");
+            if (container._renderedArtistIdsKey === artistIdsKey && container.children.length > 0) {
+                Object.keys(ARTISTS).forEach(k => {
+                    const inp = document.getElementById(`avatar_${k}`);
+                    if (inp && document.activeElement !== inp && inp.dataset.userDirty !== "1") {
+                        inp.value = ARTISTS[k].avatarFile || "";
+                    }
+                    const banInp = document.getElementById(`banner_${k}`);
+                    if (banInp && document.activeElement !== banInp && banInp.dataset.userDirty !== "1") {
+                        banInp.value = ARTISTS[k].bannerFile || "";
+                    }
+                });
+                return;
+            }
+            container._renderedArtistIdsKey = artistIdsKey;
             const html = Object.values(ARTISTS).map(artist => `
                 <div class="p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800/80 space-y-2">
                     <div class="flex items-center gap-2">
@@ -4686,11 +4866,11 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div>
                             <label class="text-[9px] text-zinc-400 block mb-0.5">Круглая аватарка (плеер / списки)</label>
-                            <input id="avatar_${artist.id}" type="text" value="${(artist.avatarFile || '').replace(/"/g, '&quot;')}" placeholder="avatars/${artist.id}.jpg" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white">
+                            <input id="avatar_${artist.id}" type="text" value="${(artist.avatarFile || '').replace(/"/g, '&quot;')}" oninput="this.dataset.userDirty='1'; handleOwnerArtistAssetInput('${artist.id}', 'avatar', this.value)" onchange="this.dataset.userDirty='0'; saveArtistAvatars(true)" placeholder="avatars/${artist.id}.jpg" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white">
                         </div>
                         <div>
                             <label class="text-[9px] text-sky-400 font-semibold block mb-0.5">Большая обложка карточки (как в Spotify)</label>
-                            <input id="banner_${artist.id}" type="text" value="${(artist.bannerFile || '').replace(/"/g, '&quot;')}" placeholder="banners/${artist.id}_cover.jpg или URL" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white">
+                            <input id="banner_${artist.id}" type="text" value="${(artist.bannerFile || '').replace(/"/g, '&quot;')}" oninput="this.dataset.userDirty='1'; handleOwnerArtistAssetInput('${artist.id}', 'banner', this.value)" onchange="this.dataset.userDirty='0'; saveArtistAvatars(true)" placeholder="banners/${artist.id}_cover.jpg или URL" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-2.5 py-1.5 text-xs text-white">
                         </div>
                     </div>
                 </div>
@@ -4875,9 +5055,13 @@
 
             Object.keys(ARTISTS).forEach(k => {
                 const inp = document.getElementById(`avatar_${k}`);
-                if (inp && document.activeElement !== inp) inp.value = ARTISTS[k].avatarFile || "";
+                if (inp && document.activeElement !== inp && inp.dataset.userDirty !== "1") {
+                    inp.value = ARTISTS[k].avatarFile || "";
+                }
                 const banInp = document.getElementById(`banner_${k}`);
-                if (banInp && document.activeElement !== banInp) banInp.value = ARTISTS[k].bannerFile || "";
+                if (banInp && document.activeElement !== banInp && banInp.dataset.userDirty !== "1") {
+                    banInp.value = ARTISTS[k].bannerFile || "";
+                }
             });
         }
 
@@ -5390,40 +5574,39 @@
 
             const content = document.getElementById("artistProfileContent");
             const html = `
-                <!-- Шапка артиста (с поддержкой большой обложки как в Spotify) -->
-                <div class="relative rounded-3xl bg-gradient-to-br ${artist.gradient} overflow-hidden border border-white/10 shadow-2xl">
+                <!-- Шапка артиста (с поддержкой полноразмерной большой обложки на всю карточку как в Spotify без пустых полос снизу) -->
+                <div class="relative rounded-3xl bg-gradient-to-br ${artist.gradient} overflow-hidden border border-white/10 shadow-2xl ${bannerUrl ? 'min-h-[270px] sm:min-h-[330px] lg:min-h-[380px] flex flex-col justify-end' : ''}">
                     ${bannerUrl ? `
-                        <div class="relative w-full h-48 sm:h-60 lg:h-72 overflow-hidden">
-                            <img src="${bannerUrl}" alt="${artist.name.replace(/"/g, '&quot;')}" decoding="async" class="w-full h-full object-cover" onerror="this.parentElement.style.display='none'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/45 to-transparent"></div>
-                        </div>
+                        <img src="${bannerUrl}" alt="${artist.name.replace(/"/g, '&quot;')}" decoding="async" class="absolute inset-0 w-full h-full object-cover object-center z-0" onerror="this.style.display='none'">
+                        <div class="absolute inset-0 z-[1] bg-gradient-to-t from-black/90 via-black/45 to-black/10"></div>
+                        <div class="absolute inset-x-0 bottom-0 h-36 z-[1] bg-gradient-to-t from-zinc-950/95 via-zinc-950/60 to-transparent"></div>
                     ` : ''}
-                    <div class="relative z-10 p-5 lg:p-6 ${bannerUrl ? '-mt-16 sm:-mt-20' : ''} space-y-4">
+                    <div class="relative z-10 w-full p-5 lg:p-7 space-y-4">
                         <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                             <div class="flex items-center gap-4 min-w-0">
-                                ${renderAvatarBox(artist, "w-20 h-20 lg:w-24 lg:h-24 rounded-full shadow-2xl ring-2 ring-white/20", "text-2xl")}
+                                ${renderAvatarBox(artist, "w-20 h-20 lg:w-24 lg:h-24 rounded-full shadow-2xl ring-2 ring-white/25", "text-2xl")}
                                 <div class="min-w-0 flex-1">
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-black/55 backdrop-blur-md border border-white/15 text-[9px] font-black uppercase tracking-widest text-purple-300">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-[9px] font-black uppercase tracking-widest text-purple-300">
                                         <i class="fa-solid fa-circle-check text-sky-400"></i>
                                         <span>ПОДТВЕРЖДЁННЫЙ АРТИСТ</span>
                                     </span>
                                     <div class="flex items-center gap-1.5 mt-1.5">
-                                        <h1 class="text-xl lg:text-3xl font-black text-white truncate drop-shadow">${artist.name}</h1>
+                                        <h1 class="text-xl lg:text-4xl font-black text-white truncate drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">${artist.name}</h1>
                                     </div>
-                                    <p class="text-[11px] lg:text-xs text-zinc-200/90 mt-0.5">${artist.role} • Треков: ${artistTracks.length}</p>
+                                    <p class="text-[11px] lg:text-xs text-zinc-200 font-medium mt-0.5 drop-shadow">${artist.role} • Треков: ${artistTracks.length}</p>
                                 </div>
                             </div>
-                            <button type="button" onclick="shareEntityLink('artist', '${artist.id}', event)" class="self-start sm:self-auto px-3.5 py-2 rounded-xl bg-black/50 hover:bg-black/75 border border-white/15 text-white text-xs font-bold flex items-center gap-2 shrink-0 spring-btn">
+                            <button type="button" onclick="shareEntityLink('artist', '${artist.id}', event)" class="self-start sm:self-auto px-3.5 py-2 rounded-xl bg-black/55 hover:bg-black/80 backdrop-blur-md border border-white/15 text-white text-xs font-bold flex items-center gap-2 shrink-0 spring-btn">
                                 <i class="fa-solid fa-share-nodes text-purple-400 text-xs"></i>
                                 <span>Поделиться</span>
                             </button>
                         </div>
-                        <div class="grid grid-cols-2 sm:flex sm:items-center gap-2.5">
-                            <button onclick="playArtistTracks('${artist.id}', false)" class="py-2.5 px-5 rounded-xl bg-white hover:bg-zinc-100 text-black font-extrabold text-xs flex items-center justify-center gap-2 spring-btn">
+                        <div class="grid grid-cols-2 sm:flex sm:items-center gap-2.5 pt-0.5">
+                            <button onclick="playArtistTracks('${artist.id}', false)" class="py-2.5 px-5 rounded-xl bg-white hover:bg-zinc-100 text-black font-extrabold text-xs flex items-center justify-center gap-2 shadow-lg spring-btn">
                                 <i class="fa-solid fa-play text-[10px]"></i>
                                 <span>Слушать все треки</span>
                             </button>
-                            <button onclick="playArtistTracks('${artist.id}', true)" class="py-2.5 px-5 rounded-xl bg-black/50 hover:bg-black/70 border border-white/15 text-white font-bold text-xs flex items-center justify-center gap-2 spring-btn">
+                            <button onclick="playArtistTracks('${artist.id}', true)" class="py-2.5 px-5 rounded-xl bg-black/55 hover:bg-black/80 backdrop-blur-md border border-white/15 text-white font-bold text-xs flex items-center justify-center gap-2 spring-btn">
                                 <i class="fa-solid fa-shuffle text-[10px] text-purple-400"></i>
                                 <span>Вперемешку</span>
                             </button>
@@ -6183,11 +6366,20 @@
 
             if (artistCard) {
                 const countTracks = TRACKS.filter(t => trackHasArtist(t, artist.id)).length;
+                const rightBannerUrl = artist.bannerFile ? getRawUrl(artist.bannerFile) : "";
                 const bioCardHtml = `
-                    <div class="flex items-center justify-between">
-                        <span class="text-[10px] font-black uppercase tracking-wider text-zinc-400">Об исполнителе</span>
-                        <button onclick="openArtistProfile('${artist.id}')" class="text-[10px] font-bold text-purple-400 hover:text-purple-300">Профиль →</button>
-                    </div>
+                    ${rightBannerUrl ? `
+                        <div onclick="openArtistProfile('${artist.id}')" class="relative -mx-3.5 -mt-3.5 mb-2.5 h-28 rounded-t-2xl overflow-hidden cursor-pointer group">
+                            <img src="${rightBannerUrl}" alt="${artist.name.replace(/"/g, '&quot;')}" decoding="async" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" onerror="this.parentElement.style.display='none'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/35 to-black/20"></div>
+                            <span class="absolute top-2.5 left-3 text-[10px] font-black uppercase tracking-wider text-white/90 drop-shadow">Об исполнителе</span>
+                        </div>
+                    ` : `
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-black uppercase tracking-wider text-zinc-400">Об исполнителе</span>
+                            <button onclick="openArtistProfile('${artist.id}')" class="text-[10px] font-bold text-purple-400 hover:text-purple-300">Профиль →</button>
+                        </div>
+                    `}
                     <div onclick="openArtistProfile('${artist.id}')" class="flex items-center gap-3 cursor-pointer group">
                         ${renderAvatarBox(artist, "w-12 h-12 rounded-full", "text-base")}
                         <div class="min-w-0 flex-1">
@@ -6395,6 +6587,29 @@
             if (coverInner && coverInner._lastCoverSignature !== coverSignature) {
                 coverInner._lastCoverSignature = coverSignature;
                 coverInner.innerHTML = renderCoverBox(track, "w-full h-full", "text-6xl");
+            }
+
+            // Обновляем приглушённую большую обложку из карточки артиста на фоне полноэкранного плеера (как в Spotify на ПК)
+            const backdropBannerImg = document.getElementById("playerBackdropBannerImg");
+            if (backdropBannerImg) {
+                const rawBannerPath =
+                    (artist && artist.bannerFile) ||
+                    (featArtist && featArtist.bannerFile) ||
+                    (artist && artist.avatarFile) ||
+                    coverPath ||
+                    "";
+                const resolvedBackdropUrl = rawBannerPath ? getRawUrl(rawBannerPath) : "";
+                if (backdropBannerImg._lastBackdropUrl !== resolvedBackdropUrl) {
+                    backdropBannerImg._lastBackdropUrl = resolvedBackdropUrl;
+                    if (resolvedBackdropUrl) {
+                        backdropBannerImg.src = resolvedBackdropUrl;
+                        backdropBannerImg.classList.remove("hidden", "player-banner-animate");
+                        void backdropBannerImg.offsetWidth;
+                        backdropBannerImg.classList.add("player-banner-animate");
+                    } else {
+                        backdropBannerImg.classList.add("hidden");
+                    }
+                }
             }
 
             const likeBtn = document.getElementById("playerLikeBtn");
@@ -6909,22 +7124,31 @@
             }
         }
 
-        async function saveArtistAvatars() {
+        async function saveArtistAvatars(silentToast = false) {
+            _lastLocalOwnerEditTime = Date.now();
             Object.keys(ARTISTS).forEach(k => {
-                const val = document.getElementById(`avatar_${k}`)?.value.trim();
-                const bannerVal = document.getElementById(`banner_${k}`)?.value.trim();
+                const avEl = document.getElementById(`avatar_${k}`);
+                const banEl = document.getElementById(`banner_${k}`);
+                const val = avEl?.value.trim();
+                const bannerVal = banEl?.value.trim();
                 if (val) ARTISTS[k].avatarFile = val;
                 if (bannerVal !== undefined) ARTISTS[k].bannerFile = bannerVal;
+                if (avEl) avEl.dataset.userDirty = "0";
+                if (banEl) banEl.dataset.userDirty = "0";
                 const cIdx = customArtistsFromCloud.findIndex(a => a.id === k);
                 if (cIdx !== -1) {
                     customArtistsFromCloud[cIdx].avatarFile = ARTISTS[k].avatarFile;
                     customArtistsFromCloud[cIdx].bannerFile = ARTISTS[k].bannerFile || "";
+                } else {
+                    customArtistsFromCloud.push({ ...ARTISTS[k], isCustom: true });
                 }
             });
             saveStateToLocalStorage(true);
             renderAllViews();
             await persistSettingsToCloud();
-            showToast("Аватарки и обложки артистов сохранены!", "КАТАЛОГ");
+            if (!silentToast) {
+                showToast("Аватарки и обложки артистов сохранены в GitHub!", "КАТАЛОГ");
+            }
         }
 
         function populateAlbumSelectForArtist() {
@@ -8156,7 +8380,11 @@
                 navigator.serviceWorker.addEventListener("message", (event) => {
                     const msg = event.data;
                     if (msg && msg.type === "SW_CATALOG_SYNC" && msg.catalog && typeof msg.catalog === "object") {
-                        if (_activeGitHubPushCount > 0 || (Date.now() - _lastLocalOwnerEditTime < 15000)) {
+                        if (isOwnerUnlocked || _activeGitHubPushCount > 0 || (Date.now() - _lastLocalOwnerEditTime < 45000)) {
+                            return;
+                        }
+                        const incTs = Number(msg.catalog.updatedAt) || 0;
+                        if (_lastLocalOwnerEditTime > 0 && localUpdatedAt > 0 && incTs > 0 && incTs < localUpdatedAt) {
                             return;
                         }
                         const beforeFp = computeCatalogFingerprint(buildFullSyncPayload());
