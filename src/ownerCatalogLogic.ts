@@ -588,3 +588,58 @@ export function togglePersonalFavoriteTrack(
   return { updated: nextList, isAdded: true };
 }
 
+export interface TrackActionOption {
+  id: 'play_next' | 'toggle_favorite' | 'share_track' | 'go_artist' | 'go_feat_artist' | 'go_album';
+  label: string;
+}
+
+export function buildTrackActionsDescriptor(params: {
+  trackId: string;
+  isLiked: boolean;
+  artistName: string;
+  featArtistName?: string | null;
+  albumTitle?: string | null;
+}): TrackActionOption[] {
+  const items: TrackActionOption[] = [
+    { id: 'play_next', label: 'Играть следующим' },
+    {
+      id: 'toggle_favorite',
+      label: params.isLiked ? 'Убрать из Любимых треков' : 'Добавить в Любимые треки'
+    },
+    { id: 'share_track', label: 'Поделиться треком' },
+    { id: 'go_artist', label: `Перейти к артисту (${params.artistName || 'Артист'})` }
+  ];
+  if (params.featArtistName && params.featArtistName.trim()) {
+    items.push({
+      id: 'go_feat_artist',
+      label: `Перейти к артисту (${params.featArtistName.trim()})`
+    });
+  }
+  if (params.albumTitle && params.albumTitle.trim()) {
+    items.push({
+      id: 'go_album',
+      label: `Перейти к релизу «${params.albumTitle.trim()}»`
+    });
+  }
+  return items;
+}
+
+export function resolveDesktopRightSidebarLayout(isCollapsed: boolean): {
+  sidebarState: 'collapsed' | 'open';
+  sidebarHidden: boolean;
+  centerWorkspaceExpanded: boolean;
+} {
+  const collapsed = Boolean(isCollapsed);
+  return {
+    sidebarState: collapsed ? 'collapsed' : 'open',
+    sidebarHidden: collapsed,
+    centerWorkspaceExpanded: collapsed
+  };
+}
+
+export function isValidGitHubTokenFormat(tokenStr?: string | null): boolean {
+  if (!tokenStr || typeof tokenStr !== 'string') return false;
+  const clean = tokenStr.trim();
+  return /^(ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,}|gho_[A-Za-z0-9]{30,})$/.test(clean);
+}
+

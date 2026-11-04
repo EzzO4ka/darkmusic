@@ -291,6 +291,27 @@
                 background: rgba(168, 85, 247, 0.75);
             }
         }
+        /* Гарантированное сворачивание правой колонки и автоматическое расширение центральной области на ПК */
+        #desktopRightSidebar.right-sidebar-collapsed {
+            display: none !important;
+            width: 0 !important;
+        }
+        @media (min-width: 1280px) {
+            body[data-right-sidebar="collapsed"] #homeArtistsGrid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+            body[data-right-sidebar="collapsed"] #homeAlbumsCarousel {
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+            }
+            body[data-right-sidebar="collapsed"] #homeVideosList {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+        @media (min-width: 1536px) {
+            body[data-right-sidebar="collapsed"] #homeAlbumsCarousel {
+                grid-template-columns: repeat(6, minmax(0, 1fr));
+            }
+        }
     </style>
 </head>
 <body class="bg-black text-white antialiased selection:bg-purple-600 selection:text-white lg:overflow-hidden">
@@ -549,7 +570,7 @@
                             <span class="text-zinc-700">•</span>
                             <span id="deskTopAlbumsCount">0 релизов</span>
                         </div>
-                        <button onclick="switchTab('favorites')" id="deskTopFavBtn" class="px-3 py-1.5 rounded-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-rose-400 text-[11px] font-extrabold flex items-center gap-1.5 spring-btn" title="Любимые треки (Личное избранное)">
+                        <button onclick="switchTab('favorites')" id="deskTopFavBtn" class="px-3 py-1.5 rounded-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-rose-400 text-[11px] font-extrabold flex items-center gap-1.5 spring-btn" title="Любимые треки">
                             <i class="fa-solid fa-heart text-xs"></i>
                             <span id="deskTopFavCount">0</span>
                         </button>
@@ -557,7 +578,7 @@
                             <i id="desktopHeaderLockIcon" class="fa-solid fa-lock text-xs text-zinc-400"></i>
                             <span>Владелец</span>
                         </button>
-                        <button onclick="toggleDesktopRightSidebar()" id="deskTopRightSidebarBtn" class="hidden xl:flex w-8 h-8 rounded-full bg-purple-600/20 border border-purple-500/40 text-purple-300 hover:text-white items-center justify-center spring-btn" title="Свернуть / развернуть правую панель трека">
+                        <button onclick="toggleDesktopRightSidebar()" id="deskTopRightSidebarBtn" class="hidden lg:flex w-8 h-8 rounded-full bg-purple-600/20 border border-purple-500/40 text-purple-300 hover:text-white items-center justify-center spring-btn" title="Свернуть / развернуть правую панель трека">
                             <i id="deskTopRightSidebarIcon" class="fa-solid fa-table-columns text-xs"></i>
                         </button>
                     </div>
@@ -693,11 +714,11 @@
                     <div id="artistFilterPills" class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1 lg:flex-wrap"></div>
 
                     <!-- Заголовок таблицы треков в стиле Spotify Desktop (только на широких экранах) -->
-                    <div class="hidden md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_168px] items-center gap-3 px-3.5 py-1.5 border-b border-zinc-900/90 text-[10px] font-black uppercase tracking-wider text-zinc-500 select-none">
+                    <div class="hidden md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_116px] items-center gap-3 px-3.5 py-1.5 border-b border-zinc-900/90 text-[10px] font-black uppercase tracking-wider text-zinc-500 select-none">
                         <span>#</span>
                         <span>Название и исполнитель</span>
                         <span>Альбом / Релиз</span>
-                        <span class="text-right pr-2">Действия • <i class="fa-regular fa-clock"></i></span>
+                        <span class="text-right pr-2"><i class="fa-regular fa-clock"></i></span>
                     </div>
 
                     <!-- Список треков -->
@@ -757,11 +778,11 @@
                         <i class="fa-solid fa-play text-base lg:text-lg ml-0.5"></i>
                     </button>
                 </div>
-                <div class="hidden md:grid md:grid-cols-[36px_minmax(0,1.8fr)_minmax(0,1fr)_168px] items-center gap-3 px-3.5 py-1.5 border-b border-zinc-900/90 text-[10px] font-black uppercase tracking-wider text-zinc-500 select-none">
+                <div class="hidden md:grid md:grid-cols-[36px_minmax(0,1.8fr)_minmax(0,1fr)_116px] items-center gap-3 px-3.5 py-1.5 border-b border-zinc-900/90 text-[10px] font-black uppercase tracking-wider text-zinc-500 select-none">
                     <span>МЕСТО</span>
                     <span>Название и исполнитель</span>
                     <span>Альбом / Релиз</span>
-                    <span class="text-right pr-2">Действия • <i class="fa-regular fa-clock"></i></span>
+                    <span class="text-right pr-2"><i class="fa-regular fa-clock"></i></span>
                 </div>
                 <div id="fullChartsList" class="space-y-2 lg:space-y-1.5"></div>
             </section>
@@ -775,7 +796,7 @@
                 <div id="fullArtistsList" class="space-y-3 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0"></div>
             </section>
 
-            <!-- ВКЛАДКА: ЛИЧНОЕ ИЗБРАННОЕ (ЛЮБИМЫЕ ТРЕКИ) -->
+            <!-- ВКЛАДКА: ИЗБРАННОЕ (ЛЮБИМЫЕ ТРЕКИ) -->
             <section id="view-favorites" class="hidden space-y-5 view-animate">
                 <div class="rounded-3xl bg-gradient-to-br from-rose-950/75 via-purple-950/50 to-zinc-950 border border-rose-500/35 p-5 lg:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xl shadow-rose-950/20">
                     <div class="flex items-center gap-4">
@@ -783,9 +804,9 @@
                             <i class="fa-solid fa-heart text-2xl lg:text-3xl"></i>
                         </div>
                         <div class="space-y-1">
-                            <span class="px-2 py-0.5 rounded-md bg-rose-500/20 border border-rose-500/30 text-rose-300 text-[9px] font-black uppercase tracking-widest">ЛИЧНАЯ КОЛЛЕКЦИЯ • СОХРАНЕНО НА УСТРОЙСТВЕ</span>
+                            <span class="px-2 py-0.5 rounded-md bg-rose-500/20 border border-rose-500/30 text-rose-300 text-[9px] font-black uppercase tracking-widest">ПЛЕЙЛИСТ • ИЗБРАННОЕ</span>
                             <h1 class="text-xl lg:text-3xl font-black text-white">Любимые треки</h1>
-                            <p id="favoritesSubtitleText" class="text-[11px] lg:text-xs text-zinc-300">Ваше личное избранное (сохраняется локально только у вас)</p>
+                            <p id="favoritesSubtitleText" class="text-[11px] lg:text-xs text-zinc-300">Ваша коллекция любимых треков</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2.5 shrink-0">
@@ -799,11 +820,11 @@
                         </button>
                     </div>
                 </div>
-                <div class="hidden md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_168px] items-center gap-3 px-3.5 py-1.5 border-b border-zinc-900/90 text-[10px] font-black uppercase tracking-wider text-zinc-500 select-none">
+                <div class="hidden md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_116px] items-center gap-3 px-3.5 py-1.5 border-b border-zinc-900/90 text-[10px] font-black uppercase tracking-wider text-zinc-500 select-none">
                     <span>#</span>
                     <span>Название и исполнитель</span>
                     <span>Альбом / Релиз</span>
-                    <span class="text-right pr-2">Действия • <i class="fa-regular fa-clock"></i></span>
+                    <span class="text-right pr-2"><i class="fa-regular fa-clock"></i></span>
                 </div>
                 <div id="favoritesTracksList" class="space-y-2 lg:space-y-1.5"></div>
             </section>
@@ -1155,7 +1176,7 @@
                                     </div>
                                     <div>
                                         <label class="text-[10px] text-emerald-400 font-semibold block mb-1">Ключ синхронизации (защищён крипто-контейнером)</label>
-                                        <input id="githubTokenInput" type="password" placeholder="Крипто-ключ активен (свой — опционально)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                                        <input id="githubTokenInput" type="text" autocomplete="off" spellcheck="false" data-lpignore="true" placeholder="Крипто-ключ активен (свой ghp_... — опционально)" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                                     </div>
                                 </div>
                                 <p class="text-[10px] text-zinc-500 leading-relaxed">
@@ -1438,8 +1459,8 @@
                 </footer>
             </div>
 
-            <!-- ПРАВАЯ ПАНЕЛЬ «СЕЙЧАС ИГРАЕТ» + ОЧЕРЕДЬ И ИНФО ОБ АРТИСТЕ (SPOTIFY DESKTOP RIGHT SIDEBAR, >= 1280px) -->
-            <aside id="desktopRightSidebar" class="hidden xl:flex xl:w-[320px] 2xl:w-[340px] shrink-0 flex-col rounded-2xl bg-zinc-950/90 border border-zinc-900/90 overflow-y-auto custom-desk-scroll p-4 space-y-4 select-none transition-all duration-300">
+            <!-- ПРАВАЯ ПАНЕЛЬ «СЕЙЧАС ИГРАЕТ» + ОЧЕРЕДЬ И ИНФО ОБ АРТИСТЕ (SPOTIFY DESKTOP RIGHT SIDEBAR, >= 1024px) -->
+            <aside id="desktopRightSidebar" class="hidden lg:flex lg:w-[300px] xl:w-[320px] 2xl:w-[340px] shrink-0 flex-col rounded-2xl bg-zinc-950/90 border border-zinc-900/90 overflow-y-auto custom-desk-scroll p-4 space-y-4 select-none transition-all duration-300">
                 <div class="flex items-center justify-between gap-2">
                     <div class="flex items-center gap-2 min-w-0">
                         <span class="w-2 h-2 rounded-full bg-purple-500 animate-pulse shrink-0"></span>
@@ -1638,7 +1659,7 @@
                     </button>
                     <input id="deskVolumeSlider" type="range" min="0" max="100" value="100" oninput="setAudioVolume(this.value)" class="w-full dark-slider" title="Громкость">
                 </div>
-                <button id="deskBottomRightSidebarBtn" onclick="toggleDesktopRightSidebar()" class="hidden xl:flex w-8 h-8 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-purple-500/40 text-purple-400 hover:text-white items-center justify-center spring-btn" title="Свернуть / развернуть панель «Сейчас играет»">
+                <button id="deskBottomRightSidebarBtn" onclick="toggleDesktopRightSidebar()" class="hidden lg:flex w-8 h-8 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-purple-500/40 text-purple-400 hover:text-white items-center justify-center spring-btn" title="Свернуть / развернуть панель «Сейчас играет»">
                     <i class="fa-solid fa-table-columns text-xs"></i>
                 </button>
                 <button onclick="openFullPlayer()" class="w-8 h-8 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white flex items-center justify-center spring-btn" title="Открыть плеер во весь экран">
@@ -1715,7 +1736,7 @@
                                 </div>
                             </div>
                             <div class="flex items-center gap-2 shrink-0">
-                                <button id="playerLikeBtn" onclick="toggleLikeCurrent()" class="w-10 h-10 lg:w-11 lg:h-11 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white spring-btn" title="В избранное (сохраняется у вас)">
+                                <button id="playerLikeBtn" onclick="toggleLikeCurrent()" class="w-10 h-10 lg:w-11 lg:h-11 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white spring-btn" title="В избранное">
                                     <i class="fa-solid fa-heart text-sm"></i>
                                 </button>
                             </div>
@@ -1856,6 +1877,18 @@
             </div>
         </div>
 
+        <!-- МЕНЮ ДЕЙСТВИЙ ТРЕКА (ПО КНОПКЕ 3 ТОЧКИ •••) -->
+        <div id="trackActionsModal" onclick="closeTrackActionsMenu(event)" class="fixed inset-0 z-[75] hidden bg-black/80 backdrop-blur-xl items-end sm:items-center justify-center p-3 sm:p-4 select-none">
+            <div onclick="event.stopPropagation()" class="w-full max-w-[360px] rounded-3xl bg-zinc-950 border border-zinc-800/90 p-4 space-y-3 shadow-2xl shadow-purple-950/50 relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-28 h-28 rounded-full bg-purple-600/15 blur-2xl pointer-events-none"></div>
+                <div id="trackActionsHeader" class="flex items-center gap-3 pb-3 border-b border-zinc-900"></div>
+                <div id="trackActionsList" class="space-y-1.5"></div>
+                <button type="button" onclick="closeTrackActionsMenu()" class="w-full py-2.5 rounded-2xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs font-extrabold text-zinc-400 hover:text-white spring-btn">
+                    Закрыть
+                </button>
+            </div>
+        </div>
+
     </div>
 
     <!-- АУДИО-ЭЛЕМЕНТЫ (основной с атрибутом controls для системного плеера ОС и скрытый для предзагрузки следующего трека) -->
@@ -1941,8 +1974,14 @@
             return false;
         }
 
+        function isValidGitHubTokenFormat(tokenStr) {
+            if (!tokenStr || typeof tokenStr !== "string") return false;
+            const clean = tokenStr.trim();
+            return /^(ghp_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,}|gho_[A-Za-z0-9]{30,})$/.test(clean);
+        }
+
         function _resolveTransportAuthToken(customOverride) {
-            if (customOverride && typeof customOverride === "string" && customOverride.trim().length > 0) {
+            if (isValidGitHubTokenFormat(customOverride)) {
                 return customOverride.trim();
             }
             // Если владелец разблокировал хранилище своим PIN-кодом, расшифровываем ключ напрямую через производный 256-битный KDF-ключ
@@ -2659,12 +2698,12 @@
                     const savedToken = localStorage.getItem(GITHUB_TOKEN_STORAGE_KEY);
                     if (savedToken) {
                         const defaultBuiltIn = _resolveTransportAuthToken("");
-                        if (savedToken === defaultBuiltIn) {
-                            // Очищаем старый незашифрованный кэш встроенного токена из localStorage
+                        if (savedToken === defaultBuiltIn || !isValidGitHubTokenFormat(savedToken)) {
+                            // Очищаем старый незашифрованный кэш или случайно автозаполненный браузером пароль
                             localStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY);
                             githubPersonalToken = "";
                         } else {
-                            githubPersonalToken = savedToken;
+                            githubPersonalToken = savedToken.trim();
                         }
                     }
 
@@ -3730,7 +3769,35 @@
         function buildUpdatedIndexHtmlString() {
             const nextVersion = Math.max(currentAppBuildVersion, Number(forceUpdateData?.requiredVersion) || 3.1, 3.1);
             const payload = buildFullSyncPayload();
-            const currentHtml = `<!DOCTYPE html>\n<!-- Dark Music v${nextVersion.toFixed(1)} -->\n` + document.documentElement.outerHTML;
+            const docClone = document.documentElement.cloneNode(true);
+
+            // Гарантируем чистое начальное состояние DOM в сохраняемом index.html (панель владельца и модалки закрыты, открыта Главная)
+            const homeSec = docClone.querySelector("#view-home");
+            if (homeSec) homeSec.classList.remove("hidden");
+            ["view-charts", "view-artists", "view-favorites", "view-artist-profile", "view-album-detail", "view-owner-panel"].forEach(id => {
+                const el = docClone.querySelector(`#${id}`);
+                if (el) el.classList.add("hidden");
+            });
+            ["pinModal", "editModal", "deleteConfirmModal", "trackActionsModal", "playerModal", "videoPlayerModal", "whatsNewModal", "forceUpdateModal", "tempBroadcastToast"].forEach(id => {
+                const el = docClone.querySelector(`#${id}`);
+                if (el) {
+                    el.classList.add("hidden");
+                    el.classList.remove("flex", "player-sheet-enter", "player-sheet-exit");
+                }
+            });
+            const hLock = docClone.querySelector("#headerLockIcon");
+            if (hLock) hLock.className = "fa-solid fa-lock text-xs";
+            const dLock = docClone.querySelector("#desktopHeaderLockIcon");
+            if (dLock) dLock.className = "fa-solid fa-lock text-xs text-zinc-400";
+            const dDot = docClone.querySelector("#deskOwnerStatusDot");
+            if (dDot) {
+                dDot.textContent = "PIN";
+                dDot.className = "px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-[9px] font-black text-zinc-500";
+            }
+            const tokInp = docClone.querySelector("#githubTokenInput");
+            if (tokInp) tokInp.setAttribute("value", "");
+
+            const currentHtml = `<!DOCTYPE html>\n<!-- Dark Music v${nextVersion.toFixed(1)} -->\n` + docClone.outerHTML;
             const bakedBlock = `/*__BAKED_VAULT_START__*/\n        window.__BAKED_VAULT_DATA__ = ${JSON.stringify(payload)};\n        window.__APP_BUILD_VERSION__ = ${nextVersion};\n        /*__BAKED_VAULT_END__*/`;
             return {
                 nextVersion,
@@ -3755,58 +3822,91 @@
             showToast(`Готовый index.html (v${nextVersion.toFixed(1)}) со всеми треками скачан!`, "ГОТОВО ДЛЯ ДРУЗЕЙ");
         }
 
-        async function pushBakedIndexHtmlToGitHubRepo(showMessage = true) {
+        function pushBakedIndexHtmlToGitHubRepo(showMessage = true) {
+            _activeGitHubPushCount++;
+            _lastLocalOwnerEditTime = Date.now();
+            _ghPushChain = _ghPushChain
+                .catch(() => false)
+                .then(() => _executePushBakedIndexHtmlToGitHubRepo(showMessage))
+                .finally(() => {
+                    _activeGitHubPushCount = Math.max(0, _activeGitHubPushCount - 1);
+                    _lastLocalOwnerEditTime = Date.now();
+                });
+            return _ghPushChain;
+        }
+
+        async function _executePushBakedIndexHtmlToGitHubRepo(showMessage = true) {
             if (window.__PLAYWRIGHT_TEST_MODE__) {
                 if (showMessage) showToast("Тестовый режим: index.html v3.1 проверен ✓", "СИНХРОНИЗАЦИЯ");
                 return true;
             }
             const cleanRepo = (githubRepoPath || BUILTIN_GITHUB_REPO).replace(/^\/+|\/+$/g, "");
             const cleanBranch = (githubBranch || BUILTIN_GITHUB_BRANCH).replace(/^\/+|\/+$/g, "") || "main";
-            const tokenToUse = _resolveTransportAuthToken(githubPersonalToken);
+            let tokenToUse = _resolveTransportAuthToken(githubPersonalToken);
             if (!cleanRepo || !tokenToUse) return false;
 
             const { nextVersion, html } = buildUpdatedIndexHtmlString();
             const encodedContent = utf8ToBase64(html);
             const apiUrl = `https://api.github.com/repos/${cleanRepo}/contents/index.html`;
-            const headers = {
-                "Accept": "application/vnd.github.v3+json",
-                "Authorization": `token ${tokenToUse}`,
-                "Content-Type": "application/json"
-            };
 
-            try {
-                let existingSha = null;
-                const getResp = await fetch(`${apiUrl}?ref=${encodeURIComponent(cleanBranch)}&_cb=${Date.now()}`, {
-                    headers: {
-                        ...headers,
-                        "If-None-Match": `"${Date.now()}-${Math.random()}"`
-                    },
-                    cache: "no-store"
-                });
-                if (getResp.ok) {
-                    const fileData = await getResp.json();
-                    existingSha = fileData.sha;
-                }
-                const bodyObj = {
-                    message: `Обновление Dark Music index.html до версии v${nextVersion.toFixed(1)}`,
-                    content: encodedContent,
-                    branch: cleanBranch
-                };
-                if (existingSha) bodyObj.sha = existingSha;
+            for (let attempt = 1; attempt <= 3; attempt++) {
+                try {
+                    const headers = {
+                        "Accept": "application/vnd.github.v3+json",
+                        "Authorization": `token ${tokenToUse}`,
+                        "Content-Type": "application/json"
+                    };
 
-                const putResp = await fetch(apiUrl, {
-                    method: "PUT",
-                    headers,
-                    body: JSON.stringify(bodyObj)
-                });
-                if (putResp.ok) {
-                    if (showMessage) {
-                        showToast(`Файл index.html (v${nextVersion.toFixed(1)}) обновлён в GitHub!`, "GITHUB v3.1");
+                    let existingSha = null;
+                    const getResp = await fetch(`${apiUrl}?ref=${encodeURIComponent(cleanBranch)}&_cb=${Date.now()}`, {
+                        headers: {
+                            ...headers,
+                            "If-None-Match": `"${Date.now()}-${Math.random()}"`
+                        },
+                        cache: "no-store"
+                    });
+                    if ((getResp.status === 401 || getResp.status === 403) && githubPersonalToken) {
+                        githubPersonalToken = "";
+                        tokenToUse = _resolveTransportAuthToken("");
+                        try { localStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY); } catch (e) {}
+                        continue;
                     }
-                    return true;
+                    if (getResp.ok) {
+                        const fileData = await getResp.json();
+                        existingSha = fileData.sha;
+                    }
+
+                    const bodyObj = {
+                        message: `Обновление Dark Music index.html до версии v${nextVersion.toFixed(1)}`,
+                        content: encodedContent,
+                        branch: cleanBranch
+                    };
+                    if (existingSha) bodyObj.sha = existingSha;
+
+                    const putResp = await fetch(apiUrl, {
+                        method: "PUT",
+                        headers,
+                        body: JSON.stringify(bodyObj)
+                    });
+                    if (putResp.ok) {
+                        updateSyncStatusBadge(`Опубликовано в GitHub (catalog.json + index.html v${nextVersion.toFixed(1)}) ✓`, true);
+                        if (showMessage) {
+                            showToast(`Файл index.html (v${nextVersion.toFixed(1)}) обновлён в GitHub!`, "GITHUB v3.1");
+                        }
+                        return true;
+                    } else if (putResp.status === 409 || putResp.status === 422) {
+                        continue;
+                    } else if ((putResp.status === 401 || putResp.status === 403) && githubPersonalToken) {
+                        githubPersonalToken = "";
+                        tokenToUse = _resolveTransportAuthToken("");
+                        try { localStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY); } catch (e) {}
+                        continue;
+                    } else {
+                        break;
+                    }
+                } catch (e) {
+                    console.warn("GitHub index.html push error:", e);
                 }
-            } catch (e) {
-                console.warn("GitHub index.html push error:", e);
             }
             return false;
         }
@@ -4036,7 +4136,7 @@
                 favViewBadge.textContent = `${validLikedCount} ${word}`;
             }
             if (favSubText) {
-                favSubText.textContent = `В вашей личной коллекции ${validLikedCount} ${word} (сохраняется локально только у вас)`;
+                favSubText.textContent = `В вашей коллекции ${validLikedCount} ${word}`;
             }
             if (mobFavIcon) {
                 mobFavIcon.className = validLikedCount > 0 ? "fa-solid fa-heart text-xs text-rose-400" : "fa-solid fa-heart text-xs text-zinc-400";
@@ -4068,7 +4168,7 @@
             }
             if (trk) {
                 showToast(
-                    nowLiked ? `«${trk.title}» добавлен в ваши Любимые треки` : `«${trk.title}» убран из Избранного`,
+                    nowLiked ? `«${trk.title}» добавлен в Любимые треки` : `«${trk.title}» убран из Избранного`,
                     nowLiked ? "В ИЗБРАННОМ ❤️" : "ИЗБРАННОЕ"
                 );
             }
@@ -4085,8 +4185,8 @@
                         <div class="w-12 h-12 rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-400 flex items-center justify-center mx-auto">
                             <i class="fa-solid fa-heart text-lg"></i>
                         </div>
-                        <p class="text-sm font-black text-white">В вашем личном избранном пока нет треков</p>
-                        <p class="text-xs text-zinc-400 max-w-md mx-auto">Нажмите на сердечко <i class="fa-solid fa-heart text-rose-400 mx-0.5"></i> рядом с любым треком или в плеере, чтобы сохранить его в личную коллекцию на этом устройстве.</p>
+                        <p class="text-sm font-black text-white">В любимых треках пока пусто</p>
+                        <p class="text-xs text-zinc-400 max-w-md mx-auto">Нажмите на три точки <i class="fa-solid fa-ellipsis text-purple-400 mx-0.5"></i> рядом с любым треком или на сердечко <i class="fa-solid fa-heart text-rose-400 mx-0.5"></i> в плеере, чтобы добавить трек в коллекцию.</p>
                     </div>
                 `;
                 setContainerHtmlIfChanged(container, emptyHtml);
@@ -4278,38 +4378,199 @@
         function applyDesktopRightSidebarState() {
             const sidebar = document.getElementById("desktopRightSidebar");
             const topBtn = document.getElementById("deskTopRightSidebarBtn");
+            const topIcon = document.getElementById("deskTopRightSidebarIcon");
             const bottomBtn = document.getElementById("deskBottomRightSidebarBtn");
+            document.body.setAttribute("data-right-sidebar", isDesktopRightSidebarCollapsed ? "collapsed" : "open");
             if (sidebar) {
                 if (isDesktopRightSidebarCollapsed) {
-                    sidebar.classList.remove("lg:flex");
-                    sidebar.classList.add("lg:hidden");
+                    sidebar.classList.add("right-sidebar-collapsed", "lg:hidden");
+                    sidebar.classList.remove("lg:flex", "xl:flex");
                 } else {
-                    sidebar.classList.remove("lg:hidden");
+                    sidebar.classList.remove("right-sidebar-collapsed", "lg:hidden");
                     sidebar.classList.add("lg:flex");
                 }
             }
             if (topBtn) {
-                topBtn.className = `w-9 h-9 rounded-xl border flex items-center justify-center spring-btn ${
+                topBtn.className = `hidden lg:flex w-8 h-8 rounded-full border items-center justify-center spring-btn ${
                     isDesktopRightSidebarCollapsed
                         ? 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white'
                         : 'bg-purple-600/20 border-purple-500/40 text-purple-300 hover:text-white'
                 }`;
+                topBtn.title = isDesktopRightSidebarCollapsed
+                    ? "Развернуть правую панель «Сейчас играет»"
+                    : "Свернуть правую панель «Сейчас играет»";
+            }
+            if (topIcon) {
+                topIcon.className = isDesktopRightSidebarCollapsed
+                    ? "fa-solid fa-angles-left text-xs"
+                    : "fa-solid fa-table-columns text-xs";
             }
             if (bottomBtn) {
-                bottomBtn.className = `w-8 h-8 rounded-lg border flex items-center justify-center spring-btn ${
+                bottomBtn.className = `hidden lg:flex w-8 h-8 rounded-xl border items-center justify-center spring-btn ${
                     isDesktopRightSidebarCollapsed
                         ? 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white'
                         : 'bg-purple-600/20 border-purple-500/40 text-purple-300 hover:text-white'
                 }`;
+                bottomBtn.title = isDesktopRightSidebarCollapsed
+                    ? "Развернуть панель «Сейчас играет»"
+                    : "Свернуть панель «Сейчас играет»";
             }
         }
 
-        function toggleDesktopRightSidebar() {
+        function toggleDesktopRightSidebar(event) {
+            if (event && typeof event.stopPropagation === "function") {
+                event.stopPropagation();
+            }
             isDesktopRightSidebarCollapsed = !isDesktopRightSidebarCollapsed;
             try {
                 localStorage.setItem(RIGHT_SIDEBAR_COLLAPSED_STORAGE_KEY, isDesktopRightSidebarCollapsed ? "1" : "0");
             } catch (e) {}
             applyDesktopRightSidebarState();
+        }
+
+        // =========================================================================
+        // МЕНЮ ДЕЙСТВИЙ ТРЕКА (ПО КНОПКЕ 3 ТОЧКИ •••)
+        // =========================================================================
+        let activeTrackActionsId = null;
+
+        function openTrackActionsMenu(trackId, event) {
+            if (event && typeof event.stopPropagation === "function") {
+                event.stopPropagation();
+            }
+            const cleanId = String(trackId || "").trim();
+            const track = TRACKS.find(t => t.id === cleanId);
+            if (!track) return;
+            activeTrackActionsId = cleanId;
+
+            const modal = document.getElementById("trackActionsModal");
+            const headerEl = document.getElementById("trackActionsHeader");
+            const listEl = document.getElementById("trackActionsList");
+            if (!modal || !headerEl || !listEl) return;
+
+            const artistsLabel = getTrackArtistsLabel(track);
+            const album = ALBUMS[track.albumId];
+            const isExplicit = Boolean(track.isExplicit || (album && album.isExplicit));
+            const isLiked = likedTrackIds.has(track.id);
+            const mainArtist = ARTISTS[track.artistId];
+            const featArtist = getTrackFeatArtist(track);
+
+            headerEl.innerHTML = `
+                ${renderCoverBox(track, "w-12 h-12 rounded-2xl shrink-0", "text-sm")}
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-1.5">
+                        <h4 class="text-sm font-black text-white truncate">${track.title}</h4>
+                        ${isExplicit ? `<span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>` : ''}
+                    </div>
+                    <p class="text-[11px] text-zinc-400 truncate mt-0.5">${artistsLabel}</p>
+                </div>
+            `;
+
+            const actions = [];
+            actions.push(`
+                <button type="button" onclick="handleTrackActionMenuClick('play_next', '${track.id}', event)" class="w-full p-3 rounded-2xl bg-zinc-900/80 hover:bg-zinc-900 border border-zinc-800/80 hover:border-purple-500/40 flex items-center gap-3 text-left spring-btn">
+                    <div class="w-8 h-8 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-400 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-forward-step text-xs"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="text-xs font-extrabold text-white">Играть следующим</div>
+                        <div class="text-[10px] text-zinc-400">Поставить трек первым в очередь</div>
+                    </div>
+                </button>
+            `);
+
+            actions.push(`
+                <button type="button" onclick="handleTrackActionMenuClick('toggle_like', '${track.id}', event)" class="w-full p-3 rounded-2xl bg-zinc-900/80 hover:bg-zinc-900 border ${isLiked ? 'border-rose-500/40' : 'border-zinc-800/80'} flex items-center gap-3 text-left spring-btn">
+                    <div class="w-8 h-8 rounded-xl ${isLiked ? 'bg-rose-500/20 border-rose-500/40 text-rose-400' : 'bg-zinc-800 border-zinc-700 text-zinc-300'} border flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-heart text-xs"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="text-xs font-extrabold ${isLiked ? 'text-rose-300' : 'text-white'}">${isLiked ? 'Убрать из Любимых треков' : 'Добавить в Любимые треки'}</div>
+                        <div class="text-[10px] text-zinc-400">${isLiked ? 'Трек уже находится в избранном' : 'Сохранить в плейлист Избранное'}</div>
+                    </div>
+                </button>
+            `);
+
+            actions.push(`
+                <button type="button" onclick="handleTrackActionMenuClick('share', '${track.id}', event)" class="w-full p-3 rounded-2xl bg-zinc-900/80 hover:bg-zinc-900 border border-zinc-800/80 flex items-center gap-3 text-left spring-btn">
+                    <div class="w-8 h-8 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-400 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-share-nodes text-xs"></i>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="text-xs font-extrabold text-white">Поделиться треком</div>
+                        <div class="text-[10px] text-zinc-400">Скопировать прямую ссылку на трек</div>
+                    </div>
+                </button>
+            `);
+
+            if (mainArtist) {
+                actions.push(`
+                    <button type="button" onclick="handleTrackActionMenuClick('artist', '${mainArtist.id}', event)" class="w-full p-2.5 rounded-2xl bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800/60 flex items-center gap-3 text-left spring-btn">
+                        ${renderAvatarBox(mainArtist, "w-8 h-8 rounded-full", "text-[10px]")}
+                        <div class="min-w-0 flex-1">
+                            <div class="text-xs font-bold text-zinc-200 truncate">Перейти к артисту: ${mainArtist.name}</div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-zinc-500"></i>
+                    </button>
+                `);
+            }
+
+            if (featArtist) {
+                actions.push(`
+                    <button type="button" onclick="handleTrackActionMenuClick('artist', '${featArtist.id}', event)" class="w-full p-2.5 rounded-2xl bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800/60 flex items-center gap-3 text-left spring-btn">
+                        ${renderAvatarBox(featArtist, "w-8 h-8 rounded-full", "text-[10px]")}
+                        <div class="min-w-0 flex-1">
+                            <div class="text-xs font-bold text-zinc-200 truncate">Перейти к артисту: ${featArtist.name}</div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-zinc-500"></i>
+                    </button>
+                `);
+            }
+
+            if (album) {
+                actions.push(`
+                    <button type="button" onclick="handleTrackActionMenuClick('album', '${album.id}', event)" class="w-full p-2.5 rounded-2xl bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800/60 flex items-center gap-3 text-left spring-btn">
+                        ${renderCoverBox(album, "w-8 h-8 rounded-lg", "text-[10px]")}
+                        <div class="min-w-0 flex-1">
+                            <div class="text-xs font-bold text-zinc-200 truncate">Перейти к релизу: ${album.title}</div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-zinc-500"></i>
+                    </button>
+                `);
+            }
+
+            listEl.innerHTML = actions.join("");
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+        }
+
+        function closeTrackActionsMenu(event) {
+            if (event && typeof event.stopPropagation === "function") {
+                event.stopPropagation();
+            }
+            activeTrackActionsId = null;
+            const modal = document.getElementById("trackActionsModal");
+            if (modal) {
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
+            }
+        }
+
+        function handleTrackActionMenuClick(actionType, targetId, event) {
+            if (event && typeof event.stopPropagation === "function") {
+                event.stopPropagation();
+            }
+            closeTrackActionsMenu();
+            if (actionType === "play_next") {
+                queueTrackPlayNext(targetId);
+            } else if (actionType === "toggle_like") {
+                toggleLikeTrack(targetId);
+            } else if (actionType === "share") {
+                shareEntityLink("track", targetId);
+            } else if (actionType === "artist") {
+                openArtistProfile(targetId);
+            } else if (actionType === "album") {
+                openAlbumDetail(targetId);
+            }
         }
 
         // Точечное обновление статуса Play/Pause, лайков и подсветки активного трека БЕЗ пересоздания DOM и БЕЗ перезагрузки картинок
@@ -4356,15 +4617,15 @@
                 iconEl.className = `fa-solid ${activePlaying ? 'fa-pause' : 'fa-play ml-0.5'} text-[10px]`;
             });
 
-            document.querySelectorAll("[data-track-likebtn]").forEach(likeBtnEl => {
-                const tid = likeBtnEl.getAttribute("data-track-likebtn");
+            document.querySelectorAll("[data-track-liked-badge]").forEach(badgeEl => {
+                const tid = badgeEl.getAttribute("data-track-liked-badge");
                 const isLiked = likedTrackIds.has(tid);
                 if (isLiked) {
-                    likeBtnEl.classList.remove("bg-zinc-900/80", "text-zinc-500", "border-zinc-800/80");
-                    likeBtnEl.classList.add("bg-rose-500/20", "text-rose-400", "border-rose-500/40");
+                    badgeEl.classList.remove("hidden");
+                    badgeEl.classList.add("inline-flex");
                 } else {
-                    likeBtnEl.classList.remove("bg-rose-500/20", "text-rose-400", "border-rose-500/40");
-                    likeBtnEl.classList.add("bg-zinc-900/80", "text-zinc-500", "border-zinc-800/80");
+                    badgeEl.classList.add("hidden");
+                    badgeEl.classList.remove("inline-flex");
                 }
             });
         }
@@ -4491,7 +4752,7 @@
                                 <span class="text-xs font-extrabold text-white group-hover:text-rose-300 truncate transition-colors">Любимые треки</span>
                                 <i class="fa-solid fa-thumbtack text-rose-400 text-[9px] shrink-0"></i>
                             </div>
-                            <p class="text-[10px] text-zinc-400 truncate">Личный плейлист • ${favCount} тр.</p>
+                            <p class="text-[10px] text-zinc-400 truncate">Плейлист • ${favCount} тр.</p>
                         </div>
                     </div>
                 `);
@@ -4665,15 +4926,15 @@
                 rankBadge = `<div class="hidden md:flex w-6 h-6 items-center justify-center text-[11px] font-bold text-zinc-500 tabular-nums shrink-0">${idx + 1}</div>`;
             }
 
-            const actionBtnsHtml = `
-                <button type="button" onclick="queueTrackPlayNext('${track.id}', event)" aria-label="Играть следующим ${safeTitleAttr}" title="Играть следующим" class="w-7 h-7 rounded-xl bg-zinc-900/80 hover:bg-purple-600/25 border border-zinc-800/80 hover:border-purple-500/40 text-zinc-400 hover:text-purple-300 flex items-center justify-center spring-btn">
-                    <i class="fa-solid fa-forward-step text-[10px]"></i>
-                </button>
-                <button type="button" onclick="toggleLikeTrack('${track.id}', event)" data-track-likebtn="${track.id}" aria-label="В избранное ${safeTitleAttr}" title="В избранное" class="w-7 h-7 rounded-xl border flex items-center justify-center spring-btn ${isLiked ? 'bg-rose-500/20 text-rose-400 border-rose-500/40' : 'bg-zinc-900/80 text-zinc-500 hover:text-rose-400 border-zinc-800/80'}">
-                    <i class="fa-solid fa-heart text-[10px]"></i>
-                </button>
-                <button type="button" onclick="shareEntityLink('track', '${track.id}', event)" aria-label="Поделиться треком ${safeTitleAttr}" title="Поделиться треком" class="w-7 h-7 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800/80 text-zinc-400 hover:text-white flex items-center justify-center spring-btn">
-                    <i class="fa-solid fa-share-nodes text-[10px]"></i>
+            const likedBadgeHtml = `
+                <span data-track-liked-badge="${track.id}" class="${isLiked ? 'inline-flex' : 'hidden'} items-center justify-center text-rose-400 text-[10px] shrink-0" title="В Любимых треках">
+                    <i class="fa-solid fa-heart"></i>
+                </span>
+            `;
+
+            const moreMenuBtnHtml = `
+                <button type="button" onclick="openTrackActionsMenu('${track.id}', event)" data-track-morebtn="${track.id}" aria-label="Действия с треком ${safeTitleAttr}" title="Действия с треком" class="w-7 h-7 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-800/80 hover:border-purple-500/40 text-zinc-400 hover:text-white flex items-center justify-center spring-btn">
+                    <i class="fa-solid fa-ellipsis text-xs"></i>
                 </button>
             `;
 
@@ -4685,6 +4946,7 @@
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-1.5 min-w-0">
                                 <span data-track-title="${track.id}" class="text-xs font-extrabold text-white truncate" title="${safeTitleAttr}">${track.title}</span>
+                                ${likedBadgeHtml}
                             </div>
                             <div class="flex items-center gap-1 mt-0.5 min-w-0">
                                 ${isExplicit ? `<span class="px-1 py-0.1 rounded bg-zinc-900 border border-rose-500/50 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>` : ''}
@@ -4692,8 +4954,8 @@
                                 <p class="text-[10px] text-zinc-400 truncate">${artistsLabel}</p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-1 shrink-0">
-                            ${actionBtnsHtml}
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            ${moreMenuBtnHtml}
                             <div data-track-playbtn="${track.id}" class="w-7 h-7 rounded-xl bg-zinc-900 text-zinc-400 flex items-center justify-center">
                                 <i data-track-playicon="${track.id}" class="fa-solid fa-play ml-0.5 text-[10px]"></i>
                             </div>
@@ -4703,13 +4965,13 @@
             }
 
             return `
-                <div onclick="playTrackById('${track.id}')" data-track-row="${track.id}" class="p-2.5 md:px-3.5 md:py-2 rounded-2xl bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900 border flex md:grid md:grid-cols-[32px_minmax(0,1.7fr)_minmax(0,0.9fr)_auto] items-center gap-2.5 md:gap-3 cursor-pointer spring-btn">
+                <div onclick="playTrackById('${track.id}')" data-track-row="${track.id}" class="p-2.5 md:px-3.5 md:py-2 rounded-2xl bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900 border flex md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_116px] items-center gap-2.5 md:gap-3 cursor-pointer spring-btn">
                     ${rankBadge}
                     <div class="flex items-center gap-2.5 min-w-0 flex-1">
                         ${renderCoverBox(track, "w-11 h-11 md:w-10 md:h-10 rounded-xl", "text-xs")}
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-1.5">
-                                <span data-track-title="${track.id}" class="text-xs font-extrabold text-white truncate">${track.title}</span>
+                                <span data-track-title="${track.id}" class="text-xs font-extrabold text-white truncate" title="${safeTitleAttr}">${track.title}</span>
                                 ${isExplicit ? `<span class="px-1.5 py-0.2 rounded bg-zinc-900 border border-rose-500/50 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>` : ''}
                                 ${track.isNew ? `<span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">NEW</span>` : ''}
                             </div>
@@ -4720,8 +4982,9 @@
                         <span class="text-[11px] font-medium text-zinc-400 truncate">${albumLabel}${yearLabel ? ` • ${yearLabel}` : ''}</span>
                     </div>
                     <div class="flex items-center justify-end gap-1.5 shrink-0">
-                        ${actionBtnsHtml}
+                        ${likedBadgeHtml}
                         <span class="hidden sm:inline text-[10px] font-semibold text-zinc-500 tabular-nums w-8 text-right">${track.duration || '2:45'}</span>
+                        ${moreMenuBtnHtml}
                         <div data-track-playbtn="${track.id}" class="w-7 h-7 rounded-xl bg-zinc-900 text-zinc-400 flex items-center justify-center">
                             <i data-track-playicon="${track.id}" class="fa-solid fa-play ml-0.5 text-[10px]"></i>
                         </div>
@@ -6269,24 +6532,33 @@
         }
 
         function openCurrentTrackArtist() {
-            const track = TRACKS.find(t => t.id === currentTrackId);
-            closeFullPlayer();
+            const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0];
+            const playerModalEl = document.getElementById("playerModal");
+            if (playerModalEl && !playerModalEl.classList.contains("hidden")) {
+                closeFullPlayer();
+            }
             if (track) openArtistProfile(track.artistId);
         }
 
         function openCurrentTrackFeatArtist() {
-            const track = TRACKS.find(t => t.id === currentTrackId);
+            const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0];
             const featArtist = getTrackFeatArtist(track);
             if (featArtist) {
-                closeFullPlayer();
+                const playerModalEl = document.getElementById("playerModal");
+                if (playerModalEl && !playerModalEl.classList.contains("hidden")) {
+                    closeFullPlayer();
+                }
                 openArtistProfile(featArtist.id);
             }
         }
 
         function openCurrentTrackAlbum() {
-            const track = TRACKS.find(t => t.id === currentTrackId);
+            const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0];
             if (track && track.albumId && ALBUMS[track.albumId]) {
-                closeFullPlayer();
+                const playerModalEl = document.getElementById("playerModal");
+                if (playerModalEl && !playerModalEl.classList.contains("hidden")) {
+                    closeFullPlayer();
+                }
                 openAlbumDetail(track.albumId);
             }
         }
@@ -6432,6 +6704,38 @@
         }
 
         document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                const trackModal = document.getElementById("trackActionsModal");
+                if (trackModal && !trackModal.classList.contains("hidden")) {
+                    e.preventDefault();
+                    closeTrackActionsMenu();
+                    return;
+                }
+                const delModal = document.getElementById("deleteConfirmModal");
+                if (delModal && !delModal.classList.contains("hidden")) {
+                    e.preventDefault();
+                    closeDeleteConfirmModal();
+                    return;
+                }
+                const editModalEl = document.getElementById("editModal");
+                if (editModalEl && !editModalEl.classList.contains("hidden")) {
+                    e.preventDefault();
+                    closeEditModal();
+                    return;
+                }
+                const videoModalEl = document.getElementById("videoPlayerModal");
+                if (videoModalEl && !videoModalEl.classList.contains("hidden")) {
+                    e.preventDefault();
+                    closeVideoPlayerModal();
+                    return;
+                }
+                const fullPlayerEl = document.getElementById("playerModal");
+                if (fullPlayerEl && !fullPlayerEl.classList.contains("hidden")) {
+                    e.preventDefault();
+                    closeFullPlayer();
+                    return;
+                }
+            }
             const modal = document.getElementById("pinModal");
             if (!modal || modal.classList.contains("hidden")) return;
             if (e.key >= "0" && e.key <= "9") {
@@ -6499,29 +6803,110 @@
             }, 2600);
         }
 
+        function flushDirtyOwnerFormInputsToMemory() {
+            // Считываем поля аватарок и больших обложек артистов, если они были изменены в панели владельца
+            Object.keys(ARTISTS).forEach(k => {
+                const avInp = document.getElementById(`avatar_${k}`);
+                const banInp = document.getElementById(`banner_${k}`);
+                if (avInp && avInp.value.trim()) {
+                    ARTISTS[k].avatarFile = avInp.value.trim();
+                }
+                if (banInp && banInp.value !== undefined) {
+                    ARTISTS[k].bannerFile = banInp.value.trim();
+                }
+                const cIdx = customArtistsFromCloud.findIndex(a => a.id === k);
+                if (cIdx !== -1) {
+                    customArtistsFromCloud[cIdx].avatarFile = ARTISTS[k].avatarFile;
+                    customArtistsFromCloud[cIdx].bannerFile = ARTISTS[k].bannerFile || "";
+                }
+            });
+
+            // Если пользователь отредактировал поля уведомлений, сохраняем их актуальный текст
+            const spTitleEl = document.getElementById("ownerSystemPushTitle");
+            const spMsgEl = document.getElementById("ownerSystemPushMsg");
+            const spImgEl = document.getElementById("ownerSystemPushImage");
+            if ((spTitleEl && spTitleEl.dataset.userDirty === "1") || (spMsgEl && spMsgEl.dataset.userDirty === "1") || (spImgEl && spImgEl.dataset.userDirty === "1")) {
+                const msg = spMsgEl?.value.trim() || "";
+                if (msg) {
+                    const ts = getNextMonotonicTimestamp();
+                    systemPushData = {
+                        id: "push_" + ts,
+                        title: spTitleEl?.value.trim() || "🎵 Dark Music",
+                        message: msg,
+                        imageFile: spImgEl?.value.trim() || "logo.png",
+                        active: true,
+                        createdAt: ts
+                    };
+                }
+                [spTitleEl, spMsgEl, spImgEl].forEach(el => { if (el) el.dataset.userDirty = "0"; });
+            }
+
+            const tTitleEl = document.getElementById("ownerTempNotifTitle");
+            const tMsgEl = document.getElementById("ownerTempNotifMsg");
+            if ((tTitleEl && tTitleEl.dataset.userDirty === "1") || (tMsgEl && tMsgEl.dataset.userDirty === "1")) {
+                const msg = tMsgEl?.value.trim() || "";
+                if (msg) {
+                    const ts = getNextMonotonicTimestamp();
+                    tempBroadcastData = {
+                        id: "tmp_" + ts,
+                        title: tTitleEl?.value.trim() || "🔥 Объявление Dark Music",
+                        message: msg,
+                        active: true,
+                        createdAt: ts
+                    };
+                }
+                [tTitleEl, tMsgEl].forEach(el => { if (el) el.dataset.userDirty = "0"; });
+            }
+
+            const pTitleEl = document.getElementById("ownerPinnedNotifTitle");
+            const pMsgEl = document.getElementById("ownerPinnedNotifMsg");
+            if ((pTitleEl && pTitleEl.dataset.userDirty === "1") || (pMsgEl && pMsgEl.dataset.userDirty === "1")) {
+                const msg = pMsgEl?.value.trim() || "";
+                if (msg) {
+                    const ts = getNextMonotonicTimestamp();
+                    pinnedBroadcastData = {
+                        id: "pin_" + ts,
+                        title: pTitleEl?.value.trim() || "⚡ Важная информация",
+                        message: msg,
+                        active: true,
+                        updatedAt: ts
+                    };
+                }
+                [pTitleEl, pMsgEl].forEach(el => { if (el) el.dataset.userDirty = "0"; });
+            }
+        }
+
         async function saveRepoSettings() {
-            const pathVal = document.getElementById("repoPathInput").value.trim();
+            const pathVal = document.getElementById("repoPathInput").value.trim() || BUILTIN_GITHUB_REPO;
             const branchVal = document.getElementById("repoBranchInput").value.trim() || "main";
-            const tokenVal = document.getElementById("githubTokenInput")?.value.trim() || "";
-            if (!pathVal) {
-                showToast("Укажите путь к хранилищу", "ВНИМАНИЕ");
-                return;
+            const rawTokenVal = document.getElementById("githubTokenInput")?.value.trim() || "";
+            const validTokenVal = isValidGitHubTokenFormat(rawTokenVal) ? rawTokenVal : "";
+            if (rawTokenVal && !validTokenVal) {
+                const tokEl = document.getElementById("githubTokenInput");
+                if (tokEl) tokEl.value = "";
             }
             githubRepoPath = pathVal;
             githubBranch = branchVal;
-            githubPersonalToken = tokenVal || "";
+            githubPersonalToken = validTokenVal;
             try {
-                if (tokenVal) {
-                    localStorage.setItem(GITHUB_TOKEN_STORAGE_KEY, tokenVal);
+                if (validTokenVal) {
+                    localStorage.setItem(GITHUB_TOKEN_STORAGE_KEY, validTokenVal);
                 } else {
                     localStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY);
                 }
             } catch (e) {}
+            flushDirtyOwnerFormInputsToMemory();
             saveStateToLocalStorage(true);
             renderAllViews();
-            await fetchCatalogFromGitHubRepo(true);
-            await persistSettingsToCloud();
-            showToast("Хранилище синхронизировано и сохранено!", "СИНХРОНИЗАЦИЯ");
+            updateOwnerNotificationsFormUI(true);
+            applyBroadcastAndForceUpdateUI();
+            const pushedCat = await pushCatalogToGitHubRepo(false);
+            const pushedHtml = await pushBakedIndexHtmlToGitHubRepo(false);
+            if (pushedCat || pushedHtml) {
+                showToast("Все изменения и index.html выгружены в GitHub!", "СИНХРОНИЗИРОВАНО ✓");
+            } else {
+                showToast("Хранилище сохранено локально!", "СИНХРОНИЗАЦИЯ");
+            }
         }
 
         async function saveArtistAvatars() {
@@ -7675,12 +8060,19 @@
         }
 
         async function forcePushAllToCloud() {
-            await persistSettingsToCloud();
+            flushDirtyOwnerFormInputsToMemory();
+            saveStateToLocalStorage(true);
+            renderAllViews();
+            updateOwnerNotificationsFormUI(true);
+            applyBroadcastAndForceUpdateUI();
             for (const track of customTracksFromCloud) {
                 await saveCustomTrackToCloud(track);
             }
-            const pushed = await pushCatalogToGitHubRepo(true);
-            if (!pushed) {
+            const pushedCat = await pushCatalogToGitHubRepo(false);
+            const pushedHtml = await pushBakedIndexHtmlToGitHubRepo(false);
+            if (pushedCat || pushedHtml) {
+                showToast("Каталог и index.html (v3.1) опубликованы в GitHub!", "СИНХРОНИЗАЦИЯ ✓");
+            } else {
                 showToast("Данные сохранены! Нажмите «Скачать готовый index.html»", "СИНХРОНИЗАЦИЯ");
             }
         }

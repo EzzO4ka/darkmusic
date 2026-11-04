@@ -21,7 +21,10 @@ import {
   dequeuePlayNextTrack,
   buildDeepLinkUrl,
   parseDeepLinkParams,
-  togglePersonalFavoriteTrack
+  togglePersonalFavoriteTrack,
+  buildTrackActionsDescriptor,
+  resolveDesktopRightSidebarLayout,
+  isValidGitHubTokenFormat
 } from './ownerCatalogLogic';
 
 test('generateArtistId transliterates Russian artist name into clean id', () => {
@@ -255,4 +258,45 @@ test('enqueuePlayNextTrack, dequeuePlayNextTrack, buildDeepLinkUrl, parseDeepLin
   assert.equal(fav2.isAdded, false);
   assert.deepEqual(fav2.updated, []);
 });
+
+test('buildTrackActionsDescriptor and resolveDesktopRightSidebarLayout return accurate 3-dots menu options and collapsible sidebar states', () => {
+  const actions = buildTrackActionsDescriptor({
+    trackId: 'trk_1',
+    isLiked: false,
+    artistName: 'МС ЕЗДИТЬ',
+    featArtistName: 'МС ГЕИЧ',
+    albumTitle: 'Лирика Житухи'
+  });
+  assert.deepEqual(
+    actions.map((a) => a.id),
+    ['play_next', 'toggle_favorite', 'share_track', 'go_artist', 'go_feat_artist', 'go_album']
+  );
+  assert.equal(actions[1].label, 'Добавить в Любимые треки');
+
+  const likedActions = buildTrackActionsDescriptor({
+    trackId: 'trk_1',
+    isLiked: true,
+    artistName: 'МС ГЕИЧ'
+  });
+  assert.equal(likedActions[1].label, 'Убрать из Любимых треков');
+  assert.equal(likedActions.length, 4);
+
+  assert.deepEqual(resolveDesktopRightSidebarLayout(false), {
+    sidebarState: 'open',
+    sidebarHidden: false,
+    centerWorkspaceExpanded: false
+  });
+  assert.deepEqual(resolveDesktopRightSidebarLayout(true), {
+    sidebarState: 'collapsed',
+    sidebarHidden: true,
+    centerWorkspaceExpanded: true
+  });
+
+  assert.equal(isValidGitHubTokenFormat('ghp_1234567890abcdefghijklmnopqrstuvwx'), true);
+  assert.equal(isValidGitHubTokenFormat('my_autofilled_password'), false);
+  assert.equal(isValidGitHubTokenFormat('7291'), false);
+  assert.equal(isValidGitHubTokenFormat(''), false);
+});
+
+
 
