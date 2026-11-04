@@ -474,12 +474,12 @@
     "trk_1793291266274"
   ],
   "systemPushBroadcast": {
-    "id": "push_1793806252926",
+    "id": "",
     "title": "Обновите приложение",
     "message": "Перейдите в приложения для скачивания новой версии.",
     "imageFile": "logo.png",
-    "active": true,
-    "createdAt": 1793806252926
+    "active": false,
+    "createdAt": 1793806319773
   },
   "tempBroadcast": {
     "id": "",
@@ -515,5 +515,5 @@
     "active": true,
     "updatedAt": 1793615692737
   },
-  "updatedAt": 1793806252941
+  "updatedAt": 1793806319776
 }
