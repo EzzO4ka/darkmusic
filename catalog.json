@@ -6,6 +6,11 @@
     "mc_makaka": "avatars/mc_makaka.jpg",
     "mc_ezdit": "avatars/mc_ezdit.jpg"
   },
+  "artistBanners": {
+    "mc_geich": "banners/mc_geich2.jpg",
+    "mc_makaka": "",
+    "mc_ezdit": ""
+  },
   "artistNames": {
     "mc_geich": "МС ГЕИЧ",
     "mc_makaka": "МС МАКАКА",
@@ -68,7 +73,8 @@
         "Спустя 2 года вернулся к прежнему контентмейкингу, исполнению и продюсерству."
       ],
       "isCustom": true,
-      "createdAt": 1793576408969
+      "createdAt": 1793576408969,
+      "bannerFile": "banners/mc_geich2.jpg"
     },
     {
       "id": "mc_makaka",
@@ -88,7 +94,8 @@
         "Самая тонкая лирика героя, которая только могла быть!"
       ],
       "isCustom": true,
-      "createdAt": 1793576412861
+      "createdAt": 1793576412861,
+      "bannerFile": ""
     },
     {
       "id": "mc_ezdit",
@@ -105,7 +112,8 @@
         "Впервые за 2 года детально поработал в новом релизе \"Лирика Житухи\" над текстом, записью вокала и сведением с битом – а раньше сразу во время записи выдумывал с головы."
       ],
       "isCustom": true,
-      "createdAt": 1793576432923
+      "createdAt": 1793576432923,
+      "bannerFile": ""
     }
   ],
   "customAlbums": [
@@ -466,12 +474,12 @@
     "trk_1793291266274"
   ],
   "systemPushBroadcast": {
-    "id": "push_1793668381097",
+    "id": "push_1793806252926",
     "title": "Обновите приложение",
     "message": "Перейдите в приложения для скачивания новой версии.",
     "imageFile": "logo.png",
     "active": true,
-    "createdAt": 1793668381097
+    "createdAt": 1793806252926
   },
   "tempBroadcast": {
     "id": "",
@@ -507,9 +515,5 @@
     "active": true,
     "updatedAt": 1793615692737
   },
-  "updatedAt": 1793792282342,
-  "version": 3.1,
-  "artistBanners": {
-    "mc_geich": "banners/mc_geich2.jpg"
-  }
+  "updatedAt": 1793806252941
 }
