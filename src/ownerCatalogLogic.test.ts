@@ -16,7 +16,12 @@ import {
   nextMonotonicTimestamp,
   shouldPopulateOwnerFormField,
   resolveViewportLayoutMode,
-  computeQueuePreviewTracks
+  computeQueuePreviewTracks,
+  enqueuePlayNextTrack,
+  dequeuePlayNextTrack,
+  buildDeepLinkUrl,
+  parseDeepLinkParams,
+  togglePersonalFavoriteTrack
 } from './ownerCatalogLogic';
 
 test('generateArtistId transliterates Russian artist name into clean id', () => {
@@ -24,15 +29,17 @@ test('generateArtistId transliterates Russian artist name into clean id', () => 
   assert.equal(id, 'art_ms_temnyy_bas_1700000000000');
 });
 
-test('createCustomArtistRecord builds complete artist object with defaults', () => {
+test('createCustomArtistRecord builds complete artist object with defaults and bannerFile', () => {
   const artist = createCustomArtistRecord({
     name: 'МС КИБЕР',
     role: 'Cyber Phonk',
+    bannerFile: 'covers/kiber_banner.jpg',
     now: 1700000000123
   });
   assert.equal(artist.id, 'art_ms_kiber_1700000000123');
   assert.equal(artist.name, 'МС КИБЕР');
   assert.equal(artist.role, 'Cyber Phonk');
+  assert.equal(artist.bannerFile, 'covers/kiber_banner.jpg');
   assert.equal(artist.isCustom, true);
   assert.equal(artist.facts.length, 1);
   assert.ok(artist.facts[0].includes('МС КИБЕР'));
@@ -196,7 +203,7 @@ test('nextMonotonicTimestamp always advances past future catalog timestamps and 
   );
 });
 
-test('resolveViewportLayoutMode and computeQueuePreviewTracks support mobile and Spotify desktop layouts', () => {
+test('resolveViewportLayoutMode and computeQueuePreviewTracks support mobile, Spotify desktop layouts, and Play Next priority', () => {
   assert.equal(resolveViewportLayoutMode(390), 'mobile');
   assert.equal(resolveViewportLayoutMode(768), 'mobile');
   assert.equal(resolveViewportLayoutMode(1024), 'desktop-2col');
@@ -213,4 +220,39 @@ test('resolveViewportLayoutMode and computeQueuePreviewTracks support mobile and
     nextAfterT2.map((t) => t.id),
     ['t3', 't4', 't1']
   );
+
+  const withPriorityQueue = computeQueuePreviewTracks(sampleTracks, 't2', 3, ['t4']);
+  assert.deepEqual(
+    withPriorityQueue.map((t) => t.id),
+    ['t4', 't3', 't1']
+  );
 });
+
+test('enqueuePlayNextTrack, dequeuePlayNextTrack, buildDeepLinkUrl, parseDeepLinkParams, and togglePersonalFavoriteTrack work accurately', () => {
+  let queue: string[] = [];
+  queue = enqueuePlayNextTrack(queue, 'trk_10');
+  queue = enqueuePlayNextTrack(queue, 'trk_20');
+  // Most recently queued "Play Next" goes to the front of the queue
+  assert.deepEqual(queue, ['trk_20', 'trk_10']);
+
+  const validSet = new Set(['trk_10', 'trk_20', 'trk_30']);
+  const step1 = dequeuePlayNextTrack(queue, validSet);
+  assert.equal(step1.nextTrackId, 'trk_20');
+  assert.deepEqual(step1.remainingQueue, ['trk_10']);
+
+  const trackUrl = buildDeepLinkUrl('https://ezzo4ka.github.io/index.html?v=3.1', 'track', 'trk_123');
+  assert.equal(trackUrl, 'https://ezzo4ka.github.io/index.html?track=trk_123');
+  assert.deepEqual(parseDeepLinkParams('?track=trk_123'), { entityType: 'track', entityId: 'trk_123' });
+  assert.deepEqual(parseDeepLinkParams('?album=alb_55'), { entityType: 'album', entityId: 'alb_55' });
+  assert.deepEqual(parseDeepLinkParams('?artist=mc_geich'), { entityType: 'artist', entityId: 'mc_geich' });
+  assert.equal(parseDeepLinkParams('?v=3.1'), null);
+
+  const fav1 = togglePersonalFavoriteTrack([], 'trk_10');
+  assert.equal(fav1.isAdded, true);
+  assert.deepEqual(fav1.updated, ['trk_10']);
+
+  const fav2 = togglePersonalFavoriteTrack(fav1.updated, 'trk_10');
+  assert.equal(fav2.isAdded, false);
+  assert.deepEqual(fav2.updated, []);
+});
+

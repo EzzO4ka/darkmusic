@@ -5,6 +5,7 @@ export interface ArtistRecord {
   gradient: string;
   icon: string;
   avatarFile: string;
+  bannerFile?: string;
   bio: string;
   facts: string[];
   isCustom?: boolean;
@@ -79,6 +80,7 @@ export function createCustomArtistRecord(input: {
   gradient?: string;
   icon?: string;
   avatarFile?: string;
+  bannerFile?: string;
   bio?: string;
   facts?: string[];
   now?: number;
@@ -100,6 +102,7 @@ export function createCustomArtistRecord(input: {
     gradient: String(input.gradient || '').trim() || 'from-purple-600 via-indigo-900 to-zinc-950',
     icon: String(input.icon || '').trim() || 'fa-microphone-lines',
     avatarFile: String(input.avatarFile || '').trim() || `avatars/${id}.jpg`,
+    bannerFile: String(input.bannerFile || '').trim(),
     bio:
       String(input.bio || '').trim() ||
       `${trimmedName} — резидент и исполнитель закрытого каталога Dark Music.`,
@@ -483,20 +486,105 @@ export function resolveViewportLayoutMode(viewportWidth: number): ViewportLayout
 export function computeQueuePreviewTracks<T extends { id: string }>(
   tracks: T[],
   currentTrackId: string | null | undefined,
-  limit: number = 3
+  limit: number = 3,
+  playNextQueueIds: string[] = []
 ): T[] {
   if (!Array.isArray(tracks) || tracks.length === 0 || limit <= 0) return [];
-  const maxItems = Math.min(limit, Math.max(0, tracks.length - 1));
+  const result: T[] = [];
+  const seen = new Set<string>();
+
+  for (const qId of playNextQueueIds) {
+    if (result.length >= limit) break;
+    const found = tracks.find((t) => t.id === qId);
+    if (found && !seen.has(found.id)) {
+      seen.add(found.id);
+      result.push(found);
+    }
+  }
+
+  const maxItems = Math.min(limit, Math.max(result.length, tracks.length - 1));
   if (maxItems === 0) return tracks.slice(0, 1);
 
   const curIdx = currentTrackId ? tracks.findIndex((t) => t.id === currentTrackId) : -1;
   const startIdx = curIdx >= 0 ? (curIdx + 1) % tracks.length : 0;
-  const result: T[] = [];
   for (let i = 0; i < tracks.length && result.length < maxItems; i++) {
     const candidate = tracks[(startIdx + i) % tracks.length];
-    if (candidate && candidate.id !== currentTrackId) {
+    if (candidate && candidate.id !== currentTrackId && !seen.has(candidate.id)) {
+      seen.add(candidate.id);
       result.push(candidate);
     }
   }
   return result;
 }
+
+export function enqueuePlayNextTrack(
+  queue: string[],
+  trackId: string
+): string[] {
+  const cleanId = String(trackId || '').trim();
+  if (!cleanId) return Array.isArray(queue) ? [...queue] : [];
+  const existing = Array.isArray(queue) ? queue.filter((id) => id !== cleanId) : [];
+  return [cleanId, ...existing];
+}
+
+export function dequeuePlayNextTrack(
+  queue: string[],
+  validTrackIds: Set<string>
+): { nextTrackId: string | null; remainingQueue: string[] } {
+  if (!Array.isArray(queue) || queue.length === 0) {
+    return { nextTrackId: null, remainingQueue: [] };
+  }
+  const remaining = [...queue];
+  while (remaining.length > 0) {
+    const candidate = remaining.shift()!;
+    if (validTrackIds.has(candidate)) {
+      return { nextTrackId: candidate, remainingQueue: remaining };
+    }
+  }
+  return { nextTrackId: null, remainingQueue: [] };
+}
+
+export type ShareEntityType = 'track' | 'album' | 'artist';
+
+export function buildDeepLinkUrl(
+  baseUrl: string,
+  entityType: ShareEntityType,
+  entityId: string
+): string {
+  const cleanBase = String(baseUrl || '').split('?')[0].split('#')[0];
+  const cleanId = encodeURIComponent(String(entityId || '').trim());
+  return `${cleanBase}?${entityType}=${cleanId}`;
+}
+
+export function parseDeepLinkParams(
+  searchStr: string
+): { entityType: ShareEntityType; entityId: string } | null {
+  const raw = String(searchStr || '').replace(/^\?/, '').trim();
+  if (!raw) return null;
+  const params = new URLSearchParams(raw);
+  const track = params.get('track')?.trim();
+  if (track) return { entityType: 'track', entityId: track };
+  const album = params.get('album')?.trim();
+  if (album) return { entityType: 'album', entityId: album };
+  const artist = params.get('artist')?.trim();
+  if (artist) return { entityType: 'artist', entityId: artist };
+  return null;
+}
+
+export function togglePersonalFavoriteTrack(
+  favorites: Iterable<string>,
+  trackId: string
+): { updated: string[]; isAdded: boolean } {
+  const cleanId = String(trackId || '').trim();
+  const set = new Set(Array.from(favorites || []).filter(Boolean));
+  if (!cleanId) {
+    return { updated: Array.from(set), isAdded: false };
+  }
+  if (set.has(cleanId)) {
+    set.delete(cleanId);
+    return { updated: Array.from(set), isAdded: false };
+  }
+  const nextList = [cleanId, ...Array.from(set)];
+  return { updated: nextList, isAdded: true };
+}
+
