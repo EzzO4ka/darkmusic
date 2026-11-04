@@ -414,6 +414,18 @@
   ],
   "customVideos": [
     {
+      "id": "vid_1793814480289",
+      "title": "Волшебная бутылочка",
+      "artistId": "mc_makaka",
+      "featArtistId": "",
+      "year": 2023,
+      "previewFile": "covers/clip_mcmakaka.jpg",
+      "videoSource": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/TRWbULj2nVA?si=InwsAfGQPvOGYlNP\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+      "duration": "2:23",
+      "isExplicit": true,
+      "createdAt": 1793814480289
+    },
+    {
       "id": "vid_1793567359361",
       "title": "Лирика Житухи",
       "artistId": "mc_ezdit",
@@ -515,5 +527,5 @@
     "active": false,
     "updatedAt": 1793807219869
   },
-  "updatedAt": 1793808736559
+  "updatedAt": 1793814480331
 }
