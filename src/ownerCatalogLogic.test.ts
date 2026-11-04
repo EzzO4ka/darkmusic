@@ -14,7 +14,9 @@ import {
   entityHasArtist,
   isVersionBlockedByForceUpdate,
   nextMonotonicTimestamp,
-  shouldPopulateOwnerFormField
+  shouldPopulateOwnerFormField,
+  resolveViewportLayoutMode,
+  computeQueuePreviewTracks
 } from './ownerCatalogLogic';
 
 test('generateArtistId transliterates Russian artist name into clean id', () => {
@@ -194,6 +196,21 @@ test('nextMonotonicTimestamp always advances past future catalog timestamps and 
   );
 });
 
+test('resolveViewportLayoutMode and computeQueuePreviewTracks support mobile and Spotify desktop layouts', () => {
+  assert.equal(resolveViewportLayoutMode(390), 'mobile');
+  assert.equal(resolveViewportLayoutMode(768), 'mobile');
+  assert.equal(resolveViewportLayoutMode(1024), 'desktop-2col');
+  assert.equal(resolveViewportLayoutMode(1440), 'desktop-3pane');
 
-
-
+  const sampleTracks = [
+    { id: 't1', title: 'Track 1' },
+    { id: 't2', title: 'Track 2' },
+    { id: 't3', title: 'Track 3' },
+    { id: 't4', title: 'Track 4' }
+  ];
+  const nextAfterT2 = computeQueuePreviewTracks(sampleTracks, 't2', 3);
+  assert.deepEqual(
+    nextAfterT2.map((t) => t.id),
+    ['t3', 't4', 't1']
+  );
+});

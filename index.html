@@ -206,14 +206,32 @@
             margin-top: -4.5px;
             box-shadow: 0 0 10px rgba(168, 85, 247, 0.9);
         }
+
+        /* Кастомный тонкий скроллбар для десктопных панелей (Spotify PC style) */
+        @media (min-width: 1024px) {
+            .custom-desk-scroll::-webkit-scrollbar {
+                width: 6px;
+                height: 6px;
+            }
+            .custom-desk-scroll::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            .custom-desk-scroll::-webkit-scrollbar-thumb {
+                background: rgba(63, 63, 70, 0.55);
+                border-radius: 999px;
+            }
+            .custom-desk-scroll::-webkit-scrollbar-thumb:hover {
+                background: rgba(168, 85, 247, 0.75);
+            }
+        }
     </style>
 </head>
-<body class="bg-black text-white antialiased selection:bg-purple-600 selection:text-white">
+<body class="bg-black text-white antialiased selection:bg-purple-600 selection:text-white lg:overflow-hidden">
 
-    <div class="max-w-[430px] mx-auto min-h-screen bg-black border-x border-zinc-900/80 relative flex flex-col pb-36 shadow-2xl shadow-purple-950/20">
+    <div id="appRootShell" class="max-w-[430px] lg:max-w-none lg:w-full mx-auto min-h-screen lg:h-screen lg:overflow-hidden bg-black border-x border-zinc-900/80 lg:border-x-0 relative flex flex-col pb-36 lg:pb-[84px] lg:p-2 lg:gap-2 shadow-2xl shadow-purple-950/20">
 
         <!-- ЭКРАН ПРИНУДИТЕЛЬНОГО ОБНОВЛЕНИЯ (БЛОКИРОВКА СТАРОЙ ВЕРСИИ) -->
-        <div id="forceUpdateModal" class="fixed inset-0 z-[70] hidden bg-black/98 backdrop-blur-3xl flex-col items-center justify-center p-6 text-center max-w-[430px] mx-auto">
+        <div id="forceUpdateModal" class="fixed inset-0 z-[70] hidden bg-black/98 backdrop-blur-3xl flex-col items-center justify-center p-6 text-center">
             <div class="w-full max-w-[350px] rounded-3xl bg-zinc-950 border border-rose-500/40 p-6 space-y-5 shadow-2xl shadow-rose-950/50 relative overflow-hidden">
                 <div class="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-rose-600/20 blur-3xl pointer-events-none"></div>
                 <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-500 via-purple-600 to-indigo-900 mx-auto flex items-center justify-center text-white shadow-xl shadow-rose-600/30 border border-white/15">
@@ -245,8 +263,8 @@
         </div>
 
         <!-- ПОЛНОЭКРАННОЕ ОКНО «ЧТО НОВОГО В ОБНОВЛЕНИИ» -->
-        <div id="whatsNewModal" class="fixed inset-0 z-[65] hidden bg-black/95 backdrop-blur-3xl flex-col items-center justify-center p-5 max-w-[430px] mx-auto">
-            <div class="w-full max-w-[370px] rounded-3xl bg-zinc-950 border border-purple-500/40 p-6 space-y-5 shadow-2xl shadow-purple-950/60 relative overflow-hidden flex flex-col max-h-[85vh]">
+        <div id="whatsNewModal" class="fixed inset-0 z-[65] hidden bg-black/95 backdrop-blur-3xl flex-col items-center justify-center p-5">
+            <div class="w-full max-w-[370px] lg:max-w-[440px] rounded-3xl bg-zinc-950 border border-purple-500/40 p-6 space-y-5 shadow-2xl shadow-purple-950/60 relative overflow-hidden flex flex-col max-h-[85vh]">
                 <div class="absolute -top-12 -right-12 w-36 h-36 rounded-full bg-purple-600/20 blur-3xl pointer-events-none"></div>
                 <div class="flex items-center gap-3.5 shrink-0">
                     <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-600 via-fuchsia-600 to-indigo-900 flex items-center justify-center text-white shadow-lg shadow-purple-600/30 border border-white/15 shrink-0">
@@ -267,15 +285,15 @@
         </div>
 
         <!-- МОДАЛЬНОЕ ОКНО ПРОСМОТРА ВИДЕОКЛИПА ВНУТРИ ПРИЛОЖЕНИЯ -->
-        <div id="videoPlayerModal" class="fixed inset-0 z-[68] hidden bg-black/95 backdrop-blur-3xl flex-col justify-center items-center p-4 max-w-[430px] mx-auto">
-            <div class="w-full rounded-3xl bg-zinc-950 border border-zinc-800 overflow-hidden shadow-2xl space-y-3 p-4">
+        <div id="videoPlayerModal" class="fixed inset-0 z-[68] hidden bg-black/95 backdrop-blur-3xl flex-col justify-center items-center p-4">
+            <div class="w-full max-w-[430px] lg:max-w-3xl rounded-3xl bg-zinc-950 border border-zinc-800 overflow-hidden shadow-2xl space-y-3 p-4 lg:p-6">
                 <div class="flex items-center justify-between gap-2">
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-1.5">
                             <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[8px] font-black uppercase tracking-widest">ВИДЕОКЛИП</span>
                             <span id="videoModalExplicit" class="hidden px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase">18+</span>
                         </div>
-                        <h3 id="videoModalTitle" class="text-sm font-black text-white truncate mt-1">Название клипа</h3>
+                        <h3 id="videoModalTitle" class="text-sm lg:text-base font-black text-white truncate mt-1">Название клипа</h3>
                         <div class="flex items-center gap-1.5 mt-0.5 min-w-0">
                             <div id="videoModalAvatars" class="flex items-center -space-x-1 shrink-0"></div>
                             <p id="videoModalArtist" class="text-[11px] text-zinc-400 truncate">Артист</p>
@@ -291,7 +309,7 @@
         </div>
 
         <!-- ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ ОТ ВЛАДЕЛЬЦА НА 20 СЕКУНД -->
-        <div id="tempBroadcastToast" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-[395px] hidden">
+        <div id="tempBroadcastToast" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-[395px] lg:max-w-[440px] hidden">
             <div class="bg-zinc-950/95 backdrop-blur-2xl border border-amber-500/50 rounded-2xl p-4 shadow-2xl shadow-amber-950/60 space-y-2.5 overflow-hidden relative">
                 <div class="flex items-start justify-between gap-3">
                     <div class="flex items-start gap-3 min-w-0">
@@ -330,8 +348,8 @@
             </div>
         </div>
 
-        <!-- ШАПКА ПРИЛОЖЕНИЯ -->
-        <header class="sticky top-0 z-20 bg-black/85 backdrop-blur-xl px-4 py-3 flex items-center justify-between border-b border-zinc-900/80">
+        <!-- МОБИЛЬНАЯ ШАПКА ПРИЛОЖЕНИЯ (ОТОБРАЖАЕТСЯ НА ТЕЛЕФОНАХ И ПЛАНШЕТАХ < 1024px) -->
+        <header class="lg:hidden sticky top-0 z-20 bg-black/85 backdrop-blur-xl px-4 py-3 flex items-center justify-between border-b border-zinc-900/80">
             <button onclick="switchTab('home')" class="flex items-center gap-2.5 text-left spring-btn">
                 <div class="w-9 h-9 rounded-xl bg-zinc-950 flex items-center justify-center shadow-lg shadow-purple-600/20 border border-zinc-800 relative overflow-hidden shrink-0">
                     <img id="appHeaderLogoImg" src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/logo.png" alt="Dark Music" decoding="async" class="w-full h-full object-contain" onerror="if(!this.dataset.triedSub){this.dataset.triedSub='1';this.src='https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/avatars/logo.png';}else{this.style.display='none';}">
@@ -356,87 +374,201 @@
             </div>
         </header>
 
-        <!-- ПОСТОЯННОЕ ЗАКРЕПЛЁННОЕ УВЕДОМЛЕНИЕ ВВЕРХУ ПРИЛОЖЕНИЯ -->
-        <div id="pinnedBroadcastBanner" class="hidden px-4 pt-2.5">
-            <div class="p-3 rounded-2xl bg-gradient-to-r from-purple-950/90 via-fuchsia-950/70 to-zinc-950 border border-purple-500/40 shadow-lg flex items-start gap-3">
-                <div class="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-300 shrink-0 mt-0.5">
-                    <i class="fa-solid fa-thumbtack text-xs"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[9px] font-black uppercase tracking-widest text-purple-300">ЗАКРЕПЛЕНО ВЛАДЕЛЬЦЕМ</span>
-                    </div>
-                    <h4 id="pinnedBroadcastTitle" class="text-xs font-extrabold text-white mt-0.5"></h4>
-                    <p id="pinnedBroadcastMessage" class="text-[11px] text-zinc-300 leading-relaxed mt-0.5"></p>
-                </div>
-            </div>
-        </div>
+        <!-- РАБОЧАЯ ОБЛАСТЬ SPOTIFY DESKTOP (3 КОЛОНКИ НА ПК: ЛЕВАЯ МЕДИАТЕКА + ЦЕНТРАЛЬНЫЙ КАТАЛОГ + ПРАВАЯ ПАНЕЛЬ «СЕЙЧАС ИГРАЕТ») -->
+        <div class="flex-1 flex flex-col lg:flex-row lg:gap-2 lg:min-h-0 lg:overflow-hidden">
 
-        <!-- СТРОКА ПОИСКА -->
-        <div id="searchBarContainer" class="hidden px-4 pt-3 pb-1 bg-black">
-            <div class="relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 text-xs"></i>
-                <input id="searchInput" type="text" oninput="handleSearchInput(this.value)" placeholder="Поиск по трекам, артистам или альбомам..." class="w-full bg-zinc-950 border border-zinc-800 focus:border-purple-500 rounded-2xl pl-9 pr-9 py-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none">
-                <button onclick="clearSearchInput()" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white text-xs">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-        </div>
-
-        <main class="flex-1 px-4 pt-3 space-y-6">
-
-            <!-- ВКЛАДКА: ГЛАВНАЯ -->
-            <section id="view-home" class="space-y-6 view-animate">
-                <!-- ГЛАВНЫЙ БАННЕР: МОЯ ВОЛНА -->
-                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-950/90 via-zinc-950 to-black border border-purple-500/30 p-5 shadow-2xl shadow-purple-950/30">
-                    <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-purple-600/20 blur-3xl pointer-events-none"></div>
-                    <div class="absolute -left-8 -bottom-8 w-32 h-32 rounded-full bg-fuchsia-600/15 blur-2xl pointer-events-none"></div>
-
-                    <div class="relative z-10 space-y-3">
-                        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-purple-500/15 border border-purple-400/30">
-                            <div id="heroEq" class="inline-flex items-end gap-0.5 h-3 eq-paused">
-                                <span class="w-0.5 bg-purple-400 rounded-full eq-bar-1"></span>
-                                <span class="w-0.5 bg-fuchsia-400 rounded-full eq-bar-2"></span>
-                                <span class="w-0.5 bg-purple-400 rounded-full eq-bar-3"></span>
-                                <span class="w-0.5 bg-fuchsia-400 rounded-full eq-bar-4"></span>
+            <!-- ЛЕВАЯ ПАНЕЛЬ НАВИГАЦИИ И МЕДИАТЕКИ (ТОЛЬКО ПК >= 1024px) -->
+            <aside id="desktopLeftSidebar" class="hidden lg:flex lg:w-[280px] xl:w-[290px] shrink-0 flex-col gap-2 min-h-0 select-none">
+                <!-- Верхний блок: Логотип и главная навигация -->
+                <div class="rounded-2xl bg-zinc-950/90 border border-zinc-900/90 p-3.5 space-y-3">
+                    <button onclick="switchTab('home')" class="w-full flex items-center gap-3 text-left group spring-btn">
+                        <div class="w-10 h-10 rounded-xl bg-zinc-900 flex items-center justify-center shadow-lg shadow-purple-600/20 border border-zinc-800 relative overflow-hidden shrink-0">
+                            <img id="deskSidebarLogoImg" src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/logo.png" alt="Dark Music" decoding="async" class="w-full h-full object-contain" onerror="if(!this.dataset.triedSub){this.dataset.triedSub='1';this.src='https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/avatars/logo.png';}else{this.style.display='none';}">
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-base font-black tracking-tight text-white group-hover:text-purple-300 transition-colors">DARK MUSIC</span>
+                                <i class="fa-solid fa-circle-check text-purple-400 text-[11px]"></i>
+                                <span id="deskAppVersionBadge" class="px-1.5 py-0.5 rounded-md bg-purple-500/15 border border-purple-500/30 text-purple-300 text-[9px] font-black leading-none">v3.1</span>
                             </div>
-                            <span class="text-[9px] font-extrabold tracking-widest uppercase text-purple-300">PERSONAL AUDIO • ONLINE</span>
+                            <p class="text-[10px] text-zinc-500 font-medium truncate">Desktop Studio • Без цензуры</p>
                         </div>
+                    </button>
 
-                        <div>
-                            <h1 class="text-2xl font-black tracking-tight text-white">Моя волна</h1>
-                            <p class="text-xs text-zinc-400 mt-0.5">Только эксклюзивные треки. Без цензуры.</p>
+                    <nav class="space-y-1">
+                        <button onclick="switchTab('home')" id="desk-nav-home" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-extrabold bg-purple-600/15 text-purple-300 border border-purple-500/30 transition-all spring-btn">
+                            <i class="fa-solid fa-house text-sm w-4 text-center"></i>
+                            <span>Главная</span>
+                        </button>
+                        <button onclick="switchTab('charts')" id="desk-nav-charts" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-zinc-400 hover:text-white hover:bg-zinc-900/70 border border-transparent transition-all spring-btn">
+                            <i class="fa-solid fa-chart-simple text-sm w-4 text-center"></i>
+                            <span>Официальный Чарт</span>
+                        </button>
+                        <button onclick="switchTab('artists')" id="desk-nav-artists" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-zinc-400 hover:text-white hover:bg-zinc-900/70 border border-transparent transition-all spring-btn">
+                            <i class="fa-solid fa-users text-sm w-4 text-center"></i>
+                            <span>Артисты лейбла</span>
+                        </button>
+                        <button onclick="openOwnerTab()" id="desk-nav-owner" class="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-xs font-bold text-zinc-400 hover:text-white hover:bg-zinc-900/70 border border-transparent transition-all spring-btn">
+                            <span class="flex items-center gap-3">
+                                <i class="fa-solid fa-key text-sm w-4 text-center"></i>
+                                <span>Панель владельца</span>
+                            </span>
+                            <span id="deskOwnerStatusDot" class="px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-[9px] font-black text-zinc-500">PIN</span>
+                        </button>
+                    </nav>
+
+                    <button onclick="playShuffleAll()" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 hover:opacity-95 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-600/25 spring-btn">
+                        <i class="fa-solid fa-shuffle text-xs"></i>
+                        <span>Моя волна • Вперемешку</span>
+                    </button>
+                </div>
+
+                <!-- Нижний блок: Моя медиатека (быстрый доступ к артистам и альбомам как в Spotify) -->
+                <div class="flex-1 rounded-2xl bg-zinc-950/90 border border-zinc-900/90 p-3.5 flex flex-col min-h-0">
+                    <div class="flex items-center justify-between gap-2 pb-2.5">
+                        <div class="flex items-center gap-2 text-zinc-300">
+                            <i class="fa-solid fa-layer-group text-purple-400 text-xs"></i>
+                            <span class="text-xs font-black tracking-tight text-white">Моя медиатека</span>
                         </div>
+                        <span id="deskLibraryCountBadge" class="px-2 py-0.5 rounded-full bg-zinc-900 border border-zinc-800 text-[9px] font-bold text-zinc-400">Каталог</span>
+                    </div>
 
-                        <div class="pt-1">
-                            <button onclick="playShuffleAll()" class="w-full py-3 px-4 rounded-2xl bg-white hover:bg-zinc-100 text-black font-extrabold text-xs flex items-center justify-between shadow-lg shadow-white/10 spring-btn">
-                                <span class="flex items-center gap-2">
-                                    <i class="fa-solid fa-shuffle text-purple-600 text-sm"></i>
-                                    <span>Вперемешку все треки</span>
-                                </span>
-                                <span class="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center text-[10px]">
-                                    <i class="fa-solid fa-play ml-0.5"></i>
-                                </span>
+                    <!-- Фильтры медиатеки -->
+                    <div class="flex items-center gap-1.5 pb-3 shrink-0">
+                        <button onclick="setDesktopLibraryFilter('all')" id="deskLibFilter_all" class="px-2.5 py-1 rounded-lg text-[10px] font-extrabold bg-white text-black transition-all spring-btn">Все</button>
+                        <button onclick="setDesktopLibraryFilter('artists')" id="deskLibFilter_artists" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800 transition-all spring-btn">Артисты</button>
+                        <button onclick="setDesktopLibraryFilter('albums')" id="deskLibFilter_albums" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800 transition-all spring-btn">Альбомы</button>
+                    </div>
+
+                    <!-- Прокручиваемый список артистов и альбомов -->
+                    <div id="desktopLibraryList" class="flex-1 overflow-y-auto custom-desk-scroll space-y-1 pr-1"></div>
+                </div>
+            </aside>
+
+            <!-- ЦЕНТРАЛЬНАЯ РАБОЧАЯ ПАНЕЛЬ (ОСНОВНОЙ КОНТЕНТ) -->
+            <div id="centerWorkspacePane" class="flex-1 flex flex-col min-w-0 lg:rounded-2xl lg:bg-zinc-950/60 lg:border lg:border-zinc-900/90 lg:overflow-y-auto custom-desk-scroll relative">
+
+                <!-- ВЕРХНИЙ БАР НА ПК (ПОИСК SPOTIFY + СТАТИСТИКА КАТАЛОГА + ДОСТУП ВЛАДЕЛЬЦА) -->
+                <div class="hidden lg:flex sticky top-0 z-20 bg-zinc-950/85 backdrop-blur-2xl px-6 py-3 items-center justify-between gap-4 border-b border-zinc-900/80">
+                    <!-- Постоянная широкая строка поиска в стиле Spotify Desktop -->
+                    <div class="flex items-center gap-2.5 flex-1 max-w-xl">
+                        <button onclick="switchTab('home')" class="w-9 h-9 rounded-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white flex items-center justify-center shrink-0 spring-btn" title="На главную">
+                            <i class="fa-solid fa-house text-xs"></i>
+                        </button>
+                        <div class="flex-1 relative">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 text-xs"></i>
+                            <input id="desktopSearchInput" type="text" oninput="handleSearchInput(this.value)" placeholder="Поиск по трекам, артистам или альбомам..." class="w-full bg-zinc-900/90 hover:bg-zinc-900 focus:bg-zinc-950 border border-zinc-800 focus:border-purple-500 rounded-full pl-9 pr-9 py-2 text-xs text-white placeholder-zinc-500 focus:outline-none transition-all">
+                            <button id="desktopSearchClearBtn" onclick="clearSearchInput()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white text-xs">
+                                <i class="fa-solid fa-xmark"></i>
                             </button>
                         </div>
                     </div>
+
+                    <div class="flex items-center gap-2.5 shrink-0">
+                        <div class="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900/80 border border-zinc-800/90 text-[10px] font-bold text-zinc-400">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <span id="deskTopTracksCount">0 треков</span>
+                            <span class="text-zinc-700">•</span>
+                            <span id="deskTopAlbumsCount">0 релизов</span>
+                        </div>
+                        <button onclick="openOwnerTab()" id="desktopHeaderOwnerBtn" class="px-3.5 py-1.5 rounded-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-[11px] font-extrabold flex items-center gap-2 spring-btn" title="Панель управления владельца">
+                            <i id="desktopHeaderLockIcon" class="fa-solid fa-lock text-xs text-zinc-400"></i>
+                            <span>Владелец</span>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- АРТИСТЫ ЛЕЙБЛА (2x2) -->
+                <!-- ПОСТОЯННОЕ ЗАКРЕПЛЁННОЕ УВЕДОМЛЕНИЕ ВВЕРХУ ПРИЛОЖЕНИЯ -->
+                <div id="pinnedBroadcastBanner" class="hidden px-4 lg:px-6 pt-2.5">
+                    <div class="p-3 rounded-2xl bg-gradient-to-r from-purple-950/90 via-fuchsia-950/70 to-zinc-950 border border-purple-500/40 shadow-lg flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-300 shrink-0 mt-0.5">
+                            <i class="fa-solid fa-thumbtack text-xs"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[9px] font-black uppercase tracking-widest text-purple-300">ЗАКРЕПЛЕНО ВЛАДЕЛЬЦЕМ</span>
+                            </div>
+                            <h4 id="pinnedBroadcastTitle" class="text-xs font-extrabold text-white mt-0.5"></h4>
+                            <p id="pinnedBroadcastMessage" class="text-[11px] text-zinc-300 leading-relaxed mt-0.5"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- МОБИЛЬНАЯ СТРОКА ПОИСКА -->
+                <div id="searchBarContainer" class="lg:hidden hidden px-4 pt-3 pb-1 bg-black">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 text-xs"></i>
+                        <input id="searchInput" type="text" oninput="handleSearchInput(this.value)" placeholder="Поиск по трекам, артистам или альбомам..." class="w-full bg-zinc-950 border border-zinc-800 focus:border-purple-500 rounded-2xl pl-9 pr-9 py-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none">
+                        <button onclick="clearSearchInput()" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white text-xs">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <main class="flex-1 px-4 lg:px-6 pt-3 lg:pt-5 pb-6 space-y-6 lg:space-y-8">
+
+                    <!-- ВКЛАДКА: ГЛАВНАЯ -->
+                    <section id="view-home" class="space-y-6 lg:space-y-8 view-animate">
+                        <!-- ГЛАВНЫЙ БАННЕР: МОЯ ВОЛНА (АДАПТИРОВАН ДЛЯ МОБИЛЬНЫХ И ПК) -->
+                        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-950/90 via-zinc-950 to-black border border-purple-500/30 p-5 lg:p-7 shadow-2xl shadow-purple-950/30">
+                            <div class="absolute -right-10 -top-10 w-40 lg:w-72 h-40 lg:h-72 rounded-full bg-purple-600/20 blur-3xl pointer-events-none"></div>
+                            <div class="absolute -left-8 -bottom-8 w-32 lg:w-56 h-32 lg:h-56 rounded-full bg-fuchsia-600/15 blur-2xl pointer-events-none"></div>
+
+                            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+                                <div class="space-y-3 max-w-xl">
+                                    <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-purple-500/15 border border-purple-400/30">
+                                        <div id="heroEq" class="inline-flex items-end gap-0.5 h-3 eq-paused">
+                                            <span class="w-0.5 bg-purple-400 rounded-full eq-bar-1"></span>
+                                            <span class="w-0.5 bg-fuchsia-400 rounded-full eq-bar-2"></span>
+                                            <span class="w-0.5 bg-purple-400 rounded-full eq-bar-3"></span>
+                                            <span class="w-0.5 bg-fuchsia-400 rounded-full eq-bar-4"></span>
+                                        </div>
+                                        <span class="text-[9px] font-extrabold tracking-widest uppercase text-purple-300">PERSONAL AUDIO • ONLINE</span>
+                                    </div>
+
+                                    <div>
+                                        <h1 class="text-2xl lg:text-4xl font-black tracking-tight text-white">Моя волна</h1>
+                                        <p class="text-xs lg:text-sm text-zinc-400 mt-0.5 lg:mt-1">Только эксклюзивные треки закрытого каталога Dark Music. Без цензуры.</p>
+                                    </div>
+
+                                    <div class="pt-1 flex flex-wrap items-center gap-2.5">
+                                        <button onclick="playShuffleAll()" class="w-full sm:w-auto py-3 px-5 rounded-2xl bg-white hover:bg-zinc-100 text-black font-extrabold text-xs flex items-center justify-between sm:justify-center gap-3 shadow-lg shadow-white/10 spring-btn">
+                                            <span class="flex items-center gap-2">
+                                                <i class="fa-solid fa-shuffle text-purple-600 text-sm"></i>
+                                                <span>Вперемешку все треки</span>
+                                            </span>
+                                            <span class="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center text-[10px]">
+                                                <i class="fa-solid fa-play ml-0.5"></i>
+                                            </span>
+                                        </button>
+                                        <button onclick="switchTab('charts')" class="hidden sm:inline-flex py-3 px-4 rounded-2xl bg-zinc-900/90 hover:bg-zinc-800 border border-white/10 text-white font-bold text-xs items-center gap-2 spring-btn">
+                                            <i class="fa-solid fa-fire text-rose-400 text-xs"></i>
+                                            <span>Официальный чарт</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Витрина актуального трека на ПК внутри главного баннера -->
+                                <div id="deskHeroFeaturedCard" class="hidden lg:flex items-center gap-3.5 p-3.5 rounded-2xl bg-black/55 backdrop-blur-xl border border-white/10 w-[300px] xl:w-[320px] shrink-0">
+                                </div>
+                            </div>
+                        </div>
+
+                <!-- АРТИСТЫ ЛЕЙБЛА (2x2 на телефоне, 3-4 в ряд на ПК) -->
                 <div class="space-y-3">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h2 class="text-sm font-black tracking-tight text-white">Артисты лейбла</h2>
-                            <p class="text-[10px] text-zinc-500">Эксклюзивный состав Dark Music</p>
+                            <h2 class="text-sm lg:text-base font-black tracking-tight text-white">Артисты лейбла</h2>
+                            <p class="text-[10px] lg:text-xs text-zinc-500">Эксклюзивный состав Dark Music</p>
                         </div>
                         <button id="homeArtistsCountBtn" onclick="switchTab('artists')" class="text-[11px] font-bold text-purple-400 hover:text-purple-300 spring-btn">
                             Все 4 <i class="fa-solid fa-arrow-right text-[9px] ml-0.5"></i>
                         </button>
                     </div>
-                    <div id="homeArtistsGrid" class="grid grid-cols-2 gap-2.5"></div>
+                    <div id="homeArtistsGrid" class="grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-2.5 lg:gap-3.5"></div>
                 </div>
 
-                <!-- ЧАРТ DARK MUSIC -->
+                <!-- ЧАРТ DARK MUSIC (1 колонка на телефоне, 2 колонки на ПК) -->
                 <div class="space-y-3">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
@@ -444,39 +576,47 @@
                                 <i class="fa-solid fa-fire"></i>
                             </span>
                             <div>
-                                <h2 class="text-sm font-black tracking-tight text-white">Чарт Dark Music</h2>
+                                <h2 class="text-sm lg:text-base font-black tracking-tight text-white">Чарт Dark Music</h2>
                             </div>
                         </div>
                         <button onclick="switchTab('charts')" class="text-[11px] font-bold text-purple-400 hover:text-purple-300 spring-btn">
                             Весь чарт <i class="fa-solid fa-arrow-right text-[9px] ml-0.5"></i>
                         </button>
                     </div>
-                    <div id="homeChartList" class="space-y-2"></div>
+                    <div id="homeChartList" class="space-y-2 lg:grid lg:grid-cols-2 lg:gap-3 lg:space-y-0"></div>
                 </div>
 
-                <!-- НОВЫЕ РЕЛИЗЫ И АЛЬБОМЫ -->
+                <!-- НОВЫЕ РЕЛИЗЫ И АЛЬБОМЫ (Горизонтальная лента на телефоне, витрина карточек на ПК) -->
                 <div class="space-y-3">
                     <div class="flex items-center justify-between">
                         <div>
-                            <h2 class="text-sm font-black tracking-tight text-white">Новые релизы и альбомы</h2>
-                            <p class="text-[10px] text-zinc-500">Альбомы, EP и синглы</p>
+                            <h2 class="text-sm lg:text-base font-black tracking-tight text-white">Новые релизы и альбомы</h2>
+                            <p class="text-[10px] lg:text-xs text-zinc-500">Альбомы, EP и синглы</p>
                         </div>
                     </div>
-                    <div id="homeAlbumsCarousel" class="flex gap-3 overflow-x-auto no-scrollbar pb-1"></div>
+                    <div id="homeAlbumsCarousel" class="flex gap-3 overflow-x-auto no-scrollbar pb-1 lg:grid lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 lg:gap-4 lg:overflow-visible"></div>
                 </div>
 
                 <!-- ВЕСЬ СПИСОК ТРЕКОВ -->
                 <div class="space-y-3">
                     <div class="flex items-center justify-between">
-                        <h2 class="text-sm font-black tracking-tight text-white">Весь список треков</h2>
+                        <h2 class="text-sm lg:text-base font-black tracking-tight text-white">Весь список треков</h2>
                         <span id="totalTracksBadge" class="px-2.5 py-0.5 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] font-bold text-zinc-400">0 шт.</span>
                     </div>
 
                     <!-- Фильтр по артистам -->
-                    <div id="artistFilterPills" class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1"></div>
+                    <div id="artistFilterPills" class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1 lg:flex-wrap"></div>
+
+                    <!-- Заголовок таблицы треков в стиле Spotify Desktop (только на широких экранах) -->
+                    <div class="hidden md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_88px] items-center gap-3 px-3.5 py-1.5 border-b border-zinc-900/90 text-[10px] font-black uppercase tracking-wider text-zinc-500 select-none">
+                        <span>#</span>
+                        <span>Название и исполнитель</span>
+                        <span>Альбом / Релиз</span>
+                        <span class="text-right pr-2"><i class="fa-regular fa-clock"></i></span>
+                    </div>
 
                     <!-- Список треков -->
-                    <div id="homeAllTracksList" class="space-y-2"></div>
+                    <div id="homeAllTracksList" class="space-y-2 lg:space-y-1.5"></div>
                 </div>
 
                 <!-- ВИДЕОКЛИПЫ НА ГЛАВНОЙ -->
@@ -487,8 +627,8 @@
                                 <i class="fa-solid fa-clapperboard"></i>
                             </span>
                             <div>
-                                <h2 class="text-sm font-black tracking-tight text-white">Видеоклипы</h2>
-                                <p class="text-[10px] text-zinc-500">Смотрите клипы прямо в приложении</p>
+                                <h2 class="text-sm lg:text-base font-black tracking-tight text-white">Видеоклипы</h2>
+                                <p class="text-[10px] lg:text-xs text-zinc-500">Смотрите клипы прямо в приложении</p>
                             </div>
                         </div>
                         <span id="totalVideosBadge" class="px-2.5 py-0.5 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] font-bold text-zinc-400">0</span>
@@ -497,7 +637,7 @@
                         <i class="fa-solid fa-thumbtack text-purple-400 text-xs mt-0.5 shrink-0"></i>
                         <p class="text-[11px] font-medium text-zinc-200 leading-snug">Некоторые клипы возможно посмотреть только с VPN - потому что эти клипы транслируются через YouTube.</p>
                     </div>
-                    <div id="homeVideosList" class="grid grid-cols-1 gap-3"></div>
+                    <div id="homeVideosList" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5"></div>
                 </div>
 
                 <!-- НОВОСТИ И АНОНСЫ НА ГЛАВНОЙ -->
@@ -508,40 +648,46 @@
                                 <i class="fa-solid fa-newspaper"></i>
                             </span>
                             <div>
-                                <h2 class="text-sm font-black tracking-tight text-white">Новости и анонсы</h2>
-                                <p class="text-[10px] text-zinc-500">Будущие релизы, дропы и обновления</p>
+                                <h2 class="text-sm lg:text-base font-black tracking-tight text-white">Новости и анонсы</h2>
+                                <p class="text-[10px] lg:text-xs text-zinc-500">Будущие релизы, дропы и обновления</p>
                             </div>
                         </div>
                     </div>
                     <!-- Фильтр новостей по артистам и общим новостям -->
-                    <div id="newsFilterPills" class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1"></div>
+                    <div id="newsFilterPills" class="flex gap-1.5 overflow-x-auto no-scrollbar pb-1 lg:flex-wrap"></div>
                     <!-- Лента новостей -->
-                    <div id="homeNewsList" class="space-y-2.5"></div>
+                    <div id="homeNewsList" class="space-y-2.5 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0"></div>
                 </div>
             </section>
 
             <!-- ВКЛАДКА: ОФИЦИАЛЬНЫЙ ЧАРТ -->
             <section id="view-charts" class="hidden space-y-4 view-animate">
-                <div class="rounded-3xl bg-gradient-to-br from-rose-950/60 via-zinc-950 to-black border border-rose-500/30 p-5 flex items-center justify-between">
+                <div class="rounded-3xl bg-gradient-to-br from-rose-950/60 via-zinc-950 to-black border border-rose-500/30 p-5 lg:p-7 flex items-center justify-between">
                     <div class="space-y-1">
                         <span class="px-2 py-0.5 rounded-md bg-rose-500/20 text-rose-400 text-[9px] font-black uppercase tracking-widest">ГЛАВНЫЙ ТОП</span>
-                        <h1 class="text-xl font-black text-white">Официальный Чарт</h1>
-                        <p class="text-[11px] text-zinc-400">Топ релизов каталога Dark Music</p>
+                        <h1 class="text-xl lg:text-3xl font-black text-white">Официальный Чарт</h1>
+                        <p class="text-[11px] lg:text-xs text-zinc-400">Топ релизов каталога Dark Music</p>
                     </div>
-                    <button onclick="playShuffleAll()" class="w-12 h-12 rounded-2xl bg-rose-500 hover:bg-rose-400 text-white flex items-center justify-center shadow-lg shadow-rose-600/30 spring-btn">
-                        <i class="fa-solid fa-play text-base ml-0.5"></i>
+                    <button onclick="playShuffleAll()" class="w-12 h-12 lg:w-14 lg:h-14 rounded-2xl bg-rose-500 hover:bg-rose-400 text-white flex items-center justify-center shadow-lg shadow-rose-600/30 spring-btn">
+                        <i class="fa-solid fa-play text-base lg:text-lg ml-0.5"></i>
                     </button>
                 </div>
-                <div id="fullChartsList" class="space-y-2"></div>
+                <div class="hidden md:grid md:grid-cols-[36px_minmax(0,1.8fr)_minmax(0,1fr)_88px] items-center gap-3 px-3.5 py-1.5 border-b border-zinc-900/90 text-[10px] font-black uppercase tracking-wider text-zinc-500 select-none">
+                    <span>МЕСТО</span>
+                    <span>Название и исполнитель</span>
+                    <span>Альбом / Релиз</span>
+                    <span class="text-right pr-2"><i class="fa-regular fa-clock"></i></span>
+                </div>
+                <div id="fullChartsList" class="space-y-2 lg:space-y-1.5"></div>
             </section>
 
             <!-- ВКЛАДКА: ВСЕ АРТИСТЫ -->
             <section id="view-artists" class="hidden space-y-4 view-animate">
                 <div>
-                    <h1 class="text-xl font-black text-white">Артисты</h1>
+                    <h1 class="text-xl lg:text-2xl font-black text-white">Артисты лейбла</h1>
                     <p class="text-xs text-zinc-400">Нажмите на карточку исполнителя, чтобы открыть его профиль, альбомы и биографию</p>
                 </div>
-                <div id="fullArtistsList" class="space-y-3"></div>
+                <div id="fullArtistsList" class="space-y-3 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0"></div>
             </section>
 
             <!-- ВКЛАДКА: ПРОФИЛЬ АРТИСТА -->
@@ -563,8 +709,8 @@
             </section>
 
             <!-- ВКЛАДКА: ПАНЕЛЬ ВЛАДЕЛЬЦА -->
-            <section id="view-owner-panel" class="hidden space-y-4 view-animate">
-                <div class="p-4 rounded-2xl bg-zinc-950 border border-emerald-500/30 space-y-3">
+            <section id="view-owner-panel" class="hidden space-y-4 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-4 items-start view-animate">
+                <div class="p-4 rounded-2xl bg-zinc-950 border border-emerald-500/30 space-y-3 lg:col-span-2">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 rounded-xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
@@ -1148,20 +1294,91 @@
 
         </main>
 
-        <!-- ОБЯЗАТЕЛЬНЫЙ ДИСКЛЕЙМЕР 18+ В САМОМ НИЗУ ПРИЛОЖЕНИЯ -->
-        <footer class="px-4 pt-6 pb-4 mt-auto">
-            <div class="p-3.5 rounded-2xl bg-zinc-950/90 border border-zinc-900/90 text-[10px] text-zinc-500 leading-relaxed text-center space-y-1.5">
-                <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-rose-500/15 border border-rose-500/30 text-rose-400 font-black text-[9px] uppercase tracking-wider">
-                    <span>18+</span>
-                </div>
-                <p>
-                    Сервис Dark Music может содержать информацию, не предназначенную для несовершеннолетних. Эти материалы отмечены значком (18+). Незаконное потребление наркотических средств, психотропных веществ, их аналогов причиняет вред здоровью, их незаконный оборот запрещен и влечет установленную законодательством ответственность
-                </p>
+                <!-- ОБЯЗАТЕЛЬНЫЙ ДИСКЛЕЙМЕР 18+ В САМОМ НИЗУ ПРИЛОЖЕНИЯ -->
+                <footer class="px-4 lg:px-6 pt-6 pb-4 mt-auto">
+                    <div class="p-3.5 rounded-2xl bg-zinc-950/90 border border-zinc-900/90 text-[10px] text-zinc-500 leading-relaxed text-center space-y-1.5">
+                        <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-rose-500/15 border border-rose-500/30 text-rose-400 font-black text-[9px] uppercase tracking-wider">
+                            <span>18+</span>
+                        </div>
+                        <p>
+                            Сервис Dark Music может содержать информацию, не предназначенную для несовершеннолетних. Эти материалы отмечены значком (18+). Незаконное потребление наркотических средств, психотропных веществ, их аналогов причиняет вред здоровью, их незаконный оборот запрещен и влечет установленную законодательством ответственность
+                        </p>
+                    </div>
+                </footer>
             </div>
-        </footer>
 
-        <!-- МИНИ-ПЛЕЕР + НИЖНЯЯ НАВИГАЦИЯ -->
-        <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-30 bg-black/95 backdrop-blur-2xl border-t border-zinc-900 px-3 pt-1.5 pb-2 space-y-1.5">
+            <!-- ПРАВАЯ ПАНЕЛЬ «СЕЙЧАС ИГРАЕТ» + ОЧЕРЕДЬ И ИНФО ОБ АРТИСТЕ (SPOTIFY DESKTOP RIGHT SIDEBAR, >= 1280px) -->
+            <aside id="desktopRightSidebar" class="hidden xl:flex xl:w-[320px] 2xl:w-[340px] shrink-0 flex-col rounded-2xl bg-zinc-950/90 border border-zinc-900/90 overflow-y-auto custom-desk-scroll p-4 space-y-4 select-none">
+                <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <span class="w-2 h-2 rounded-full bg-purple-500 animate-pulse shrink-0"></span>
+                        <span id="deskRightAlbumBadge" onclick="openCurrentTrackAlbum()" class="text-[11px] font-black uppercase tracking-wider text-zinc-200 hover:text-purple-400 cursor-pointer truncate">Сейчас играет</span>
+                    </div>
+                    <button onclick="openFullPlayer()" class="w-7 h-7 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center shrink-0 spring-btn" title="Развернуть плеер">
+                        <i class="fa-solid fa-up-right-and-down-left-from-center text-[10px]"></i>
+                    </button>
+                </div>
+
+                <!-- Большая квадратная обложка текущего трека -->
+                <div onclick="openFullPlayer()" id="deskRightCoverCard" class="w-full aspect-square shrink-0 rounded-2xl bg-gradient-to-br from-purple-700 via-indigo-950 to-black border border-white/15 shadow-xl shadow-purple-950/40 relative overflow-hidden flex items-center justify-center cursor-pointer group">
+                    <div id="deskRightCoverInner" class="w-full h-full flex items-center justify-center">
+                        <i class="fa-solid fa-compact-disc text-5xl text-white/30"></i>
+                    </div>
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span class="px-3 py-1.5 rounded-full bg-black/80 border border-white/20 text-[10px] font-extrabold text-white">Открыть плеер</span>
+                    </div>
+                </div>
+
+                <!-- Название трека, артисты и кнопка лайка -->
+                <div class="flex items-start justify-between gap-3">
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <h3 id="deskRightTitle" onclick="openFullPlayer()" class="text-base font-black text-white hover:text-purple-300 cursor-pointer truncate">Выберите трек</h3>
+                            <span id="deskRightExplicitBadge" class="hidden px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/50 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>
+                            <span id="deskRightNewBadge" class="hidden px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">NEW</span>
+                        </div>
+                        <div id="deskRightArtistsContainer" class="flex items-center flex-wrap gap-1.5 mt-1.5"></div>
+                    </div>
+                    <button id="deskRightLikeBtn" onclick="toggleLikeCurrent()" class="w-9 h-9 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white shrink-0 spring-btn" title="В избранное">
+                        <i class="fa-solid fa-heart text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- Карточка «Об исполнителе» как в правой колонке Spotify -->
+                <div id="deskRightArtistCard" class="rounded-2xl bg-zinc-900/70 border border-zinc-800/90 p-3.5 space-y-2.5">
+                </div>
+
+                <!-- Интересный факт об артисте -->
+                <div class="p-3.5 rounded-2xl bg-gradient-to-br from-purple-950/40 via-zinc-900/80 to-zinc-950 border border-purple-500/30 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-5 h-5 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400 text-[10px]">
+                                <i class="fa-solid fa-lightbulb"></i>
+                            </span>
+                            <span id="deskRightFactHeader" class="text-[9px] font-black uppercase tracking-widest text-purple-300 truncate">ИНТЕРЕСНЫЙ ФАКТ</span>
+                        </div>
+                        <button onclick="cycleArtistFact()" class="text-[10px] font-bold text-zinc-400 hover:text-white spring-btn shrink-0">
+                            Ещё ↻
+                        </button>
+                    </div>
+                    <p id="deskRightFactText" class="text-[11px] text-zinc-300 leading-relaxed">
+                        Эксклюзивный исполнитель закрытого каталога Dark Music.
+                    </p>
+                </div>
+
+                <!-- Далее в очереди -->
+                <div class="space-y-2 pt-1">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-black uppercase tracking-wider text-zinc-400">Далее в очереди</span>
+                        <button onclick="playShuffleAll()" class="text-[10px] font-bold text-purple-400 hover:text-purple-300">Перемешать</button>
+                    </div>
+                    <div id="deskRightQueueList" class="space-y-1.5"></div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- МОБИЛЬНЫЙ МИНИ-ПЛЕЕР + НИЖНЯЯ НАВИГАЦИЯ (ТОЛЬКО НА ТЕЛЕФОНАХ < 1024px) -->
+        <div class="lg:hidden fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-30 bg-black/95 backdrop-blur-2xl border-t border-zinc-900 px-3 pt-1.5 pb-2 space-y-1.5">
             <!-- Неоновая полоса прогресса мини-плеера -->
             <div class="w-full h-0.5 bg-zinc-900 rounded-full overflow-hidden">
                 <div id="miniProgressBar" class="h-full bg-gradient-to-r from-purple-500 via-fuchsia-500 to-rose-500 w-0 transition-all duration-200"></div>
@@ -1220,8 +1437,71 @@
             </nav>
         </div>
 
-        <!-- ПОЛНОЭКРАНЫЙ ПЛЕЕР -->
-        <div id="playerModal" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-3xl flex-col justify-between max-w-[430px] mx-auto px-5 py-5 overflow-y-auto no-scrollbar">
+        <!-- НИЖНЯЯ ПАНЕЛЬ ПЛЕЕРА SPOTIFY DESKTOP (ТОЛЬКО НА ПК >= 1024px) -->
+        <div id="desktopPlayerBar" class="hidden lg:flex fixed bottom-0 left-0 right-0 h-[84px] z-40 bg-black/95 backdrop-blur-2xl border-t border-zinc-900/90 px-5 items-center justify-between gap-4 select-none">
+            <!-- Левая зона (30%): Обложка, название, круглые аватарки артистов и лайк -->
+            <div class="w-[30%] min-w-[220px] flex items-center gap-3">
+                <div onclick="openFullPlayer()" id="deskPlayerCover" class="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-950 flex items-center justify-center shrink-0 overflow-hidden border border-white/10 cursor-pointer shadow-lg">
+                    <i class="fa-solid fa-music text-sm text-white/80"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-1.5">
+                        <p id="deskPlayerTitle" onclick="openFullPlayer()" class="text-xs font-extrabold text-white hover:text-purple-300 truncate cursor-pointer">Выберите трек</p>
+                        <span id="deskPlayerExplicitBadge" class="hidden px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 mt-1 min-w-0">
+                        <div id="deskPlayerArtistAvatars" class="flex items-center -space-x-1 shrink-0"></div>
+                        <p id="deskPlayerArtists" onclick="openCurrentTrackArtist()" class="text-[11px] text-zinc-400 hover:text-white truncate cursor-pointer">Dark Music</p>
+                    </div>
+                </div>
+                <button id="deskPlayerLikeBtn" onclick="toggleLikeCurrent()" class="w-8 h-8 rounded-xl bg-zinc-900/80 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white shrink-0 spring-btn" title="Нравится">
+                    <i class="fa-solid fa-heart text-xs"></i>
+                </button>
+            </div>
+
+            <!-- Центральная зона (40%): Кнопки управления и полоса перемотки -->
+            <div class="w-[40%] max-w-[560px] flex flex-col items-center gap-1.5">
+                <div class="flex items-center gap-4">
+                    <button id="deskShuffleBtn" onclick="toggleShuffleMode()" class="w-8 h-8 rounded-lg flex items-center justify-center text-purple-400 hover:text-purple-300 spring-btn" title="Перемешать">
+                        <i class="fa-solid fa-shuffle text-xs"></i>
+                    </button>
+                    <button onclick="prevTrack()" class="w-8 h-8 rounded-lg text-zinc-300 hover:text-white flex items-center justify-center spring-btn" title="Предыдущий трек">
+                        <i class="fa-solid fa-backward-step text-sm"></i>
+                    </button>
+                    <button onclick="togglePlay()" id="deskPlayBtn" class="w-9 h-9 rounded-full bg-white hover:scale-105 text-black flex items-center justify-center shadow-md shadow-white/20 transition-transform spring-btn" title="Воспроизвести / Пауза">
+                        <i id="deskPlayIcon" class="fa-solid fa-play text-xs ml-0.5"></i>
+                    </button>
+                    <button onclick="nextTrack()" class="w-8 h-8 rounded-lg text-zinc-300 hover:text-white flex items-center justify-center spring-btn" title="Следующий трек">
+                        <i class="fa-solid fa-forward-step text-sm"></i>
+                    </button>
+                    <button id="deskRepeatBtn" onclick="toggleRepeatMode()" class="w-8 h-8 rounded-lg flex items-center justify-center text-zinc-500 hover:text-zinc-300 spring-btn" title="Повтор трека">
+                        <i class="fa-solid fa-repeat text-xs"></i>
+                    </button>
+                </div>
+                <div class="w-full flex items-center gap-2.5">
+                    <span id="deskCurrentTime" class="text-[10px] font-bold text-zinc-500 w-8 text-right tabular-nums">0:00</span>
+                    <input id="deskPlayerSeek" type="range" min="0" max="100" value="0" oninput="seekAudio(this.value)" class="flex-1 dark-slider">
+                    <span id="deskDuration" class="text-[10px] font-bold text-zinc-500 w-8 tabular-nums">2:45</span>
+                </div>
+            </div>
+
+            <!-- Правая зона (30%): Аудио-движок, громкость и полноэкранный режим -->
+            <div class="w-[30%] min-w-[200px] flex items-center justify-end gap-3">
+                <span class="hidden xl:inline-flex px-2 py-0.5 rounded-md bg-zinc-900 border border-zinc-800 text-[9px] text-purple-300 font-extrabold tracking-widest">DARK ENGINE</span>
+                <div class="flex items-center gap-2 w-28">
+                    <button onclick="toggleMuteAudio()" class="text-zinc-400 hover:text-white text-xs w-5 text-center" title="Звук">
+                        <i id="deskVolumeIcon" class="fa-solid fa-volume-high"></i>
+                    </button>
+                    <input id="deskVolumeSlider" type="range" min="0" max="100" value="100" oninput="setAudioVolume(this.value)" class="w-full dark-slider" title="Громкость">
+                </div>
+                <button onclick="openFullPlayer()" class="w-8 h-8 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white flex items-center justify-center spring-btn" title="Открыть большой плеер">
+                    <i class="fa-solid fa-expand text-xs"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- ПОЛНОЭКРАННЫЙ ПЛЕЕР (НА МОБИЛЬНЫХ — ВО ВЕСЬ ЭКРАН, НА ПК — МОДАЛЬНАЯ КАРТОЧКА ПО ЦЕНТРУ) -->
+        <div id="playerModal" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-3xl flex-col justify-between max-w-[430px] lg:max-w-lg lg:my-auto lg:max-h-[88vh] lg:rounded-3xl lg:border lg:border-zinc-800 lg:shadow-2xl mx-auto px-5 py-5 overflow-y-auto no-scrollbar">
             <!-- Верхняя панель плеера -->
             <div class="flex items-center justify-between">
                 <button onclick="closeFullPlayer()" class="w-9 h-9 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-center text-zinc-300 spring-btn">
@@ -3610,19 +3890,140 @@
             setContainerHtmlIfChanged(container, html);
         }
 
+        let desktopLibraryFilter = "all";
+        let lastAudioVolumeBeforeMute = 1.0;
+
+        function scrollWorkspaceToTop() {
+            const pane = document.getElementById("centerWorkspacePane");
+            if (pane && window.innerWidth >= 1024) {
+                pane.scrollTo({ top: 0, behavior: "smooth" });
+            } else {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+        }
+
+        function setDesktopLibraryFilter(filterMode) {
+            desktopLibraryFilter = filterMode || "all";
+            ["all", "artists", "albums"].forEach(mode => {
+                const btn = document.getElementById(`deskLibFilter_${mode}`);
+                if (!btn) return;
+                if (mode === desktopLibraryFilter) {
+                    btn.className = "px-2.5 py-1 rounded-lg text-[10px] font-extrabold bg-white text-black transition-all spring-btn";
+                } else {
+                    btn.className = "px-2.5 py-1 rounded-lg text-[10px] font-bold bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800 transition-all spring-btn";
+                }
+            });
+            renderDesktopLibrary();
+        }
+
+        function renderDesktopLibrary() {
+            const container = document.getElementById("desktopLibraryList");
+            const countBadge = document.getElementById("deskLibraryCountBadge");
+            const topTracksBadge = document.getElementById("deskTopTracksCount");
+            const topAlbumsBadge = document.getElementById("deskTopAlbumsCount");
+
+            const artistsList = Object.values(ARTISTS);
+            const albumsList = Object.values(ALBUMS);
+
+            if (topTracksBadge) topTracksBadge.textContent = `${TRACKS.length} треков`;
+            if (topAlbumsBadge) topAlbumsBadge.textContent = `${albumsList.length} релизов`;
+            if (countBadge) countBadge.textContent = `${artistsList.length + albumsList.length} поз.`;
+            if (!container) return;
+
+            const itemsHtml = [];
+
+            if (desktopLibraryFilter === "all" || desktopLibraryFilter === "artists") {
+                artistsList.forEach(artist => {
+                    const tCount = TRACKS.filter(t => trackHasArtist(t, artist.id)).length;
+                    itemsHtml.push(`
+                        <div onclick="openArtistProfile('${artist.id}')" class="p-2 rounded-xl hover:bg-zinc-900/90 flex items-center gap-2.5 cursor-pointer group transition-colors spring-btn">
+                            ${renderAvatarBox(artist, "w-10 h-10 rounded-full", "text-xs")}
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center gap-1">
+                                    <span class="text-xs font-extrabold text-white group-hover:text-purple-300 truncate transition-colors">${artist.name}</span>
+                                    <i class="fa-solid fa-circle-check text-sky-400 text-[9px] shrink-0"></i>
+                                </div>
+                                <p class="text-[10px] text-zinc-500 truncate">Артист • ${tCount} тр.</p>
+                            </div>
+                        </div>
+                    `);
+                });
+            }
+
+            if (desktopLibraryFilter === "all" || desktopLibraryFilter === "albums") {
+                albumsList.forEach(alb => {
+                    const artLabel = getAlbumArtistsLabel(alb);
+                    itemsHtml.push(`
+                        <div onclick="openAlbumDetail('${alb.id}')" class="p-2 rounded-xl hover:bg-zinc-900/90 flex items-center gap-2.5 cursor-pointer group transition-colors spring-btn">
+                            ${renderCoverBox(alb, "w-10 h-10 rounded-lg", "text-xs")}
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center gap-1">
+                                    <span class="text-xs font-extrabold text-white group-hover:text-purple-300 truncate transition-colors">${alb.title}</span>
+                                    ${alb.isExplicit ? `<span class="text-[8px] font-black text-rose-400 shrink-0">18+</span>` : ''}
+                                </div>
+                                <p class="text-[10px] text-zinc-500 truncate">${alb.type || 'Альбом'} • ${artLabel}</p>
+                            </div>
+                        </div>
+                    `);
+                });
+            }
+
+            if (itemsHtml.length === 0) {
+                itemsHtml.push(`<div class="p-4 text-center text-[11px] text-zinc-500">В медиатеке пока пусто</div>`);
+            }
+
+            setContainerHtmlIfChanged(container, itemsHtml.join(""));
+        }
+
+        function renderDesktopHeroFeatured() {
+            const card = document.getElementById("deskHeroFeaturedCard");
+            if (!card) return;
+            const featuredTrack = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0] || null;
+            if (!featuredTrack) {
+                setContainerHtmlIfChanged(card, `<div class="text-xs text-zinc-500">Добавьте треки в каталог</div>`);
+                return;
+            }
+            const artistsLabel = getTrackArtistsLabel(featuredTrack);
+            const album = ALBUMS[featuredTrack.albumId];
+            const isExplicit = Boolean(featuredTrack.isExplicit || (album && album.isExplicit));
+            const html = `
+                <div onclick="playTrackById('${featuredTrack.id}')" class="flex items-center gap-3.5 w-full cursor-pointer group">
+                    <div class="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 shadow-lg">
+                        ${renderCoverBox(featuredTrack, "w-16 h-16 rounded-xl", "text-lg")}
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <span class="px-2 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-300 text-[8px] font-black uppercase tracking-widest">${currentTrackId ? 'СЕЙЧАС В ЭФИРЕ' : 'РЕКОМЕНДАЦИЯ'}</span>
+                        <div class="flex items-center gap-1 mt-1">
+                            <h3 class="text-xs font-black text-white group-hover:text-purple-300 truncate">${featuredTrack.title}</h3>
+                            ${isExplicit ? `<span class="px-1 py-0.2 rounded bg-rose-500/20 text-rose-400 text-[8px] font-black shrink-0">18+</span>` : ''}
+                        </div>
+                        <p class="text-[10px] text-zinc-400 truncate mt-0.5">${artistsLabel}</p>
+                    </div>
+                    <div class="w-9 h-9 rounded-full bg-purple-600 group-hover:bg-purple-500 text-white flex items-center justify-center shadow-lg shadow-purple-600/40 shrink-0">
+                        <i class="fa-solid ${currentTrackId === featuredTrack.id && isPlaying ? 'fa-pause' : 'fa-play ml-0.5'} text-xs"></i>
+                    </div>
+                </div>
+            `;
+            setContainerHtmlIfChanged(card, html);
+        }
+
         function renderAllViews() {
             rebuildCatalogInMemory();
             refreshAllArtistSelects();
             renderOwnerArtistAvatarsInputs();
-            const logoImg = document.getElementById("appHeaderLogoImg");
-            if (logoImg) {
-                const targetLogoUrl = getRawUrl("logo.png");
-                if (logoImg.dataset.loadedRepo !== githubRepoPath) {
-                    logoImg.dataset.loadedRepo = githubRepoPath;
-                    delete logoImg.dataset.triedSub;
-                    logoImg.src = targetLogoUrl;
+            ["appHeaderLogoImg", "deskSidebarLogoImg"].forEach(imgId => {
+                const logoImg = document.getElementById(imgId);
+                if (logoImg) {
+                    const targetLogoUrl = getRawUrl("logo.png");
+                    if (logoImg.dataset.loadedRepo !== githubRepoPath) {
+                        logoImg.dataset.loadedRepo = githubRepoPath;
+                        delete logoImg.dataset.triedSub;
+                        logoImg.src = targetLogoUrl;
+                    }
                 }
-            }
+            });
+            renderDesktopLibrary();
+            renderDesktopHeroFeatured();
             renderHomeArtists();
             renderHomeChart();
             renderHomeAlbums();
@@ -3659,11 +4060,11 @@
             }
             if (!container) return;
             const html = artistsList.map((artist) => `
-                <div onclick="openArtistProfile('${artist.id}')" class="p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 flex items-center gap-2.5 cursor-pointer spring-btn">
-                    ${renderAvatarBox(artist, "w-11 h-11 rounded-full", "text-sm")}
+                <div onclick="openArtistProfile('${artist.id}')" class="p-2.5 lg:p-3 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 flex items-center gap-2.5 lg:gap-3 cursor-pointer group spring-btn">
+                    ${renderAvatarBox(artist, "w-11 h-11 lg:w-12 lg:h-12 rounded-full", "text-sm")}
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-1">
-                            <span class="text-xs font-extrabold text-white truncate">${artist.name}</span>
+                            <span class="text-xs font-extrabold text-white group-hover:text-purple-300 truncate transition-colors">${artist.name}</span>
                             <i class="fa-solid fa-circle-check text-sky-400 text-[10px] shrink-0"></i>
                         </div>
                         <p class="text-[10px] text-zinc-500 truncate">${artist.role || 'Эксклюзивный артист'}</p>
@@ -3673,7 +4074,7 @@
             setContainerHtmlIfChanged(container, html);
         }
 
-        function renderTrackRow(track, idx, rankNumber = null) {
+        function renderTrackRow(track, idx, rankNumber = null, compactCard = false) {
             const artistsLabel = getTrackArtistsLabel(track);
             const album = ALBUMS[track.albumId];
             const albumLabel = album ? album.title : "Сингл";
@@ -3689,22 +4090,52 @@
                 };
                 const cls = rankColors[rankNumber] || "bg-zinc-900 text-zinc-500 border-zinc-800";
                 rankBadge = `<div class="w-6 h-6 rounded-lg border ${cls} flex items-center justify-center text-[10px] font-black shrink-0">#${rankNumber}</div>`;
+            } else if (!compactCard) {
+                rankBadge = `<div class="hidden md:flex w-6 h-6 items-center justify-center text-[11px] font-bold text-zinc-500 tabular-nums shrink-0">${idx + 1}</div>`;
+            }
+
+            if (compactCard) {
+                return `
+                    <div onclick="playTrackById('${track.id}')" data-track-row="${track.id}" class="p-2.5 rounded-2xl bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900 border flex items-center gap-2.5 cursor-pointer spring-btn">
+                        ${rankBadge}
+                        ${renderCoverBox(track, "w-11 h-11 rounded-xl", "text-xs")}
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-1.5">
+                                <span data-track-title="${track.id}" class="text-xs font-extrabold text-white truncate">${track.title}</span>
+                                ${isExplicit ? `<span class="px-1.5 py-0.2 rounded bg-zinc-900 border border-rose-500/50 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>` : ''}
+                                ${track.isNew ? `<span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">NEW</span>` : ''}
+                            </div>
+                            <p class="text-[10px] text-zinc-400 truncate">${artistsLabel} • ${albumLabel}${yearLabel ? ` (${yearLabel})` : ''}</p>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="text-[10px] font-semibold text-zinc-500 tabular-nums">${track.duration || '2:45'}</span>
+                            <div data-track-playbtn="${track.id}" class="w-7 h-7 rounded-xl bg-zinc-900 text-zinc-400 flex items-center justify-center">
+                                <i data-track-playicon="${track.id}" class="fa-solid fa-play ml-0.5 text-[10px]"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
             }
 
             return `
-                <div onclick="playTrackById('${track.id}')" data-track-row="${track.id}" class="p-2.5 rounded-2xl bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900 border flex items-center gap-2.5 cursor-pointer spring-btn">
+                <div onclick="playTrackById('${track.id}')" data-track-row="${track.id}" class="p-2.5 md:px-3.5 md:py-2 rounded-2xl bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900 border flex md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_88px] items-center gap-2.5 md:gap-3 cursor-pointer spring-btn">
                     ${rankBadge}
-                    ${renderCoverBox(track, "w-11 h-11 rounded-xl", "text-xs")}
-                    <div class="min-w-0 flex-1">
-                        <div class="flex items-center gap-1.5">
-                            <span data-track-title="${track.id}" class="text-xs font-extrabold text-white truncate">${track.title}</span>
-                            ${isExplicit ? `<span class="px-1.5 py-0.2 rounded bg-zinc-900 border border-rose-500/50 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>` : ''}
-                            ${track.isNew ? `<span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">NEW</span>` : ''}
+                    <div class="flex items-center gap-2.5 min-w-0 flex-1">
+                        ${renderCoverBox(track, "w-11 h-11 md:w-10 md:h-10 rounded-xl", "text-xs")}
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-1.5">
+                                <span data-track-title="${track.id}" class="text-xs font-extrabold text-white truncate">${track.title}</span>
+                                ${isExplicit ? `<span class="px-1.5 py-0.2 rounded bg-zinc-900 border border-rose-500/50 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>` : ''}
+                                ${track.isNew ? `<span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">NEW</span>` : ''}
+                            </div>
+                            <p class="text-[10px] text-zinc-400 truncate">${artistsLabel}<span class="md:hidden"> • ${albumLabel}${yearLabel ? ` (${yearLabel})` : ''}</span></p>
                         </div>
-                        <p class="text-[10px] text-zinc-400 truncate">${artistsLabel} • ${albumLabel}${yearLabel ? ` (${yearLabel})` : ''}</p>
                     </div>
-                    <div class="flex items-center gap-2 shrink-0">
-                        <span class="text-[10px] font-semibold text-zinc-500">${track.duration || '2:45'}</span>
+                    <div class="hidden md:flex items-center min-w-0">
+                        <span class="text-[11px] font-medium text-zinc-400 truncate">${albumLabel}${yearLabel ? ` • ${yearLabel}` : ''}</span>
+                    </div>
+                    <div class="flex items-center justify-end gap-2 shrink-0">
+                        <span class="text-[10px] font-semibold text-zinc-500 tabular-nums">${track.duration || '2:45'}</span>
                         <div data-track-playbtn="${track.id}" class="w-7 h-7 rounded-xl bg-zinc-900 text-zinc-400 flex items-center justify-center">
                             <i data-track-playicon="${track.id}" class="fa-solid fa-play ml-0.5 text-[10px]"></i>
                         </div>
@@ -3718,7 +4149,7 @@
             if (!container) return;
             if (TRACKS.length === 0) {
                 const emptyHtml = `
-                    <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-center text-xs text-zinc-500">
+                    <div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-center text-xs text-zinc-500 lg:col-span-2">
                         В каталоге пока нет загруженных треков. Добавьте первый трек в панели владельца.
                     </div>
                 `;
@@ -3726,7 +4157,7 @@
                 return;
             }
             const top4 = TRACKS.slice(0, 4);
-            const html = top4.map((t, i) => renderTrackRow(t, i, i + 1)).join("");
+            const html = top4.map((t, i) => renderTrackRow(t, i, i + 1, true)).join("");
             if (setContainerHtmlIfChanged(container, html)) {
                 updateTrackRowsPlayState();
             }
@@ -3738,7 +4169,7 @@
             const albumsList = Object.values(ALBUMS);
             if (albumsList.length === 0) {
                 const emptyHtml = `
-                    <div class="w-full p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-center text-xs text-zinc-500">
+                    <div class="w-full lg:col-span-4 p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-center text-xs text-zinc-500">
                         Альбомы пока не созданы. Вы можете создать альбом в панели владельца.
                     </div>
                 `;
@@ -3748,14 +4179,14 @@
             const html = albumsList.map((alb) => {
                 const artistsLabel = getAlbumArtistsLabel(alb);
                 return `
-                    <div onclick="openAlbumDetail('${alb.id}')" class="w-36 shrink-0 p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2 spring-btn">
-                        <div class="relative aspect-square w-full overflow-hidden rounded-xl">
+                    <div onclick="openAlbumDetail('${alb.id}')" class="w-36 lg:w-auto shrink-0 p-2.5 lg:p-3 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2.5 group spring-btn">
+                        <div class="relative aspect-square w-full overflow-hidden rounded-xl shadow-md">
                             ${renderCoverBox(alb, "w-full h-full aspect-square rounded-xl", "text-2xl")}
                             ${alb.isExplicit ? `<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-rose-600/90 text-white text-[8px] font-black uppercase shadow">18+</span>` : ''}
                         </div>
                         <div>
                             <div class="flex items-center gap-1">
-                                <h3 class="text-xs font-extrabold text-white truncate">${alb.title}</h3>
+                                <h3 class="text-xs font-extrabold text-white group-hover:text-purple-300 truncate transition-colors">${alb.title}</h3>
                                 ${alb.isExplicit ? `<span class="text-[8px] font-black text-rose-400 shrink-0">18+</span>` : ''}
                             </div>
                             <p class="text-[10px] text-zinc-400 truncate">${artistsLabel} • ${alb.year || 2025}</p>
@@ -4143,16 +4574,16 @@
                 </div>
                 ` : ''}
 
-                <!-- Альбомы артиста -->
+                    <!-- Альбомы артиста -->
                 <div class="space-y-2.5">
                     <h2 class="text-xs font-black uppercase tracking-wider text-purple-400 flex items-center gap-1.5">
                         <i class="fa-solid fa-compact-disc"></i>
                         <span>АЛЬБОМЫ, EP И СИНГЛЫ (${artistAlbums.length})</span>
                     </h2>
                     ${artistAlbums.length > 0 ? `
-                        <div class="grid grid-cols-2 gap-2.5">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                             ${artistAlbums.map((alb) => `
-                                <div onclick="openAlbumDetail('${alb.id}')" class="p-2.5 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2 spring-btn">
+                                <div onclick="openAlbumDetail('${alb.id}')" class="p-2.5 lg:p-3 rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 cursor-pointer space-y-2 spring-btn">
                                     <div class="relative aspect-square w-full overflow-hidden rounded-xl">
                                         ${renderCoverBox(alb, "w-full h-full aspect-square rounded-xl", "text-2xl")}
                                         ${alb.isExplicit ? `<span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-rose-600/90 text-white text-[8px] font-black uppercase shadow">18+</span>` : ''}
@@ -4175,7 +4606,7 @@
                 <div class="space-y-2.5">
                     <h2 class="text-xs font-black uppercase tracking-wider text-zinc-400">ВСЕ ТРЕКИ (${artistTracks.length})</h2>
                     ${artistTracks.length > 0 ? `
-                        <div class="space-y-2">
+                        <div class="space-y-2 lg:space-y-1.5">
                             ${artistTracks.map((t, i) => renderTrackRow(t, i)).join("")}
                         </div>
                     ` : `<div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-xs text-zinc-500">У артиста пока нет добавленных треков</div>`}
@@ -4192,7 +4623,7 @@
                         <p class="text-[11px] font-medium text-zinc-200 leading-snug">Некоторые клипы возможно посмотреть только с VPN - потому что эти клипы транслируются через YouTube.</p>
                     </div>
                     ${artistVideos.length > 0 ? `
-                        <div class="grid grid-cols-1 gap-2.5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             ${artistVideos.map(v => renderVideoCard(v)).join("")}
                         </div>
                     ` : `<div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-xs text-zinc-500">У артиста пока нет видеоклипов</div>`}
@@ -4205,7 +4636,7 @@
                         <span>НОВОСТИ АРТИСТА (${artistNews.length})</span>
                     </h2>
                     ${artistNews.length > 0 ? `
-                        <div class="space-y-2.5">
+                        <div class="space-y-2.5 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0">
                             ${artistNews.map(n => renderNewsCard(n)).join("")}
                         </div>
                     ` : `<div class="p-4 rounded-2xl bg-zinc-950 border border-zinc-900 text-xs text-zinc-500">Пока нет новостей об этом артисте</div>`}
@@ -4225,7 +4656,7 @@
 
             hideAllSections();
             document.getElementById("view-artist-profile").classList.remove("hidden");
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            scrollWorkspaceToTop();
         }
 
         function openAlbumDetail(albumId) {
@@ -4237,15 +4668,15 @@
 
             const content = document.getElementById("albumDetailContent");
             const html = `
-                <div class="rounded-3xl bg-zinc-950 border border-zinc-900 p-5 space-y-4">
-                    <div class="flex items-center gap-4">
-                        ${renderCoverBox(album, "w-24 h-24 rounded-2xl shadow-xl", "text-2xl")}
+                <div class="rounded-3xl bg-zinc-950 border border-zinc-900 p-5 lg:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4 min-w-0">
+                        ${renderCoverBox(album, "w-24 h-24 lg:w-32 lg:h-32 rounded-2xl shadow-xl", "text-2xl")}
                         <div class="min-w-0 flex-1 space-y-1">
                             <div class="flex items-center gap-1.5">
                                 <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 text-[9px] font-black uppercase">${album.type || 'АЛЬБОМ'} • ${album.year || 2025}</span>
                                 ${album.isExplicit ? `<span class="px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/50 text-rose-400 text-[9px] font-black uppercase">18+</span>` : ''}
                             </div>
-                            <h1 class="text-lg font-black text-white truncate">${album.title}</h1>
+                            <h1 class="text-lg lg:text-2xl font-black text-white truncate">${album.title}</h1>
                             <div class="flex items-center flex-wrap gap-1.5 pt-0.5">
                                 <button onclick="openArtistProfile('${artist.id}')" class="text-xs font-bold text-zinc-300 hover:text-white flex items-center gap-1.5 spring-btn">
                                     ${renderAvatarBox(artist, "w-5 h-5 rounded-full", "text-[9px]")}
@@ -4263,12 +4694,12 @@
                             </div>
                         </div>
                     </div>
-                    <button onclick="playAlbumTracks('${album.id}')" class="w-full py-2.5 rounded-xl bg-white text-black font-extrabold text-xs flex items-center justify-center gap-2 spring-btn">
+                    <button onclick="playAlbumTracks('${album.id}')" class="w-full sm:w-auto sm:px-6 py-3 rounded-xl bg-white hover:bg-zinc-100 text-black font-extrabold text-xs flex items-center justify-center gap-2 shrink-0 spring-btn">
                         <i class="fa-solid fa-play text-[10px]"></i>
                         <span>Слушать релиз (${albumTracks.length})</span>
                     </button>
                 </div>
-                <div class="space-y-2">
+                <div class="space-y-2 lg:space-y-1.5">
                     <h2 class="text-xs font-black uppercase tracking-wider text-zinc-400">ТРЕКЛИСТ РЕЛИЗА</h2>
                     ${albumTracks.length > 0
                         ? albumTracks.map((t, i) => renderTrackRow(t, i, i + 1)).join("")
@@ -4281,7 +4712,7 @@
 
             hideAllSections();
             document.getElementById("view-album-detail").classList.remove("hidden");
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            scrollWorkspaceToTop();
         }
 
         function playTrackById(trackId) {
@@ -4753,28 +5184,166 @@
             return `${m}:${s < 10 ? "0" : ""}${s}`;
         }
 
+        function setAudioVolume(val) {
+            const pct = Math.max(0, Math.min(100, parseFloat(val) || 0)) / 100;
+            audioEl.volume = pct;
+            if (pct > 0) {
+                audioEl.muted = false;
+                lastAudioVolumeBeforeMute = pct;
+            }
+            const icon = document.getElementById("deskVolumeIcon");
+            if (icon) {
+                if (pct === 0 || audioEl.muted) {
+                    icon.className = "fa-solid fa-volume-xmark text-rose-400";
+                } else if (pct < 0.5) {
+                    icon.className = "fa-solid fa-volume-low";
+                } else {
+                    icon.className = "fa-solid fa-volume-high";
+                }
+            }
+        }
+
+        function toggleMuteAudio() {
+            const slider = document.getElementById("deskVolumeSlider");
+            if (audioEl.muted || audioEl.volume === 0) {
+                audioEl.muted = false;
+                const restore = lastAudioVolumeBeforeMute > 0.05 ? lastAudioVolumeBeforeMute : 0.8;
+                audioEl.volume = restore;
+                if (slider) slider.value = Math.round(restore * 100);
+            } else {
+                lastAudioVolumeBeforeMute = audioEl.volume || 1.0;
+                audioEl.muted = true;
+                if (slider) slider.value = 0;
+            }
+            setAudioVolume(slider ? slider.value : (audioEl.muted ? 0 : 100));
+        }
+
         function updateProgressUI(cur, dur) {
             const pct = dur > 0 ? Math.min(100, (cur / dur) * 100) : 0;
             const miniBar = document.getElementById("miniProgressBar");
             const seek = document.getElementById("playerSeek");
             const curEl = document.getElementById("playerCurrentTime");
             const durEl = document.getElementById("playerDuration");
+            const deskSeek = document.getElementById("deskPlayerSeek");
+            const deskCurEl = document.getElementById("deskCurrentTime");
+            const deskDurEl = document.getElementById("deskDuration");
 
             if (miniBar) miniBar.style.width = `${pct}%`;
             if (seek) seek.value = pct;
             if (curEl) curEl.textContent = formatTime(cur);
             if (durEl) durEl.textContent = formatTime(dur);
+            if (deskSeek) deskSeek.value = pct;
+            if (deskCurEl) deskCurEl.textContent = formatTime(cur);
+            if (deskDurEl) deskDurEl.textContent = formatTime(dur);
+        }
+
+        function renderDesktopRightSidebar(track, artist, featArtist, album, isExplicit, coverSignature) {
+            const titleEl = document.getElementById("deskRightTitle");
+            const albumBadge = document.getElementById("deskRightAlbumBadge");
+            const expBadge = document.getElementById("deskRightExplicitBadge");
+            const newBadge = document.getElementById("deskRightNewBadge");
+            const coverInner = document.getElementById("deskRightCoverInner");
+            const artistsCont = document.getElementById("deskRightArtistsContainer");
+            const artistCard = document.getElementById("deskRightArtistCard");
+            const queueCont = document.getElementById("deskRightQueueList");
+            const likeBtn = document.getElementById("deskRightLikeBtn");
+
+            if (!track) return;
+
+            if (titleEl) titleEl.textContent = track.title;
+            if (albumBadge) albumBadge.textContent = album ? album.title : "Сингл • Сейчас играет";
+            if (expBadge) {
+                if (isExplicit) expBadge.classList.remove("hidden");
+                else expBadge.classList.add("hidden");
+            }
+            if (newBadge) {
+                if (track.isNew) newBadge.classList.remove("hidden");
+                else newBadge.classList.add("hidden");
+            }
+            if (coverInner && coverInner._lastCoverSignature !== coverSignature) {
+                coverInner._lastCoverSignature = coverSignature;
+                coverInner.innerHTML = renderCoverBox(track, "w-full h-full", "text-5xl");
+            }
+            if (likeBtn) {
+                const liked = likedTrackIds.has(track.id);
+                likeBtn.className = `w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 spring-btn ${liked ? 'bg-rose-500/20 border-rose-500/40 text-rose-400' : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-white'}`;
+            }
+
+            if (artistsCont) {
+                const artistsHtml = `
+                    <button onclick="openArtistProfile('${artist.id}')" class="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-300 hover:text-white spring-btn">
+                        ${renderAvatarBox(artist, "w-5 h-5 rounded-full", "text-[8px]")}
+                        <span>${artist.name}</span>
+                        <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
+                    </button>
+                    ${featArtist ? `
+                        <span class="text-xs font-bold text-zinc-500 -ml-1 mr-0.5">,</span>
+                        <button onclick="openArtistProfile('${featArtist.id}')" class="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-300 hover:text-white spring-btn">
+                            ${renderAvatarBox(featArtist, "w-5 h-5 rounded-full", "text-[8px]")}
+                            <span>${featArtist.name}</span>
+                            <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
+                        </button>
+                    ` : ''}
+                `;
+                setContainerHtmlIfChanged(artistsCont, artistsHtml);
+            }
+
+            if (artistCard) {
+                const countTracks = TRACKS.filter(t => trackHasArtist(t, artist.id)).length;
+                const bioCardHtml = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-black uppercase tracking-wider text-zinc-400">Об исполнителе</span>
+                        <button onclick="openArtistProfile('${artist.id}')" class="text-[10px] font-bold text-purple-400 hover:text-purple-300">Профиль →</button>
+                    </div>
+                    <div onclick="openArtistProfile('${artist.id}')" class="flex items-center gap-3 cursor-pointer group">
+                        ${renderAvatarBox(artist, "w-12 h-12 rounded-full", "text-base")}
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-1">
+                                <h4 class="text-xs font-black text-white group-hover:text-purple-300 truncate">${artist.name}</h4>
+                                <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
+                            </div>
+                            <p class="text-[10px] text-zinc-400 truncate">${artist.role || 'Артист Dark Music'}</p>
+                            <p class="text-[10px] font-bold text-purple-400 mt-0.5">Треков в каталоге: ${countTracks}</p>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-zinc-400 leading-relaxed line-clamp-3">${artist.bio || ''}</p>
+                `;
+                setContainerHtmlIfChanged(artistCard, bioCardHtml);
+            }
+
+            if (queueCont && TRACKS.length > 0) {
+                const curIdx = TRACKS.findIndex(t => t.id === track.id);
+                const startIdx = curIdx >= 0 ? curIdx : 0;
+                const upcoming = [];
+                const limit = Math.min(3, Math.max(0, TRACKS.length - 1));
+                for (let step = 1; step <= limit; step++) {
+                    upcoming.push(TRACKS[(startIdx + step) % TRACKS.length]);
+                }
+                const qHtml = upcoming.map(qt => `
+                    <div onclick="playTrackById('${qt.id}')" class="p-2 rounded-xl bg-zinc-900/60 hover:bg-zinc-900 border border-zinc-800/70 flex items-center gap-2.5 cursor-pointer group spring-btn">
+                        ${renderCoverBox(qt, "w-9 h-9 rounded-lg", "text-[10px]")}
+                        <div class="min-w-0 flex-1">
+                            <p class="text-[11px] font-extrabold text-white group-hover:text-purple-300 truncate">${qt.title}</p>
+                            <p class="text-[10px] text-zinc-500 truncate">${getTrackArtistsLabel(qt)}</p>
+                        </div>
+                        <span class="text-[10px] font-semibold text-zinc-500 tabular-nums shrink-0">${qt.duration || '2:45'}</span>
+                    </div>
+                `).join("");
+                setContainerHtmlIfChanged(queueCont, qHtml);
+            }
         }
 
         function updatePlayerUI() {
             const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0] || null;
             const miniPlayIcon = document.getElementById("miniPlayIcon");
             const playerPlayIcon = document.getElementById("playerPlayIcon");
+            const deskPlayIcon = document.getElementById("deskPlayIcon");
             const heroEq = document.getElementById("heroEq");
             const coverCard = document.getElementById("playerCoverCard");
 
             if (miniPlayIcon) miniPlayIcon.className = `fa-solid ${isPlaying ? 'fa-pause' : 'fa-play ml-0.5'} text-xs`;
             if (playerPlayIcon) playerPlayIcon.className = `fa-solid ${isPlaying ? 'fa-pause' : 'fa-play ml-0.5'} text-xl`;
+            if (deskPlayIcon) deskPlayIcon.className = `fa-solid ${isPlaying ? 'fa-pause' : 'fa-play ml-0.5'} text-xs`;
 
             if (heroEq) {
                 if (isPlaying) heroEq.classList.remove("eq-paused");
@@ -4789,6 +5358,8 @@
                     coverCard.classList.add("cover-paused");
                 }
             }
+
+            renderDesktopHeroFeatured();
 
             if (!track) return;
 
@@ -4808,11 +5379,13 @@
             const artistAvatarSignature = `${artist.id}|${artist.avatarFile}|${artist.gradient}`;
             const featAvatarSignature = featArtist ? `${featArtist.id}|${featArtist.avatarFile}|${featArtist.gradient}` : "";
             const miniAvatarsComboSig = `${artistAvatarSignature}||${featAvatarSignature}`;
+            const avatarsHtml =
+                renderAvatarBox(artist, "w-4 h-4 rounded-full", "text-[8px]") +
+                (featArtist ? renderAvatarBox(featArtist, "w-4 h-4 rounded-full", "text-[8px]") : "");
+
             if (miniArtistAvatarEl && miniArtistAvatarEl._lastAvatarSig !== miniAvatarsComboSig) {
                 miniArtistAvatarEl._lastAvatarSig = miniAvatarsComboSig;
-                miniArtistAvatarEl.innerHTML =
-                    renderAvatarBox(artist, "w-4 h-4 rounded-full", "text-[8px]") +
-                    (featArtist ? renderAvatarBox(featArtist, "w-4 h-4 rounded-full", "text-[8px]") : "");
+                miniArtistAvatarEl.innerHTML = avatarsHtml;
             }
             const miniExpBadge = document.getElementById("miniExplicitBadge");
             if (miniExpBadge) {
@@ -4825,6 +5398,37 @@
             if (miniCoverEl && miniCoverEl._lastCoverSignature !== coverSignature) {
                 miniCoverEl._lastCoverSignature = coverSignature;
                 miniCoverEl.innerHTML = renderCoverBox(track, "w-10 h-10 rounded-xl", "text-xs");
+            }
+
+            // Нижний плеер Spotify Desktop (на ПК)
+            const deskTitleEl = document.getElementById("deskPlayerTitle");
+            const deskArtistsEl = document.getElementById("deskPlayerArtists");
+            const deskAvatarsEl = document.getElementById("deskPlayerArtistAvatars");
+            const deskExpBadge = document.getElementById("deskPlayerExplicitBadge");
+            const deskCoverEl = document.getElementById("deskPlayerCover");
+            const deskLikeBtn = document.getElementById("deskPlayerLikeBtn");
+            const deskDurEl = document.getElementById("deskDuration");
+
+            if (deskTitleEl) deskTitleEl.textContent = track.title;
+            if (deskArtistsEl) deskArtistsEl.textContent = artistsLabel;
+            if (deskAvatarsEl && deskAvatarsEl._lastAvatarSig !== miniAvatarsComboSig) {
+                deskAvatarsEl._lastAvatarSig = miniAvatarsComboSig;
+                deskAvatarsEl.innerHTML = avatarsHtml;
+            }
+            if (deskExpBadge) {
+                if (isExplicit) deskExpBadge.classList.remove("hidden");
+                else deskExpBadge.classList.add("hidden");
+            }
+            if (deskCoverEl && deskCoverEl._lastCoverSignature !== coverSignature) {
+                deskCoverEl._lastCoverSignature = coverSignature;
+                deskCoverEl.innerHTML = renderCoverBox(track, "w-14 h-14 rounded-xl", "text-sm");
+            }
+            if (deskLikeBtn) {
+                const liked = likedTrackIds.has(track.id);
+                deskLikeBtn.className = `w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 spring-btn ${liked ? 'bg-rose-500/20 border-rose-500/40 text-rose-400' : 'bg-zinc-900/80 border-zinc-800 text-zinc-400 hover:text-white'}`;
+            }
+            if (deskDurEl && (!audioEl.duration || isNaN(audioEl.duration))) {
+                deskDurEl.textContent = track.duration || "2:45";
             }
 
             document.getElementById("playerTitle").textContent = track.title;
@@ -4841,7 +5445,6 @@
             const featAvatarEl = document.getElementById("playerFeatArtistAvatar");
             if (featArtist && featDivider && featBtn && featNameEl) {
                 featNameEl.textContent = featArtist.name;
-                const featAvatarSignature = `${featArtist.id}|${featArtist.avatarFile}|${featArtist.gradient}`;
                 if (featAvatarEl && featAvatarEl._lastAvatarSig !== featAvatarSignature) {
                     featAvatarEl._lastAvatarSig = featAvatarSignature;
                     featAvatarEl.innerHTML = renderAvatarBox(featArtist, "w-5 h-5 rounded-full", "text-[9px]");
@@ -4883,6 +5486,7 @@
                 likeBtn.className = `w-10 h-10 rounded-2xl border flex items-center justify-center spring-btn ${liked ? 'bg-rose-500/20 border-rose-500/40 text-rose-400' : 'bg-zinc-900 border-zinc-800 text-zinc-400'}`;
             }
 
+            renderDesktopRightSidebar(track, artist, featArtist, album, isExplicit, coverSignature);
             renderArtistFactInPlayer(artist);
         }
 
@@ -4913,6 +5517,8 @@
         function renderArtistFactInPlayer(artist, forceAnimate = false) {
             const headerEl = document.getElementById("playerFactHeader");
             const textEl = document.getElementById("playerFactText");
+            const deskHeaderEl = document.getElementById("deskRightFactHeader");
+            const deskTextEl = document.getElementById("deskRightFactText");
             if (!headerEl || !textEl) return;
 
             const track = TRACKS.find(t => t.id === currentTrackId) || TRACKS[0] || null;
@@ -4924,6 +5530,8 @@
             const factSignature = `${track ? track.id : 'none'}|${idx}|${item.artistName}|${item.text}`;
 
             headerEl.textContent = `ИНТЕРЕСНЫЙ ФАКТ • ${item.artistName}`;
+            if (deskHeaderEl) deskHeaderEl.textContent = `ФАКТ • ${item.artistName}`;
+            if (deskTextEl) deskTextEl.textContent = item.text;
 
             if (!forceAnimate && textEl._lastFactSignature === factSignature) {
                 return;
@@ -4976,13 +5584,17 @@
         function toggleShuffleMode() {
             isShuffle = !isShuffle;
             const btn = document.getElementById("shuffleBtn");
+            const deskBtn = document.getElementById("deskShuffleBtn");
             if (btn) btn.className = `w-9 h-9 rounded-xl flex items-center justify-center spring-btn ${isShuffle ? 'text-purple-400' : 'text-zinc-500'}`;
+            if (deskBtn) deskBtn.className = `w-8 h-8 rounded-lg flex items-center justify-center spring-btn ${isShuffle ? 'text-purple-400 hover:text-purple-300' : 'text-zinc-500 hover:text-zinc-300'}`;
         }
 
         function toggleRepeatMode() {
             isRepeat = !isRepeat;
             const btn = document.getElementById("repeatBtn");
+            const deskBtn = document.getElementById("deskRepeatBtn");
             if (btn) btn.className = `w-9 h-9 rounded-xl flex items-center justify-center spring-btn ${isRepeat ? 'text-purple-400' : 'text-zinc-500'}`;
+            if (deskBtn) deskBtn.className = `w-8 h-8 rounded-lg flex items-center justify-center spring-btn ${isRepeat ? 'text-purple-400 hover:text-purple-300' : 'text-zinc-500 hover:text-zinc-300'}`;
         }
 
         function openFullPlayer() {
@@ -5035,37 +5647,46 @@
             });
         }
 
-        function switchTab(tab) {
-            hideAllSections();
+        function updateNavActiveStates(activeTab) {
             ["home", "charts", "artists", "owner"].forEach(k => {
                 const btn = document.getElementById(`nav-${k}`);
                 if (btn) {
-                    btn.className = `flex flex-col items-center gap-0.5 py-1 ${k === tab ? 'text-purple-400' : 'text-zinc-500 hover:text-zinc-300'} spring-btn`;
+                    const activeColor = k === "owner" ? "text-emerald-400" : "text-purple-400";
+                    btn.className = `flex flex-col items-center gap-0.5 py-1 ${k === activeTab ? activeColor : 'text-zinc-500 hover:text-zinc-300'} spring-btn`;
+                }
+                const deskBtn = document.getElementById(`desk-nav-${k}`);
+                if (deskBtn) {
+                    const isAct = (k === activeTab);
+                    if (k === "owner") {
+                        deskBtn.className = `w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all spring-btn ${isAct ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-extrabold' : 'text-zinc-400 hover:text-white hover:bg-zinc-900/70 border border-transparent'}`;
+                    } else {
+                        deskBtn.className = `w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs transition-all spring-btn ${isAct ? 'font-extrabold bg-purple-600/15 text-purple-300 border border-purple-500/30' : 'font-bold text-zinc-400 hover:text-white hover:bg-zinc-900/70 border border-transparent'}`;
+                    }
                 }
             });
+        }
+
+        function switchTab(tab) {
+            hideAllSections();
+            updateNavActiveStates(tab);
 
             renderAllViews();
 
             const target = document.getElementById(`view-${tab}`);
             if (target) target.classList.remove("hidden");
-            window.scrollTo({ top: 0, behavior: "smooth" });
+            scrollWorkspaceToTop();
         }
 
         function openOwnerTab() {
             if (isOwnerUnlocked) {
                 hideAllSections();
-                ["home", "charts", "artists", "owner"].forEach(k => {
-                    const btn = document.getElementById(`nav-${k}`);
-                    if (btn) {
-                        btn.className = `flex flex-col items-center gap-0.5 py-1 ${k === 'owner' ? 'text-emerald-400' : 'text-zinc-500 hover:text-zinc-300'} spring-btn`;
-                    }
-                });
+                updateNavActiveStates("owner");
                 populateAlbumSelectForArtist();
                 loadArtistBioAndFactsForm();
                 updateOwnerNotificationsFormUI();
                 renderOwnerManageLists();
                 document.getElementById("view-owner-panel").classList.remove("hidden");
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                scrollWorkspaceToTop();
             } else {
                 enteredPin = "";
                 updatePinDots();
@@ -5123,7 +5744,14 @@
             isOwnerUnlocked = true;
             closePinModal();
             const lockIcon = document.getElementById("headerLockIcon");
+            const deskLockIcon = document.getElementById("desktopHeaderLockIcon");
+            const deskOwnerDot = document.getElementById("deskOwnerStatusDot");
             if (lockIcon) lockIcon.className = "fa-solid fa-lock-open text-xs text-emerald-400";
+            if (deskLockIcon) deskLockIcon.className = "fa-solid fa-lock-open text-xs text-emerald-400";
+            if (deskOwnerDot) {
+                deskOwnerDot.textContent = "OPEN";
+                deskOwnerDot.className = "px-1.5 py-0.5 rounded bg-emerald-500/20 border border-emerald-500/40 text-[9px] font-black text-emerald-300";
+            }
             applyBroadcastAndForceUpdateUI();
             openOwnerTab();
             showToast("Панель владельца разблокирована", "ДОСТУП ОТКРЫТ");
@@ -5133,7 +5761,14 @@
             isOwnerUnlocked = false;
             _unlockedPinVaultKey = null;
             const lockIcon = document.getElementById("headerLockIcon");
+            const deskLockIcon = document.getElementById("desktopHeaderLockIcon");
+            const deskOwnerDot = document.getElementById("deskOwnerStatusDot");
             if (lockIcon) lockIcon.className = "fa-solid fa-lock text-xs";
+            if (deskLockIcon) deskLockIcon.className = "fa-solid fa-lock text-xs text-zinc-400";
+            if (deskOwnerDot) {
+                deskOwnerDot.textContent = "PIN";
+                deskOwnerDot.className = "px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-[9px] font-black text-zinc-500";
+            }
             applyBroadcastAndForceUpdateUI();
             switchTab("home");
             showToast("Режим владельца заблокирован", "ЗАЩИТА");
@@ -5164,13 +5799,33 @@
         }
 
         function handleSearchInput(val) {
-            searchQuery = val;
+            searchQuery = val || "";
+            const mobInp = document.getElementById("searchInput");
+            const deskInp = document.getElementById("desktopSearchInput");
+            const deskClear = document.getElementById("desktopSearchClearBtn");
+            if (mobInp && document.activeElement !== mobInp) mobInp.value = searchQuery;
+            if (deskInp && document.activeElement !== deskInp) deskInp.value = searchQuery;
+            if (deskClear) {
+                if (searchQuery.trim().length > 0) deskClear.classList.remove("hidden");
+                else deskClear.classList.add("hidden");
+            }
+            const homeView = document.getElementById("view-home");
+            if (homeView && homeView.classList.contains("hidden") && searchQuery.trim().length > 0) {
+                hideAllSections();
+                updateNavActiveStates("home");
+                homeView.classList.remove("hidden");
+            }
             renderHomeTracks();
         }
 
         function clearSearchInput() {
             searchQuery = "";
-            document.getElementById("searchInput").value = "";
+            const mobInp = document.getElementById("searchInput");
+            const deskInp = document.getElementById("desktopSearchInput");
+            const deskClear = document.getElementById("desktopSearchClearBtn");
+            if (mobInp) mobInp.value = "";
+            if (deskInp) deskInp.value = "";
+            if (deskClear) deskClear.classList.add("hidden");
             renderHomeTracks();
         }
 

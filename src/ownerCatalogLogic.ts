@@ -471,5 +471,32 @@ export function shouldPopulateOwnerFormField(params: {
   return true;
 }
 
+export type ViewportLayoutMode = 'mobile' | 'desktop-2col' | 'desktop-3pane';
 
+export function resolveViewportLayoutMode(viewportWidth: number): ViewportLayoutMode {
+  const w = Number(viewportWidth) || 0;
+  if (w < 1024) return 'mobile';
+  if (w < 1280) return 'desktop-2col';
+  return 'desktop-3pane';
+}
 
+export function computeQueuePreviewTracks<T extends { id: string }>(
+  tracks: T[],
+  currentTrackId: string | null | undefined,
+  limit: number = 3
+): T[] {
+  if (!Array.isArray(tracks) || tracks.length === 0 || limit <= 0) return [];
+  const maxItems = Math.min(limit, Math.max(0, tracks.length - 1));
+  if (maxItems === 0) return tracks.slice(0, 1);
+
+  const curIdx = currentTrackId ? tracks.findIndex((t) => t.id === currentTrackId) : -1;
+  const startIdx = curIdx >= 0 ? (curIdx + 1) % tracks.length : 0;
+  const result: T[] = [];
+  for (let i = 0; i < tracks.length && result.length < maxItems; i++) {
+    const candidate = tracks[(startIdx + i) % tracks.length];
+    if (candidate && candidate.id !== currentTrackId) {
+      result.push(candidate);
+    }
+  }
+  return result;
+}
