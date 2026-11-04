@@ -1,0 +1,51 @@
+name: Build Dark Music for Windows
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'index.html'
+      - 'catalog.json'
+      - 'logo.png'
+      - 'avatars/**'
+      - 'banners/**'
+      - 'covers/**'
+      - 'tracks/**'
+      - 'src/**'
+      - 'public/**'
+      - 'electron/**'
+      - 'package.json'
+      - '.github/workflows/windows-exe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    name: Build Windows installer
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm install
+      - name: Prepare Windows application icon
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path build | Out-Null
+          node -e "const fs=require('fs'); const pngToIco=require('png-to-ico'); pngToIco('logo.png').then(buf=>fs.writeFileSync('build/icon.ico',buf)).catch(err=>{console.error(err);process.exit(1)})"
+      - name: Build Windows installer
+        run: npm run dist:win
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: DarkMusic-Windows-Installer
+          path: dist/*.exe
+          if-no-files-found: error
+          retention-days: 30
