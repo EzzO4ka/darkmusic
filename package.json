@@ -1,19 +1,63 @@
 {
-  "name": "dark-music-android",
+  "name": "dark-music",
   "version": "3.1.0",
   "private": true,
-  "description": "Dark Music Android app wrapper for the existing HTML app",
+  "description": "Dark Music desktop application and Android wrapper",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "python3 -m http.server 3000 --bind 0.0.0.0",
-    "build": "node -e \"console.log('Dark Music build ready')\"",
+    "build": "echo Dark Music build ready",
     "android:sync": "cap sync android",
-    "android:open": "cap open android"
+    "android:open": "cap open android",
+    "dist:win": "electron-builder --win nsis --x64"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.0",
     "@capacitor/core": "^8.0.0"
   },
   "devDependencies": {
-    "@capacitor/cli": "^8.0.0"
+    "@capacitor/cli": "^8.0.0",
+    "electron": "^39.0.0",
+    "electron-builder": "^26.0.12",
+    "png-to-ico": "^2.1.8"
+  },
+  "build": {
+    "appId": "com.lokiq.darkmusic",
+    "productName": "Dark Music",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "catalog.json",
+      "logo.png",
+      "sw.js",
+      "src/**/*",
+      "public/**/*",
+      "avatars/**/*",
+      "banners/**/*",
+      "covers/**/*",
+      "tracks/**/*",
+      "electron/**/*"
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Dark Music"
+    }
   }
 }
