@@ -9,7 +9,7 @@
     "build": "echo Dark Music build ready",
     "android:sync": "cap sync android",
     "android:open": "cap open android",
-    "dist:win": "electron-builder --win nsis --x64"
+    "dist:win": "electron-builder --win nsis --x64 --publish never"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.0",
