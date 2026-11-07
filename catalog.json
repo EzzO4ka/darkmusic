@@ -230,19 +230,6 @@
       "duration": "2:00"
     },
     {
-      "duration": "2:18",
-      "id": "trk_1792611936565",
-      "title": "Волшебная бутылочка",
-      "isNew": false,
-      "artistId": "mc_makaka",
-      "createdAt": 1792611936565,
-      "filePath": "tracks/mc_makaka/МС Макака - Волшебная бутылочка.mp3",
-      "year": 2023,
-      "albumId": "alb_1792597638805",
-      "isExplicit": true,
-      "coverFile": ""
-    },
-    {
       "duration": "1:50",
       "title": "Загеев",
       "id": "trk_1792611847469",
@@ -254,6 +241,19 @@
       "coverFile": "",
       "filePath": "tracks/mc_makaka/МС Макака - Загеев.mp3",
       "createdAt": 1792611847469
+    },
+    {
+      "duration": "2:18",
+      "id": "trk_1792611936565",
+      "title": "Волшебная бутылочка",
+      "isNew": false,
+      "artistId": "mc_makaka",
+      "createdAt": 1792611936565,
+      "filePath": "tracks/mc_makaka/МС Макака - Волшебная бутылочка.mp3",
+      "year": 2023,
+      "albumId": "alb_1792597638805",
+      "isExplicit": true,
+      "coverFile": ""
     },
     {
       "isNew": false,
@@ -528,5 +528,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794054669084
+  "updatedAt": 1794054672252
 }
