@@ -217,19 +217,6 @@
       "albumId": "alb_1792597638805"
     },
     {
-      "isNew": false,
-      "duration": "1:48",
-      "year": 2023,
-      "isExplicit": true,
-      "filePath": "tracks/mc_makaka/МС Макака - Не еби мне мозги.mp3",
-      "createdAt": 1792611895502,
-      "artistId": "mc_makaka",
-      "coverFile": "",
-      "title": "Не еби мне мозги",
-      "albumId": "alb_1792597638805",
-      "id": "trk_1792611895502"
-    },
-    {
       "title": "Милена спрыгнула с окна",
       "year": 2023,
       "filePath": "tracks/mc_makaka/МС_Макака_Милена_спрыгнула_с_окна.mp3",
@@ -241,6 +228,19 @@
       "isNew": false,
       "coverFile": "",
       "duration": "2:00"
+    },
+    {
+      "isNew": false,
+      "duration": "1:48",
+      "year": 2023,
+      "isExplicit": true,
+      "filePath": "tracks/mc_makaka/МС Макака - Не еби мне мозги.mp3",
+      "createdAt": 1792611895502,
+      "artistId": "mc_makaka",
+      "coverFile": "",
+      "title": "Не еби мне мозги",
+      "albumId": "alb_1792597638805",
+      "id": "trk_1792611895502"
     },
     {
       "duration": "2:18",
@@ -528,5 +528,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794054658411
+  "updatedAt": 1794054663152
 }
