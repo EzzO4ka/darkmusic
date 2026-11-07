@@ -176,7 +176,7 @@
       "id": "trk_1794062482767",
       "title": "115 причин не ехать в Выборг",
       "artistId": "mc_ezdit",
-      "albumId": "",
+      "albumId": "alb_1794065945442",
       "filePath": "tracks/mc_ezdit/Untitled-Bounce.mp3",
       "coverFile": "covers/Ночная операция отклонена.png",
       "duration": "2:27",
@@ -574,5 +574,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794065945443
+  "updatedAt": 1794066020813
 }
