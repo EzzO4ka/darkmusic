@@ -230,19 +230,6 @@
       "duration": "2:00"
     },
     {
-      "duration": "1:50",
-      "title": "Загеев",
-      "id": "trk_1792611847469",
-      "albumId": "alb_1792597638805",
-      "artistId": "mc_makaka",
-      "year": 2023,
-      "isExplicit": true,
-      "isNew": false,
-      "coverFile": "",
-      "filePath": "tracks/mc_makaka/МС Макака - Загеев.mp3",
-      "createdAt": 1792611847469
-    },
-    {
       "artistId": "mc_makaka",
       "year": 2023,
       "coverFile": "",
@@ -254,6 +241,19 @@
       "isExplicit": true,
       "id": "trk_1792605485661",
       "isNew": false
+    },
+    {
+      "duration": "1:50",
+      "title": "Загеев",
+      "id": "trk_1792611847469",
+      "albumId": "alb_1792597638805",
+      "artistId": "mc_makaka",
+      "year": 2023,
+      "isExplicit": true,
+      "isNew": false,
+      "coverFile": "",
+      "filePath": "tracks/mc_makaka/МС Макака - Загеев.mp3",
+      "createdAt": 1792611847469
     },
     {
       "isNew": false,
@@ -528,5 +528,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794054679517
+  "updatedAt": 1794054680626
 }
