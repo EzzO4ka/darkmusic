@@ -256,19 +256,6 @@
       "isNew": false
     },
     {
-      "title": "Шляпка гриба",
-      "filePath": "tracks/mc_makaka/МС Макака - Шляпка гриба.mp3",
-      "createdAt": 1792612000839,
-      "artistId": "mc_makaka",
-      "coverFile": "",
-      "year": 2023,
-      "id": "trk_1792612000839",
-      "isExplicit": true,
-      "isNew": false,
-      "duration": "2:01",
-      "albumId": "alb_1792597638805"
-    },
-    {
       "title": "Милена спрыгнула с окна",
       "year": 2023,
       "filePath": "tracks/mc_makaka/МС_Макака_Милена_спрыгнула_с_окна.mp3",
@@ -280,6 +267,19 @@
       "isNew": false,
       "coverFile": "",
       "duration": "2:00"
+    },
+    {
+      "isNew": false,
+      "id": "trk_1792597676680",
+      "duration": "2:29",
+      "createdAt": 1792597676680,
+      "isExplicit": true,
+      "year": 2023,
+      "coverFile": "",
+      "filePath": "tracks/mc_makaka/МС Макака - Маша ебанулась.mp3",
+      "title": "Маша ебанулась",
+      "artistId": "mc_makaka",
+      "albumId": "alb_1792597638805"
     },
     {
       "isNew": false,
@@ -399,16 +399,16 @@
       "createdAt": 1792597878782
     },
     {
-      "isNew": false,
-      "id": "trk_1792597676680",
-      "duration": "2:29",
-      "createdAt": 1792597676680,
-      "isExplicit": true,
-      "year": 2023,
-      "coverFile": "",
-      "filePath": "tracks/mc_makaka/МС Макака - Маша ебанулась.mp3",
-      "title": "Маша ебанулась",
+      "title": "Шляпка гриба",
+      "filePath": "tracks/mc_makaka/МС Макака - Шляпка гриба.mp3",
+      "createdAt": 1792612000839,
       "artistId": "mc_makaka",
+      "coverFile": "",
+      "year": 2023,
+      "id": "trk_1792612000839",
+      "isExplicit": true,
+      "isNew": false,
+      "duration": "2:01",
       "albumId": "alb_1792597638805"
     }
   ],
@@ -528,5 +528,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794054624235
+  "updatedAt": 1794054626291
 }
