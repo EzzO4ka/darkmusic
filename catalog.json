@@ -486,12 +486,13 @@
     "trk_1793291266274"
   ],
   "systemPushBroadcast": {
-    "id": "",
-    "title": "Обновите приложение",
-    "message": "Перейдите в приложения для скачивания новой версии.",
+    "id": "push_1794061006674",
+    "title": "ВНИМАНИЕ",
+    "message": "ПРИЛОЖЕНИЕ ОПЯТЬ ВЗЛОМАЛ ПИНТОГОН, ВАШИ ДАННЫЕ БЫЛИ СЪЕДЕНЫ МАМОЙ",
     "imageFile": "logo.png",
-    "active": false,
-    "createdAt": 1793806319773
+    "active": true,
+    "createdAt": 1794061006674,
+    "updatedAt": 1794061006674
   },
   "tempBroadcast": {
     "id": "",
@@ -528,5 +529,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794059798457
+  "updatedAt": 1794061006674
 }
