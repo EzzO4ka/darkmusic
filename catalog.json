@@ -171,7 +171,7 @@
       "coverFile": "covers/Ночная операция отклонена.png",
       "duration": "2:27",
       "year": 2026,
-      "isNew": true,
+      "isNew": false,
       "isExplicit": true,
       "createdAt": 1794062482768
     },
@@ -564,5 +564,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794064968401
+  "updatedAt": 1794065331047
 }
