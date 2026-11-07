@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/logo.png" alt="Dark Music Logo" width="110" height="110" style="border-radius: 24px;">
 
-# DARK MUSIC v3.1
+# DARK MUSIC v4.0
 
 **Эксклюзивный музыкальный стриминговый сервис**
 
@@ -12,7 +12,7 @@
 веществ, их аналогов причиняет вред здоровью, их незаконный оборот
 запрещен и влечет установленную законодательством ответственность`
 
-[![Version](https://img.shields.io/badge/версия-v3.1-a855f7?style=for-the-badge)](https://github.com/EzzO4ka/darkmusic)
+[![Version](https://img.shields.io/badge/версия-v4.0-a855f7?style=for-the-badge)](https://github.com/EzzO4ka/darkmusic)
 [![Platform](https://img.shields.io/badge/платформа-Android%20%7C%20Desktop%20%7C%20Web-18181b?style=for-the-badge)](https://github.com/EzzO4ka/darkmusic)
 [![Content](https://img.shields.io/badge/контент-18%2B%20Без%20цензуры-f43f5e?style=for-the-badge)](https://github.com/EzzO4ka/darkmusic)
 
