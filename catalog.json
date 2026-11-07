@@ -243,19 +243,6 @@
       "createdAt": 1792611847469
     },
     {
-      "title": "Шляпка гриба",
-      "filePath": "tracks/mc_makaka/МС Макака - Шляпка гриба.mp3",
-      "createdAt": 1792612000839,
-      "artistId": "mc_makaka",
-      "coverFile": "",
-      "year": 2023,
-      "id": "trk_1792612000839",
-      "isExplicit": true,
-      "isNew": false,
-      "duration": "2:01",
-      "albumId": "alb_1792597638805"
-    },
-    {
       "artistId": "mc_makaka",
       "year": 2023,
       "coverFile": "",
@@ -267,6 +254,19 @@
       "isExplicit": true,
       "id": "trk_1792605485661",
       "isNew": false
+    },
+    {
+      "title": "Шляпка гриба",
+      "filePath": "tracks/mc_makaka/МС Макака - Шляпка гриба.mp3",
+      "createdAt": 1792612000839,
+      "artistId": "mc_makaka",
+      "coverFile": "",
+      "year": 2023,
+      "id": "trk_1792612000839",
+      "isExplicit": true,
+      "isNew": false,
+      "duration": "2:01",
+      "albumId": "alb_1792597638805"
     },
     {
       "title": "Милена спрыгнула с окна",
@@ -528,5 +528,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794054622179
+  "updatedAt": 1794054624235
 }
