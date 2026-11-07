@@ -230,19 +230,6 @@
       "id": "trk_1792611895502"
     },
     {
-      "duration": "1:50",
-      "title": "Загеев",
-      "id": "trk_1792611847469",
-      "albumId": "alb_1792597638805",
-      "artistId": "mc_makaka",
-      "year": 2023,
-      "isExplicit": true,
-      "isNew": false,
-      "coverFile": "",
-      "filePath": "tracks/mc_makaka/МС Макака - Загеев.mp3",
-      "createdAt": 1792611847469
-    },
-    {
       "duration": "2:18",
       "id": "trk_1792611936565",
       "title": "Волшебная бутылочка",
@@ -254,6 +241,19 @@
       "albumId": "alb_1792597638805",
       "isExplicit": true,
       "coverFile": ""
+    },
+    {
+      "duration": "1:50",
+      "title": "Загеев",
+      "id": "trk_1792611847469",
+      "albumId": "alb_1792597638805",
+      "artistId": "mc_makaka",
+      "year": 2023,
+      "isExplicit": true,
+      "isNew": false,
+      "coverFile": "",
+      "filePath": "tracks/mc_makaka/МС Макака - Загеев.mp3",
+      "createdAt": 1792611847469
     },
     {
       "title": "Милена спрыгнула с окна",
@@ -528,5 +528,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794054654569
+  "updatedAt": 1794054656104
 }
