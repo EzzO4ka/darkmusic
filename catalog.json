@@ -10,7 +10,7 @@
   "artistBanners": {
     "mc_geich": "banners/mc_geich2.jpg",
     "mc_makaka": "banners/mc_makaka2.jpg",
-    "mc_ezdit": "banners/mc_ezdit333.jpg",
+    "mc_ezdit": "banners/mc_ezdit4.jpg",
     "MCTEST": "banners/mc_t2.jpg"
   },
   "artistNames": {
@@ -125,7 +125,7 @@
       ],
       "isCustom": true,
       "createdAt": 1793576432923,
-      "bannerFile": "banners/mc_ezdit333.jpg"
+      "bannerFile": "banners/mc_ezdit4.jpg"
     }
   ],
   "customAlbums": [
@@ -564,5 +564,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794064861094
+  "updatedAt": 1794064968401
 }
