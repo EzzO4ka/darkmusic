@@ -243,19 +243,6 @@
       "coverFile": ""
     },
     {
-      "isNew": false,
-      "duration": "1:48",
-      "year": 2023,
-      "isExplicit": true,
-      "filePath": "tracks/mc_makaka/МС Макака - Не еби мне мозги.mp3",
-      "createdAt": 1792611895502,
-      "artistId": "mc_makaka",
-      "coverFile": "",
-      "title": "Не еби мне мозги",
-      "albumId": "alb_1792597638805",
-      "id": "trk_1792611895502"
-    },
-    {
       "duration": "1:50",
       "title": "Загеев",
       "id": "trk_1792611847469",
@@ -267,6 +254,19 @@
       "coverFile": "",
       "filePath": "tracks/mc_makaka/МС Макака - Загеев.mp3",
       "createdAt": 1792611847469
+    },
+    {
+      "isNew": false,
+      "duration": "1:48",
+      "year": 2023,
+      "isExplicit": true,
+      "filePath": "tracks/mc_makaka/МС Макака - Не еби мне мозги.mp3",
+      "createdAt": 1792611895502,
+      "artistId": "mc_makaka",
+      "coverFile": "",
+      "title": "Не еби мне мозги",
+      "albumId": "alb_1792597638805",
+      "id": "trk_1792611895502"
     },
     {
       "artistId": "mc_makaka",
@@ -528,5 +528,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794054664683
+  "updatedAt": 1794054666123
 }
