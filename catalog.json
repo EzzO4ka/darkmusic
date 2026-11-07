@@ -230,19 +230,6 @@
       "id": "trk_1792611895502"
     },
     {
-      "title": "Шляпка гриба",
-      "filePath": "tracks/mc_makaka/МС Макака - Шляпка гриба.mp3",
-      "createdAt": 1792612000839,
-      "artistId": "mc_makaka",
-      "coverFile": "",
-      "year": 2023,
-      "id": "trk_1792612000839",
-      "isExplicit": true,
-      "isNew": false,
-      "duration": "2:01",
-      "albumId": "alb_1792597638805"
-    },
-    {
       "duration": "1:50",
       "title": "Загеев",
       "id": "trk_1792611847469",
@@ -254,6 +241,19 @@
       "coverFile": "",
       "filePath": "tracks/mc_makaka/МС Макака - Загеев.mp3",
       "createdAt": 1792611847469
+    },
+    {
+      "title": "Шляпка гриба",
+      "filePath": "tracks/mc_makaka/МС Макака - Шляпка гриба.mp3",
+      "createdAt": 1792612000839,
+      "artistId": "mc_makaka",
+      "coverFile": "",
+      "year": 2023,
+      "id": "trk_1792612000839",
+      "isExplicit": true,
+      "isNew": false,
+      "duration": "2:01",
+      "albumId": "alb_1792597638805"
     },
     {
       "artistId": "mc_makaka",
@@ -528,5 +528,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794054619763
+  "updatedAt": 1794054622179
 }
