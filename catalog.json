@@ -4,12 +4,12 @@
   "avatars": {
     "mc_geich": "avatars/mc_geich.jpg",
     "mc_makaka": "avatars/mc_makaka.jpg",
-    "mc_ezdit": "avatars/mc_ezdit.jpg"
+    "mc_ezdit": "avatars/mc_ezdittttt3.jpg"
   },
   "artistBanners": {
     "mc_geich": "banners/mc_geich2.jpg",
     "mc_makaka": "banners/mc_makaka2.jpg",
-    "mc_ezdit": "banners/mc_ezdit2.jpg"
+    "mc_ezdit": "banners/mc_ezdit333.jpg"
   },
   "artistNames": {
     "mc_geich": "МС ГЕИЧ",
@@ -104,7 +104,7 @@
       "role": "Рэп",
       "gradient": "from-amber-600 via-orange-950 to-zinc-950",
       "icon": "fa-gauge-high",
-      "avatarFile": "avatars/mc_ezdit.jpg",
+      "avatarFile": "avatars/mc_ezdittttt3.jpg",
       "bio": "Питерский рэп-исполнитель. Его главная фишка - записать вокал, одновременно выдумывая текст из головы. Все треки не имеют определённого смысла - и так нормально.",
       "facts": [
         "Его главная фишка - записать вокал, одновременно выдумывая текст из головы.",
@@ -115,7 +115,7 @@
       ],
       "isCustom": true,
       "createdAt": 1793576432923,
-      "bannerFile": "banners/mc_ezdit2.jpg"
+      "bannerFile": "banners/mc_ezdit333.jpg"
     }
   ],
   "customAlbums": [
@@ -544,5 +544,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794064051662
+  "updatedAt": 1794064196605
 }
