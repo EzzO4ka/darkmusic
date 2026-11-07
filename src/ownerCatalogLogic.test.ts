@@ -20,10 +20,15 @@ import {
   enqueuePlayNextTrack,
   dequeuePlayNextTrack,
   buildDeepLinkUrl,
+  formatShareMessageWithLink,
+  resolveCanonicalShareBaseUrl,
   parseDeepLinkParams,
   togglePersonalFavoriteTrack,
   buildTrackActionsDescriptor,
   resolveDesktopRightSidebarLayout,
+  resolveDesktopLeftSidebarLayout,
+  reorderScopedTracks,
+  resolveNextTrackInContext,
   isValidGitHubTokenFormat,
   resolveFullscreenPlayerBackdropUrl,
   shouldProtectOwnerCatalogFromStaleSync,
@@ -153,17 +158,18 @@ test('formatCollaborationArtistsLabel joins artists with a comma without feat an
   assert.equal(entityHasArtist(videoClip, 'mc_ezdit'), false);
 });
 
-test('isVersionBlockedByForceUpdate blocks v1.0, v2.0, v3.0 and allows current v3.1', () => {
+test('isVersionBlockedByForceUpdate blocks v1.0, v2.0, v3.0, v3.1 and allows current v4.0', () => {
   const forceConfig = {
     active: true,
-    requiredVersion: 3.1,
-    blockedVersions: [1.0, 2.0, 3.0]
+    requiredVersion: 4.0,
+    blockedVersions: [1.0, 2.0, 3.0, 3.1]
   };
   assert.equal(isVersionBlockedByForceUpdate(1.0, forceConfig, false), true);
   assert.equal(isVersionBlockedByForceUpdate(2.0, forceConfig, false), true);
   assert.equal(isVersionBlockedByForceUpdate(3.0, forceConfig, false), true);
-  assert.equal(isVersionBlockedByForceUpdate(3.1, forceConfig, false), false);
-  assert.equal(isVersionBlockedByForceUpdate(3.0, forceConfig, true), false);
+  assert.equal(isVersionBlockedByForceUpdate(3.1, forceConfig, false), true);
+  assert.equal(isVersionBlockedByForceUpdate(4.0, forceConfig, false), false);
+  assert.equal(isVersionBlockedByForceUpdate(3.1, forceConfig, true), false);
 });
 
 test('nextMonotonicTimestamp always advances past future catalog timestamps and shouldPopulateOwnerFormField never overwrites dirty or unlocked owner inputs', () => {
@@ -246,12 +252,12 @@ test('enqueuePlayNextTrack, dequeuePlayNextTrack, buildDeepLinkUrl, parseDeepLin
   assert.equal(step1.nextTrackId, 'trk_20');
   assert.deepEqual(step1.remainingQueue, ['trk_10']);
 
-  const trackUrl = buildDeepLinkUrl('https://ezzo4ka.github.io/index.html?v=3.1', 'track', 'trk_123');
+  const trackUrl = buildDeepLinkUrl('https://ezzo4ka.github.io/index.html?v=4.0', 'track', 'trk_123');
   assert.equal(trackUrl, 'https://ezzo4ka.github.io/index.html?track=trk_123');
   assert.deepEqual(parseDeepLinkParams('?track=trk_123'), { entityType: 'track', entityId: 'trk_123' });
-  assert.deepEqual(parseDeepLinkParams('?album=alb_55'), { entityType: 'album', entityId: 'alb_55' });
+  assert.deepEqual(parseDeepLinkParams('darkmusic://open?album=alb_55'), { entityType: 'album', entityId: 'alb_55' });
   assert.deepEqual(parseDeepLinkParams('?artist=mc_geich'), { entityType: 'artist', entityId: 'mc_geich' });
-  assert.equal(parseDeepLinkParams('?v=3.1'), null);
+  assert.equal(parseDeepLinkParams('?v=4.0'), null);
 
   const fav1 = togglePersonalFavoriteTrack([], 'trk_10');
   assert.equal(fav1.isAdded, true);
@@ -293,6 +299,17 @@ test('buildTrackActionsDescriptor and resolveDesktopRightSidebarLayout return ac
     sidebarState: 'collapsed',
     sidebarHidden: true,
     centerWorkspaceExpanded: true
+  });
+
+  assert.deepEqual(resolveDesktopLeftSidebarLayout(false), {
+    sidebarState: 'open',
+    isMiniRail: false,
+    widthPx: 290
+  });
+  assert.deepEqual(resolveDesktopLeftSidebarLayout(true), {
+    sidebarState: 'collapsed',
+    isMiniRail: true,
+    widthPx: 76
   });
 
   assert.equal(isValidGitHubTokenFormat('ghp_1234567890abcdefghijklmnopqrstuvwx'), true);
@@ -373,4 +390,99 @@ test('buildTrackActionsDescriptor and resolveDesktopRightSidebarLayout return ac
     ['mc_ezdit', 'mc_geich']
   );
 });
+
+test('reorderScopedTracks moves tracks up and down within an artist or album scope without disturbing unrelated tracks', () => {
+  const catalogTracks = [
+    { id: 't1', artistId: 'mc_geich', albumId: 'a1' },
+    { id: 't2', artistId: 'mc_makaka', albumId: 'a2' },
+    { id: 't3', artistId: 'mc_geich', albumId: 'a1' },
+    { id: 't4', artistId: 'mc_geich', albumId: 'a1' }
+  ];
+
+  // Move t3 up within mc_geich's tracks -> swaps t3 (index 2) with t1 (index 0), keeping t2 at index 1!
+  const step1 = reorderScopedTracks(
+    catalogTracks,
+    't3',
+    'up',
+    (t) => t.artistId === 'mc_geich'
+  );
+  assert.equal(step1.moved, true);
+  assert.deepEqual(
+    step1.reordered.map((t) => t.id),
+    ['t3', 't2', 't1', 't4']
+  );
+
+  // Move t1 down within mc_geich's tracks -> swaps t1 (index 2) with t4 (index 3)
+  const step2 = reorderScopedTracks(
+    step1.reordered,
+    't1',
+    'down',
+    (t) => t.artistId === 'mc_geich'
+  );
+  assert.equal(step2.moved, true);
+  assert.deepEqual(
+    step2.reordered.map((t) => t.id),
+    ['t3', 't2', 't4', 't1']
+  );
+});
+
+test('formatShareMessageWithLink converts file:// and localhost paths into public https://ezzo4ka.github.io URLs with Russian message', () => {
+  assert.equal(
+    resolveCanonicalShareBaseUrl('file:///C:/Users/Admin/AppData/Local/Programs/dark-music/resources/app.asar/index.html'),
+    'https://ezzo4ka.github.io/'
+  );
+  assert.equal(
+    resolveCanonicalShareBaseUrl('http://localhost:3000/index.html'),
+    'https://ezzo4ka.github.io/'
+  );
+
+  const shareTrack = formatShareMessageWithLink({
+    entityType: 'track',
+    entityId: 'trk_1793566754812',
+    title: 'Лирика Житухи',
+    artistLabel: 'МС ЕЗДИТЬ, МС ГЕИЧ',
+    currentHref: 'file:///C:/DarkMusic/index.html'
+  });
+  assert.equal(shareTrack.url, 'https://ezzo4ka.github.io/?track=trk_1793566754812');
+  assert.equal(
+    shareTrack.shareText,
+    '🎧 Слушайте в Dark Music: МС ЕЗДИТЬ, МС ГЕИЧ — Лирика Житухи\nhttps://ezzo4ka.github.io/?track=trk_1793566754812'
+  );
+});
+
+test('resolveNextTrackInContext plays album and artist tracks sequentially instead of jumping to random global tracks', () => {
+  const allIds = ['trk_global_1', 'trk_alb_1', 'trk_alb_2', 'trk_alb_3', 'trk_global_2'];
+  const albumIds = ['trk_alb_1', 'trk_alb_2', 'trk_alb_3'];
+
+  const next1 = resolveNextTrackInContext({
+    contextTrackIds: albumIds,
+    allTrackIds: allIds,
+    currentTrackId: 'trk_alb_1',
+    playNextQueue: [],
+    isShuffle: false,
+    direction: 'next'
+  });
+  assert.equal(next1.nextTrackId, 'trk_alb_2');
+
+  const next2 = resolveNextTrackInContext({
+    contextTrackIds: albumIds,
+    allTrackIds: allIds,
+    currentTrackId: 'trk_alb_3',
+    playNextQueue: [],
+    isShuffle: false,
+    direction: 'next'
+  });
+  assert.equal(next2.nextTrackId, 'trk_alb_1');
+
+  const prev1 = resolveNextTrackInContext({
+    contextTrackIds: albumIds,
+    allTrackIds: allIds,
+    currentTrackId: 'trk_alb_1',
+    playNextQueue: [],
+    isShuffle: false,
+    direction: 'prev'
+  });
+  assert.equal(prev1.nextTrackId, 'trk_alb_3');
+});
+
 

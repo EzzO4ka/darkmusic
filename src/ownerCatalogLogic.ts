@@ -436,7 +436,7 @@ export function isVersionBlockedByForceUpdate(
   if (!forceUpdate || !forceUpdate.active || isOwnerUnlocked) {
     return false;
   }
-  const reqVer = Number(forceUpdate.requiredVersion) || 3.1;
+  const reqVer = Number(forceUpdate.requiredVersion) || 4.0;
   const blockedList = Array.isArray(forceUpdate.blockedVersions)
     ? forceUpdate.blockedVersions.map((v) => Number(v)).filter((v) => !Number.isNaN(v) && v < reqVer - 0.0001)
     : [];
@@ -546,22 +546,100 @@ export function dequeuePlayNextTrack(
 
 export type ShareEntityType = 'track' | 'album' | 'artist';
 
+export const DEFAULT_PUBLIC_SHARE_ORIGIN = 'https://ezzo4ka.github.io/';
+
+export function resolveCanonicalShareBaseUrl(
+  currentHref: string,
+  defaultPublicOrigin: string = DEFAULT_PUBLIC_SHARE_ORIGIN
+): string {
+  const raw = String(currentHref || '').trim();
+  if (!raw) return defaultPublicOrigin;
+  if (/^(file:|capacitor:|ionic:|app:|about:|data:|blob:)/i.test(raw)) {
+    return defaultPublicOrigin;
+  }
+  try {
+    const u = new URL(raw);
+    if (
+      u.protocol !== 'http:' &&
+      u.protocol !== 'https:'
+    ) {
+      return defaultPublicOrigin;
+    }
+    if (
+      u.hostname === 'localhost' ||
+      u.hostname === '127.0.0.1' ||
+      u.hostname === '0.0.0.0' ||
+      u.hostname.endsWith('.local')
+    ) {
+      return defaultPublicOrigin;
+    }
+    u.search = '';
+    u.hash = '';
+    return u.toString();
+  } catch {
+    return defaultPublicOrigin;
+  }
+}
+
 export function buildDeepLinkUrl(
   baseUrl: string,
   entityType: ShareEntityType,
   entityId: string
 ): string {
-  const cleanBase = String(baseUrl || '').split('?')[0].split('#')[0];
+  const canonicalBase = resolveCanonicalShareBaseUrl(baseUrl);
+  const cleanBase = String(canonicalBase || DEFAULT_PUBLIC_SHARE_ORIGIN).split('?')[0].split('#')[0];
   const cleanId = encodeURIComponent(String(entityId || '').trim());
   return `${cleanBase}?${entityType}=${cleanId}`;
+}
+
+export function formatShareMessageWithLink(params: {
+  entityType: ShareEntityType;
+  entityId: string;
+  title: string;
+  artistLabel?: string | null;
+  currentHref: string;
+  defaultPublicOrigin?: string;
+}): { url: string; shareText: string } {
+  const base = resolveCanonicalShareBaseUrl(
+    params.currentHref,
+    params.defaultPublicOrigin || DEFAULT_PUBLIC_SHARE_ORIGIN
+  );
+  const url = buildDeepLinkUrl(base, params.entityType, params.entityId);
+  const cleanTitle = String(params.title || '').trim() || 'Dark Music';
+  const cleanArtist = String(params.artistLabel || '').trim();
+
+  if (params.entityType === 'track') {
+    const label = cleanArtist ? `${cleanArtist} — ${cleanTitle}` : cleanTitle;
+    return {
+      url,
+      shareText: `🎧 Слушайте в Dark Music: ${label}\n${url}`
+    };
+  }
+  if (params.entityType === 'album') {
+    const label = cleanArtist ? `${cleanArtist} — ${cleanTitle}` : cleanTitle;
+    return {
+      url,
+      shareText: `🎧 Слушайте релиз в Dark Music: ${label}\n${url}`
+    };
+  }
+  return {
+    url,
+    shareText: `🎧 Слушайте артиста в Dark Music: ${cleanTitle}\n${url}`
+  };
 }
 
 export function parseDeepLinkParams(
   searchStr: string
 ): { entityType: ShareEntityType; entityId: string } | null {
-  const raw = String(searchStr || '').replace(/^\?/, '').trim();
+  const raw = String(searchStr || '').trim();
   if (!raw) return null;
-  const params = new URLSearchParams(raw);
+  let queryPart = raw;
+  if (raw.includes('?')) {
+    queryPart = raw.slice(raw.indexOf('?') + 1);
+  }
+  queryPart = queryPart.split('#')[0].replace(/^\?/, '').trim();
+  if (!queryPart) return null;
+  const params = new URLSearchParams(queryPart);
   const track = params.get('track')?.trim();
   if (track) return { entityType: 'track', entityId: track };
   const album = params.get('album')?.trim();
@@ -637,6 +715,97 @@ export function resolveDesktopRightSidebarLayout(isCollapsed: boolean): {
   };
 }
 
+export function resolveDesktopLeftSidebarLayout(isCollapsed: boolean): {
+  sidebarState: 'collapsed' | 'open';
+  isMiniRail: boolean;
+  widthPx: number;
+} {
+  const collapsed = Boolean(isCollapsed);
+  return {
+    sidebarState: collapsed ? 'collapsed' : 'open',
+    isMiniRail: collapsed,
+    widthPx: collapsed ? 76 : 290
+  };
+}
+
+export function reorderScopedTracks<T extends { id: string }>(
+  tracks: T[],
+  targetId: string,
+  direction: 'up' | 'down',
+  predicate?: (track: T) => boolean
+): { reordered: T[]; moved: boolean } {
+  if (!Array.isArray(tracks) || tracks.length < 2) {
+    return { reordered: Array.isArray(tracks) ? [...tracks] : [], moved: false };
+  }
+  const matchIndices: number[] = [];
+  for (let i = 0; i < tracks.length; i++) {
+    if (!predicate || predicate(tracks[i])) {
+      matchIndices.push(i);
+    }
+  }
+  const posInScope = matchIndices.findIndex((idx) => tracks[idx]?.id === targetId);
+  if (posInScope === -1) {
+    return { reordered: [...tracks], moved: false };
+  }
+  const neighborPosInScope = direction === 'up' ? posInScope - 1 : posInScope + 1;
+  if (neighborPosInScope < 0 || neighborPosInScope >= matchIndices.length) {
+    return { reordered: [...tracks], moved: false };
+  }
+  const actualIdxA = matchIndices[posInScope];
+  const actualIdxB = matchIndices[neighborPosInScope];
+  const copy = [...tracks];
+  const temp = copy[actualIdxA];
+  copy[actualIdxA] = copy[actualIdxB];
+  copy[actualIdxB] = temp;
+  return { reordered: copy, moved: true };
+}
+
+export function resolveNextTrackInContext(params: {
+  contextTrackIds: string[];
+  allTrackIds: string[];
+  currentTrackId: string | null | undefined;
+  playNextQueue: string[];
+  isShuffle: boolean;
+  direction?: 'next' | 'prev';
+  randomIndexFn?: (length: number) => number;
+}): { nextTrackId: string | null; remainingQueue: string[] } {
+  const allValid = new Set(params.allTrackIds || []);
+  const dir = params.direction || 'next';
+
+  if (dir === 'next' && Array.isArray(params.playNextQueue) && params.playNextQueue.length > 0) {
+    const dequeued = dequeuePlayNextTrack(params.playNextQueue, allValid);
+    if (dequeued.nextTrackId) {
+      return dequeued;
+    }
+  }
+
+  const activePool = (Array.isArray(params.contextTrackIds) ? params.contextTrackIds : []).filter((id) =>
+    allValid.has(id)
+  );
+  const pool = activePool.length > 0 ? activePool : Array.from(allValid);
+  if (pool.length === 0) {
+    return { nextTrackId: null, remainingQueue: params.playNextQueue || [] };
+  }
+
+  const curId = params.currentTrackId || null;
+  if (params.isShuffle && pool.length > 1 && dir === 'next') {
+    const candidates = pool.filter((id) => id !== curId);
+    const pickFn = params.randomIndexFn || ((len: number) => Math.floor(Math.random() * len));
+    const chosen = candidates[Math.max(0, Math.min(candidates.length - 1, pickFn(candidates.length)))];
+    return { nextTrackId: chosen || pool[0], remainingQueue: params.playNextQueue || [] };
+  }
+
+  const idx = curId ? pool.indexOf(curId) : -1;
+  if (idx === -1) {
+    return { nextTrackId: pool[0], remainingQueue: params.playNextQueue || [] };
+  }
+  const nextIdx = dir === 'prev' ? (idx - 1 + pool.length) % pool.length : (idx + 1) % pool.length;
+  return {
+    nextTrackId: pool[nextIdx],
+    remainingQueue: params.playNextQueue || []
+  };
+}
+
 export function isValidGitHubTokenFormat(tokenStr?: string | null): boolean {
   if (!tokenStr || typeof tokenStr !== 'string') return false;
   const clean = tokenStr.trim();
@@ -696,5 +865,6 @@ export function resolveRightSidebarArtistCards<T extends { id: string }>(
   }
   return cards;
 }
+
 
 
