@@ -130,6 +130,16 @@
   ],
   "customAlbums": [
     {
+      "id": "alb_1794065945442",
+      "title": "115 причин не ехать в Выборг",
+      "artistId": "mc_ezdit",
+      "type": "СИНГЛ",
+      "year": 2026,
+      "coverFile": "covers/alb_115__________________________1794065944373.jpg",
+      "gradient": "from-emerald-600 via-teal-900 to-zinc-950",
+      "isExplicit": true
+    },
+    {
       "isExplicit": true,
       "year": 2023,
       "coverFile": "covers/alb_zageev.jpg",
@@ -564,5 +574,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794065500834
+  "updatedAt": 1794065945443
 }
