@@ -256,19 +256,6 @@
       "albumId": "alb_1792597638805"
     },
     {
-      "artistId": "mc_makaka",
-      "year": 2023,
-      "coverFile": "",
-      "title": "Моя любовь",
-      "filePath": "tracks/mc_makaka/МС Макака - Моя любовь.mp3",
-      "albumId": "alb_1792597638805",
-      "createdAt": 1792605485661,
-      "duration": "1:25",
-      "isExplicit": true,
-      "id": "trk_1792605485661",
-      "isNew": false
-    },
-    {
       "title": "Милена спрыгнула с окна",
       "year": 2023,
       "filePath": "tracks/mc_makaka/МС_Макака_Милена_спрыгнула_с_окна.mp3",
@@ -280,6 +267,19 @@
       "isNew": false,
       "coverFile": "",
       "duration": "2:00"
+    },
+    {
+      "artistId": "mc_makaka",
+      "year": 2023,
+      "coverFile": "",
+      "title": "Моя любовь",
+      "filePath": "tracks/mc_makaka/МС Макака - Моя любовь.mp3",
+      "albumId": "alb_1792597638805",
+      "createdAt": 1792605485661,
+      "duration": "1:25",
+      "isExplicit": true,
+      "id": "trk_1792605485661",
+      "isNew": false
     },
     {
       "isNew": false,
@@ -528,5 +528,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794054630378
+  "updatedAt": 1794054632324
 }
