@@ -151,6 +151,19 @@
   ],
   "customTracks": [
     {
+      "id": "trk_1794062482767",
+      "title": "115 причин не ехать в Выборг",
+      "artistId": "mc_ezdit",
+      "albumId": "",
+      "filePath": "tracks/mc_ezdit/Untitled-Bounce.mp3",
+      "coverFile": "covers/Ночная операция отклонена.png",
+      "duration": "2:27",
+      "year": 2026,
+      "isNew": true,
+      "isExplicit": true,
+      "createdAt": 1794062482768
+    },
+    {
       "id": "trk_1793566754812",
       "title": "Лирика Житухи",
       "artistId": "mc_ezdit",
@@ -160,7 +173,7 @@
       "coverFile": "",
       "duration": "2:57",
       "year": 2026,
-      "isNew": true,
+      "isNew": false,
       "isExplicit": true,
       "createdAt": 1793566754812
     },
@@ -529,5 +542,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794061006674
+  "updatedAt": 1794062490638
 }
