@@ -1,8 +1,91 @@
 const { app, BrowserWindow, shell } = require('electron');
 const path = require('path');
 
+let mainWindow = null;
+let pendingDeepLinkUrl = null;
+
+function extractDeepLinkFromArgv(argv) {
+  if (!Array.isArray(argv)) return null;
+  for (const arg of argv) {
+    if (typeof arg === 'string' && /^darkmusic:\/\//i.test(arg.trim())) {
+      return arg.trim();
+    }
+  }
+  return null;
+}
+
+function parseDeepLinkQuery(rawUrl) {
+  if (!rawUrl || typeof rawUrl !== 'string') return {};
+  try {
+    const idx = rawUrl.indexOf('?');
+    if (idx === -1) return {};
+    const searchParams = new URLSearchParams(rawUrl.slice(idx + 1).split('#')[0]);
+    const query = {};
+    for (const [k, v] of searchParams.entries()) {
+      if (k === 'track' || k === 'album' || k === 'artist') {
+        query[k] = v;
+      }
+    }
+    return query;
+  } catch {
+    return {};
+  }
+}
+
+function forwardDeepLinkToWindow(rawUrl) {
+  if (!rawUrl) return;
+  if (mainWindow && !mainWindow.isDestroyed() && mainWindow.webContents) {
+    const safeJson = JSON.stringify(String(rawUrl));
+    mainWindow.webContents
+      .executeJavaScript(
+        `if (typeof window.handleIncomingDeepLinkUrl === 'function') { window.handleIncomingDeepLinkUrl(${safeJson}); }`
+      )
+      .catch(() => {});
+  } else {
+    pendingDeepLinkUrl = rawUrl;
+  }
+}
+
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient('darkmusic', process.execPath, [path.resolve(process.argv[1])]);
+  }
+} else {
+  app.setAsDefaultProtocolClient('darkmusic');
+}
+
+const gotSingleInstanceLock = app.requestSingleInstanceLock();
+if (!gotSingleInstanceLock) {
+  app.quit();
+} else {
+  app.on('second-instance', (_event, commandLine) => {
+    const deepLink = extractDeepLinkFromArgv(commandLine);
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.show();
+      mainWindow.focus();
+    }
+    if (deepLink) {
+      forwardDeepLinkToWindow(deepLink);
+    }
+  });
+}
+
+app.on('open-url', (event, url) => {
+  event.preventDefault();
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.show();
+    mainWindow.focus();
+  }
+  forwardDeepLinkToWindow(url);
+});
+
 function createWindow() {
-  const win = new BrowserWindow({
+  const initialDeepLink = pendingDeepLinkUrl || extractDeepLinkFromArgv(process.argv);
+  const initialQuery = parseDeepLinkQuery(initialDeepLink);
+
+  mainWindow = new BrowserWindow({
     width: 1280,
     height: 820,
     minWidth: 900,
@@ -10,6 +93,7 @@ function createWindow() {
     backgroundColor: '#000000',
     autoHideMenuBar: true,
     show: false,
+    title: 'Dark Music - Music App',
     icon: path.join(__dirname, '..', 'build', 'icon.ico'),
     webPreferences: {
       nodeIntegration: false,
@@ -18,18 +102,36 @@ function createWindow() {
     }
   });
 
-  win.once('ready-to-show', () => win.show());
-  win.webContents.setWindowOpenHandler(({ url }) => {
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+    if (pendingDeepLinkUrl) {
+      const urlToOpen = pendingDeepLinkUrl;
+      pendingDeepLinkUrl = null;
+      forwardDeepLinkToWindow(urlToOpen);
+    }
+  });
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    if (initialDeepLink) {
+      forwardDeepLinkToWindow(initialDeepLink);
+    }
+  });
+
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (/^(https?:|mailto:)/i.test(url)) shell.openExternal(url);
     return { action: 'deny' };
   });
-  win.webContents.on('will-navigate', (event, url) => {
+
+  mainWindow.webContents.on('will-navigate', (event, url) => {
     if (!url.startsWith('file://')) {
       event.preventDefault();
       if (/^https?:/i.test(url)) shell.openExternal(url);
     }
   });
-  win.loadFile(path.join(__dirname, '..', 'index.html'));
+
+  mainWindow.loadFile(path.join(__dirname, '..', 'index.html'), {
+    query: initialQuery
+  });
 }
 
 app.whenReady().then(() => {
@@ -38,6 +140,8 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
+
