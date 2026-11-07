@@ -499,13 +499,13 @@
     "trk_1793291266274"
   ],
   "systemPushBroadcast": {
-    "id": "push_1794061006674",
-    "title": "ВНИМАНИЕ",
-    "message": "ПРИЛОЖЕНИЕ ОПЯТЬ ВЗЛОМАЛ ПИНТОГОН, ВАШИ ДАННЫЕ БЫЛИ СЪЕДЕНЫ МАМОЙ",
+    "id": "push_1794062663623",
+    "title": "🎵 Dark Music — Новый релиз!",
+    "message": "Слушайте новый трек резидентов лейбла в высоком качестве!",
     "imageFile": "logo.png",
     "active": true,
-    "createdAt": 1794061006674,
-    "updatedAt": 1794061006674
+    "createdAt": 1794062663623,
+    "updatedAt": 1794062663623
   },
   "tempBroadcast": {
     "id": "",
@@ -542,5 +542,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794062490638
+  "updatedAt": 1794062663623
 }
