@@ -218,19 +218,6 @@
     },
     {
       "isNew": false,
-      "duration": "1:48",
-      "year": 2023,
-      "isExplicit": true,
-      "filePath": "tracks/mc_makaka/МС Макака - Не еби мне мозги.mp3",
-      "createdAt": 1792611895502,
-      "artistId": "mc_makaka",
-      "coverFile": "",
-      "title": "Не еби мне мозги",
-      "albumId": "alb_1792597638805",
-      "id": "trk_1792611895502"
-    },
-    {
-      "isNew": false,
       "id": "trk_1792597676680",
       "duration": "2:29",
       "createdAt": 1792597676680,
@@ -241,6 +228,19 @@
       "title": "Маша ебанулась",
       "artistId": "mc_makaka",
       "albumId": "alb_1792597638805"
+    },
+    {
+      "isNew": false,
+      "duration": "1:48",
+      "year": 2023,
+      "isExplicit": true,
+      "filePath": "tracks/mc_makaka/МС Макака - Не еби мне мозги.mp3",
+      "createdAt": 1792611895502,
+      "artistId": "mc_makaka",
+      "coverFile": "",
+      "title": "Не еби мне мозги",
+      "albumId": "alb_1792597638805",
+      "id": "trk_1792611895502"
     },
     {
       "duration": "2:18",
@@ -528,5 +528,5 @@
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1794054637485
+  "updatedAt": 1794054638005
 }
