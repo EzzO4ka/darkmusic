@@ -204,19 +204,6 @@
       "albumId": ""
     },
     {
-      "title": "Шляпка гриба",
-      "filePath": "tracks/mc_makaka/МС Макака - Шляпка гриба.mp3",
-      "createdAt": 1792612000839,
-      "artistId": "mc_makaka",
-      "coverFile": "",
-      "year": 2023,
-      "id": "trk_1792612000839",
-      "isExplicit": true,
-      "isNew": false,
-      "duration": "2:01",
-      "albumId": "alb_1792597638805"
-    },
-    {
       "duration": "2:18",
       "id": "trk_1792611936565",
       "title": "Волшебная бутылочка",
@@ -228,6 +215,19 @@
       "albumId": "alb_1792597638805",
       "isExplicit": true,
       "coverFile": ""
+    },
+    {
+      "title": "Шляпка гриба",
+      "filePath": "tracks/mc_makaka/МС Макака - Шляпка гриба.mp3",
+      "createdAt": 1792612000839,
+      "artistId": "mc_makaka",
+      "coverFile": "",
+      "year": 2023,
+      "id": "trk_1792612000839",
+      "isExplicit": true,
+      "isNew": false,
+      "duration": "2:01",
+      "albumId": "alb_1792597638805"
     },
     {
       "isNew": false,
@@ -509,7 +509,7 @@
   },
   "forceUpdate": {
     "active": true,
-    "requiredVersion": 4.0,
+    "requiredVersion": 4,
     "blockedVersions": [
       1,
       2,
@@ -524,9 +524,9 @@
     "id": "wn_4_0",
     "title": "Что нового в v4.0?",
     "content": "Плавная анимация ползунков громкости и перемотки;\nСворачивание левой колонки на ПК в компактный режим (только иконки);\nЗапоминание последнего трека при выходе из приложения;\nПоследовательное воспроизведение внутри альбома и карточки артиста;\nКрасивые ссылки при отправке трека («Слушайте в Dark Music...») и открытие ссылок сразу в приложении.",
-    "version": 4.0,
+    "version": 4,
     "active": true,
     "updatedAt": 1793815000000
   },
-  "updatedAt": 1793815000000
+  "updatedAt": 1794054617816
 }
