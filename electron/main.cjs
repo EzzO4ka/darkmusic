@@ -112,7 +112,7 @@ function createWindow() {
   });
 
   mainWindow.webContents.on('did-finish-load', () => {
-    if (initialDeepLink) {
+    if (initialDeepLink && Object.keys(initialQuery).length === 0) {
       forwardDeepLinkToWindow(initialDeepLink);
     }
   });
