@@ -521,13 +521,12 @@
     "MCTEST"
   ],
   "systemPushBroadcast": {
-    "id": "push_1794062663623",
-    "title": "🎵 Dark Music — Новый релиз!",
-    "message": "Слушайте новый трек резидентов лейбла в высоком качестве!",
+    "id": "push_1794202530677",
+    "title": "Обновите версию приложения",
+    "message": "Скоро новая версия выйдет в GitHub. Старые версии заблокированы.",
     "imageFile": "logo.png",
     "active": true,
-    "createdAt": 1794062663623,
-    "updatedAt": 1794062663623
+    "createdAt": 1794202530677
   },
   "tempBroadcast": {
     "id": "",
@@ -565,5 +564,5 @@
     "active": true,
     "updatedAt": 1794100000000
   },
-  "updatedAt": 1794202483115
+  "updatedAt": 1794202530689
 }
