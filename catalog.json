@@ -184,9 +184,34 @@
       "isExplicit": true,
       "coverFile": "covers/alb_sosiska.jpg",
       "gradient": "from-rose-600 via-red-900 to-zinc-950"
+    },
+    {
+      "id": "alb_1794211260336",
+      "title": "Кто пчелок уважает",
+      "artistId": "art_ms_dolboeb_1794211002271",
+      "featArtistId": "",
+      "type": "СИНГЛ",
+      "year": 2026,
+      "isExplicit": false,
+      "coverFile": "covers/alb_pchelka.jpg",
+      "gradient": "from-emerald-600 via-teal-900 to-zinc-950"
     }
   ],
   "customTracks": [
+    {
+      "id": "trk_1794211260337",
+      "title": "Кто пчелок уважает",
+      "artistId": "art_ms_dolboeb_1794211002271",
+      "featArtistId": "",
+      "albumId": "alb_1794211260336",
+      "filePath": "tracks/mc_dolboeb/lv_0_20261109104108.mp3",
+      "coverFile": "covers/alb_pchelka.jpg",
+      "duration": "12:16",
+      "year": 2026,
+      "isNew": true,
+      "isExplicit": false,
+      "createdAt": 1794211260337
+    },
     {
       "id": "trk_1794062482767",
       "title": "115 причин не ехать в Выборг",
@@ -590,5 +615,5 @@
     "active": true,
     "updatedAt": 1794100000000
   },
-  "updatedAt": 1794211002342
+  "updatedAt": 1794211260421
 }
