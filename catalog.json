@@ -537,6 +537,15 @@
   ],
   "customNews": [
     {
+      "id": "news_1794211490281",
+      "title": "Новоиспеченный",
+      "targetId": "art_ms_dolboeb_1794211002271",
+      "dateText": "09.11.26",
+      "imageFile": "avatars/dolboeb.jpg",
+      "content": "Вышел новый долбоёб с новым треком. Дословно - МС ДОЛБОЁБ",
+      "createdAt": 1794211490282
+    },
+    {
       "id": "news_1794064715382",
       "title": "Новый релиз от МС ЕЗДИТЬ",
       "targetId": "app",
@@ -615,5 +624,5 @@
     "active": true,
     "updatedAt": 1794100000000
   },
-  "updatedAt": 1794211260421
+  "updatedAt": 1794211490320
 }
