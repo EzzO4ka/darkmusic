@@ -426,14 +426,14 @@ test('reorderScopedTracks moves tracks up and down within an artist or album sco
   );
 });
 
-test('formatShareMessageWithLink converts file:// and localhost paths into public https://ezzo4ka.github.io URLs with Russian message', () => {
+test('formatShareMessageWithLink converts file:// and localhost paths into public https://ezzo4ka.github.io/darkmusic/ URLs with Russian message', () => {
   assert.equal(
     resolveCanonicalShareBaseUrl('file:///C:/Users/Admin/AppData/Local/Programs/dark-music/resources/app.asar/index.html'),
-    'https://ezzo4ka.github.io/'
+    'https://ezzo4ka.github.io/darkmusic/'
   );
   assert.equal(
     resolveCanonicalShareBaseUrl('http://localhost:3000/index.html'),
-    'https://ezzo4ka.github.io/'
+    'https://ezzo4ka.github.io/darkmusic/'
   );
 
   const shareTrack = formatShareMessageWithLink({
@@ -443,10 +443,10 @@ test('formatShareMessageWithLink converts file:// and localhost paths into publi
     artistLabel: 'МС ЕЗДИТЬ, МС ГЕИЧ',
     currentHref: 'file:///C:/DarkMusic/index.html'
   });
-  assert.equal(shareTrack.url, 'https://ezzo4ka.github.io/?track=trk_1793566754812');
+  assert.equal(shareTrack.url, 'https://ezzo4ka.github.io/darkmusic/?track=trk_1793566754812');
   assert.equal(
     shareTrack.shareText,
-    '🎧 Слушайте в Dark Music: МС ЕЗДИТЬ, МС ГЕИЧ — Лирика Житухи\nhttps://ezzo4ka.github.io/?track=trk_1793566754812'
+    '🎧 Слушайте в Dark Music: МС ЕЗДИТЬ, МС ГЕИЧ — Лирика Житухи\nhttps://ezzo4ka.github.io/darkmusic/?track=trk_1793566754812'
   );
 });
 

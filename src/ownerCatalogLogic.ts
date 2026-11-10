@@ -546,7 +546,7 @@ export function dequeuePlayNextTrack(
 
 export type ShareEntityType = 'track' | 'album' | 'artist';
 
-export const DEFAULT_PUBLIC_SHARE_ORIGIN = 'https://ezzo4ka.github.io/';
+export const DEFAULT_PUBLIC_SHARE_ORIGIN = 'https://ezzo4ka.github.io/darkmusic/';
 
 export function resolveCanonicalShareBaseUrl(
   currentHref: string,
