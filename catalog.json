@@ -608,11 +608,13 @@
     "blockedVersions": [
       1,
       2,
-      3
+      3,
+      3.1,
+      4
     ],
-    "downloadUrl": "https://ezzo4ka.github.io/darkmusic/",
-    "message": "Данная версия недоступна. Пожалуйста, скачайте новую версию по кнопке [\"Скачать новую версию\"]",
-    "updatedAt": 1794301517354
+    "downloadUrl": "https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.1",
+    "message": "Данная версия больше не работает. Установите новую по кнопке ниже.",
+    "updatedAt": 1794307825680
   },
   "whatsNew": {
     "id": "wn_4_1",
@@ -622,5 +624,5 @@
     "active": true,
     "updatedAt": 1794100000000
   },
-  "updatedAt": 1794301517369
+  "updatedAt": 1794307825686
 }
