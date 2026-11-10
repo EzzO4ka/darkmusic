@@ -12,9 +12,9 @@
 веществ, их аналогов причиняет вред здоровью, их незаконный оборот
 запрещен и влечет установленную законодательством ответственность`
 
-[![Version](https://img.shields.io/badge/версия-v4.0-a855f7?style=for-the-badge)](https://github.com/EzzO4ka/darkmusic)
-[![Platform](https://img.shields.io/badge/платформа-Android%20%7C%20Desktop%20%7C%20Web-18181b?style=for-the-badge)](https://github.com/EzzO4ka/darkmusic)
-[![Content](https://img.shields.io/badge/контент-18%2B%20Без%20цензуры-f43f5e?style=for-the-badge)](https://github.com/EzzO4ka/darkmusic)
+[![Version](https://img.shields.io/badge/версия-v4.1-a855f7?style=for-the-badge)](https://ezzo4ka.github.io/darkmusic/)
+[![Platform](https://img.shields.io/badge/платформа-Android%20%7C%20Desktop%20%7C%20Web-18181b?style=for-the-badge)](https://ezzo4ka.github.io/darkmusic/)
+[![Content](https://img.shields.io/badge/контент-18%2B%20%20-f43f5e?style=for-the-badge)](https://ezzo4ka.github.io/darkmusic/)
 
 </div>
 
