@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/logo.png" alt="Dark Music Logo" width="110" height="110" style="border-radius: 24px;">
 
-# DARK MUSIC v4.0
+# DARK MUSIC v4.1
 
 **Эксклюзивный музыкальный стриминговый сервис**
 
