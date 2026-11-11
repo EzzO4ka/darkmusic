@@ -199,45 +199,6 @@
   ],
   "customTracks": [
     {
-      "id": "trk_1794425567692",
-      "title": "_67_Six_Seven_80858207",
-      "artistId": "art_ms_dolboeb_1794211002271",
-      "albumId": "",
-      "filePath": "tracks/art_ms_dolboeb_1794211002271/Gazan_-_67_Six_Seven_80858207.mp3",
-      "coverFile": "covers/m8Z_i7dYOC-hbbcSduRqDS73mO4BLk8e-INZnmHe2T4E2Te85b2nHyif9_EPEkS9iuHkBAev5yrIMavJfBKgtxHI.jpg",
-      "duration": "1:23",
-      "year": 2026,
-      "isNew": true,
-      "isExplicit": true,
-      "createdAt": 1794425567692
-    },
-    {
-      "id": "trk_1794425557522",
-      "title": "_Ty_ne_bojjsya_nochi_81423717",
-      "artistId": "art_ms_dolboeb_1794211002271",
-      "albumId": "",
-      "filePath": "tracks/art_ms_dolboeb_1794211002271/ENZRO_-_Ty_ne_bojjsya_nochi_81423717.mp3",
-      "coverFile": "covers/images (1).jpg",
-      "duration": "3:38",
-      "year": 2026,
-      "isNew": true,
-      "isExplicit": true,
-      "createdAt": 1794425557522
-    },
-    {
-      "id": "trk_1794425548423",
-      "title": "_DINASTIYA_81965580",
-      "artistId": "art_ms_dolboeb_1794211002271",
-      "albumId": "",
-      "filePath": "tracks/art_ms_dolboeb_1794211002271/VILLIAN_madk1d_-_DINASTIYA_81965580.mp3",
-      "coverFile": "covers/images (2).jpg",
-      "duration": "2:30",
-      "year": 2026,
-      "isNew": true,
-      "isExplicit": true,
-      "createdAt": 1794425548423
-    },
-    {
       "id": "trk_1794211260337",
       "title": "Кто пчелок уважает",
       "artistId": "art_ms_dolboeb_1794211002271",
@@ -628,7 +589,10 @@
     "news_1793576344447",
     "alb_1793291266274",
     "trk_1793291266274",
-    "MCTEST"
+    "MCTEST",
+    "trk_1794425567692",
+    "trk_1794425557522",
+    "trk_1794425548423"
   ],
   "systemPushBroadcast": {
     "id": "",
@@ -675,5 +639,5 @@
     "active": true,
     "updatedAt": 1794397699559
   },
-  "updatedAt": 1794425580252
+  "updatedAt": 1794425854280
 }
