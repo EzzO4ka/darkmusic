@@ -489,6 +489,18 @@
   ],
   "customVideos": [
     {
+      "id": "vid_1794420741450",
+      "title": "115 причин не ехать в Выборг",
+      "artistId": "mc_ezdit",
+      "featArtistId": "",
+      "year": 2026,
+      "previewFile": "covers/viborg_yt.jpg",
+      "videoSource": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/h-FZpeTxgNc?si=yKKnXQrENm8KqaD4\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+      "duration": "2:27",
+      "isExplicit": true,
+      "createdAt": 1794420741450
+    },
+    {
       "id": "vid_1793814480289",
       "title": "Волшебная бутылочка",
       "artistId": "mc_makaka",
@@ -624,5 +636,5 @@
     "active": true,
     "updatedAt": 1794397699559
   },
-  "updatedAt": 1794397699566
+  "updatedAt": 1794420741459
 }
