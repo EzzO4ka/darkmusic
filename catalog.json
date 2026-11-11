@@ -606,15 +606,16 @@
     "id": "",
     "title": "Объявление Dark Music",
     "message": "Некоторые клипы получится посмотреть только с VPN - потому что эти клипы транслируются через YouTube.",
-    "active": false,
-    "createdAt": 1793615799053
+    "active": true,
+    "createdAt": 1793615799053,
+    "updatedAt": 1794423492150
   },
   "pinnedBroadcast": {
     "id": "",
     "title": "Ведутся технические работы",
     "message": "Временно возможны перебои в работе приложения.",
     "active": false,
-    "updatedAt": 1794307891426
+    "updatedAt": 1794423489388
   },
   "forceUpdate": {
     "active": true,
@@ -639,5 +640,5 @@
     "active": true,
     "updatedAt": 1794397699559
   },
-  "updatedAt": 1794423428963
+  "updatedAt": 1794423492150
 }
