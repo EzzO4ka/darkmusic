@@ -594,12 +594,12 @@
     "MCTEST"
   ],
   "systemPushBroadcast": {
-    "id": "push_1794423845512",
+    "id": "",
     "title": "🎵 Dark Music — Новый релиз!",
     "message": "Слушайте новый трек резидентов лейбла в высоком качестве!",
     "imageFile": "logo.png",
-    "active": true,
-    "createdAt": 1794423845512
+    "active": false,
+    "createdAt": 1794423915912
   },
   "tempBroadcast": {
     "id": "tmp_1794423824914",
@@ -638,5 +638,5 @@
     "active": true,
     "updatedAt": 1794397699559
   },
-  "updatedAt": 1794423858290
+  "updatedAt": 1794423915916
 }
