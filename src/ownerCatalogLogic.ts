@@ -436,7 +436,7 @@ export function isVersionBlockedByForceUpdate(
   if (!forceUpdate || !forceUpdate.active || isOwnerUnlocked) {
     return false;
   }
-  const reqVer = Number(forceUpdate.requiredVersion) || 4.0;
+  const reqVer = Number(forceUpdate.requiredVersion) || 4.2;
   const blockedList = Array.isArray(forceUpdate.blockedVersions)
     ? forceUpdate.blockedVersions.map((v) => Number(v)).filter((v) => !Number.isNaN(v) && v < reqVer - 0.0001)
     : [];
@@ -886,10 +886,10 @@ export const APP_THEMES: Record<AppThemeId, AppThemeDescriptor> = {
   },
   ps5: {
     id: 'ps5',
-    shortLabel: 'PS5 Неон',
-    fullLabel: 'Новая (PS5 Media)',
-    description: 'Космический неон, свечение и консольный интерфейс Медиа',
-    icon: 'fa-gamepad'
+    shortLabel: 'Неон',
+    fullLabel: 'Неоновая (Стеклянная)',
+    description: 'Полупрозрачный стеклянный интерфейс и космические обои со свечением',
+    icon: 'fa-wand-magic-sparkles'
   },
   light: {
     id: 'light',

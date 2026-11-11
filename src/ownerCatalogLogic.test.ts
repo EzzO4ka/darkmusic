@@ -162,18 +162,22 @@ test('formatCollaborationArtistsLabel joins artists with a comma without feat an
   assert.equal(entityHasArtist(videoClip, 'mc_ezdit'), false);
 });
 
-test('isVersionBlockedByForceUpdate blocks v1.0, v2.0, v3.0, v3.1 and allows current v4.0', () => {
+test('isVersionBlockedByForceUpdate blocks v1.0, v2.0, v3.0, v3.1, v4.0, v4.1 and allows current v4.2', () => {
   const forceConfig = {
     active: true,
-    requiredVersion: 4.0,
-    blockedVersions: [1.0, 2.0, 3.0, 3.1]
+    requiredVersion: 4.2,
+    blockedVersions: [1.0, 2.0, 3.0, 3.1, 4.0, 4.1]
   };
   assert.equal(isVersionBlockedByForceUpdate(1.0, forceConfig, false), true);
   assert.equal(isVersionBlockedByForceUpdate(2.0, forceConfig, false), true);
   assert.equal(isVersionBlockedByForceUpdate(3.0, forceConfig, false), true);
   assert.equal(isVersionBlockedByForceUpdate(3.1, forceConfig, false), true);
-  assert.equal(isVersionBlockedByForceUpdate(4.0, forceConfig, false), false);
-  assert.equal(isVersionBlockedByForceUpdate(3.1, forceConfig, true), false);
+  assert.equal(isVersionBlockedByForceUpdate(4.0, forceConfig, false), true);
+  assert.equal(isVersionBlockedByForceUpdate(4.1, forceConfig, false), true);
+  assert.equal(isVersionBlockedByForceUpdate(4.2, forceConfig, false), false);
+  assert.equal(isVersionBlockedByForceUpdate(4.1, forceConfig, true), false);
+  assert.equal(APP_THEMES.ps5.shortLabel.includes('PS5'), false);
+  assert.equal(APP_THEMES.ps5.fullLabel.includes('PS5'), false);
 });
 
 test('nextMonotonicTimestamp always advances past future catalog timestamps and shouldPopulateOwnerFormField never overwrites dirty or unlocked owner inputs', () => {

@@ -86,8 +86,8 @@ jobs:
                   applicationId "com.darkmusic.app"
                   minSdk 24
                   targetSdk 34
-                  versionCode 31
-                  versionName "3.1"
+                  versionCode 42
+                  versionName "4.2"
               }
 
               buildTypes {
@@ -143,6 +143,18 @@ jobs:
                       <intent-filter>
                           <action android:name="android.intent.action.MAIN" />
                           <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+                      <intent-filter>
+                          <action android:name="android.intent.action.VIEW" />
+                          <category android:name="android.intent.category.DEFAULT" />
+                          <category android:name="android.intent.category.BROWSABLE" />
+                          <data android:scheme="darkmusic" />
+                      </intent-filter>
+                      <intent-filter>
+                          <action android:name="android.intent.action.VIEW" />
+                          <category android:name="android.intent.category.DEFAULT" />
+                          <category android:name="android.intent.category.BROWSABLE" />
+                          <data android:scheme="https" android:host="ezzo4ka.github.io" android:pathPrefix="/darkmusic" />
                       </intent-filter>
                   </activity>
 
@@ -886,7 +898,33 @@ jobs:
                       }
                   });
 
-                  webView.loadUrl("file:///android_asset/index.html?v=3.1");
+                  String initialUrl = "file:///android_asset/index.html?v=4.2";
+                  try {
+                      if (getIntent() != null && getIntent().getData() != null) {
+                          String q = getIntent().getData().getEncodedQuery();
+                          if (q != null && !q.isEmpty()) {
+                              initialUrl = "file:///android_asset/index.html?v=4.2&" + q;
+                          }
+                      }
+                  } catch (Exception ignored) {}
+                  webView.loadUrl(initialUrl);
+              }
+
+              @Override
+              protected void onNewIntent(Intent intent) {
+                  super.onNewIntent(intent);
+                  setIntent(intent);
+                  try {
+                      if (intent != null && intent.getData() != null && staticWebView != null) {
+                          final String rawUri = intent.getData().toString().replace("\\", "\\\\").replace("'", "\\'");
+                          staticWebView.post(() -> {
+                              staticWebView.evaluateJavascript(
+                                  "if(typeof window.handleIncomingDeepLinkUrl==='function'){window.handleIncomingDeepLinkUrl('" + rawUri + "');}",
+                                  null
+                              );
+                          });
+                      }
+                  } catch (Exception ignored) {}
               }
 
               public static void dispatchToWebView(final String action, final long seekMs) {
@@ -1032,5 +1070,5 @@ jobs:
       - name: Upload Dark Music APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: DarkMusic-v3.1-APK
+          name: DarkMusic-v4.2-APK
           path: android-project/app/build/outputs/apk/debug/app-debug.apk
