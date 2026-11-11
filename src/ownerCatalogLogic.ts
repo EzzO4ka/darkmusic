@@ -903,12 +903,17 @@ export const APP_THEMES: Record<AppThemeId, AppThemeDescriptor> = {
 export function resolveEffectiveAppTheme(params: {
   savedTheme?: string | null;
   systemPrefersLight: boolean;
+  previousOsScheme?: 'light' | 'dark' | null;
 }): AppThemeId {
+  const currentOsScheme: AppThemeId = params.systemPrefersLight ? 'light' : 'dark';
+  if (params.previousOsScheme && params.previousOsScheme !== currentOsScheme) {
+    return currentOsScheme;
+  }
   const cleanSaved = String(params.savedTheme || '').trim().toLowerCase();
   if (cleanSaved === 'dark' || cleanSaved === 'ps5' || cleanSaved === 'light') {
     return cleanSaved as AppThemeId;
   }
-  return params.systemPrefersLight ? 'light' : 'dark';
+  return currentOsScheme;
 }
 
 export function resolveThemeOnSystemSchemeChange(

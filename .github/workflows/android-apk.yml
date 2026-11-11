@@ -139,7 +139,7 @@ jobs:
                       android:name=".MainActivity"
                       android:exported="true"
                       android:launchMode="singleTop"
-                      android:configChanges="orientation|screenSize|keyboardHidden">
+                      android:configChanges="orientation|screenSize|keyboardHidden|uiMode">
                       <intent-filter>
                           <action android:name="android.intent.action.MAIN" />
                           <category android:name="android.intent.category.LAUNCHER" />
@@ -770,6 +770,7 @@ jobs:
           import android.content.Intent;
           import android.content.SharedPreferences;
           import android.content.pm.PackageManager;
+          import android.content.res.Configuration;
           import android.graphics.Bitmap;
           import android.graphics.BitmapFactory;
           import android.net.Uri;
@@ -804,10 +805,27 @@ jobs:
                   }
               }
 
+              private void syncSystemNightModeToWebView() {
+                  if (staticWebView == null) return;
+                  try {
+                      int nightMask = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                      boolean isLight = (nightMask == Configuration.UI_MODE_NIGHT_NO);
+                      final String js = "window.__ANDROID_OS_PREFERS_LIGHT__ = " + isLight + "; if (typeof window.onNativeSystemThemeChanged === 'function') { window.onNativeSystemThemeChanged(" + isLight + "); }";
+                      staticWebView.post(() -> staticWebView.evaluateJavascript(js, null));
+                  } catch (Exception ignored) {}
+              }
+
+              @Override
+              public void onConfigurationChanged(Configuration newConfig) {
+                  super.onConfigurationChanged(newConfig);
+                  syncSystemNightModeToWebView();
+              }
+
               @Override
               protected void onResume() {
                   super.onResume();
                   isActivityInForeground = true;
+                  syncSystemNightModeToWebView();
               }
 
               @Override

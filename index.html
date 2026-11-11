@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <!-- Dark Music v4.2 -->
-<html lang="ru" class="dark"><head>
+<html lang="ru"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="app-version" content="4.2">
+    <meta name="color-scheme" content="light dark">
     <meta name="description" content="Dark Music - Music App">
     <meta property="og:title" content="Dark Music - Music App">
     <meta property="og:description" content="Dark Music - Music App">
@@ -14,7 +15,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Dark Music - Music App">
     <meta name="twitter:description" content="Dark Music - Music App">
-    <meta name="theme-color" content="#000000">
+    <meta id="metaThemeColor" name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Dark Music">
@@ -745,10 +746,12 @@
             background: rgba(24, 19, 48, 0.68) !important;
             border-color: rgba(216, 180, 254, 0.44) !important;
         }
-        body[data-theme="ps5"] #homeChartList > div:first-child {
-            border: 1.5px solid rgba(192, 132, 252, 0.82) !important;
-            box-shadow: 0 0 26px rgba(168, 85, 247, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
-            background: linear-gradient(90deg, rgba(76, 29, 149, 0.48) 0%, rgba(15, 13, 30, 0.58) 100%) !important;
+        body[data-theme="ps5"] #homeChartList > div[data-track-active="true"],
+        body[data-theme="ps5"] [data-track-row][data-track-active="true"],
+        body[data-theme="ps5"] [data-track-row].border-purple-500\/50 {
+            border: 1.5px solid rgba(192, 132, 252, 0.9) !important;
+            box-shadow: 0 0 26px rgba(168, 85, 247, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+            background: linear-gradient(90deg, rgba(88, 28, 135, 0.56) 0%, rgba(20, 15, 42, 0.66) 100%) !important;
         }
         body[data-theme="ps5"] #deskRightFactCard {
             background: linear-gradient(135deg, rgba(88, 28, 135, 0.44) 0%, rgba(16, 14, 34, 0.56) 100%) !important;
@@ -848,6 +851,17 @@
             background-color: #f1f5f9 !important;
             border-color: #cbd5e1 !important;
         }
+        body[data-theme="light"] #homeChartList > div[data-track-active="true"],
+        body[data-theme="light"] [data-track-row][data-track-active="true"],
+        body[data-theme="light"] [data-track-row].border-purple-500\/50 {
+            background: linear-gradient(90deg, #f3e8ff 0%, #ede9fe 100%) !important;
+            border: 1.5px solid #a855f7 !important;
+            box-shadow: 0 6px 20px rgba(147, 51, 234, 0.16) !important;
+        }
+        body[data-theme="light"] [data-track-row][data-track-active="true"] [data-track-title],
+        body[data-theme="light"] [data-track-row].border-purple-500\/50 [data-track-title] {
+            color: #6b21a8 !important;
+        }
         body[data-theme="light"] .border-zinc-900,
         body[data-theme="light"] .border-zinc-900\/80,
         body[data-theme="light"] .border-zinc-900\/90,
@@ -898,6 +912,72 @@
             border-color: #d8b4fe !important;
         }
         body[data-theme="light"] #deskRightArtistCard .drop-shadow {
+            color: #ffffff !important;
+        }
+        /* Шапка карточки артиста (Spotify-баннер с фото или тёмным градиентом) в светлой теме — всегда яркий белый читаемый текст */
+        body[data-theme="light"] #artistProfileContent > div:first-child {
+            color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 14px 34px rgba(15, 23, 42, 0.16) !important;
+        }
+        body[data-theme="light"] #artistProfileContent > div:first-child h1 {
+            color: #ffffff !important;
+            text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9), 0 1px 3px rgba(0, 0, 0, 0.95) !important;
+        }
+        body[data-theme="light"] #artistProfileContent > div:first-child p {
+            color: #f1f5f9 !important;
+            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.9) !important;
+        }
+        body[data-theme="light"] #artistProfileContent > div:first-child span.bg-black\/60 {
+            background-color: rgba(9, 9, 11, 0.72) !important;
+            border-color: rgba(255, 255, 255, 0.24) !important;
+            color: #f3e8ff !important;
+        }
+        body[data-theme="light"] #artistProfileContent > div:first-child span.bg-black\/60 span {
+            color: #f3e8ff !important;
+        }
+        body[data-theme="light"] #artistProfileContent > div:first-child button.bg-black\/55 {
+            background-color: rgba(9, 9, 11, 0.68) !important;
+            border-color: rgba(255, 255, 255, 0.25) !important;
+            color: #ffffff !important;
+        }
+        body[data-theme="light"] #artistProfileContent > div:first-child button.bg-black\/55:hover {
+            background-color: rgba(9, 9, 11, 0.85) !important;
+        }
+        body[data-theme="light"] #artistProfileContent > div:first-child button.bg-black\/55 span {
+            color: #ffffff !important;
+        }
+        body[data-theme="light"] #artistProfileContent > div:first-child button.bg-black\/55 i {
+            color: #d8b4fe !important;
+        }
+        body[data-theme="light"] #artistProfileContent > div:first-child button.bg-white {
+            background-color: #ffffff !important;
+            color: #0f172a !important;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35) !important;
+        }
+        body[data-theme="light"] #artistProfileContent > div:first-child button.bg-white span,
+        body[data-theme="light"] #artistProfileContent > div:first-child button.bg-white i {
+            color: #0f172a !important;
+        }
+        /* Сохраняем читаемость бейджей поверх обложек видео и альбомов в светлой теме */
+        body[data-theme="light"] .bg-black\/80,
+        body[data-theme="light"] .bg-rose-600\/90 {
+            color: #ffffff !important;
+        }
+        body[data-theme="light"] #view-favorites > div:first-child {
+            background: linear-gradient(135deg, #ffe4e6 0%, #f3e8ff 55%, #ffffff 100%) !important;
+            border-color: #fda4af !important;
+            box-shadow: 0 12px 32px rgba(225, 29, 72, 0.08) !important;
+        }
+        body[data-theme="light"] #albumDetailContent button.bg-white,
+        body[data-theme="light"] #view-favorites > div:first-child button.bg-white {
+            background-color: #0f172a !important;
+            color: #ffffff !important;
+        }
+        body[data-theme="light"] #albumDetailContent button.bg-white span,
+        body[data-theme="light"] #albumDetailContent button.bg-white i,
+        body[data-theme="light"] #view-favorites > div:first-child button.bg-white span,
+        body[data-theme="light"] #view-favorites > div:first-child button.bg-white i {
             color: #ffffff !important;
         }
         /* Баннер «Моя волна» в светлой теме — нежный светло-лавандовый/перламутровый с высокой читаемостью */
@@ -1171,14 +1251,14 @@
         </div>
 
         <!-- ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ ПЛЕЕРА (ТОСТ) -->
-        <div id="toastBanner" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-[390px] pointer-events-none transition-all duration-300 opacity-100 translate-y-0">
+        <div id="toastBanner" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-[390px] pointer-events-none transition-all duration-300 opacity-0 -translate-y-3">
             <div class="bg-zinc-900/95 backdrop-blur-xl border border-purple-500/40 rounded-2xl px-4 py-3 shadow-2xl shadow-purple-950/60 flex items-center gap-3">
                 <div class="w-8 h-8 rounded-xl bg-purple-600/20 border border-purple-500/40 flex items-center justify-center text-purple-400 shrink-0">
                     <i class="fa-solid fa-compact-disc fa-spin text-sm"></i>
                 </div>
                 <div class="min-w-0 flex-1">
-                    <div id="toastTag" class="text-[9px] font-black uppercase tracking-widest text-purple-400">GITHUB v4.2</div>
-                    <div id="toastMessage" class="text-xs font-bold text-white truncate">Файл index.html (v4.2) обновлён в GitHub!</div>
+                    <div id="toastTag" class="text-[9px] font-black uppercase tracking-widest text-purple-400">DARK MUSIC</div>
+                    <div id="toastMessage" class="text-xs font-bold text-white truncate">Трек запущен</div>
                 </div>
             </div>
         </div>
@@ -9330,13 +9410,22 @@
                 const el = docClone.querySelector(`#${id}`);
                 if (el) el.classList.add("hidden");
             });
-            ["pinModal", "editModal", "deleteConfirmModal", "trackActionsModal", "playerModal", "videoPlayerModal", "whatsNewModal", "forceUpdateModal", "tempBroadcastToast", "themeSelectorModal"].forEach(id => {
+            ["pinModal", "editModal", "deleteConfirmModal", "trackActionsModal", "playerModal", "videoPlayerModal", "whatsNewModal", "forceUpdateModal", "tempBroadcastToast", "pinnedBroadcastBanner", "themeSelectorModal"].forEach(id => {
                 const el = docClone.querySelector(`#${id}`);
                 if (el) {
                     el.classList.add("hidden");
                     el.classList.remove("flex", "player-sheet-enter", "player-sheet-exit");
                 }
             });
+            const toastClone = docClone.querySelector("#toastBanner");
+            if (toastClone) {
+                toastClone.classList.remove("opacity-100", "translate-y-0");
+                toastClone.classList.add("opacity-0", "-translate-y-3");
+            }
+            const toastTagClone = docClone.querySelector("#toastTag");
+            if (toastTagClone) toastTagClone.textContent = "DARK MUSIC";
+            const toastMsgClone = docClone.querySelector("#toastMessage");
+            if (toastMsgClone) toastMsgClone.textContent = "Трек запущен";
             const hLock = docClone.querySelector("#headerLockIcon");
             if (hLock) hLock.className = "fa-solid fa-lock text-xs";
             const dLock = docClone.querySelector("#desktopHeaderLockIcon");
@@ -9346,11 +9435,27 @@
                 dDot.textContent = "PIN";
                 dDot.className = "px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-[9px] font-black text-zinc-500 left-sidebar-text";
             }
+            docClone.classList.remove("dark");
             const bodyClone = docClone.querySelector("body");
             if (bodyClone) {
                 bodyClone.setAttribute("data-left-sidebar", "open");
                 bodyClone.setAttribute("data-right-sidebar", "open");
                 bodyClone.setAttribute("data-theme", "dark");
+                const leftSideClone = bodyClone.querySelector("#desktopLeftSidebar");
+                if (leftSideClone) leftSideClone.classList.remove("left-sidebar-collapsed");
+                const rightSideClone = bodyClone.querySelector("#desktopRightSidebar");
+                if (rightSideClone) rightSideClone.classList.remove("right-sidebar-collapsed");
+                const topHeaderClone = bodyClone.querySelector("#desktopTopHeaderBar");
+                if (topHeaderClone) topHeaderClone.classList.remove("ps5-search-open");
+                // Удаляем любые сторонние элементы браузерных расширений и временные deep-link iframe
+                bodyClone.querySelectorAll('iframe[src^="darkmusic://"], #volume-booster-visusalizer, audio.audio-output').forEach(n => n.remove());
+                const scriptsInBody = bodyClone.querySelectorAll("script");
+                const lastScript = scriptsInBody[scriptsInBody.length - 1];
+                if (lastScript) {
+                    while (lastScript.nextSibling) {
+                        lastScript.nextSibling.remove();
+                    }
+                }
             }
             ["home", "charts", "artists", "favorites", "owner"].forEach(k => {
                 const isAct = k === "home";
@@ -10527,7 +10632,8 @@
         function updateTrackRowsPlayState() {
             document.querySelectorAll("[data-track-row]").forEach(row => {
                 const tid = row.getAttribute("data-track-row");
-                const isCurrent = (tid === currentTrackId);
+                const isCurrent = Boolean(currentTrackId && tid === currentTrackId);
+                row.setAttribute("data-track-active", isCurrent ? "true" : "false");
                 if (isCurrent) {
                     row.classList.remove("bg-zinc-950/90", "hover:bg-zinc-900", "border-zinc-900");
                     row.classList.add("bg-purple-950/35", "border-purple-500/50");
@@ -11002,14 +11108,23 @@
                 </button>
             `;
 
+            const isCurrent = Boolean(currentTrackId && track.id === currentTrackId);
+            const activePlaying = Boolean(isCurrent && isPlaying);
+            const rowStateClasses = isCurrent
+                ? "bg-purple-950/35 border-purple-500/50"
+                : "bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900";
+            const titleColorClass = isCurrent ? "text-purple-300" : "text-white";
+            const playBtnColorClass = activePlaying ? "bg-purple-600 text-white" : "bg-zinc-900 text-zinc-400";
+            const playIconClass = activePlaying ? "fa-pause" : "fa-play ml-0.5";
+
             if (compactCard) {
                 return `
-                    <div onclick="playTrackById('${track.id}', '${safeCtxType}', '${safeCtxId}')" data-track-row="${track.id}" class="p-2.5 rounded-2xl bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900 border flex items-center gap-2.5 cursor-pointer spring-btn">
+                    <div onclick="playTrackById('${track.id}', '${safeCtxType}', '${safeCtxId}')" data-track-row="${track.id}" data-track-active="${isCurrent ? 'true' : 'false'}" class="p-2.5 rounded-2xl ${rowStateClasses} border flex items-center gap-2.5 cursor-pointer spring-btn">
                         ${rankBadge}
                         ${renderCoverBox(track, "w-11 h-11 rounded-xl", "text-xs")}
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-1.5 min-w-0">
-                                <span data-track-title="${track.id}" class="text-xs font-extrabold text-white truncate" title="${safeTitleAttr}">${track.title}</span>
+                                <span data-track-title="${track.id}" class="text-xs font-extrabold ${titleColorClass} truncate" title="${safeTitleAttr}">${track.title}</span>
                                 ${likedBadgeHtml}
                             </div>
                             <div class="flex items-center gap-1 mt-0.5 min-w-0">
@@ -11021,8 +11136,8 @@
                         <div class="flex items-center gap-1.5 shrink-0">
                             ${ownerReorderBtnsHtml}
                             ${moreMenuBtnHtml}
-                            <div data-track-playbtn="${track.id}" class="w-7 h-7 rounded-xl bg-zinc-900 text-zinc-400 flex items-center justify-center">
-                                <i data-track-playicon="${track.id}" class="fa-solid fa-play ml-0.5 text-[10px]"></i>
+                            <div data-track-playbtn="${track.id}" class="w-7 h-7 rounded-xl ${playBtnColorClass} flex items-center justify-center">
+                                <i data-track-playicon="${track.id}" class="fa-solid ${playIconClass} text-[10px]"></i>
                             </div>
                         </div>
                     </div>
@@ -11030,13 +11145,13 @@
             }
 
             return `
-                <div onclick="playTrackById('${track.id}', '${safeCtxType}', '${safeCtxId}')" data-track-row="${track.id}" class="p-2.5 md:px-3.5 md:py-2 rounded-2xl bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900 border flex md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_auto] items-center gap-2.5 md:gap-3 cursor-pointer spring-btn">
+                <div onclick="playTrackById('${track.id}', '${safeCtxType}', '${safeCtxId}')" data-track-row="${track.id}" data-track-active="${isCurrent ? 'true' : 'false'}" class="p-2.5 md:px-3.5 md:py-2 rounded-2xl ${rowStateClasses} border flex md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_auto] items-center gap-2.5 md:gap-3 cursor-pointer spring-btn">
                     ${rankBadge}
                     <div class="flex items-center gap-2.5 min-w-0 flex-1">
                         ${renderCoverBox(track, "w-11 h-11 md:w-10 md:h-10 rounded-xl", "text-xs")}
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-1.5">
-                                <span data-track-title="${track.id}" class="text-xs font-extrabold text-white truncate" title="${safeTitleAttr}">${track.title}</span>
+                                <span data-track-title="${track.id}" class="text-xs font-extrabold ${titleColorClass} truncate" title="${safeTitleAttr}">${track.title}</span>
                                 ${isExplicit ? `<span class="px-1.5 py-0.2 rounded bg-zinc-900 border border-rose-500/50 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>` : ''}
                                 ${track.isNew ? `<span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">NEW</span>` : ''}
                             </div>
@@ -11051,8 +11166,8 @@
                         ${likedBadgeHtml}
                         <span class="hidden sm:inline text-[10px] font-semibold text-zinc-500 tabular-nums w-8 text-right">${track.duration || '2:45'}</span>
                         ${moreMenuBtnHtml}
-                        <div data-track-playbtn="${track.id}" class="w-7 h-7 rounded-xl bg-zinc-900 text-zinc-400 flex items-center justify-center">
-                            <i data-track-playicon="${track.id}" class="fa-solid fa-play ml-0.5 text-[10px]"></i>
+                        <div data-track-playbtn="${track.id}" class="w-7 h-7 rounded-xl ${playBtnColorClass} flex items-center justify-center">
+                            <i data-track-playicon="${track.id}" class="fa-solid ${playIconClass} text-[10px]"></i>
                         </div>
                     </div>
                 </div>
@@ -13055,10 +13170,21 @@
             renderHomeTracks();
         }
 
+        function hideToastBannerImmediate() {
+            const banner = document.getElementById("toastBanner");
+            if (!banner) return;
+            clearTimeout(window._toastTimer);
+            banner.classList.remove("opacity-100", "translate-y-0");
+            banner.classList.add("opacity-0", "-translate-y-3");
+        }
+
         function showToast(message, tag = "DARK MUSIC") {
             const banner = document.getElementById("toastBanner");
-            document.getElementById("toastTag").textContent = tag;
-            document.getElementById("toastMessage").textContent = message;
+            if (!banner) return;
+            const tagEl = document.getElementById("toastTag");
+            const msgEl = document.getElementById("toastMessage");
+            if (tagEl) tagEl.textContent = tag;
+            if (msgEl) msgEl.textContent = message;
             banner.classList.remove("opacity-0", "-translate-y-3");
             banner.classList.add("opacity-100", "translate-y-0");
             clearTimeout(window._toastTimer);
@@ -14514,26 +14640,62 @@
         // =========================================================================
         // СИСТЕМА 3 ТЕМ DARK MUSIC (dark | ps5 | light) + АВТО-ОПРЕДЕЛЕНИЕ ТЕМЫ ОС
         // =========================================================================
-        const APP_THEME_STORAGE_KEY = "dark_music_app_theme_v1";
+        const APP_THEME_STORAGE_KEY = "dark_music_theme_mode_v2";
+        const LEGACY_APP_THEME_STORAGE_KEY = "dark_music_app_theme_v1";
+        const APP_LAST_OS_SCHEME_KEY = "dark_music_last_os_scheme_v1";
         let currentAppTheme = "dark";
+        let _lastDetectedOsScheme = null;
 
         function detectSystemPrefersLight() {
             try {
-                return Boolean(window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches);
-            } catch (e) {
-                return false;
-            }
+                if (typeof window.__ANDROID_OS_PREFERS_LIGHT__ === "boolean") {
+                    return window.__ANDROID_OS_PREFERS_LIGHT__;
+                }
+                try {
+                    if (window.top && window.top !== window && window.top.matchMedia) {
+                        if (window.top.matchMedia("(prefers-color-scheme: light)").matches) return true;
+                        if (window.top.matchMedia("(prefers-color-scheme: dark)").matches) return false;
+                    }
+                } catch (err) {}
+                if (window.matchMedia) {
+                    if (window.matchMedia("(prefers-color-scheme: light)").matches) return true;
+                    if (window.matchMedia("(prefers-color-scheme: dark)").matches) return false;
+                }
+            } catch (e) {}
+            return false;
         }
 
         function resolveInitialAppTheme() {
             const sysLight = detectSystemPrefersLight();
+            const currentOsScheme = sysLight ? "light" : "dark";
+            let savedTheme = null;
+            let savedOsScheme = null;
             try {
-                const saved = localStorage.getItem(APP_THEME_STORAGE_KEY);
-                if (saved === "dark" || saved === "ps5" || saved === "light") {
-                    return saved;
+                // Очищаем устаревший ключ первой версии, который жёстко блокировал авто-смену на "dark"
+                const legacySaved = localStorage.getItem(LEGACY_APP_THEME_STORAGE_KEY);
+                if (legacySaved) {
+                    if (legacySaved === "ps5" && !localStorage.getItem(APP_THEME_STORAGE_KEY)) {
+                        localStorage.setItem(APP_THEME_STORAGE_KEY, "ps5");
+                    }
+                    localStorage.removeItem(LEGACY_APP_THEME_STORAGE_KEY);
                 }
+                savedTheme = localStorage.getItem(APP_THEME_STORAGE_KEY);
+                savedOsScheme = localStorage.getItem(APP_LAST_OS_SCHEME_KEY);
+                localStorage.setItem(APP_LAST_OS_SCHEME_KEY, currentOsScheme);
             } catch (e) {}
-            return sysLight ? "light" : "dark";
+            _lastDetectedOsScheme = currentOsScheme;
+
+            // Если системная тема телефона/ПК изменилась с прошлого запуска — переключаем на актуальную системную тему
+            if (savedOsScheme && savedOsScheme !== currentOsScheme) {
+                try {
+                    localStorage.removeItem(APP_THEME_STORAGE_KEY);
+                } catch (e) {}
+                return currentOsScheme;
+            }
+            if (savedTheme === "dark" || savedTheme === "ps5" || savedTheme === "light") {
+                return savedTheme;
+            }
+            return currentOsScheme;
         }
 
         function updatePs5LiveClock() {
@@ -14589,9 +14751,17 @@
             if (document.body) {
                 document.body.setAttribute("data-theme", validTheme);
             }
+            if (document.documentElement) {
+                document.documentElement.classList.toggle("dark", validTheme !== "light");
+            }
+            const metaColor = document.getElementById("metaThemeColor");
+            if (metaColor) {
+                metaColor.setAttribute("content", validTheme === "light" ? "#f1f5f9" : (validTheme === "ps5" ? "#0b0316" : "#000000"));
+            }
             if (persistManual) {
                 try {
                     localStorage.setItem(APP_THEME_STORAGE_KEY, validTheme);
+                    localStorage.setItem(APP_LAST_OS_SCHEME_KEY, detectSystemPrefersLight() ? "light" : "dark");
                 } catch (e) {}
             }
             updateThemeControlsUI();
@@ -14603,7 +14773,7 @@
                     ps5: "Неоновая (Стеклянная) тема",
                     light: "Светлая (Белая) тема"
                 };
-                showToast("ОФОРМЛЕНИЕ", `Включена: ${names[validTheme]}`);
+                showToast(`Включена: ${names[validTheme]}`, "ОФОРМЛЕНИЕ");
             }
         }
 
@@ -14614,13 +14784,40 @@
         }
 
         function applySystemThemeNow() {
+            const currentOsScheme = detectSystemPrefersLight() ? "light" : "dark";
+            _lastDetectedOsScheme = currentOsScheme;
             try {
                 localStorage.removeItem(APP_THEME_STORAGE_KEY);
+                localStorage.removeItem(LEGACY_APP_THEME_STORAGE_KEY);
+                localStorage.setItem(APP_LAST_OS_SCHEME_KEY, currentOsScheme);
             } catch (e) {}
-            const target = detectSystemPrefersLight() ? "light" : "dark";
-            setAppTheme(target, false, false);
+            setAppTheme(currentOsScheme, false, false);
             closeThemeSelectorModal();
         }
+
+        function checkSystemThemeAutoSwitch(explicitIsLight = null) {
+            const isLightNow = typeof explicitIsLight === "boolean" ? explicitIsLight : detectSystemPrefersLight();
+            const currentOsScheme = isLightNow ? "light" : "dark";
+            if (_lastDetectedOsScheme !== null && _lastDetectedOsScheme !== currentOsScheme) {
+                _lastDetectedOsScheme = currentOsScheme;
+                try {
+                    localStorage.removeItem(APP_THEME_STORAGE_KEY);
+                    localStorage.removeItem(LEGACY_APP_THEME_STORAGE_KEY);
+                    localStorage.setItem(APP_LAST_OS_SCHEME_KEY, currentOsScheme);
+                } catch (e) {}
+                setAppTheme(currentOsScheme, false, true);
+            } else if (_lastDetectedOsScheme === null) {
+                _lastDetectedOsScheme = currentOsScheme;
+                try {
+                    localStorage.setItem(APP_LAST_OS_SCHEME_KEY, currentOsScheme);
+                } catch (e) {}
+            }
+        }
+
+        window.onNativeSystemThemeChanged = function(isLight) {
+            window.__ANDROID_OS_PREFERS_LIGHT__ = Boolean(isLight);
+            checkSystemThemeAutoSwitch(Boolean(isLight));
+        };
 
         function openThemeSelectorModal() {
             updateThemeControlsUI();
@@ -14663,23 +14860,35 @@
             try {
                 if (window.matchMedia) {
                     const lightMedia = window.matchMedia("(prefers-color-scheme: light)");
-                    const handleSystemThemeChange = (e) => {
-                        const targetTheme = e.matches ? "light" : "dark";
-                        try {
-                            localStorage.removeItem(APP_THEME_STORAGE_KEY);
-                        } catch (err) {}
-                        setAppTheme(targetTheme, false, false);
+                    const darkMedia = window.matchMedia("(prefers-color-scheme: dark)");
+                    const handleLightChange = (e) => {
+                        checkSystemThemeAutoSwitch(Boolean(e.matches));
+                    };
+                    const handleDarkChange = (e) => {
+                        checkSystemThemeAutoSwitch(!e.matches);
                     };
                     if (typeof lightMedia.addEventListener === "function") {
-                        lightMedia.addEventListener("change", handleSystemThemeChange);
+                        lightMedia.addEventListener("change", handleLightChange);
+                        darkMedia.addEventListener("change", handleDarkChange);
                     } else if (typeof lightMedia.addListener === "function") {
-                        lightMedia.addListener(handleSystemThemeChange);
+                        lightMedia.addListener(handleLightChange);
+                        darkMedia.addListener(handleDarkChange);
                     }
                 }
             } catch (e) {}
+
+            window.addEventListener("focus", () => checkSystemThemeAutoSwitch());
+            window.addEventListener("pageshow", () => checkSystemThemeAutoSwitch());
+            document.addEventListener("visibilitychange", () => {
+                if (document.visibilityState === "visible") {
+                    checkSystemThemeAutoSwitch();
+                }
+            });
+            setInterval(() => checkSystemThemeAutoSwitch(), 600);
         }
 
         function initDarkMusicApp() {
+            hideToastBannerImmediate();
             initThemeSystem();
             registerSystemNotificationServiceWorker();
             loadPersonalFavoritesFromStorage();
@@ -14869,19 +15078,4 @@
 
         setupCloudSync();
     </script>
-
-<iframe src="darkmusic://open?track=trk_1794211260337" style="display: none;"></iframe><audio class="audio-output" style="display: none;"></audio><div id="volume-booster-visusalizer">
-                    <div class="sound">
-                        <div class="sound-icon"></div>
-                        <div class="sound-wave sound-wave_one"></div>
-                        <div class="sound-wave sound-wave_two"></div>
-                        <div class="sound-wave sound-wave_three"></div>
-                    </div>
-                    <div class="segments-box">
-                        <div data-range="1-20" class="segment"><span></span></div>
-                        <div data-range="21-40" class="segment"><span></span></div>
-                        <div data-range="41-60" class="segment"><span></span></div>
-                        <div data-range="61-80" class="segment"><span></span></div>
-                        <div data-range="81-100" class="segment"><span></span></div>
-                    </div>
-                </div><div style="color-scheme: unset; forced-color-adjust: unset; math-depth: unset; position-anchor: unset; text-size-adjust: unset; appearance: unset; color: unset; font: unset; font-palette: unset; font-synthesis: unset; position-area: unset; text-orientation: unset; text-rendering: unset; text-spacing-trim: unset; -webkit-font-smoothing: unset; -webkit-locale: unset; -webkit-text-orientation: unset; -webkit-writing-mode: unset; writing-mode: unset; zoom: unset; accent-color: unset; place-content: unset; place-items: unset; place-self: unset; alignment-baseline: unset; anchor-name: unset; anchor-scope: unset; animation-composition: unset; animation: unset; animation-trigger: unset; app-region: unset; aspect-ratio: unset; backdrop-filter: unset; backface-visibility: unset; background: unset; background-blend-mode: unset; baseline-shift: unset; baseline-source: unset; block-size: unset; border-block: unset; border: unset; border-radius: unset; border-collapse: unset; border-end-end-radius: unset; border-end-start-radius: unset; border-inline: unset; border-shape: unset; border-start-end-radius: unset; border-start-start-radius: unset; bottom: unset; box-decoration-break: unset; box-shadow: unset; box-sizing: unset; break-after: unset; break-before: unset; break-inside: unset; buffered-rendering: unset; caption-side: unset; caret-animation: unset; caret-color: unset; caret-shape: unset; clear: unset; clip: unset; clip-path: unset; clip-rule: unset; color-interpolation: unset; color-interpolation-filters: unset; color-rendering: unset; columns: unset; column-fill: unset; gap: unset; rule-break: unset; rule: unset; rule-inset: unset; rule-visibility-items: unset; column-span: unset; contain: unset; contain-intrinsic-block-size: unset; contain-intrinsic-size: unset; contain-intrinsic-inline-size: unset; container: unset; content: unset; content-visibility: unset; corner-shape: unset; corner-block-end-shape: unset; corner-block-start-shape: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; cursor: unset; cx: unset; cy: unset; d: unset; display: unset; dominant-baseline: unset; dynamic-range-limit: unset; empty-cells: unset; field-sizing: unset; fill: unset; fill-opacity: unset; fill-rule: unset; filter: unset; flex: unset; flex-flow: unset; flex-line-count: unset; float: unset; flood-color: unset; flood-opacity: unset; frame-sizing: unset; grid: unset; grid-area: unset; height: unset; hyphenate-character: unset; hyphenate-limit-chars: unset; hyphens: unset; image-orientation: unset; image-rendering: unset; initial-letter: unset; inline-size: unset; inset-block: unset; inset-inline: unset; interactivity: unset; interest-delay: unset; interpolate-size: unset; isolation: unset; letter-spacing: unset; lighting-color: unset; line-break: unset; list-style: unset; margin-block: unset; margin: unset; margin-inline: unset; margin-trim: unset; marker: unset; mask: unset; mask-type: unset; math-shift: unset; math-style: unset; max-block-size: unset; max-height: unset; max-inline-size: unset; max-width: unset; min-block-size: unset; min-height: unset; min-inline-size: unset; min-width: unset; mix-blend-mode: unset; object-fit: unset; object-position: unset; object-view-box: unset; offset: unset; opacity: unset; order: unset; orphans: unset; outline: unset; outline-offset: unset; overflow-anchor: unset; overflow-block: unset; overflow-clip-margin: unset; overflow-inline: unset; overflow-wrap: unset; overflow: unset; overlay: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; overscroll-behavior: unset; padding-block: unset; padding: unset; padding-inline: unset; page: unset; page-margin-safety: unset; page-orientation: unset; paint-order: unset; perspective: unset; perspective-origin: unset; pointer-events: unset; position-try: unset; position-visibility: unset; print-color-adjust: unset; quotes: unset; r: unset; reading-flow: unset; reading-order: unset; resize: unset; right: unset; rotate: unset; ruby-align: unset; ruby-overhang: unset; ruby-position: unset; rule-overlap: unset; rx: unset; ry: unset; scale: unset; scroll-axis-lock: unset; scroll-behavior: unset; scroll-initial-target: unset; scroll-margin-block: unset; scroll-margin: unset; scroll-margin-inline: unset; scroll-marker-group: unset; scroll-padding-block: unset; scroll-padding: unset; scroll-padding-inline: unset; scroll-snap-align: unset; scroll-snap-stop: unset; scroll-snap-type: unset; scroll-target-group: unset; scroll-timeline: unset; scrollbar-color: unset; scrollbar-gutter: unset; scrollbar-width: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; shape-rendering: unset; size: unset; speak: unset; stop-color: unset; stop-opacity: unset; stroke: unset; stroke-dasharray: unset; stroke-dashoffset: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-width: unset; tab-size: unset; table-layout: unset; text-align: unset; text-align-last: unset; text-anchor: unset; text-autospace: unset; text-box: unset; text-combine-upright: unset; text-decoration: unset; text-decoration-inset: unset; text-decoration-skip-ink: unset; text-emphasis: unset; text-emphasis-position: unset; text-fit: unset; text-indent: unset; text-justify: unset; text-overflow: unset; text-shadow: unset; text-transform: unset; text-underline-offset: unset; text-underline-position: unset; text-wrap: unset; timeline-scope: unset; timeline-trigger: unset; touch-action: unset; transform: unset; transform-box: unset; transform-origin: unset; transform-style: unset; transition: unset; translate: unset; trigger-scope: unset; user-select: unset; vector-effect: unset; vertical-align: unset; view-timeline: unset; view-transition-class: unset; view-transition-group: unset; view-transition-name: unset; view-transition-scope: unset; visibility: unset; border-spacing: unset; -webkit-box-align: unset; -webkit-box-decoration-break: unset; -webkit-box-direction: unset; -webkit-box-flex: unset; -webkit-box-ordinal-group: unset; -webkit-box-orient: unset; -webkit-box-pack: unset; -webkit-box-reflect: unset; -webkit-line-break: unset; -webkit-line-clamp: unset; -webkit-mask-box-image: unset; -webkit-rtl-ordering: unset; -webkit-ruby-position: unset; -webkit-tap-highlight-color: unset; -webkit-text-combine: unset; -webkit-text-decorations-in-effect: unset; -webkit-text-fill-color: unset; -webkit-text-security: unset; -webkit-text-stroke: unset; -webkit-user-drag: unset; white-space-collapse: unset; widows: unset; width: unset; will-change: unset; window-drag: unset; word-break: unset; word-spacing: unset; x: unset; y: unset; z-index: unset; position: absolute; top: 0px; left: 0px;"><div style="color-scheme: unset; forced-color-adjust: unset; math-depth: unset; position-anchor: unset; text-size-adjust: unset; appearance: unset; color: unset; font: unset; font-palette: unset; font-synthesis: unset; position-area: unset; text-orientation: unset; text-rendering: unset; text-spacing-trim: unset; -webkit-font-smoothing: unset; -webkit-locale: unset; -webkit-text-orientation: unset; -webkit-writing-mode: unset; writing-mode: unset; zoom: unset; accent-color: unset; place-content: unset; place-items: unset; place-self: unset; alignment-baseline: unset; anchor-name: unset; anchor-scope: unset; animation-composition: unset; animation: unset; animation-trigger: unset; app-region: unset; aspect-ratio: unset; backdrop-filter: unset; backface-visibility: unset; background: unset; background-blend-mode: unset; baseline-shift: unset; baseline-source: unset; block-size: unset; border-block: unset; border: unset; border-radius: unset; border-collapse: unset; border-end-end-radius: unset; border-end-start-radius: unset; border-inline: unset; border-shape: unset; border-start-end-radius: unset; border-start-start-radius: unset; bottom: unset; box-decoration-break: unset; box-shadow: unset; box-sizing: unset; break-after: unset; break-before: unset; break-inside: unset; buffered-rendering: unset; caption-side: unset; caret-animation: unset; caret-color: unset; caret-shape: unset; clear: unset; clip: unset; clip-path: unset; clip-rule: unset; color-interpolation: unset; color-interpolation-filters: unset; color-rendering: unset; columns: unset; column-fill: unset; gap: unset; rule-break: unset; rule: unset; rule-inset: unset; rule-visibility-items: unset; column-span: unset; contain: unset; contain-intrinsic-block-size: unset; contain-intrinsic-size: unset; contain-intrinsic-inline-size: unset; container: unset; content: unset; content-visibility: unset; corner-shape: unset; corner-block-end-shape: unset; corner-block-start-shape: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; cursor: unset; cx: unset; cy: unset; d: unset; display: unset; dominant-baseline: unset; dynamic-range-limit: unset; empty-cells: unset; field-sizing: unset; fill: unset; fill-opacity: unset; fill-rule: unset; filter: unset; flex: unset; flex-flow: unset; flex-line-count: unset; float: unset; flood-color: unset; flood-opacity: unset; frame-sizing: unset; grid: unset; grid-area: unset; height: unset; hyphenate-character: unset; hyphenate-limit-chars: unset; hyphens: unset; image-orientation: unset; image-rendering: unset; initial-letter: unset; inline-size: unset; inset-block: unset; inset-inline: unset; interactivity: unset; interest-delay: unset; interpolate-size: unset; isolation: unset; letter-spacing: unset; lighting-color: unset; line-break: unset; list-style: unset; margin-block: unset; margin: unset; margin-inline: unset; margin-trim: unset; marker: unset; mask: unset; mask-type: unset; math-shift: unset; math-style: unset; max-block-size: unset; max-height: unset; max-inline-size: unset; max-width: unset; min-block-size: unset; min-height: unset; min-inline-size: unset; min-width: unset; mix-blend-mode: unset; object-fit: unset; object-position: unset; object-view-box: unset; offset: unset; opacity: unset; order: unset; orphans: unset; outline: unset; outline-offset: unset; overflow-anchor: unset; overflow-block: unset; overflow-clip-margin: unset; overflow-inline: unset; overflow-wrap: unset; overflow: unset; overlay: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; overscroll-behavior: unset; padding-block: unset; padding: unset; padding-inline: unset; page: unset; page-margin-safety: unset; page-orientation: unset; paint-order: unset; perspective: unset; perspective-origin: unset; pointer-events: unset; position-try: unset; position-visibility: unset; print-color-adjust: unset; quotes: unset; r: unset; reading-flow: unset; reading-order: unset; resize: unset; right: unset; rotate: unset; ruby-align: unset; ruby-overhang: unset; ruby-position: unset; rule-overlap: unset; rx: unset; ry: unset; scale: unset; scroll-axis-lock: unset; scroll-behavior: unset; scroll-initial-target: unset; scroll-margin-block: unset; scroll-margin: unset; scroll-margin-inline: unset; scroll-marker-group: unset; scroll-padding-block: unset; scroll-padding: unset; scroll-padding-inline: unset; scroll-snap-align: unset; scroll-snap-stop: unset; scroll-snap-type: unset; scroll-target-group: unset; scroll-timeline: unset; scrollbar-color: unset; scrollbar-gutter: unset; scrollbar-width: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; shape-rendering: unset; size: unset; speak: unset; stop-color: unset; stop-opacity: unset; stroke: unset; stroke-dasharray: unset; stroke-dashoffset: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-width: unset; tab-size: unset; table-layout: unset; text-align: unset; text-align-last: unset; text-anchor: unset; text-autospace: unset; text-box: unset; text-combine-upright: unset; text-decoration: unset; text-decoration-inset: unset; text-decoration-skip-ink: unset; text-emphasis: unset; text-emphasis-position: unset; text-fit: unset; text-indent: unset; text-justify: unset; text-overflow: unset; text-shadow: unset; text-transform: unset; text-underline-offset: unset; text-underline-position: unset; text-wrap: unset; timeline-scope: unset; timeline-trigger: unset; touch-action: unset; transform: unset; transform-box: unset; transform-origin: unset; transform-style: unset; transition: unset; translate: unset; trigger-scope: unset; user-select: unset; vector-effect: unset; vertical-align: unset; view-timeline: unset; view-transition-class: unset; view-transition-group: unset; view-transition-name: unset; view-transition-scope: unset; visibility: unset; border-spacing: unset; -webkit-box-align: unset; -webkit-box-decoration-break: unset; -webkit-box-direction: unset; -webkit-box-flex: unset; -webkit-box-ordinal-group: unset; -webkit-box-orient: unset; -webkit-box-pack: unset; -webkit-box-reflect: unset; -webkit-line-break: unset; -webkit-line-clamp: unset; -webkit-mask-box-image: unset; -webkit-rtl-ordering: unset; -webkit-ruby-position: unset; -webkit-tap-highlight-color: unset; -webkit-text-combine: unset; -webkit-text-decorations-in-effect: unset; -webkit-text-fill-color: unset; -webkit-text-security: unset; -webkit-text-stroke: unset; -webkit-user-drag: unset; white-space-collapse: unset; widows: unset; width: unset; will-change: unset; window-drag: unset; word-break: unset; word-spacing: unset; x: unset; y: unset; z-index: unset; position: absolute; top: 0px; left: 0px;"></div></div></body></html>
+</body></html>

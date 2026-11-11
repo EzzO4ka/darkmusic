@@ -1,8 +1,23 @@
-const { app, BrowserWindow, shell } = require('electron');
+const { app, BrowserWindow, shell, nativeTheme } = require('electron');
 const path = require('path');
 
 let mainWindow = null;
 let pendingDeepLinkUrl = null;
+
+function notifyWindowSystemTheme() {
+  if (mainWindow && !mainWindow.isDestroyed() && mainWindow.webContents) {
+    const isLight = !nativeTheme.shouldUseDarkColors;
+    mainWindow.webContents
+      .executeJavaScript(
+        `window.__ANDROID_OS_PREFERS_LIGHT__ = ${isLight}; if (typeof window.onNativeSystemThemeChanged === 'function') { window.onNativeSystemThemeChanged(${isLight}); }`
+      )
+      .catch(() => {});
+  }
+}
+
+nativeTheme.on('updated', () => {
+  notifyWindowSystemTheme();
+});
 
 function extractDeepLinkFromArgv(argv) {
   if (!Array.isArray(argv)) return null;

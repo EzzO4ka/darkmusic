@@ -503,6 +503,16 @@ test('resolveEffectiveAppTheme, resolveThemeOnSystemSchemeChange, and cycleNextA
   assert.equal(resolveEffectiveAppTheme({ savedTheme: 'light', systemPrefersLight: false }), 'light');
   assert.equal(resolveEffectiveAppTheme({ savedTheme: 'dark', systemPrefersLight: true }), 'dark');
 
+  // When OS color scheme changes between sessions or reloads, it automatically switches to the new OS theme
+  assert.equal(
+    resolveEffectiveAppTheme({ savedTheme: 'dark', systemPrefersLight: true, previousOsScheme: 'dark' }),
+    'light'
+  );
+  assert.equal(
+    resolveEffectiveAppTheme({ savedTheme: 'light', systemPrefersLight: false, previousOsScheme: 'light' }),
+    'dark'
+  );
+
   // When OS color scheme changes dynamically, light -> 'light', dark -> 'dark'
   assert.equal(resolveThemeOnSystemSchemeChange(true), 'light');
   assert.equal(resolveThemeOnSystemSchemeChange(false), 'dark');
