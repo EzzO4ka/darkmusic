@@ -603,11 +603,11 @@
     "updatedAt": 1794423428963
   },
   "tempBroadcast": {
-    "id": "tmp_1794423800505",
+    "id": "tmp_1794423824914",
     "title": "Хуй",
     "message": "Хуй",
     "active": true,
-    "createdAt": 1794423800505
+    "createdAt": 1794423824914
   },
   "pinnedBroadcast": {
     "id": "",
@@ -639,5 +639,5 @@
     "active": true,
     "updatedAt": 1794397699559
   },
-  "updatedAt": 1794423800587
+  "updatedAt": 1794423824933
 }
