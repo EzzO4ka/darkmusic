@@ -968,7 +968,7 @@
     <div id="appRootShell" class="max-w-[430px] lg:max-w-none lg:w-full mx-auto min-h-screen lg:h-screen lg:overflow-hidden bg-black border-x border-zinc-900/80 lg:border-x-0 relative z-10 flex flex-col pb-36 lg:pb-[84px] lg:p-2 lg:gap-2 shadow-2xl shadow-purple-950/20">
 
         <!-- МОДАЛЬНОЕ ОКНО ВЫБОРА ТЕМЫ ОФОРМЛЕНИЯ (3 ТЕМЫ + АВТОМАТИЧЕСКАЯ ПО СИСТЕМЕ ПК / ТЕЛЕФОНА) -->
-        <div id="themeSelectorModal" class="fixed inset-0 z-[80] hidden bg-black/80 backdrop-blur-2xl flex-col items-center justify-center p-4 select-none" onclick="if(event.target===this)closeThemeSelectorModal()">
+        <div id="themeSelectorModal" class="fixed inset-0 z-[80] bg-black/80 backdrop-blur-2xl flex-col items-center justify-center p-4 select-none hidden" onclick="if(event.target===this)closeThemeSelectorModal()">
             <div class="w-full max-w-[390px] lg:max-w-[460px] rounded-3xl bg-zinc-950 border border-purple-500/40 p-5 lg:p-6 space-y-4 shadow-2xl shadow-purple-950/70 relative overflow-hidden">
                 <div class="flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3">
@@ -1000,13 +1000,13 @@
                                 <p class="text-[10px] text-zinc-400 mt-0.5">Фирменный чёрно-фиолетовый дизайн Dark Music по умолчанию</p>
                             </div>
                         </div>
-                        <span id="themeOptionCheck_dark" class="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-[10px] shrink-0">
+                        <span id="themeOptionCheck_dark" class="w-6 h-6 rounded-full bg-zinc-800 text-transparent flex items-center justify-center text-[10px] shrink-0">
                             <i class="fa-solid fa-check"></i>
                         </span>
                     </button>
 
                     <!-- Тема 2: Неоновая (Стеклянная) -->
-                    <button type="button" onclick="setAppTheme('ps5', true)" id="themeOptionBtn_ps5" class="w-full p-3.5 rounded-2xl bg-zinc-900/90 hover:bg-zinc-900 border border-zinc-800 flex items-center justify-between gap-3 text-left transition-all spring-btn">
+                    <button type="button" onclick="setAppTheme('ps5', true)" id="themeOptionBtn_ps5" class="w-full p-3.5 rounded-2xl bg-purple-950/40 border-2 border-purple-500 flex items-center justify-between gap-3 text-left transition-all spring-btn shadow-lg shadow-purple-950/40">
                         <div class="flex items-center gap-3 min-w-0">
                             <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-purple-600 via-fuchsia-600 to-indigo-950 border border-purple-300/60 flex items-center justify-center text-white shrink-0 shadow-lg shadow-purple-600/40">
                                 <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
@@ -1019,7 +1019,7 @@
                                 <p class="text-[10px] text-zinc-400 mt-0.5">Полупрозрачный стеклянный интерфейс и плавно пульсирующий фиолетовый фон</p>
                             </div>
                         </div>
-                        <span id="themeOptionCheck_ps5" class="w-6 h-6 rounded-full bg-zinc-800 text-transparent flex items-center justify-center text-[10px] shrink-0">
+                        <span id="themeOptionCheck_ps5" class="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-[10px] shrink-0 shadow">
                             <i class="fa-solid fa-check"></i>
                         </span>
                     </button>
@@ -1051,7 +1051,7 @@
                             <i class="fa-solid fa-wand-magic-sparkles text-[10px] text-purple-400"></i>
                             <span class="text-[11px] font-extrabold text-white">Авто-смена по теме ПК / телефона</span>
                         </div>
-                        <p id="systemThemeStatusLabel" class="text-[10px] text-zinc-400 mt-0.5">Светлая система → Белая тема • Тёмная система → Обычная тёмная</p>
+                        <p id="systemThemeStatusLabel" class="text-[10px] text-zinc-400 mt-0.5">Сейчас на устройстве: Тёмная тема (включит Обычную тёмную)</p>
                     </div>
                     <button type="button" onclick="applySystemThemeNow()" class="px-3 py-1.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 text-purple-300 text-[10px] font-extrabold shrink-0 spring-btn">
                         Как в системе
@@ -1105,9 +1105,13 @@
                         <h2 id="whatsNewTitle" class="text-base font-black text-white truncate mt-1">Что нового в v4.2?</h2>
                     </div>
                 </div>
-                <div id="whatsNewBody" class="text-xs text-zinc-300 leading-relaxed whitespace-pre-line overflow-y-auto no-scrollbar pr-1 flex-1 bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-3.5">Добавлены 3 темы оформления: Тёмная, Неоновая (стеклянная) и Светлая;
-Автоматическое переключение темы по настройкам телефона или ПК;
-Обновлена сборка v4.2 и заблокированы устаревшие версии ниже v4.2.</div>
+                <div id="whatsNewBody" class="text-xs text-zinc-300 leading-relaxed whitespace-pre-line overflow-y-auto no-scrollbar pr-1 flex-1 bg-zinc-900/60 border border-zinc-800/80 rounded-2xl p-3.5">🎨 БОЛЬШОЕ ОБНОВЛЕНИЕ ОФОРМЛЕНИЯ!
+Теперь внешний вид Dark Music можно настроить полностью под себя:
+• Новая тема «Неон» — глубокий космический стиль, неоновое свечение
+• Светлая (Белая) дневная тема — чистый контрастный интерфейс для комфортного использования приложения на ярком солнце. 
+• Классическая тёмная — наш фирменный чёрно-фиолетовый AMOLED-дизайн. 
+• Авто-переключение «Как в системе» — приложение автоматически подстраивается под тему вашего смартфона или ПК в реальном времени.
+Настроить оформление можно в любой момент через иконку палитры!</div>
                 <button onclick="dismissWhatsNewModal()" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 hover:opacity-95 text-white font-black text-xs flex items-center justify-center gap-2 shadow-xl shadow-purple-600/30 spring-btn shrink-0">
                     <i class="fa-solid fa-check text-sm"></i>
                     <span>Отлично, перейти к музыке</span>
@@ -1173,8 +1177,8 @@
                     <i class="fa-solid fa-compact-disc fa-spin text-sm"></i>
                 </div>
                 <div class="min-w-0 flex-1">
-                    <div id="toastTag" class="text-[9px] font-black uppercase tracking-widest text-purple-400">СЕЙЧАС ИГРАЕТ</div>
-                    <div id="toastMessage" class="text-xs font-bold text-white truncate">МС ДОЛБОЁБ — Кто пчелок уважает</div>
+                    <div id="toastTag" class="text-[9px] font-black uppercase tracking-widest text-purple-400">ДОСТУП ОТКРЫТ</div>
+                    <div id="toastMessage" class="text-xs font-bold text-white truncate">Панель владельца разблокирована</div>
                 </div>
             </div>
         </div>
@@ -1196,7 +1200,7 @@
 
             <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
                 <button type="button" onclick="openThemeSelectorModal()" id="mobileThemeSwitchBtn" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 flex items-center justify-center text-purple-300 shrink-0 spring-btn" title="Сменить тему (Тёмная / Неоновая / Светлая)">
-                    <i id="mobileThemeSwitchIcon" class="fa-solid fa-palette text-xs"></i>
+                    <i id="mobileThemeSwitchIcon" class="fa-solid fa-wand-magic-sparkles text-xs"></i>
                 </button>
                 <button onclick="switchTab('favorites')" id="mobileHeaderFavBtn" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-800 flex items-center justify-center text-rose-400 relative shrink-0 spring-btn" title="Избранное (Любимые треки)">
                     <i class="fa-solid fa-heart text-xs"></i>
@@ -1480,8 +1484,8 @@
                             <span id="deskTopAlbumsCount">5 релизов</span>
                         </div>
                         <button type="button" onclick="openThemeSelectorModal()" id="desktopThemeSwitchBtn" class="px-3.5 py-1.5 rounded-full bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 text-purple-300 text-[11px] font-extrabold flex items-center gap-1.5 spring-btn" title="Сменить тему оформления (Тёмная / Неоновая / Светлая)">
-                            <i id="desktopThemeSwitchIcon" class="fa-solid fa-palette text-xs"></i>
-                            <span id="desktopThemeSwitchLabel">Тема: Тёмная</span>
+                            <i id="desktopThemeSwitchIcon" class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+                            <span id="desktopThemeSwitchLabel">Тема: Неон</span>
                         </button>
                         <button onclick="switchTab('favorites')" id="deskTopFavBtn" class="px-3 py-1.5 rounded-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-rose-400 text-[11px] font-extrabold flex items-center gap-1.5 spring-btn" title="Любимые треки">
                             <i class="fa-solid fa-heart text-xs"></i>
@@ -1536,7 +1540,7 @@
                             <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
                                 <div class="space-y-3 max-w-xl">
                                     <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-purple-500/15 border border-purple-400/30">
-                                        <div id="heroEq" class="inline-flex items-end gap-0.5 h-3">
+                                        <div id="heroEq" class="inline-flex items-end gap-0.5 h-3 eq-paused">
                                             <span class="w-0.5 bg-purple-400 rounded-full eq-bar-1"></span>
                                             <span class="w-0.5 bg-fuchsia-400 rounded-full eq-bar-2"></span>
                                             <span class="w-0.5 bg-purple-400 rounded-full eq-bar-3"></span>
@@ -1569,25 +1573,25 @@
 
                                 <!-- Витрина актуального трека на ПК внутри главного баннера -->
                                 <div id="deskHeroFeaturedCard" class="hidden lg:flex items-center gap-3.5 p-3.5 rounded-2xl bg-black/55 backdrop-blur-xl border border-white/10 w-[300px] xl:w-[320px] shrink-0">
-                <div onclick="playTrackById('trk_1794211260337')" class="flex items-center gap-3.5 w-full cursor-pointer group">
+                <div onclick="playTrackById('trk_1794062482767')" class="flex items-center gap-3.5 w-full cursor-pointer group">
                     <div class="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 shadow-lg">
                         
                 <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-600 via-teal-900 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
                     <i class="fa-solid fa-compact-disc text-lg text-white/75"></i>
-                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/covers/alb_pchelka.jpg" alt="" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/covers/%D0%9D%D0%BE%D1%87%D0%BD%D0%B0%D1%8F%20%D0%BE%D0%BF%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%20%D0%BE%D1%82%D0%BA%D0%BB%D0%BE%D0%BD%D0%B5%D0%BD%D0%B0.png" alt="" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
                 </div>
             
                     </div>
                     <div class="min-w-0 flex-1">
                         <span class="px-2 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-300 text-[8px] font-black uppercase tracking-widest">СЕЙЧАС В ЭФИРЕ</span>
                         <div class="flex items-center gap-1 mt-1">
-                            <h3 class="text-xs font-black text-white group-hover:text-purple-300 truncate">Кто пчелок уважает</h3>
-                            
+                            <h3 class="text-xs font-black text-white group-hover:text-purple-300 truncate">115 причин не ехать в Выборг</h3>
+                            <span class="px-1 py-0.2 rounded bg-rose-500/20 text-rose-400 text-[8px] font-black shrink-0">18+</span>
                         </div>
-                        <p class="text-[10px] text-zinc-400 truncate mt-0.5">МС ДОЛБОЁБ</p>
+                        <p class="text-[10px] text-zinc-400 truncate mt-0.5">МС ЕЗДИТЬ</p>
                     </div>
                     <div class="w-9 h-9 rounded-full bg-purple-600 group-hover:bg-purple-500 text-white flex items-center justify-center shadow-lg shadow-purple-600/40 shrink-0">
-                        <i class="fa-solid fa-pause text-xs"></i>
+                        <i class="fa-solid fa-play ml-0.5 text-xs"></i>
                     </div>
                 </div>
             </div>
@@ -1686,7 +1690,7 @@
                         </button>
                     </div>
                     <div id="homeChartList" class="space-y-2 lg:grid lg:grid-cols-2 lg:gap-3 lg:space-y-0">
-                    <div onclick="playTrackById('trk_1794211260337', 'all', '')" data-track-row="trk_1794211260337" class="p-2.5 rounded-2xl border flex items-center gap-2.5 cursor-pointer spring-btn bg-purple-950/35 border-purple-500/50">
+                    <div onclick="playTrackById('trk_1794211260337', 'all', '')" data-track-row="trk_1794211260337" class="p-2.5 rounded-2xl bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900 border flex items-center gap-2.5 cursor-pointer spring-btn">
                         <div class="w-6 h-6 rounded-lg border bg-amber-500/20 text-amber-400 border-amber-500/40 flex items-center justify-center text-[10px] font-black shrink-0">#1</div>
                         
                 <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-600 via-teal-900 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
@@ -1696,7 +1700,7 @@
             
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-1.5 min-w-0">
-                                <span data-track-title="trk_1794211260337" class="text-xs font-extrabold truncate text-purple-300" title="Кто пчелок уважает">Кто пчелок уважает</span>
+                                <span data-track-title="trk_1794211260337" class="text-xs font-extrabold text-white truncate" title="Кто пчелок уважает">Кто пчелок уважает</span>
                                 
                 <span data-track-liked-badge="trk_1794211260337" class="hidden items-center justify-center text-rose-400 text-[10px] shrink-0" title="В Любимых треках">
                     <i class="fa-solid fa-heart"></i>
@@ -1716,13 +1720,13 @@
                     <i class="fa-solid fa-ellipsis text-xs"></i>
                 </button>
             
-                            <div data-track-playbtn="trk_1794211260337" class="w-7 h-7 rounded-xl flex items-center justify-center bg-purple-600 text-white">
-                                <i data-track-playicon="trk_1794211260337" class="fa-solid fa-pause text-[10px]"></i>
+                            <div data-track-playbtn="trk_1794211260337" class="w-7 h-7 rounded-xl bg-zinc-900 text-zinc-400 flex items-center justify-center">
+                                <i data-track-playicon="trk_1794211260337" class="fa-solid fa-play ml-0.5 text-[10px]"></i>
                             </div>
                         </div>
                     </div>
                 
-                    <div onclick="playTrackById('trk_1794062482767', 'all', '')" data-track-row="trk_1794062482767" class="p-2.5 rounded-2xl bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900 border flex items-center gap-2.5 cursor-pointer spring-btn">
+                    <div onclick="playTrackById('trk_1794062482767', 'all', '')" data-track-row="trk_1794062482767" class="p-2.5 rounded-2xl border flex items-center gap-2.5 cursor-pointer spring-btn bg-purple-950/35 border-purple-500/50">
                         <div class="w-6 h-6 rounded-lg border bg-zinc-400/20 text-zinc-300 border-zinc-400/40 flex items-center justify-center text-[10px] font-black shrink-0">#2</div>
                         
                 <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-600 via-teal-900 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
@@ -1732,7 +1736,7 @@
             
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-1.5 min-w-0">
-                                <span data-track-title="trk_1794062482767" class="text-xs font-extrabold text-white truncate" title="115 причин не ехать в Выборг">115 причин не ехать в Выборг</span>
+                                <span data-track-title="trk_1794062482767" class="text-xs font-extrabold truncate text-purple-300" title="115 причин не ехать в Выборг">115 причин не ехать в Выборг</span>
                                 
                 <span data-track-liked-badge="trk_1794062482767" class="hidden items-center justify-center text-rose-400 text-[10px] shrink-0" title="В Любимых треках">
                     <i class="fa-solid fa-heart"></i>
@@ -1982,7 +1986,7 @@
 
                     <!-- Список треков -->
                     <div id="homeAllTracksList" class="space-y-2 lg:space-y-1.5">
-                <div onclick="playTrackById('trk_1794211260337', 'all', '')" data-track-row="trk_1794211260337" class="p-2.5 md:px-3.5 md:py-2 rounded-2xl border flex md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_auto] items-center gap-2.5 md:gap-3 cursor-pointer spring-btn bg-purple-950/35 border-purple-500/50">
+                <div onclick="playTrackById('trk_1794211260337', 'all', '')" data-track-row="trk_1794211260337" class="p-2.5 md:px-3.5 md:py-2 rounded-2xl bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900 border flex md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_auto] items-center gap-2.5 md:gap-3 cursor-pointer spring-btn">
                     <div class="hidden md:flex w-6 h-6 items-center justify-center text-[11px] font-bold text-zinc-500 tabular-nums shrink-0">1</div>
                     <div class="flex items-center gap-2.5 min-w-0 flex-1">
                         
@@ -1993,7 +1997,7 @@
             
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-1.5">
-                                <span data-track-title="trk_1794211260337" class="text-xs font-extrabold truncate text-purple-300" title="Кто пчелок уважает">Кто пчелок уважает</span>
+                                <span data-track-title="trk_1794211260337" class="text-xs font-extrabold text-white truncate" title="Кто пчелок уважает">Кто пчелок уважает</span>
                                 
                                 <span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">NEW</span>
                             </div>
@@ -2016,13 +2020,13 @@
                     <i class="fa-solid fa-ellipsis text-xs"></i>
                 </button>
             
-                        <div data-track-playbtn="trk_1794211260337" class="w-7 h-7 rounded-xl flex items-center justify-center bg-purple-600 text-white">
-                            <i data-track-playicon="trk_1794211260337" class="fa-solid fa-pause text-[10px]"></i>
+                        <div data-track-playbtn="trk_1794211260337" class="w-7 h-7 rounded-xl bg-zinc-900 text-zinc-400 flex items-center justify-center">
+                            <i data-track-playicon="trk_1794211260337" class="fa-solid fa-play ml-0.5 text-[10px]"></i>
                         </div>
                     </div>
                 </div>
             
-                <div onclick="playTrackById('trk_1794062482767', 'all', '')" data-track-row="trk_1794062482767" class="p-2.5 md:px-3.5 md:py-2 rounded-2xl bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900 border flex md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_auto] items-center gap-2.5 md:gap-3 cursor-pointer spring-btn">
+                <div onclick="playTrackById('trk_1794062482767', 'all', '')" data-track-row="trk_1794062482767" class="p-2.5 md:px-3.5 md:py-2 rounded-2xl border flex md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_auto] items-center gap-2.5 md:gap-3 cursor-pointer spring-btn bg-purple-950/35 border-purple-500/50">
                     <div class="hidden md:flex w-6 h-6 items-center justify-center text-[11px] font-bold text-zinc-500 tabular-nums shrink-0">2</div>
                     <div class="flex items-center gap-2.5 min-w-0 flex-1">
                         
@@ -2033,7 +2037,7 @@
             
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-1.5">
-                                <span data-track-title="trk_1794062482767" class="text-xs font-extrabold text-white truncate" title="115 причин не ехать в Выборг">115 причин не ехать в Выборг</span>
+                                <span data-track-title="trk_1794062482767" class="text-xs font-extrabold truncate text-purple-300" title="115 причин не ехать в Выборг">115 причин не ехать в Выборг</span>
                                 <span class="px-1.5 py-0.2 rounded bg-zinc-900 border border-rose-500/50 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>
                                 <span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">NEW</span>
                             </div>
@@ -2876,13 +2880,48 @@
                                 <p class="text-[10px] lg:text-xs text-zinc-500">Смотрите клипы прямо в приложении</p>
                             </div>
                         </div>
-                        <span id="totalVideosBadge" class="px-2.5 py-0.5 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] font-bold text-zinc-400">4 шт.</span>
+                        <span id="totalVideosBadge" class="px-2.5 py-0.5 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] font-bold text-zinc-400">5 шт.</span>
                     </div>
                     <div class="p-3 rounded-xl bg-purple-500/10 border border-purple-500/25 flex items-start gap-2.5">
                         <i class="fa-solid fa-thumbtack text-purple-400 text-xs mt-0.5 shrink-0"></i>
                         <p class="text-[11px] font-medium text-zinc-200 leading-snug">Некоторые клипы возможно посмотреть только с VPN - потому что эти клипы транслируются через YouTube.</p>
                     </div>
                     <div id="homeVideosList" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5">
+                <div onclick="openVideoPlayerModal('vid_1794420741450')" class="rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 overflow-hidden cursor-pointer group spring-btn">
+                    <div class="w-full aspect-video bg-gradient-to-br from-amber-600 via-orange-950 to-zinc-950 relative overflow-hidden flex items-center justify-center">
+                        <i class="fa-solid fa-film text-3xl text-white/30"></i>
+                        <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/covers/viborg_yt.jpg" alt="115 причин не ехать в Выборг" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                        <div class="absolute inset-0 bg-black/35 group-hover:bg-black/20 transition-all flex items-center justify-center">
+                            <div class="w-12 h-12 rounded-full bg-white/95 text-black flex items-center justify-center shadow-xl shadow-black/60">
+                                <i class="fa-solid fa-play text-sm ml-0.5"></i>
+                            </div>
+                        </div>
+                        <span class="absolute top-2.5 right-2.5 px-1.5 py-0.5 rounded bg-rose-600 text-white text-[8px] font-black uppercase shadow">18+</span>
+                        <span class="absolute bottom-2 right-2.5 px-1.5 py-0.5 rounded bg-black/80 text-white text-[9px] font-bold">2:27</span>
+                    </div>
+                    <div class="p-3 flex items-center justify-between gap-2">
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-1.5">
+                                <h3 class="text-xs font-extrabold text-white truncate">115 причин не ехать в Выборг</h3>
+                                <span class="px-1.5 py-0.2 rounded bg-zinc-900 border border-rose-500/50 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 mt-1 min-w-0">
+                                <div class="flex items-center -space-x-1 shrink-0">
+                                    
+                <div class="w-4 h-4 rounded-full bg-gradient-to-br from-amber-600 via-orange-950 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
+                    <i class="fa-solid fa-gauge-high text-[8px] text-white/85"></i>
+                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/avatars/mc_ezdittttt3.jpg" alt="МС ЕЗДИТЬ" decoding="async" class="absolute inset-0 w-full h-full object-cover rounded-full" onerror="this.style.display='none'">
+                </div>
+            
+                                    
+                                </div>
+                                <p class="text-[10px] text-zinc-400 truncate">МС ЕЗДИТЬ • 2026</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-bold text-purple-400 shrink-0">Смотреть</span>
+                    </div>
+                </div>
+            
                 <div onclick="openVideoPlayerModal('vid_1793814480289')" class="rounded-2xl bg-zinc-950 hover:bg-zinc-900 border border-zinc-900 overflow-hidden cursor-pointer group spring-btn">
                     <div class="w-full aspect-video bg-gradient-to-br from-sky-600 via-blue-950 to-zinc-950 relative overflow-hidden flex items-center justify-center">
                         <i class="fa-solid fa-film text-3xl text-white/30"></i>
@@ -3141,7 +3180,7 @@
                     <span class="text-right pr-2"><i class="fa-regular fa-clock"></i></span>
                 </div>
                 <div id="fullChartsList" class="space-y-2 lg:space-y-1.5">
-                <div onclick="playTrackById('trk_1794211260337', 'all', '')" data-track-row="trk_1794211260337" class="p-2.5 md:px-3.5 md:py-2 rounded-2xl border flex md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_auto] items-center gap-2.5 md:gap-3 cursor-pointer spring-btn bg-purple-950/35 border-purple-500/50">
+                <div onclick="playTrackById('trk_1794211260337', 'all', '')" data-track-row="trk_1794211260337" class="p-2.5 md:px-3.5 md:py-2 rounded-2xl bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900 border flex md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_auto] items-center gap-2.5 md:gap-3 cursor-pointer spring-btn">
                     <div class="w-6 h-6 rounded-lg border bg-amber-500/20 text-amber-400 border-amber-500/40 flex items-center justify-center text-[10px] font-black shrink-0">#1</div>
                     <div class="flex items-center gap-2.5 min-w-0 flex-1">
                         
@@ -3152,7 +3191,7 @@
             
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-1.5">
-                                <span data-track-title="trk_1794211260337" class="text-xs font-extrabold truncate text-purple-300" title="Кто пчелок уважает">Кто пчелок уважает</span>
+                                <span data-track-title="trk_1794211260337" class="text-xs font-extrabold text-white truncate" title="Кто пчелок уважает">Кто пчелок уважает</span>
                                 
                                 <span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">NEW</span>
                             </div>
@@ -3175,13 +3214,13 @@
                     <i class="fa-solid fa-ellipsis text-xs"></i>
                 </button>
             
-                        <div data-track-playbtn="trk_1794211260337" class="w-7 h-7 rounded-xl flex items-center justify-center bg-purple-600 text-white">
-                            <i data-track-playicon="trk_1794211260337" class="fa-solid fa-pause text-[10px]"></i>
+                        <div data-track-playbtn="trk_1794211260337" class="w-7 h-7 rounded-xl bg-zinc-900 text-zinc-400 flex items-center justify-center">
+                            <i data-track-playicon="trk_1794211260337" class="fa-solid fa-play ml-0.5 text-[10px]"></i>
                         </div>
                     </div>
                 </div>
             
-                <div onclick="playTrackById('trk_1794062482767', 'all', '')" data-track-row="trk_1794062482767" class="p-2.5 md:px-3.5 md:py-2 rounded-2xl bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900 border flex md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_auto] items-center gap-2.5 md:gap-3 cursor-pointer spring-btn">
+                <div onclick="playTrackById('trk_1794062482767', 'all', '')" data-track-row="trk_1794062482767" class="p-2.5 md:px-3.5 md:py-2 rounded-2xl border flex md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_auto] items-center gap-2.5 md:gap-3 cursor-pointer spring-btn bg-purple-950/35 border-purple-500/50">
                     <div class="w-6 h-6 rounded-lg border bg-zinc-400/20 text-zinc-300 border-zinc-400/40 flex items-center justify-center text-[10px] font-black shrink-0">#2</div>
                     <div class="flex items-center gap-2.5 min-w-0 flex-1">
                         
@@ -3192,7 +3231,7 @@
             
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-1.5">
-                                <span data-track-title="trk_1794062482767" class="text-xs font-extrabold text-white truncate" title="115 причин не ехать в Выборг">115 причин не ехать в Выборг</span>
+                                <span data-track-title="trk_1794062482767" class="text-xs font-extrabold truncate text-purple-300" title="115 причин не ехать в Выборг">115 причин не ехать в Выборг</span>
                                 <span class="px-1.5 py-0.2 rounded bg-zinc-900 border border-rose-500/50 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>
                                 <span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">NEW</span>
                             </div>
@@ -4934,7 +4973,7 @@
                         
                     </div>
                     
-                <div onclick="playTrackById('trk_1794211260337', 'album', 'alb_1794211260336')" data-track-row="trk_1794211260337" class="p-2.5 md:px-3.5 md:py-2 rounded-2xl border flex md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_auto] items-center gap-2.5 md:gap-3 cursor-pointer spring-btn bg-purple-950/35 border-purple-500/50">
+                <div onclick="playTrackById('trk_1794211260337', 'album', 'alb_1794211260336')" data-track-row="trk_1794211260337" class="p-2.5 md:px-3.5 md:py-2 rounded-2xl border flex md:grid md:grid-cols-[32px_minmax(0,1.8fr)_minmax(0,1fr)_auto] items-center gap-2.5 md:gap-3 cursor-pointer spring-btn bg-zinc-950/90 hover:bg-zinc-900 border-zinc-900">
                     <div class="w-6 h-6 rounded-lg border bg-amber-500/20 text-amber-400 border-amber-500/40 flex items-center justify-center text-[10px] font-black shrink-0">#1</div>
                     <div class="flex items-center gap-2.5 min-w-0 flex-1">
                         
@@ -4945,7 +4984,7 @@
             
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-1.5">
-                                <span data-track-title="trk_1794211260337" class="text-xs font-extrabold truncate text-purple-300" title="Кто пчелок уважает">Кто пчелок уважает</span>
+                                <span data-track-title="trk_1794211260337" class="text-xs font-extrabold truncate text-white" title="Кто пчелок уважает">Кто пчелок уважает</span>
                                 
                                 <span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">NEW</span>
                             </div>
@@ -4968,8 +5007,8 @@
                     <i class="fa-solid fa-ellipsis text-xs"></i>
                 </button>
             
-                        <div data-track-playbtn="trk_1794211260337" class="w-7 h-7 rounded-xl flex items-center justify-center bg-purple-600 text-white">
-                            <i data-track-playicon="trk_1794211260337" class="fa-solid fa-pause text-[10px]"></i>
+                        <div data-track-playbtn="trk_1794211260337" class="w-7 h-7 rounded-xl flex items-center justify-center bg-zinc-900 text-zinc-400">
+                            <i data-track-playicon="trk_1794211260337" class="fa-solid fa-play ml-0.5 text-[10px]"></i>
                         </div>
                     </div>
                 </div>
@@ -4988,7 +5027,7 @@
                             </div>
                             <div>
                                 <h2 class="text-xs font-black text-white">Режим владельца активен</h2>
-                                <p id="cloudSyncStatusText" class="text-[10px] text-emerald-400 font-semibold">Опубликовано в GitHub для всех устройств ✓</p>
+                                <p id="cloudSyncStatusText" class="text-[10px] text-emerald-400 font-semibold">Синхронизировано с EzzO4ka/darkmusic ✓</p>
                             </div>
                         </div>
                         <button onclick="lockOwnerMode()" class="px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-[11px] text-rose-400 font-bold spring-btn">
@@ -5038,7 +5077,7 @@
                                         <i class="fa-solid fa-mobile-screen-button text-emerald-400 text-xs"></i>
                                         <span class="text-[11px] font-extrabold text-emerald-300">Системный Push в шторку устройств</span>
                                     </div>
-                                    <span id="systemPushStatusBadge" class="text-[9px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Разослано</span>
+                                    <span id="systemPushStatusBadge" class="text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">Выкл</span>
                                 </div>
                                 <p class="text-[10px] text-zinc-400 leading-relaxed">
                                     Отправляет системное уведомление прямо в шторку уведомлений Android и браузеров всех подключённых устройств.
@@ -5049,9 +5088,9 @@
                                         Разрешить шторку
                                     </button>
                                 </div>
-                                <input id="ownerSystemPushTitle" type="text" placeholder="Заголовок в шторке (например: 🎵 Dark Music — Новый дроп!)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" data-last-sync-sig="push_1794202530677|1794202530677|Обновите версию приложения|Скоро новая версия выйдет в GitHub. Старые версии заблокированы." data-owner-initialized="1" data-user-dirty="0">
-                                <textarea id="ownerSystemPushMsg" rows="2" placeholder="Текст системного уведомления (придёт в шторку уведомлений телефонов и ПК)..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" data-last-sync-sig="push_1794202530677|1794202530677|Обновите версию приложения|Скоро новая версия выйдет в GitHub. Старые версии заблокированы." data-owner-initialized="1" data-user-dirty="0"></textarea>
-                                <input id="ownerSystemPushImage" type="text" placeholder="Обложка / иконка уведомления (необязательно: logo.png или covers/...)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" data-last-sync-sig="push_1794202530677|1794202530677|Обновите версию приложения|Скоро новая версия выйдет в GitHub. Старые версии заблокированы." data-owner-initialized="1" data-user-dirty="0">
+                                <input id="ownerSystemPushTitle" type="text" placeholder="Заголовок в шторке (например: 🎵 Dark Music — Новый дроп!)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" data-last-sync-sig="|1794307894633|Обновите версию приложения|Скоро новая версия выйдет в GitHub. Старые версии заблокированы." data-owner-initialized="1" data-user-dirty="0">
+                                <textarea id="ownerSystemPushMsg" rows="2" placeholder="Текст системного уведомления (придёт в шторку уведомлений телефонов и ПК)..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" data-last-sync-sig="|1794307894633|Обновите версию приложения|Скоро новая версия выйдет в GitHub. Старые версии заблокированы." data-owner-initialized="1" data-user-dirty="0"></textarea>
+                                <input id="ownerSystemPushImage" type="text" placeholder="Обложка / иконка уведомления (необязательно: logo.png или covers/...)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500" data-last-sync-sig="|1794307894633|Обновите версию приложения|Скоро новая версия выйдет в GitHub. Старые версии заблокированы." data-owner-initialized="1" data-user-dirty="0">
                                 <div class="grid grid-cols-2 gap-2">
                                     <button type="button" onclick="sendOwnerSystemPushNotification(true)" class="py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold text-[11px] flex items-center justify-center gap-1.5 spring-btn">
                                         <i class="fa-solid fa-paper-plane text-[10px]"></i>
@@ -5085,10 +5124,10 @@
                             <div class="p-3 rounded-xl bg-zinc-900/80 border border-zinc-800 space-y-2">
                                 <div class="flex items-center justify-between">
                                     <span class="text-[11px] font-extrabold text-purple-300">2. Закреплённый баннер (висит вверху постоянно)</span>
-                                    <span id="pinnedNotifStatusBadge" class="text-[9px] font-bold px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/40">Закреплено</span>
+                                    <span id="pinnedNotifStatusBadge" class="text-[9px] font-bold px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">Выкл</span>
                                 </div>
-                                <input id="ownerPinnedNotifTitle" type="text" placeholder="Заголовок баннера (например: ⚡ Важная информация)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500" data-last-sync-sig="pin_1793808733458|1794064490793|Ведутся технические работы|Временно возможны перебои в работе приложения." data-owner-initialized="1" data-user-dirty="0">
-                                <textarea id="ownerPinnedNotifMsg" rows="2" placeholder="Текст закреплённого уведомления (будет висеть вверху, пока вы не отмените)..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500" data-last-sync-sig="pin_1793808733458|1794064490793|Ведутся технические работы|Временно возможны перебои в работе приложения." data-owner-initialized="1" data-user-dirty="0"></textarea>
+                                <input id="ownerPinnedNotifTitle" type="text" placeholder="Заголовок баннера (например: ⚡ Важная информация)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500" data-last-sync-sig="|1794307891426|Ведутся технические работы|Временно возможны перебои в работе приложения." data-owner-initialized="1" data-user-dirty="0">
+                                <textarea id="ownerPinnedNotifMsg" rows="2" placeholder="Текст закреплённого уведомления (будет висеть вверху, пока вы не отмените)..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500" data-last-sync-sig="|1794307891426|Ведутся технические работы|Временно возможны перебои в работе приложения." data-owner-initialized="1" data-user-dirty="0"></textarea>
                                 <div class="grid grid-cols-2 gap-2">
                                     <button onclick="saveOwnerPinnedNotification(true)" class="py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-[11px] spring-btn">
                                         Закрепить у всех
@@ -5172,8 +5211,20 @@
                                 <p class="text-[10px] text-zinc-400 leading-relaxed">
                                     Показывает пользователям полноэкранное окно со списком изменений новой версии.
                                 </p>
-                                <input id="ownerWhatsNewTitle" type="text" placeholder="Заголовок (например: Что нового в Dark Music v4.2)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500" data-last-sync-sig="wn_1794307950000|1794307950000|Что нового в v4.2?|С полным списком изменений можете ознакомиться в GitHub https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.2" data-owner-initialized="1" data-user-dirty="0">
-                                <textarea id="ownerWhatsNewContent" rows="3" placeholder="Опишите, что нового добавилось (каждый пункт с новой строки)..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500" data-last-sync-sig="wn_1794307950000|1794307950000|Что нового в v4.2?|С полным списком изменений можете ознакомиться в GitHub https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.2" data-owner-initialized="1" data-user-dirty="0"></textarea>
+                                <input id="ownerWhatsNewTitle" type="text" placeholder="Заголовок (например: Что нового в Dark Music v4.2)" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500" data-last-sync-sig="wn_1794397699559|1794397699559|Что нового в v4.2?|🎨 БОЛЬШОЕ ОБНОВЛЕНИЕ ОФОРМЛЕНИЯ!
+Теперь внешний вид Dark Music можно настроить полностью под себя:
+• Новая тема «Неон» — глубокий космический стиль, неоновое свечение
+• Светлая (Белая) дневная тема — чистый контрастный интерфейс для комфортного использования приложения на ярком солнце. 
+• Классическая тёмная — наш фирменный чёрно-фиолетовый AMOLED-дизайн. 
+• Авто-переключение «Как в системе» — приложение автоматически подстраивается под тему вашего смартфона или ПК в реальном времени.
+Настроить оформление можно в любой момент через иконку палитры!" data-owner-initialized="1" data-user-dirty="0">
+                                <textarea id="ownerWhatsNewContent" rows="3" placeholder="Опишите, что нового добавилось (каждый пункт с новой строки)..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-xs text-white focus:outline-none focus:border-purple-500" data-last-sync-sig="wn_1794397699559|1794397699559|Что нового в v4.2?|🎨 БОЛЬШОЕ ОБНОВЛЕНИЕ ОФОРМЛЕНИЯ!
+Теперь внешний вид Dark Music можно настроить полностью под себя:
+• Новая тема «Неон» — глубокий космический стиль, неоновое свечение
+• Светлая (Белая) дневная тема — чистый контрастный интерфейс для комфортного использования приложения на ярком солнце. 
+• Классическая тёмная — наш фирменный чёрно-фиолетовый AMOLED-дизайн. 
+• Авто-переключение «Как в системе» — приложение автоматически подстраивается под тему вашего смартфона или ПК в реальном времени.
+Настроить оформление можно в любой момент через иконку палитры!" data-owner-initialized="1" data-user-dirty="0"></textarea>
                                 <div class="grid grid-cols-2 gap-2">
                                     <button onclick="saveOwnerWhatsNew(true)" class="py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-extrabold text-[11px] spring-btn">
                                         Включить показ «Что нового»
@@ -6400,6 +6451,25 @@
                             <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-2">
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-center gap-1.5">
+                                        <span class="text-xs font-bold text-white truncate">115 причин не ехать в Выборг</span>
+                                        <span class="text-[10px] text-purple-400 shrink-0">(2026)</span>
+                                        <span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>
+                                    </div>
+                                    <div class="text-[10px] text-zinc-400 truncate">МС ЕЗДИТЬ • <iframe width="560" height="315" src="https://www.youtube.com/embed/h-FZpeTxgNc?si=yKKnXQrENm8KqaD4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe></div>
+                                </div>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <button type="button" onclick="openEditVideoModal('vid_1794420741450')" aria-label="Редактировать клип 115 причин не ехать в Выборг" class="w-7 h-7 rounded-lg bg-zinc-800 text-purple-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-pen text-[10px]"></i>
+                                    </button>
+                                    <button type="button" onclick="removeVideoFromCatalog('vid_1794420741450')" aria-label="Удалить клип 115 причин не ехать в Выборг" class="w-7 h-7 rounded-lg bg-zinc-800 text-rose-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-trash text-[10px]"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        
+                            <div class="p-2.5 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-2">
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center gap-1.5">
                                         <span class="text-xs font-bold text-white truncate">Волшебная бутылочка</span>
                                         <span class="text-[10px] text-purple-400 shrink-0">(2023)</span>
                                         <span class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>
@@ -6598,7 +6668,7 @@
                 <div class="hide-on-ps5 flex items-center justify-between gap-2">
                     <div class="flex items-center gap-2 min-w-0">
                         <span class="w-2 h-2 rounded-full bg-purple-500 animate-pulse shrink-0"></span>
-                        <span id="deskRightAlbumBadge" onclick="openCurrentTrackAlbum()" class="text-[11px] font-black uppercase tracking-wider text-zinc-200 hover:text-purple-400 cursor-pointer truncate">Кто пчелок уважает</span>
+                        <span id="deskRightAlbumBadge" onclick="openCurrentTrackAlbum()" class="text-[11px] font-black uppercase tracking-wider text-zinc-200 hover:text-purple-400 cursor-pointer truncate">115 причин не ехать в Выборг</span>
                     </div>
                     <div class="flex items-center gap-1.5 shrink-0">
                         <button onclick="shareCurrentTrack(event)" class="w-7 h-7 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center shrink-0 spring-btn" title="Поделиться треком">
@@ -6618,7 +6688,7 @@
                     <div id="deskRightCoverInner" class="w-full h-full flex items-center justify-center">
                 <div class="w-full h-full bg-gradient-to-br from-emerald-600 via-teal-900 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
                     <i class="fa-solid fa-compact-disc text-5xl text-white/75"></i>
-                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/covers/alb_pchelka.jpg" alt="" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/covers/%D0%9D%D0%BE%D1%87%D0%BD%D0%B0%D1%8F%20%D0%BE%D0%BF%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%20%D0%BE%D1%82%D0%BA%D0%BB%D0%BE%D0%BD%D0%B5%D0%BD%D0%B0.png" alt="" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
                 </div>
             </div>
                     <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -6632,7 +6702,7 @@
                         <i id="ps5RightPlayIcon" class="fa-solid fa-play text-xs"></i>
                         <span id="ps5RightPlayText">Play</span>
                     </button>
-                    <button type="button" id="ps5RightLikeBtn" onclick="toggleLikeCurrent()" class="py-2.5 px-4 rounded-full bg-zinc-900/90 hover:bg-zinc-800 border border-white/15 text-white font-extrabold text-xs flex items-center justify-center gap-2 spring-btn">
+                    <button type="button" id="ps5RightLikeBtn" onclick="toggleLikeCurrent()" class="py-2.5 px-4 rounded-full border font-extrabold text-xs flex items-center justify-center gap-2 spring-btn bg-zinc-900/90 hover:bg-zinc-800 border-white/15 text-white">
                         <i class="fa-solid fa-heart text-xs"></i>
                         <span>Нравится</span>
                     </button>
@@ -6645,19 +6715,19 @@
                 <div class="hide-on-ps5 flex items-start justify-between gap-3">
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-1.5 flex-wrap">
-                            <h3 id="deskRightTitle" onclick="openFullPlayer()" class="text-base font-black text-white hover:text-purple-300 cursor-pointer truncate">Кто пчелок уважает</h3>
-                            <span id="deskRightExplicitBadge" class="px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/50 text-rose-400 text-[8px] font-black uppercase shrink-0 hidden">18+</span>
+                            <h3 id="deskRightTitle" onclick="openFullPlayer()" class="text-base font-black text-white hover:text-purple-300 cursor-pointer truncate">115 причин не ехать в Выборг</h3>
+                            <span id="deskRightExplicitBadge" class="px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/50 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>
                             <span id="deskRightNewBadge" class="px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">NEW</span>
                         </div>
                         <div id="deskRightArtistsContainer" class="flex items-center flex-wrap gap-1.5 mt-1.5">
-                    <button onclick="openArtistProfile('art_ms_dolboeb_1794211002271')" class="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-300 hover:text-white spring-btn">
+                    <button onclick="openArtistProfile('mc_ezdit')" class="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-300 hover:text-white spring-btn">
                         
-                <div class="w-5 h-5 rounded-full bg-gradient-to-br from-emerald-600 via-teal-900 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
-                    <i class="fa-solid fa-fire text-[8px] text-white/85"></i>
-                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/avatars/dolboeb.jpg" alt="МС ДОЛБОЁБ" decoding="async" class="absolute inset-0 w-full h-full object-cover rounded-full" onerror="this.style.display='none'">
+                <div class="w-5 h-5 rounded-full bg-gradient-to-br from-amber-600 via-orange-950 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
+                    <i class="fa-solid fa-gauge-high text-[8px] text-white/85"></i>
+                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/avatars/mc_ezdittttt3.jpg" alt="МС ЕЗДИТЬ" decoding="async" class="absolute inset-0 w-full h-full object-cover rounded-full" onerror="this.style.display='none'">
                 </div>
             
-                        <span>МС ДОЛБОЁБ</span>
+                        <span>МС ЕЗДИТЬ</span>
                         <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
                     </button>
                     
@@ -6672,34 +6742,34 @@
                 <div id="deskRightArtistCard" class="space-y-2.5">
                         <div class="rounded-2xl bg-zinc-900/70 border border-zinc-800/90 p-3.5 space-y-2.5 overflow-hidden">
                             
-                                <div onclick="openArtistProfile('art_ms_dolboeb_1794211002271')" class="hide-on-ps5 relative -mx-3.5 -mt-3.5 mb-2.5 h-28 rounded-t-2xl overflow-hidden cursor-pointer group">
-                                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/banners/dolboeb2.jpg" alt="МС ДОЛБОЁБ" decoding="async" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" onerror="this.parentElement.style.display='none'">
+                                <div onclick="openArtistProfile('mc_ezdit')" class="hide-on-ps5 relative -mx-3.5 -mt-3.5 mb-2.5 h-28 rounded-t-2xl overflow-hidden cursor-pointer group">
+                                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/banners/mc_ezdit4.jpg" alt="МС ЕЗДИТЬ" decoding="async" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" onerror="this.parentElement.style.display='none'">
                                     <div class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/35 to-black/25"></div>
                                     <span class="absolute top-2.5 left-3 text-[10px] font-black uppercase tracking-wider text-white/90 drop-shadow">Об исполнителе</span>
                                     <span class="absolute top-2.5 right-3 text-[10px] font-bold text-purple-300 group-hover:text-white drop-shadow">Профиль →</span>
                                 </div>
                                 <div class="ps5-only-flex items-center justify-between">
                                     <span class="text-[10px] font-black uppercase tracking-wider text-zinc-400">Об исполнителе</span>
-                                    <button onclick="openArtistProfile('art_ms_dolboeb_1794211002271')" class="text-[10px] font-bold text-purple-400 hover:text-purple-300">Профиль →</button>
+                                    <button onclick="openArtistProfile('mc_ezdit')" class="text-[10px] font-bold text-purple-400 hover:text-purple-300">Профиль →</button>
                                 </div>
                             
-                            <div onclick="openArtistProfile('art_ms_dolboeb_1794211002271')" class="flex items-center gap-3 cursor-pointer group">
+                            <div onclick="openArtistProfile('mc_ezdit')" class="flex items-center gap-3 cursor-pointer group">
                                 
-                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-600 via-teal-900 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
-                    <i class="fa-solid fa-fire text-base text-white/85"></i>
-                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/avatars/dolboeb.jpg" alt="МС ДОЛБОЁБ" decoding="async" class="absolute inset-0 w-full h-full object-cover rounded-full" onerror="this.style.display='none'">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-600 via-orange-950 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
+                    <i class="fa-solid fa-gauge-high text-base text-white/85"></i>
+                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/avatars/mc_ezdittttt3.jpg" alt="МС ЕЗДИТЬ" decoding="async" class="absolute inset-0 w-full h-full object-cover rounded-full" onerror="this.style.display='none'">
                 </div>
             
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-center gap-1">
-                                        <h4 class="text-xs font-black text-white group-hover:text-purple-300 truncate">МС ДОЛБОЁБ</h4>
+                                        <h4 class="text-xs font-black text-white group-hover:text-purple-300 truncate">МС ЕЗДИТЬ</h4>
                                         <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
                                     </div>
-                                    <p class="text-[10px] text-zinc-400 truncate">Хуйня</p>
-                                    <p class="text-[10px] font-bold text-purple-400 mt-0.5">Треков в каталоге: 1</p>
+                                    <p class="text-[10px] text-zinc-400 truncate">Рэп</p>
+                                    <p class="text-[10px] font-bold text-purple-400 mt-0.5">Треков в каталоге: 11</p>
                                 </div>
                             </div>
-                            <p class="text-[11px] text-zinc-400 leading-relaxed line-clamp-3">Какой то конченый долбоеб записывает полную хуйню</p>
+                            <p class="text-[11px] text-zinc-400 leading-relaxed line-clamp-3">Питерский рэп-исполнитель. Его главная фишка - записать вокал, одновременно выдумывая текст из головы. Все треки не имеют определённого смысла - и так нормально.</p>
                         </div>
                     </div>
 
@@ -6710,13 +6780,13 @@
                             <span class="w-5 h-5 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400 text-[10px]">
                                 <i class="fa-solid fa-lightbulb"></i>
                             </span>
-                            <span id="deskRightFactHeader" class="text-[9px] font-black uppercase tracking-widest text-purple-300 truncate">ФАКТ • МС ДОЛБОЁБ</span>
+                            <span id="deskRightFactHeader" class="text-[9px] font-black uppercase tracking-widest text-purple-300 truncate">ФАКТ • МС ЕЗДИТЬ</span>
                         </div>
                         <button onclick="cycleArtistFact()" class="text-[10px] font-bold text-zinc-400 hover:text-white spring-btn shrink-0">
                             Ещё ↻
                         </button>
                     </div>
-                    <p id="deskRightFactText" class="text-[11px] text-zinc-300 leading-relaxed">Какой то конченый долбоеб записывает полную хуйню</p>
+                    <p id="deskRightFactText" class="text-[11px] text-zinc-300 leading-relaxed">Его главная фишка - записать вокал, одновременно выдумывая текст из головы.</p>
                 </div>
 
                 <!-- Далее в очереди -->
@@ -6725,7 +6795,64 @@
                         <span id="deskRightQueueHeaderLabel" class="text-[10px] font-black uppercase tracking-wider text-zinc-400">Далее в очереди</span>
                         <button onclick="playShuffleAll()" class="text-[10px] font-bold text-purple-400 hover:text-purple-300">Перемешать</button>
                     </div>
-                    <div id="deskRightQueueList" class="space-y-1.5"></div>
+                    <div id="deskRightQueueList" class="space-y-1.5">
+                    <div onclick="playTrackById('trk_1793566754812')" class="p-2 rounded-xl bg-zinc-900/60 border-zinc-800/70 hover:bg-zinc-900 border flex items-center gap-2.5 cursor-pointer group spring-btn">
+                        
+                <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-rose-600 via-red-900 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
+                    <i class="fa-solid fa-compact-disc text-[10px] text-white/75"></i>
+                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/covers/alb_sosiska.jpg" alt="" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                </div>
+            
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-1">
+                                <p class="text-[11px] font-extrabold text-white group-hover:text-purple-300 truncate">Лирика Житухи</p>
+                                
+                            </div>
+                            <p class="text-[10px] text-zinc-500 truncate">МС ЕЗДИТЬ, МС ГЕИЧ</p>
+                        </div>
+                        
+                            <span class="text-[10px] font-semibold text-zinc-500 tabular-nums shrink-0">2:57</span>
+                        
+                    </div>
+                
+                    <div onclick="playTrackById('trk_1792613045145')" class="p-2 rounded-xl bg-zinc-900/60 border-zinc-800/70 hover:bg-zinc-900 border flex items-center gap-2.5 cursor-pointer group spring-btn">
+                        
+                <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-600 via-orange-950 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
+                    <i class="fa-solid fa-compact-disc text-[10px] text-white/75"></i>
+                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/covers/alb_ya.JPG" alt="" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                </div>
+            
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-1">
+                                <p class="text-[11px] font-extrabold text-white group-hover:text-purple-300 truncate">Я</p>
+                                
+                            </div>
+                            <p class="text-[10px] text-zinc-500 truncate">МС ГЕИЧ</p>
+                        </div>
+                        
+                            <span class="text-[10px] font-semibold text-zinc-500 tabular-nums shrink-0">1:24</span>
+                        
+                    </div>
+                
+                    <div onclick="playTrackById('trk_1792612989945')" class="p-2 rounded-xl bg-zinc-900/60 border-zinc-800/70 hover:bg-zinc-900 border flex items-center gap-2.5 cursor-pointer group spring-btn">
+                        
+                <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-600 via-orange-950 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
+                    <i class="fa-solid fa-compact-disc text-[10px] text-white/75"></i>
+                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/covers/alb_ahmad.JPG" alt="" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                </div>
+            
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-1">
+                                <p class="text-[11px] font-extrabold text-white group-hover:text-purple-300 truncate">Ахмад</p>
+                                
+                            </div>
+                            <p class="text-[10px] text-zinc-500 truncate">МС ГЕИЧ</p>
+                        </div>
+                        
+                            <span class="text-[10px] font-semibold text-zinc-500 tabular-nums shrink-0">0:55</span>
+                        
+                    </div>
+                </div>
                 </div>
             </aside>
         </div>
@@ -6743,22 +6870,22 @@
                     <div id="miniCover" class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-950 flex items-center justify-center shrink-0 overflow-hidden border border-white/10">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 via-teal-900 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
                     <i class="fa-solid fa-compact-disc text-xs text-white/75"></i>
-                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/covers/alb_pchelka.jpg" alt="" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/covers/%D0%9D%D0%BE%D1%87%D0%BD%D0%B0%D1%8F%20%D0%BE%D0%BF%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%20%D0%BE%D1%82%D0%BA%D0%BB%D0%BE%D0%BD%D0%B5%D0%BD%D0%B0.png" alt="" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
                 </div>
             </div>
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-1.5">
-                            <p id="miniTitle" class="text-xs font-extrabold text-white truncate">Кто пчелок уважает</p>
-                            <span id="miniExplicitBadge" class="px-1 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0 hidden">18+</span>
+                            <p id="miniTitle" class="text-xs font-extrabold text-white truncate">115 причин не ехать в Выборг</p>
+                            <span id="miniExplicitBadge" class="px-1 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>
                         </div>
                         <div class="flex items-center gap-1.5 mt-0.5 min-w-0">
                             <div id="miniArtistAvatar" class="flex items-center -space-x-1 shrink-0">
-                <div class="w-4 h-4 rounded-full bg-gradient-to-br from-emerald-600 via-teal-900 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
-                    <i class="fa-solid fa-fire text-[8px] text-white/85"></i>
-                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/avatars/dolboeb.jpg" alt="МС ДОЛБОЁБ" decoding="async" class="absolute inset-0 w-full h-full object-cover rounded-full" onerror="this.style.display='none'">
+                <div class="w-4 h-4 rounded-full bg-gradient-to-br from-amber-600 via-orange-950 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
+                    <i class="fa-solid fa-gauge-high text-[8px] text-white/85"></i>
+                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/avatars/mc_ezdittttt3.jpg" alt="МС ЕЗДИТЬ" decoding="async" class="absolute inset-0 w-full h-full object-cover rounded-full" onerror="this.style.display='none'">
                 </div>
             </div>
-                            <p id="miniArtist" class="text-[10px] text-zinc-400 truncate">МС ДОЛБОЁБ</p>
+                            <p id="miniArtist" class="text-[10px] text-zinc-400 truncate">МС ЕЗДИТЬ</p>
                         </div>
                     </div>
                 </div>
@@ -6805,22 +6932,22 @@
                 <div onclick="openFullPlayer()" id="deskPlayerCover" class="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-950 flex items-center justify-center shrink-0 overflow-hidden border border-white/10 cursor-pointer shadow-lg">
                 <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-600 via-teal-900 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
                     <i class="fa-solid fa-compact-disc text-sm text-white/75"></i>
-                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/covers/alb_pchelka.jpg" alt="" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/covers/%D0%9D%D0%BE%D1%87%D0%BD%D0%B0%D1%8F%20%D0%BE%D0%BF%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%20%D0%BE%D1%82%D0%BA%D0%BB%D0%BE%D0%BD%D0%B5%D0%BD%D0%B0.png" alt="" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
                 </div>
             </div>
                 <div class="min-w-0 flex-1">
                     <div class="flex items-center gap-1.5">
-                        <p id="deskPlayerTitle" onclick="openFullPlayer()" class="text-xs font-extrabold text-white hover:text-purple-300 truncate cursor-pointer">Кто пчелок уважает</p>
-                        <span id="deskPlayerExplicitBadge" class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0 hidden">18+</span>
+                        <p id="deskPlayerTitle" onclick="openFullPlayer()" class="text-xs font-extrabold text-white hover:text-purple-300 truncate cursor-pointer">115 причин не ехать в Выборг</p>
+                        <span id="deskPlayerExplicitBadge" class="px-1.5 py-0.2 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[8px] font-black uppercase shrink-0">18+</span>
                     </div>
                     <div class="flex items-center gap-1.5 mt-1 min-w-0">
                         <div id="deskPlayerArtistAvatars" class="flex items-center -space-x-1 shrink-0">
-                <div class="w-4 h-4 rounded-full bg-gradient-to-br from-emerald-600 via-teal-900 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
-                    <i class="fa-solid fa-fire text-[8px] text-white/85"></i>
-                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/avatars/dolboeb.jpg" alt="МС ДОЛБОЁБ" decoding="async" class="absolute inset-0 w-full h-full object-cover rounded-full" onerror="this.style.display='none'">
+                <div class="w-4 h-4 rounded-full bg-gradient-to-br from-amber-600 via-orange-950 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
+                    <i class="fa-solid fa-gauge-high text-[8px] text-white/85"></i>
+                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/avatars/mc_ezdittttt3.jpg" alt="МС ЕЗДИТЬ" decoding="async" class="absolute inset-0 w-full h-full object-cover rounded-full" onerror="this.style.display='none'">
                 </div>
             </div>
-                        <p id="deskPlayerArtists" onclick="openCurrentTrackArtist()" class="text-[11px] text-zinc-400 hover:text-white truncate cursor-pointer">МС ДОЛБОЁБ</p>
+                        <p id="deskPlayerArtists" onclick="openCurrentTrackArtist()" class="text-[11px] text-zinc-400 hover:text-white truncate cursor-pointer">МС ЕЗДИТЬ</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-1.5 shrink-0">
@@ -6855,7 +6982,7 @@
                 <div class="w-full flex items-center gap-2.5">
                     <span id="deskCurrentTime" class="text-[10px] font-bold text-zinc-500 w-8 text-right tabular-nums">0:00</span>
                     <input id="deskPlayerSeek" type="range" min="0" max="100" step="0.01" value="0" onpointerdown="beginSeekScrub()" onmousedown="beginSeekScrub()" ontouchstart="beginSeekScrub()" onpointerup="endSeekScrub(this)" onmouseup="endSeekScrub(this)" ontouchend="endSeekScrub(this)" onchange="endSeekScrub(this)" oninput="seekAudio(this.value)" class="flex-1 dark-slider" style="--slider-pct: 0%;">
-                    <span id="deskDuration" class="text-[10px] font-bold text-zinc-500 w-8 tabular-nums">12:16</span>
+                    <span id="deskDuration" class="text-[10px] font-bold text-zinc-500 w-8 tabular-nums">2:27</span>
                 </div>
             </div>
 
@@ -6865,9 +6992,9 @@
                     <span class="hidden 2xl:inline-flex px-2 py-0.5 rounded-md bg-zinc-900 border border-zinc-800 text-[9px] text-purple-300 font-extrabold tracking-widest">DARK ENGINE</span>
                     <div class="flex items-center gap-2 w-24 xl:w-28">
                         <button onclick="toggleMuteAudio()" class="text-zinc-400 hover:text-white text-xs w-5 text-center" title="Звук">
-                            <i id="deskVolumeIcon" class="fa-solid fa-volume-low"></i>
+                            <i id="deskVolumeIcon" class="fa-solid fa-volume-high"></i>
                         </button>
-                        <input id="deskVolumeSlider" type="range" min="0" max="100" step="0.01" value="100" oninput="setAudioVolume(this.value)" onchange="if(this.blur)this.blur()" class="w-full dark-slider" title="Громкость">
+                        <input id="deskVolumeSlider" type="range" min="0" max="100" step="0.01" value="100" oninput="setAudioVolume(this.value)" onchange="if(this.blur)this.blur()" class="w-full dark-slider" title="Громкость" style="--slider-pct: 100%;">
                     </div>
                     <button id="deskBottomRightSidebarBtn" onclick="toggleDesktopRightSidebar()" class="hidden lg:flex w-8 h-8 rounded-xl border items-center justify-center spring-btn bg-purple-600/20 border-purple-500/40 text-purple-300 hover:text-white" title="Свернуть панель «Сейчас играет»">
                         <i class="fa-solid fa-table-columns text-xs"></i>
@@ -6883,7 +7010,7 @@
         <div id="playerModal" class="fixed inset-0 z-[60] bg-zinc-950/95 backdrop-blur-3xl flex-col justify-between w-full h-full overflow-y-auto no-scrollbar select-none hidden">
             <!-- Большая приглушённая обложка из карточки артиста на весь экран (как в Spotify на ПК) -->
             <div id="playerBackdropBannerWrap" class="pointer-events-none fixed inset-0 overflow-hidden z-0">
-                <img id="playerBackdropBannerImg" src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/banners/dolboeb2.jpg" alt="" decoding="async" class="w-full h-full object-cover object-center opacity-35 lg:opacity-45 brightness-[0.48] saturate-[1.15] scale-105 transition-all duration-700 player-banner-animate" onerror="this.classList.add('hidden')">
+                <img id="playerBackdropBannerImg" src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/banners/mc_ezdit4.jpg" alt="" decoding="async" class="w-full h-full object-cover object-center opacity-35 lg:opacity-45 brightness-[0.48] saturate-[1.15] scale-105 transition-all duration-700 player-banner-animate" onerror="this.classList.add('hidden')">
                 <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/65 to-zinc-950/45"></div>
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_15%,rgba(9,9,11,0.82)_100%)]"></div>
                 <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-purple-700/20 blur-[130px]"></div>
@@ -6900,7 +7027,7 @@
                     </button>
                     <div class="text-center min-w-0 px-2">
                         <div class="text-[9px] lg:text-[10px] font-black uppercase tracking-widest text-zinc-500">СЕЙЧАС ИГРАЕТ В DARK MUSIC</div>
-                        <button id="playerAlbumTopBtn" onclick="openCurrentTrackAlbum()" class="text-xs lg:text-sm font-extrabold text-purple-400 hover:underline truncate max-w-[210px] lg:max-w-[360px] block mx-auto">Кто пчелок уважает</button>
+                        <button id="playerAlbumTopBtn" onclick="openCurrentTrackAlbum()" class="text-xs lg:text-sm font-extrabold text-purple-400 hover:underline truncate max-w-[210px] lg:max-w-[360px] block mx-auto">115 причин не ехать в Выборг</button>
                     </div>
                     <div class="flex items-center gap-2">
                         <button onclick="shareCurrentTrack(event)" class="w-10 h-10 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-800 flex items-center justify-center text-zinc-300 hover:text-white spring-btn" title="Поделиться ссылкой на трек">
@@ -6916,11 +7043,11 @@
                 <div class="my-auto py-3 lg:py-6 lg:grid lg:grid-cols-[minmax(280px,400px)_minmax(320px,480px)] lg:gap-12 lg:items-center lg:justify-center">
                     <!-- Квадратная обложка трека/альбома (без текста поверх обложки) -->
                     <div class="my-3 lg:my-0 flex justify-center">
-                        <div id="playerCoverCard" class="w-64 h-64 sm:w-72 sm:h-72 lg:w-[370px] lg:h-[370px] rounded-3xl bg-gradient-to-br from-purple-700 via-indigo-950 to-black border border-white/15 shadow-2xl shadow-purple-950/70 relative overflow-hidden flex items-center justify-center cover-playing">
+                        <div id="playerCoverCard" class="w-64 h-64 sm:w-72 sm:h-72 lg:w-[370px] lg:h-[370px] rounded-3xl bg-gradient-to-br from-purple-700 via-indigo-950 to-black border border-white/15 shadow-2xl shadow-purple-950/70 relative overflow-hidden flex items-center justify-center cover-paused">
                             <div id="playerCoverInner" class="w-full h-full flex items-center justify-center">
                 <div class="w-full h-full bg-gradient-to-br from-emerald-600 via-teal-900 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
                     <i class="fa-solid fa-compact-disc text-6xl text-white/75"></i>
-                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/covers/alb_pchelka.jpg" alt="" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
+                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/covers/%D0%9D%D0%BE%D1%87%D0%BD%D0%B0%D1%8F%20%D0%BE%D0%BF%D0%B5%D1%80%D0%B0%D1%86%D0%B8%D1%8F%20%D0%BE%D1%82%D0%BA%D0%BB%D0%BE%D0%BD%D0%B5%D0%BD%D0%B0.png" alt="" decoding="async" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none'">
                 </div>
             </div>
                         </div>
@@ -6932,19 +7059,19 @@
                         <div class="flex items-center justify-between gap-3">
                             <div class="min-w-0 flex-1">
                                 <div class="flex items-center gap-2 flex-wrap">
-                                    <h2 id="playerTitle" class="text-lg lg:text-2xl font-black text-white truncate">Кто пчелок уважает</h2>
-                                    <span id="playerExplicitBadge" class="px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/50 text-rose-400 text-[9px] font-black uppercase shrink-0 hidden">18+</span>
+                                    <h2 id="playerTitle" class="text-lg lg:text-2xl font-black text-white truncate">115 причин не ехать в Выборг</h2>
+                                    <span id="playerExplicitBadge" class="px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/50 text-rose-400 text-[9px] font-black uppercase shrink-0">18+</span>
                                     <span id="playerNewBadge" class="px-1.5 py-0.5 rounded bg-rose-500/20 border border-rose-500/40 text-rose-400 text-[9px] font-black uppercase shrink-0">NEW</span>
                                 </div>
                                 <div class="flex items-center flex-wrap gap-1.5 mt-1.5">
                                     <button id="playerArtistBtn" onclick="openCurrentTrackArtist()" class="flex items-center gap-1.5 text-xs lg:text-sm font-bold text-zinc-300 hover:text-white spring-btn">
                                         <span id="playerArtistAvatar" class="w-5 h-5 lg:w-6 lg:h-6 rounded-full overflow-hidden shrink-0 inline-flex items-center justify-center">
-                <div class="w-5 h-5 rounded-full bg-gradient-to-br from-emerald-600 via-teal-900 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
-                    <i class="fa-solid fa-fire text-[9px] text-white/85"></i>
-                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/avatars/dolboeb.jpg" alt="МС ДОЛБОЁБ" decoding="async" class="absolute inset-0 w-full h-full object-cover rounded-full" onerror="this.style.display='none'">
+                <div class="w-5 h-5 rounded-full bg-gradient-to-br from-amber-600 via-orange-950 to-zinc-950 flex items-center justify-center relative overflow-hidden shrink-0 border border-white/10">
+                    <i class="fa-solid fa-gauge-high text-[9px] text-white/85"></i>
+                    <img src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/avatars/mc_ezdittttt3.jpg" alt="МС ЕЗДИТЬ" decoding="async" class="absolute inset-0 w-full h-full object-cover rounded-full" onerror="this.style.display='none'">
                 </div>
             </span>
-                                        <span id="playerArtist">МС ДОЛБОЁБ</span>
+                                        <span id="playerArtist">МС ЕЗДИТЬ</span>
                                         <i class="fa-solid fa-circle-check text-sky-400 text-[10px]"></i>
                                     </button>
                                     <span id="playerFeatDivider" class="text-xs lg:text-sm font-bold text-zinc-400 -ml-1 mr-0.5 hidden">,</span>
@@ -6973,7 +7100,7 @@
                             <div class="flex items-center justify-between text-[10px] font-bold text-zinc-500">
                                 <span id="playerCurrentTime">0:00</span>
                                 <span id="playerEngineBadge" class="px-2 py-0.5 rounded-md bg-zinc-900 border border-zinc-800 text-[9px] text-zinc-400 font-extrabold tracking-widest">DARK ENGINE • HZ</span>
-                                <span id="playerDuration">12:16</span>
+                                <span id="playerDuration">2:27</span>
                             </div>
                         </div>
 
@@ -7003,13 +7130,13 @@
                                     <span class="w-5 h-5 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400 text-[10px]">
                                         <i class="fa-solid fa-lightbulb"></i>
                                     </span>
-                                    <span id="playerFactHeader" class="text-[9px] font-black uppercase tracking-widest text-purple-400">ИНТЕРЕСНЫЙ ФАКТ • МС ДОЛБОЁБ</span>
+                                    <span id="playerFactHeader" class="text-[9px] font-black uppercase tracking-widest text-purple-400">ИНТЕРЕСНЫЙ ФАКТ • МС ЕЗДИТЬ</span>
                                 </div>
                                 <button onclick="cycleArtistFact()" class="text-[10px] font-bold text-zinc-400 hover:text-white spring-btn">
                                     Ещё факт ↻
                                 </button>
                             </div>
-                            <p id="playerFactText" class="text-xs text-zinc-300 leading-relaxed fact-animate">Какой то конченый долбоеб записывает полную хуйню</p>
+                            <p id="playerFactText" class="text-xs text-zinc-300 leading-relaxed fact-animate">Его главная фишка - записать вокал, одновременно выдумывая текст из головы.</p>
                         </div>
                     </div>
                 </div>
@@ -7214,12 +7341,12 @@
     </div>
 
     <!-- АУДИО-ЭЛЕМЕНТЫ (основной с атрибутом controls для системного плеера ОС и скрытый для предзагрузки следующего трека) -->
-    <audio id="audioElement" controls="" playsinline="" webkit-playsinline="" x-webkit-airplay="allow" preload="auto" class="fixed -bottom-40 left-0 w-1 h-1 opacity-0 pointer-events-none" title="Кто пчелок уважает — МС ДОЛБОЁБ" src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/tracks/mc_dolboeb/lv_0_20261109104108.mp3"></audio>
+    <audio id="audioElement" controls="" playsinline="" webkit-playsinline="" x-webkit-airplay="allow" preload="auto" class="fixed -bottom-40 left-0 w-1 h-1 opacity-0 pointer-events-none" title="115 причин не ехать в Выборг — МС ЕЗДИТЬ" src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/tracks/mc_ezdit/Untitled-Bounce.mp3"></audio>
     <audio id="preloadAudioElement" preload="auto" muted="" class="hidden" src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/tracks/mc_dolboeb/lv_0_20261109104108.mp3"></audio>
 
     <script>
         /*__BAKED_VAULT_START__*/
-        window.__BAKED_VAULT_DATA__ = {"githubRepoPath":"EzzO4ka/darkmusic","githubBranch":"main","avatars":{"mc_geich":"avatars/mc_geich.jpg","mc_makaka":"avatars/mc_makaka.jpg","mc_ezdit":"avatars/mc_ezdittttt3.jpg","art_ms_dolboeb_1794211002271":"avatars/dolboeb.jpg"},"artistBanners":{"mc_geich":"banners/mc_geich2.jpg","mc_makaka":"banners/mc_makaka2.jpg","mc_ezdit":"banners/mc_ezdit4.jpg","art_ms_dolboeb_1794211002271":"banners/dolboeb2.jpg"},"artistNames":{"mc_geich":"МС ГЕИЧ","mc_makaka":"МС МАКАКА","mc_ezdit":"МС ЕЗДИТЬ","art_ms_dolboeb_1794211002271":"МС ДОЛБОЁБ"},"artistBios":{"mc_geich":"Российский рэп исполнитель, продюсер, контентмейкер. Стал популярен благодаря \"Элиты\" Татьяны Леонидовны. Писал рофленные текста про Ахмада и себя. Продюсировал МС МАКАКУ.","mc_makaka":"МС МАКАКА — самая взрывная энергия объединения Dark Music. Король школьного и дворового русского рэпа. Стал популярен в школе благодаря его продюсерам Максиму и Алексею. Обрёл известность в 2023 году после выхода первого альбома \"ЗАГЕЕВ\".","mc_ezdit":"Питерский рэп-исполнитель. Его главная фишка - записать вокал, одновременно выдумывая текст из головы. Все треки не имеют определённого смысла - и так нормально.","art_ms_dolboeb_1794211002271":"Какой то конченый долбоеб записывает полную хуйню"},"artistRoles":{"mc_geich":"Рэп","mc_makaka":"Рэп","mc_ezdit":"Рэп","art_ms_dolboeb_1794211002271":"Хуйня"},"artistFacts":{"mc_geich":["Брал биты с интернета, писал на микрофон наушников, склепал биты и текста в Movavi - Вот это нихуя себе","Совмещает реальность с рофлом - Получилось круто","Спустя 2 года вернулся к прежнему контентмейкингу, исполнению и продюсерству."],"mc_makaka":["Записывает вокал с одного дубля, чтобы сохранить максимальную живую подачу.","Давал концерты в школе: классы, туалет, коридор за 10 рублей.","Треки записывал в подъезде, в школьном туалете и на улице за электрической будкой.","Совмещает реальность с рофлом - Вот это нихуя себе","Трек \"Маша ебанулась\" получился благодаря Маше: Она реально на уроке химии упала со стула.","Текста придумывали не только продюсеры, но и помогали одноклассники!","Самая тонкая лирика героя, которая только могла быть!"],"mc_ezdit":["Его главная фишка - записать вокал, одновременно выдумывая текст из головы.","Все треки не имеют определённого смысла - и так нормально.","Даже Бетховен в ахуе - Как он мог без остановки записать вокал на 9 минут в треке \"Перезвон\".","Впервые за 2 года детально поработал в новом релизе \"Лирика Житухи\" над текстом, записью вокала и сведением с битом – а раньше сразу во время записи выдумывал с головы.","Песня \"115 причин не ехать в Выборг\" была основана на реальных событиях"],"art_ms_dolboeb_1794211002271":["Какой то конченый долбоеб записывает полную хуйню"]},"artistGradients":{"mc_geich":"from-amber-600 via-orange-950 to-zinc-950","mc_makaka":"from-sky-600 via-blue-950 to-zinc-950","mc_ezdit":"from-amber-600 via-orange-950 to-zinc-950","art_ms_dolboeb_1794211002271":"from-emerald-600 via-teal-900 to-zinc-950"},"artistIcons":{"mc_geich":"fa-user-astronaut","mc_makaka":"fa-crown","mc_ezdit":"fa-gauge-high","art_ms_dolboeb_1794211002271":"fa-fire"},"customArtists":[{"id":"mc_geich","name":"МС ГЕИЧ","role":"Рэп","gradient":"from-amber-600 via-orange-950 to-zinc-950","icon":"fa-user-astronaut","avatarFile":"avatars/mc_geich.jpg","bio":"Российский рэп исполнитель, продюсер, контентмейкер. Стал популярен благодаря \"Элиты\" Татьяны Леонидовны. Писал рофленные текста про Ахмада и себя. Продюсировал МС МАКАКУ.","facts":["Брал биты с интернета, писал на микрофон наушников, склепал биты и текста в Movavi - Вот это нихуя себе","Совмещает реальность с рофлом - Получилось круто","Спустя 2 года вернулся к прежнему контентмейкингу, исполнению и продюсерству."],"isCustom":true,"createdAt":1793576408969,"bannerFile":"banners/mc_geich2.jpg"},{"id":"mc_makaka","name":"МС МАКАКА","role":"Рэп","gradient":"from-sky-600 via-blue-950 to-zinc-950","icon":"fa-crown","avatarFile":"avatars/mc_makaka.jpg","bio":"МС МАКАКА — самая взрывная энергия объединения Dark Music. Король школьного и дворового русского рэпа. Стал популярен в школе благодаря его продюсерам Максиму и Алексею. Обрёл известность в 2023 году после выхода первого альбома \"ЗАГЕЕВ\".","facts":["Записывает вокал с одного дубля, чтобы сохранить максимальную живую подачу.","Давал концерты в школе: классы, туалет, коридор за 10 рублей.","Треки записывал в подъезде, в школьном туалете и на улице за электрической будкой.","Совмещает реальность с рофлом - Вот это нихуя себе","Трек \"Маша ебанулась\" получился благодаря Маше: Она реально на уроке химии упала со стула.","Текста придумывали не только продюсеры, но и помогали одноклассники!","Самая тонкая лирика героя, которая только могла быть!"],"isCustom":true,"createdAt":1793576412861,"bannerFile":"banners/mc_makaka2.jpg"},{"id":"mc_ezdit","name":"МС ЕЗДИТЬ","role":"Рэп","gradient":"from-amber-600 via-orange-950 to-zinc-950","icon":"fa-gauge-high","avatarFile":"avatars/mc_ezdittttt3.jpg","bio":"Питерский рэп-исполнитель. Его главная фишка - записать вокал, одновременно выдумывая текст из головы. Все треки не имеют определённого смысла - и так нормально.","facts":["Его главная фишка - записать вокал, одновременно выдумывая текст из головы.","Все треки не имеют определённого смысла - и так нормально.","Даже Бетховен в ахуе - Как он мог без остановки записать вокал на 9 минут в треке \"Перезвон\".","Впервые за 2 года детально поработал в новом релизе \"Лирика Житухи\" над текстом, записью вокала и сведением с битом – а раньше сразу во время записи выдумывал с головы.","Песня \"115 причин не ехать в Выборг\" была основана на реальных событиях"],"isCustom":true,"createdAt":1793576432923,"bannerFile":"banners/mc_ezdit4.jpg"},{"id":"art_ms_dolboeb_1794211002271","name":"МС ДОЛБОЁБ","role":"Хуйня","gradient":"from-emerald-600 via-teal-900 to-zinc-950","icon":"fa-fire","avatarFile":"avatars/dolboeb.jpg","bannerFile":"banners/dolboeb2.jpg","bio":"Какой то конченый долбоеб записывает полную хуйню","facts":["Какой то конченый долбоеб записывает полную хуйню"],"isCustom":true,"createdAt":1794211002271}],"customAlbums":[{"id":"alb_1794065945442","title":"115 причин не ехать в Выборг","artistId":"mc_ezdit","type":"СИНГЛ","year":2026,"coverFile":"covers/alb_115__________________________1794065944373.jpg","gradient":"from-emerald-600 via-teal-900 to-zinc-950","isExplicit":true},{"isExplicit":true,"year":2023,"coverFile":"covers/alb_zageev.jpg","title":"ЗАГЕЕВ","gradient":"from-emerald-600 via-teal-900 to-zinc-950","type":"АЛЬБОМ","artistId":"mc_makaka","id":"alb_1792597638805"},{"year":2024,"gradient":"from-rose-600 via-red-900 to-zinc-950","isExplicit":true,"artistId":"mc_ezdit","id":"alb_1792604400709","type":"АЛЬБОМ","title":"Мертворождённые","coverFile":"covers/alb_mertvorozdennye.jpg"},{"id":"alb_1793566754812","title":"Лирика Житухи","artistId":"mc_ezdit","featArtistId":"mc_geich","type":"СИНГЛ","year":2026,"isExplicit":true,"coverFile":"covers/alb_sosiska.jpg","gradient":"from-rose-600 via-red-900 to-zinc-950"},{"id":"alb_1794211260336","title":"Кто пчелок уважает","artistId":"art_ms_dolboeb_1794211002271","featArtistId":"","type":"СИНГЛ","year":2026,"isExplicit":false,"coverFile":"covers/alb_pchelka.jpg","gradient":"from-emerald-600 via-teal-900 to-zinc-950"}],"customTracks":[{"id":"trk_1794211260337","title":"Кто пчелок уважает","artistId":"art_ms_dolboeb_1794211002271","featArtistId":"","albumId":"alb_1794211260336","filePath":"tracks/mc_dolboeb/lv_0_20261109104108.mp3","coverFile":"covers/alb_pchelka.jpg","duration":"12:16","year":2026,"isNew":true,"isExplicit":false,"createdAt":1794211260337},{"id":"trk_1794062482767","title":"115 причин не ехать в Выборг","artistId":"mc_ezdit","albumId":"alb_1794065945442","filePath":"tracks/mc_ezdit/Untitled-Bounce.mp3","coverFile":"covers/Ночная операция отклонена.png","duration":"2:27","year":2026,"isNew":true,"isExplicit":true,"createdAt":1794062482768},{"id":"trk_1793566754812","title":"Лирика Житухи","artistId":"mc_ezdit","featArtistId":"mc_geich","albumId":"alb_1793566754812","filePath":"tracks/mc_ezdit/ЛИРИКА ЖИТУХИ.MP3","coverFile":"","duration":"2:57","year":2026,"isNew":false,"isExplicit":true,"createdAt":1793566754812},{"id":"trk_1792613045145","title":"Я","albumId":"","year":2024,"isExplicit":true,"duration":"1:24","isNew":false,"filePath":"tracks/mc_geich/Геич - Я.mp3","coverFile":"covers/alb_ya.JPG","artistId":"mc_geich","createdAt":1792613045145},{"isNew":false,"coverFile":"covers/alb_ahmad.JPG","id":"trk_1792612989945","createdAt":1792612989945,"filePath":"tracks/mc_geich/Геич - Ахмад.mp3","year":2024,"artistId":"mc_geich","isExplicit":true,"title":"Ахмад","albumId":"","duration":"0:55"},{"year":2023,"title":"Про продюсеров","coverFile":"covers/alb_prod.jpg","createdAt":1792612900589,"duration":"0:37","isExplicit":true,"isNew":false,"id":"trk_1792612900589","filePath":"tracks/mc_makaka/МС Макака - Про продюсеров.mp3","artistId":"mc_makaka","albumId":""},{"isNew":false,"id":"trk_1792597676680","duration":"2:29","createdAt":1792597676680,"isExplicit":true,"year":2023,"coverFile":"","filePath":"tracks/mc_makaka/МС Макака - Маша ебанулась.mp3","title":"Маша ебанулась","artistId":"mc_makaka","albumId":"alb_1792597638805"},{"title":"Милена спрыгнула с окна","year":2023,"filePath":"tracks/mc_makaka/МС_Макака_Милена_спрыгнула_с_окна.mp3","artistId":"mc_makaka","id":"trk_1792605310798","isExplicit":true,"createdAt":1792605310798,"albumId":"alb_1792597638805","isNew":false,"coverFile":"","duration":"2:00"},{"artistId":"mc_makaka","year":2023,"coverFile":"","title":"Моя любовь","filePath":"tracks/mc_makaka/МС Макака - Моя любовь.mp3","albumId":"alb_1792597638805","createdAt":1792605485661,"duration":"1:25","isExplicit":true,"id":"trk_1792605485661","isNew":false},{"duration":"1:50","title":"Загеев","id":"trk_1792611847469","albumId":"alb_1792597638805","artistId":"mc_makaka","year":2023,"isExplicit":true,"isNew":false,"coverFile":"","filePath":"tracks/mc_makaka/МС Макака - Загеев.mp3","createdAt":1792611847469},{"isNew":false,"duration":"1:48","year":2023,"isExplicit":true,"filePath":"tracks/mc_makaka/МС Макака - Не еби мне мозги.mp3","createdAt":1792611895502,"artistId":"mc_makaka","coverFile":"","title":"Не еби мне мозги","albumId":"alb_1792597638805","id":"trk_1792611895502"},{"duration":"2:18","id":"trk_1792611936565","title":"Волшебная бутылочка","isNew":false,"artistId":"mc_makaka","createdAt":1792611936565,"filePath":"tracks/mc_makaka/МС Макака - Волшебная бутылочка.mp3","year":2023,"albumId":"alb_1792597638805","isExplicit":true,"coverFile":""},{"isNew":false,"duration":"1:05","year":2024,"isExplicit":true,"filePath":"tracks/mc_ezdit/МС Ездить Что делать вегодня....mp3","createdAt":1792605138686,"artistId":"mc_ezdit","coverFile":"","title":"Что делать сегодня","albumId":"alb_1792604400709","id":"trk_1792605138686"},{"filePath":"tracks/mc_ezdit/МС Ездить Протухшое яйцо.mp3","artistId":"mc_ezdit","isExplicit":false,"title":"Протухшое яйцо","id":"trk_1792605088772","albumId":"alb_1792604400709","createdAt":1792605088772,"coverFile":"","duration":"1:05","year":2024,"isNew":false},{"duration":"1:05","createdAt":1792605048746,"coverFile":"","albumId":"alb_1792604400709","title":"Прогулка по улице","filePath":"tracks/mc_ezdit/МС Ездить Прогулка по улице.mp3","isExplicit":true,"id":"trk_1792605048746","artistId":"mc_ezdit","year":2024,"isNew":false},{"isExplicit":true,"duration":"1:05","createdAt":1792605018896,"id":"trk_1792605018896","coverFile":"","title":"Отец детей из говна","albumId":"alb_1792604400709","filePath":"tracks/mc_ezdit/МС Ездить Отец детей из говна.mp3","artistId":"mc_ezdit","isNew":false,"year":2024},{"year":2024,"title":"Нюхать клей","artistId":"mc_ezdit","filePath":"tracks/mc_ezdit/МС Ездить Нюхать клей.mp3","isExplicit":true,"duration":"1:05","id":"trk_1792604909501","isNew":false,"createdAt":1792604909501,"albumId":"alb_1792604400709","coverFile":""},{"isExplicit":false,"id":"trk_1792604765920","coverFile":"","filePath":"tracks/mc_ezdit/МС Ездить Мёртвый Туолет.mp3","createdAt":1792604765920,"isNew":false,"artistId":"mc_ezdit","year":2024,"title":"Мёртвый Туолет","albumId":"alb_1792604400709","duration":"1:05"},{"isNew":false,"duration":"1:13","year":2024,"isExplicit":true,"filePath":"tracks/mc_ezdit/МС Ездить Ленин наш батюшка (Каломенская).mp3","createdAt":1792604659532,"artistId":"mc_ezdit","coverFile":"","title":"Ленин наш батюшка (Коломенская)","albumId":"alb_1792604400709","id":"trk_1792604659532"},{"isNew":false,"albumId":"alb_1792604400709","artistId":"mc_ezdit","createdAt":1792604538770,"filePath":"tracks/mc_ezdit/МС Ездить Кто в говнище....mp3","isExplicit":true,"coverFile":"","id":"trk_1792604538770","year":2024,"duration":"1:05","title":"Кто в говнище"},{"year":2026,"title":"МАМА ПАПА","isExplicit":true,"duration":"2:55","albumId":"","isNew":false,"id":"trk_1792597878782","artistId":"mc_ezdit","coverFile":"covers/alb_mamapapa.jpg","filePath":"tracks/mc_ezdit/МС ЕЗДИТЬ - МАМА ПАПА.MP3","createdAt":1792597878782},{"title":"Шляпка гриба","filePath":"tracks/mc_makaka/МС Макака - Шляпка гриба.mp3","createdAt":1792612000839,"artistId":"mc_makaka","coverFile":"","year":2023,"id":"trk_1792612000839","isExplicit":true,"isNew":false,"duration":"2:01","albumId":"alb_1792597638805"}],"customVideos":[{"id":"vid_1793814480289","title":"Волшебная бутылочка","artistId":"mc_makaka","featArtistId":"","year":2023,"previewFile":"covers/clip_mcmakaka.jpg","videoSource":"<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/TRWbULj2nVA?si=InwsAfGQPvOGYlNP\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>","duration":"2:23","isExplicit":true,"createdAt":1793814480289},{"id":"vid_1793567359361","title":"Лирика Житухи","artistId":"mc_ezdit","year":2026,"previewFile":"covers/alb_rkn.jpg","videoSource":"<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/f4ocRn42FcU?si=acqaj-mIwZdBkhKt\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>","duration":"2:57","isExplicit":true,"createdAt":1793567359361,"featArtistId":"mc_geich"},{"id":"vid_1793051455024","title":"ПЕРЕЗВОН","artistId":"mc_ezdit","year":2026,"previewFile":"covers/alb_perezvon.jpg","videoSource":"<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/Oa6z5XOWFMY?si=ty6zUllX2tlpR0SY\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>","duration":"9:48","isExplicit":false,"createdAt":1793051455024},{"id":"vid_1793051361313","title":"МАМА ПАПА","artistId":"mc_ezdit","year":2026,"previewFile":"covers/alb_mamapapa.jpg","videoSource":"<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/ELoWJ9hkM-E?si=Stk1AqNGWMmSSAoF\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>","duration":"2:55","isExplicit":true,"createdAt":1793051361313}],"customNews":[{"id":"news_1794211490281","title":"Новоиспеченный","targetId":"art_ms_dolboeb_1794211002271","dateText":"09.11.26","imageFile":"avatars/dolboeb.jpg","content":"Вышел новый долбоёб с новым треком. Дословно - МС ДОЛБОЁБ","createdAt":1794211490282},{"id":"news_1794064715382","title":"Новый релиз от МС ЕЗДИТЬ","targetId":"app","dateText":"07.11.26","imageFile":"","content":"Вышел новый трек, кажется Олег Бахчисарай возвращает прайм \"Мертворождённых\". Всем слушать ❤️","createdAt":1794064715382},{"id":"news_1793575928947","title":"Новый релиз","targetId":"app","dateText":"02.11.26","imageFile":"","content":"Вышел новый релиз от МС ЕЗДИТЬ и МС ГЕИЧ - Лирика Житухи.\n\nИсполнители детально поработали над треком, также МС ГЕИЧ вернулся спустя 2 года к исполнению композиций и продюсерству.","createdAt":1793575928947}],"deletedCustomIds":["alb_1792597596794","alb_1793176376242","trk_1793176376243","art_eunrrenkrpkikprr_1793264041633","art_ms_dolboeb_1793263987131","mc_oparysh","trk_1792603726620","art_ms_oparysh_1793609173461","alb_1793609112638","news_1793576344447","alb_1793291266274","trk_1793291266274","MCTEST"],"systemPushBroadcast":{"id":"","title":"Обновите версию приложения","message":"Скоро новая версия выйдет в GitHub. Старые версии заблокированы.","imageFile":"logo.png","active":false,"createdAt":1794307894633},"tempBroadcast":{"id":"","title":"Объявление Dark Music","message":"Некоторые клипы получится посмотреть только с VPN - потому что эти клипы транслируются через YouTube.","active":false,"createdAt":1793615799053},"pinnedBroadcast":{"id":"","title":"Ведутся технические работы","message":"Временно возможны перебои в работе приложения.","active":false,"updatedAt":1794307891426},"forceUpdate":{"active":true,"requiredVersion":4.2,"blockedVersions":[1,2,3,3.1,4,4.1],"downloadUrl":"https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.2","message":"Данная версия больше не работает. Установите новую по кнопке ниже.","updatedAt":1794307950000},"whatsNew":{"id":"wn_1794307950000","title":"Что нового в v4.2?","content":"С полным список изменений можете ознакомиться в GitHub https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.2","version":4.2,"active":true,"updatedAt":1794307950000},"updatedAt":1794307950000};
+        window.__BAKED_VAULT_DATA__ = {"githubRepoPath":"EzzO4ka/darkmusic","githubBranch":"main","avatars":{"mc_geich":"avatars/mc_geich.jpg","mc_makaka":"avatars/mc_makaka.jpg","mc_ezdit":"avatars/mc_ezdittttt3.jpg","art_ms_dolboeb_1794211002271":"avatars/dolboeb.jpg"},"artistBanners":{"mc_geich":"banners/mc_geich2.jpg","mc_makaka":"banners/mc_makaka2.jpg","mc_ezdit":"banners/mc_ezdit4.jpg","art_ms_dolboeb_1794211002271":"banners/dolboeb2.jpg"},"artistNames":{"mc_geich":"МС ГЕИЧ","mc_makaka":"МС МАКАКА","mc_ezdit":"МС ЕЗДИТЬ","art_ms_dolboeb_1794211002271":"МС ДОЛБОЁБ"},"artistBios":{"mc_geich":"Российский рэп исполнитель, продюсер, контентмейкер. Стал популярен благодаря \"Элиты\" Татьяны Леонидовны. Писал рофленные текста про Ахмада и себя. Продюсировал МС МАКАКУ.","mc_makaka":"МС МАКАКА — самая взрывная энергия объединения Dark Music. Король школьного и дворового русского рэпа. Стал популярен в школе благодаря его продюсерам Максиму и Алексею. Обрёл известность в 2023 году после выхода первого альбома \"ЗАГЕЕВ\".","mc_ezdit":"Питерский рэп-исполнитель. Его главная фишка - записать вокал, одновременно выдумывая текст из головы. Все треки не имеют определённого смысла - и так нормально.","art_ms_dolboeb_1794211002271":"Какой то конченый долбоеб записывает полную хуйню"},"artistRoles":{"mc_geich":"Рэп","mc_makaka":"Рэп","mc_ezdit":"Рэп","art_ms_dolboeb_1794211002271":"Хуйня"},"artistFacts":{"mc_geich":["Брал биты с интернета, писал на микрофон наушников, склепал биты и текста в Movavi - Вот это нихуя себе","Совмещает реальность с рофлом - Получилось круто","Спустя 2 года вернулся к прежнему контентмейкингу, исполнению и продюсерству."],"mc_makaka":["Записывает вокал с одного дубля, чтобы сохранить максимальную живую подачу.","Давал концерты в школе: классы, туалет, коридор за 10 рублей.","Треки записывал в подъезде, в школьном туалете и на улице за электрической будкой.","Совмещает реальность с рофлом - Вот это нихуя себе","Трек \"Маша ебанулась\" получился благодаря Маше: Она реально на уроке химии упала со стула.","Текста придумывали не только продюсеры, но и помогали одноклассники!","Самая тонкая лирика героя, которая только могла быть!"],"mc_ezdit":["Его главная фишка - записать вокал, одновременно выдумывая текст из головы.","Все треки не имеют определённого смысла - и так нормально.","Даже Бетховен в ахуе - Как он мог без остановки записать вокал на 9 минут в треке \"Перезвон\".","Впервые за 2 года детально поработал в новом релизе \"Лирика Житухи\" над текстом, записью вокала и сведением с битом – а раньше сразу во время записи выдумывал с головы.","Песня \"115 причин не ехать в Выборг\" была основана на реальных событиях"],"art_ms_dolboeb_1794211002271":["Какой то конченый долбоеб записывает полную хуйню"]},"artistGradients":{"mc_geich":"from-amber-600 via-orange-950 to-zinc-950","mc_makaka":"from-sky-600 via-blue-950 to-zinc-950","mc_ezdit":"from-amber-600 via-orange-950 to-zinc-950","art_ms_dolboeb_1794211002271":"from-emerald-600 via-teal-900 to-zinc-950"},"artistIcons":{"mc_geich":"fa-user-astronaut","mc_makaka":"fa-crown","mc_ezdit":"fa-gauge-high","art_ms_dolboeb_1794211002271":"fa-fire"},"customArtists":[{"id":"mc_geich","name":"МС ГЕИЧ","role":"Рэп","gradient":"from-amber-600 via-orange-950 to-zinc-950","icon":"fa-user-astronaut","avatarFile":"avatars/mc_geich.jpg","bio":"Российский рэп исполнитель, продюсер, контентмейкер. Стал популярен благодаря \"Элиты\" Татьяны Леонидовны. Писал рофленные текста про Ахмада и себя. Продюсировал МС МАКАКУ.","facts":["Брал биты с интернета, писал на микрофон наушников, склепал биты и текста в Movavi - Вот это нихуя себе","Совмещает реальность с рофлом - Получилось круто","Спустя 2 года вернулся к прежнему контентмейкингу, исполнению и продюсерству."],"isCustom":true,"createdAt":1793576408969,"bannerFile":"banners/mc_geich2.jpg"},{"id":"mc_makaka","name":"МС МАКАКА","role":"Рэп","gradient":"from-sky-600 via-blue-950 to-zinc-950","icon":"fa-crown","avatarFile":"avatars/mc_makaka.jpg","bio":"МС МАКАКА — самая взрывная энергия объединения Dark Music. Король школьного и дворового русского рэпа. Стал популярен в школе благодаря его продюсерам Максиму и Алексею. Обрёл известность в 2023 году после выхода первого альбома \"ЗАГЕЕВ\".","facts":["Записывает вокал с одного дубля, чтобы сохранить максимальную живую подачу.","Давал концерты в школе: классы, туалет, коридор за 10 рублей.","Треки записывал в подъезде, в школьном туалете и на улице за электрической будкой.","Совмещает реальность с рофлом - Вот это нихуя себе","Трек \"Маша ебанулась\" получился благодаря Маше: Она реально на уроке химии упала со стула.","Текста придумывали не только продюсеры, но и помогали одноклассники!","Самая тонкая лирика героя, которая только могла быть!"],"isCustom":true,"createdAt":1793576412861,"bannerFile":"banners/mc_makaka2.jpg"},{"id":"mc_ezdit","name":"МС ЕЗДИТЬ","role":"Рэп","gradient":"from-amber-600 via-orange-950 to-zinc-950","icon":"fa-gauge-high","avatarFile":"avatars/mc_ezdittttt3.jpg","bio":"Питерский рэп-исполнитель. Его главная фишка - записать вокал, одновременно выдумывая текст из головы. Все треки не имеют определённого смысла - и так нормально.","facts":["Его главная фишка - записать вокал, одновременно выдумывая текст из головы.","Все треки не имеют определённого смысла - и так нормально.","Даже Бетховен в ахуе - Как он мог без остановки записать вокал на 9 минут в треке \"Перезвон\".","Впервые за 2 года детально поработал в новом релизе \"Лирика Житухи\" над текстом, записью вокала и сведением с битом – а раньше сразу во время записи выдумывал с головы.","Песня \"115 причин не ехать в Выборг\" была основана на реальных событиях"],"isCustom":true,"createdAt":1793576432923,"bannerFile":"banners/mc_ezdit4.jpg"},{"id":"art_ms_dolboeb_1794211002271","name":"МС ДОЛБОЁБ","role":"Хуйня","gradient":"from-emerald-600 via-teal-900 to-zinc-950","icon":"fa-fire","avatarFile":"avatars/dolboeb.jpg","bannerFile":"banners/dolboeb2.jpg","bio":"Какой то конченый долбоеб записывает полную хуйню","facts":["Какой то конченый долбоеб записывает полную хуйню"],"isCustom":true,"createdAt":1794211002271}],"customAlbums":[{"id":"alb_1794065945442","title":"115 причин не ехать в Выборг","artistId":"mc_ezdit","type":"СИНГЛ","year":2026,"coverFile":"covers/alb_115__________________________1794065944373.jpg","gradient":"from-emerald-600 via-teal-900 to-zinc-950","isExplicit":true},{"isExplicit":true,"year":2023,"coverFile":"covers/alb_zageev.jpg","title":"ЗАГЕЕВ","gradient":"from-emerald-600 via-teal-900 to-zinc-950","type":"АЛЬБОМ","artistId":"mc_makaka","id":"alb_1792597638805"},{"year":2024,"gradient":"from-rose-600 via-red-900 to-zinc-950","isExplicit":true,"artistId":"mc_ezdit","id":"alb_1792604400709","type":"АЛЬБОМ","title":"Мертворождённые","coverFile":"covers/alb_mertvorozdennye.jpg"},{"id":"alb_1793566754812","title":"Лирика Житухи","artistId":"mc_ezdit","featArtistId":"mc_geich","type":"СИНГЛ","year":2026,"isExplicit":true,"coverFile":"covers/alb_sosiska.jpg","gradient":"from-rose-600 via-red-900 to-zinc-950"},{"id":"alb_1794211260336","title":"Кто пчелок уважает","artistId":"art_ms_dolboeb_1794211002271","featArtistId":"","type":"СИНГЛ","year":2026,"isExplicit":false,"coverFile":"covers/alb_pchelka.jpg","gradient":"from-emerald-600 via-teal-900 to-zinc-950"}],"customTracks":[{"id":"trk_1794211260337","title":"Кто пчелок уважает","artistId":"art_ms_dolboeb_1794211002271","featArtistId":"","albumId":"alb_1794211260336","filePath":"tracks/mc_dolboeb/lv_0_20261109104108.mp3","coverFile":"covers/alb_pchelka.jpg","duration":"12:16","year":2026,"isNew":true,"isExplicit":false,"createdAt":1794211260337},{"id":"trk_1794062482767","title":"115 причин не ехать в Выборг","artistId":"mc_ezdit","albumId":"alb_1794065945442","filePath":"tracks/mc_ezdit/Untitled-Bounce.mp3","coverFile":"covers/Ночная операция отклонена.png","duration":"2:27","year":2026,"isNew":true,"isExplicit":true,"createdAt":1794062482768},{"id":"trk_1793566754812","title":"Лирика Житухи","artistId":"mc_ezdit","featArtistId":"mc_geich","albumId":"alb_1793566754812","filePath":"tracks/mc_ezdit/ЛИРИКА ЖИТУХИ.MP3","coverFile":"","duration":"2:57","year":2026,"isNew":false,"isExplicit":true,"createdAt":1793566754812},{"id":"trk_1792613045145","title":"Я","albumId":"","year":2024,"isExplicit":true,"duration":"1:24","isNew":false,"filePath":"tracks/mc_geich/Геич - Я.mp3","coverFile":"covers/alb_ya.JPG","artistId":"mc_geich","createdAt":1792613045145},{"isNew":false,"coverFile":"covers/alb_ahmad.JPG","id":"trk_1792612989945","createdAt":1792612989945,"filePath":"tracks/mc_geich/Геич - Ахмад.mp3","year":2024,"artistId":"mc_geich","isExplicit":true,"title":"Ахмад","albumId":"","duration":"0:55"},{"year":2023,"title":"Про продюсеров","coverFile":"covers/alb_prod.jpg","createdAt":1792612900589,"duration":"0:37","isExplicit":true,"isNew":false,"id":"trk_1792612900589","filePath":"tracks/mc_makaka/МС Макака - Про продюсеров.mp3","artistId":"mc_makaka","albumId":""},{"isNew":false,"id":"trk_1792597676680","duration":"2:29","createdAt":1792597676680,"isExplicit":true,"year":2023,"coverFile":"","filePath":"tracks/mc_makaka/МС Макака - Маша ебанулась.mp3","title":"Маша ебанулась","artistId":"mc_makaka","albumId":"alb_1792597638805"},{"title":"Милена спрыгнула с окна","year":2023,"filePath":"tracks/mc_makaka/МС_Макака_Милена_спрыгнула_с_окна.mp3","artistId":"mc_makaka","id":"trk_1792605310798","isExplicit":true,"createdAt":1792605310798,"albumId":"alb_1792597638805","isNew":false,"coverFile":"","duration":"2:00"},{"artistId":"mc_makaka","year":2023,"coverFile":"","title":"Моя любовь","filePath":"tracks/mc_makaka/МС Макака - Моя любовь.mp3","albumId":"alb_1792597638805","createdAt":1792605485661,"duration":"1:25","isExplicit":true,"id":"trk_1792605485661","isNew":false},{"duration":"1:50","title":"Загеев","id":"trk_1792611847469","albumId":"alb_1792597638805","artistId":"mc_makaka","year":2023,"isExplicit":true,"isNew":false,"coverFile":"","filePath":"tracks/mc_makaka/МС Макака - Загеев.mp3","createdAt":1792611847469},{"isNew":false,"duration":"1:48","year":2023,"isExplicit":true,"filePath":"tracks/mc_makaka/МС Макака - Не еби мне мозги.mp3","createdAt":1792611895502,"artistId":"mc_makaka","coverFile":"","title":"Не еби мне мозги","albumId":"alb_1792597638805","id":"trk_1792611895502"},{"duration":"2:18","id":"trk_1792611936565","title":"Волшебная бутылочка","isNew":false,"artistId":"mc_makaka","createdAt":1792611936565,"filePath":"tracks/mc_makaka/МС Макака - Волшебная бутылочка.mp3","year":2023,"albumId":"alb_1792597638805","isExplicit":true,"coverFile":""},{"isNew":false,"duration":"1:05","year":2024,"isExplicit":true,"filePath":"tracks/mc_ezdit/МС Ездить Что делать вегодня....mp3","createdAt":1792605138686,"artistId":"mc_ezdit","coverFile":"","title":"Что делать сегодня","albumId":"alb_1792604400709","id":"trk_1792605138686"},{"filePath":"tracks/mc_ezdit/МС Ездить Протухшое яйцо.mp3","artistId":"mc_ezdit","isExplicit":false,"title":"Протухшое яйцо","id":"trk_1792605088772","albumId":"alb_1792604400709","createdAt":1792605088772,"coverFile":"","duration":"1:05","year":2024,"isNew":false},{"duration":"1:05","createdAt":1792605048746,"coverFile":"","albumId":"alb_1792604400709","title":"Прогулка по улице","filePath":"tracks/mc_ezdit/МС Ездить Прогулка по улице.mp3","isExplicit":true,"id":"trk_1792605048746","artistId":"mc_ezdit","year":2024,"isNew":false},{"isExplicit":true,"duration":"1:05","createdAt":1792605018896,"id":"trk_1792605018896","coverFile":"","title":"Отец детей из говна","albumId":"alb_1792604400709","filePath":"tracks/mc_ezdit/МС Ездить Отец детей из говна.mp3","artistId":"mc_ezdit","isNew":false,"year":2024},{"year":2024,"title":"Нюхать клей","artistId":"mc_ezdit","filePath":"tracks/mc_ezdit/МС Ездить Нюхать клей.mp3","isExplicit":true,"duration":"1:05","id":"trk_1792604909501","isNew":false,"createdAt":1792604909501,"albumId":"alb_1792604400709","coverFile":""},{"isExplicit":false,"id":"trk_1792604765920","coverFile":"","filePath":"tracks/mc_ezdit/МС Ездить Мёртвый Туолет.mp3","createdAt":1792604765920,"isNew":false,"artistId":"mc_ezdit","year":2024,"title":"Мёртвый Туолет","albumId":"alb_1792604400709","duration":"1:05"},{"isNew":false,"duration":"1:13","year":2024,"isExplicit":true,"filePath":"tracks/mc_ezdit/МС Ездить Ленин наш батюшка (Каломенская).mp3","createdAt":1792604659532,"artistId":"mc_ezdit","coverFile":"","title":"Ленин наш батюшка (Коломенская)","albumId":"alb_1792604400709","id":"trk_1792604659532"},{"isNew":false,"albumId":"alb_1792604400709","artistId":"mc_ezdit","createdAt":1792604538770,"filePath":"tracks/mc_ezdit/МС Ездить Кто в говнище....mp3","isExplicit":true,"coverFile":"","id":"trk_1792604538770","year":2024,"duration":"1:05","title":"Кто в говнище"},{"year":2026,"title":"МАМА ПАПА","isExplicit":true,"duration":"2:55","albumId":"","isNew":false,"id":"trk_1792597878782","artistId":"mc_ezdit","coverFile":"covers/alb_mamapapa.jpg","filePath":"tracks/mc_ezdit/МС ЕЗДИТЬ - МАМА ПАПА.MP3","createdAt":1792597878782},{"title":"Шляпка гриба","filePath":"tracks/mc_makaka/МС Макака - Шляпка гриба.mp3","createdAt":1792612000839,"artistId":"mc_makaka","coverFile":"","year":2023,"id":"trk_1792612000839","isExplicit":true,"isNew":false,"duration":"2:01","albumId":"alb_1792597638805"}],"customVideos":[{"id":"vid_1794420741450","title":"115 причин не ехать в Выборг","artistId":"mc_ezdit","featArtistId":"","year":2026,"previewFile":"covers/viborg_yt.jpg","videoSource":"<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/h-FZpeTxgNc?si=yKKnXQrENm8KqaD4\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>","duration":"2:27","isExplicit":true,"createdAt":1794420741450},{"id":"vid_1793814480289","title":"Волшебная бутылочка","artistId":"mc_makaka","featArtistId":"","year":2023,"previewFile":"covers/clip_mcmakaka.jpg","videoSource":"<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/TRWbULj2nVA?si=InwsAfGQPvOGYlNP\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>","duration":"2:23","isExplicit":true,"createdAt":1793814480289},{"id":"vid_1793567359361","title":"Лирика Житухи","artistId":"mc_ezdit","year":2026,"previewFile":"covers/alb_rkn.jpg","videoSource":"<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/f4ocRn42FcU?si=acqaj-mIwZdBkhKt\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>","duration":"2:57","isExplicit":true,"createdAt":1793567359361,"featArtistId":"mc_geich"},{"id":"vid_1793051455024","title":"ПЕРЕЗВОН","artistId":"mc_ezdit","year":2026,"previewFile":"covers/alb_perezvon.jpg","videoSource":"<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/Oa6z5XOWFMY?si=ty6zUllX2tlpR0SY\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>","duration":"9:48","isExplicit":false,"createdAt":1793051455024},{"id":"vid_1793051361313","title":"МАМА ПАПА","artistId":"mc_ezdit","year":2026,"previewFile":"covers/alb_mamapapa.jpg","videoSource":"<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/ELoWJ9hkM-E?si=Stk1AqNGWMmSSAoF\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>","duration":"2:55","isExplicit":true,"createdAt":1793051361313}],"customNews":[{"id":"news_1794211490281","title":"Новоиспеченный","targetId":"art_ms_dolboeb_1794211002271","dateText":"09.11.26","imageFile":"avatars/dolboeb.jpg","content":"Вышел новый долбоёб с новым треком. Дословно - МС ДОЛБОЁБ","createdAt":1794211490282},{"id":"news_1794064715382","title":"Новый релиз от МС ЕЗДИТЬ","targetId":"app","dateText":"07.11.26","imageFile":"","content":"Вышел новый трек, кажется Олег Бахчисарай возвращает прайм \"Мертворождённых\". Всем слушать ❤️","createdAt":1794064715382},{"id":"news_1793575928947","title":"Новый релиз","targetId":"app","dateText":"02.11.26","imageFile":"","content":"Вышел новый релиз от МС ЕЗДИТЬ и МС ГЕИЧ - Лирика Житухи.\n\nИсполнители детально поработали над треком, также МС ГЕИЧ вернулся спустя 2 года к исполнению композиций и продюсерству.","createdAt":1793575928947}],"deletedCustomIds":["alb_1792597596794","alb_1793176376242","trk_1793176376243","art_eunrrenkrpkikprr_1793264041633","art_ms_dolboeb_1793263987131","mc_oparysh","trk_1792603726620","art_ms_oparysh_1793609173461","alb_1793609112638","news_1793576344447","alb_1793291266274","trk_1793291266274","MCTEST"],"systemPushBroadcast":{"id":"","title":"Обновите версию приложения","message":"Скоро новая версия выйдет в GitHub. Старые версии заблокированы.","imageFile":"logo.png","active":false,"createdAt":1794307894633},"tempBroadcast":{"id":"","title":"Объявление Dark Music","message":"Некоторые клипы получится посмотреть только с VPN - потому что эти клипы транслируются через YouTube.","active":false,"createdAt":1793615799053},"pinnedBroadcast":{"id":"","title":"Ведутся технические работы","message":"Временно возможны перебои в работе приложения.","active":false,"updatedAt":1794307891426},"forceUpdate":{"active":true,"requiredVersion":4.2,"blockedVersions":[1,2,3,3.1,4,4.1],"downloadUrl":"https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.2","message":"Данная версия больше не работает. Установите новую по кнопке ниже.","updatedAt":1794307950000},"whatsNew":{"id":"wn_1794397699559","title":"Что нового в v4.2?","content":"🎨 БОЛЬШОЕ ОБНОВЛЕНИЕ ОФОРМЛЕНИЯ!\nТеперь внешний вид Dark Music можно настроить полностью под себя:\n• Новая тема «Неон» — глубокий космический стиль, неоновое свечение\n• Светлая (Белая) дневная тема — чистый контрастный интерфейс для комфортного использования приложения на ярком солнце. \n• Классическая тёмная — наш фирменный чёрно-фиолетовый AMOLED-дизайн. \n• Авто-переключение «Как в системе» — приложение автоматически подстраивается под тему вашего смартфона или ПК в реальном времени.\nНастроить оформление можно в любой момент через иконку палитры!","version":4.2,"active":true,"updatedAt":1794397699559},"updatedAt":1794420783169};
         window.__APP_BUILD_VERSION__ = 4.2;
         /*__BAKED_VAULT_END__*/
 
@@ -14743,4 +14870,18 @@
         setupCloudSync();
     </script>
 
-<iframe src="darkmusic://open?track=trk_1794211260337" style="display: none;"></iframe></body></html>
+<iframe src="darkmusic://open?track=trk_1794211260337" style="display: none;"></iframe><audio class="audio-output" style="display: none;"></audio><div id="volume-booster-visusalizer">
+                    <div class="sound">
+                        <div class="sound-icon"></div>
+                        <div class="sound-wave sound-wave_one"></div>
+                        <div class="sound-wave sound-wave_two"></div>
+                        <div class="sound-wave sound-wave_three"></div>
+                    </div>
+                    <div class="segments-box">
+                        <div data-range="1-20" class="segment"><span></span></div>
+                        <div data-range="21-40" class="segment"><span></span></div>
+                        <div data-range="41-60" class="segment"><span></span></div>
+                        <div data-range="61-80" class="segment"><span></span></div>
+                        <div data-range="81-100" class="segment"><span></span></div>
+                    </div>
+                </div><div style="color-scheme: unset; forced-color-adjust: unset; math-depth: unset; position-anchor: unset; text-size-adjust: unset; appearance: unset; color: unset; font: unset; font-palette: unset; font-synthesis: unset; position-area: unset; text-orientation: unset; text-rendering: unset; text-spacing-trim: unset; -webkit-font-smoothing: unset; -webkit-locale: unset; -webkit-text-orientation: unset; -webkit-writing-mode: unset; writing-mode: unset; zoom: unset; accent-color: unset; place-content: unset; place-items: unset; place-self: unset; alignment-baseline: unset; anchor-name: unset; anchor-scope: unset; animation-composition: unset; animation: unset; animation-trigger: unset; app-region: unset; aspect-ratio: unset; backdrop-filter: unset; backface-visibility: unset; background: unset; background-blend-mode: unset; baseline-shift: unset; baseline-source: unset; block-size: unset; border-block: unset; border: unset; border-radius: unset; border-collapse: unset; border-end-end-radius: unset; border-end-start-radius: unset; border-inline: unset; border-shape: unset; border-start-end-radius: unset; border-start-start-radius: unset; bottom: unset; box-decoration-break: unset; box-shadow: unset; box-sizing: unset; break-after: unset; break-before: unset; break-inside: unset; buffered-rendering: unset; caption-side: unset; caret-animation: unset; caret-color: unset; caret-shape: unset; clear: unset; clip: unset; clip-path: unset; clip-rule: unset; color-interpolation: unset; color-interpolation-filters: unset; color-rendering: unset; columns: unset; column-fill: unset; gap: unset; rule-break: unset; rule: unset; rule-inset: unset; rule-visibility-items: unset; column-span: unset; contain: unset; contain-intrinsic-block-size: unset; contain-intrinsic-size: unset; contain-intrinsic-inline-size: unset; container: unset; content: unset; content-visibility: unset; corner-shape: unset; corner-block-end-shape: unset; corner-block-start-shape: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; cursor: unset; cx: unset; cy: unset; d: unset; display: unset; dominant-baseline: unset; dynamic-range-limit: unset; empty-cells: unset; field-sizing: unset; fill: unset; fill-opacity: unset; fill-rule: unset; filter: unset; flex: unset; flex-flow: unset; flex-line-count: unset; float: unset; flood-color: unset; flood-opacity: unset; frame-sizing: unset; grid: unset; grid-area: unset; height: unset; hyphenate-character: unset; hyphenate-limit-chars: unset; hyphens: unset; image-orientation: unset; image-rendering: unset; initial-letter: unset; inline-size: unset; inset-block: unset; inset-inline: unset; interactivity: unset; interest-delay: unset; interpolate-size: unset; isolation: unset; letter-spacing: unset; lighting-color: unset; line-break: unset; list-style: unset; margin-block: unset; margin: unset; margin-inline: unset; margin-trim: unset; marker: unset; mask: unset; mask-type: unset; math-shift: unset; math-style: unset; max-block-size: unset; max-height: unset; max-inline-size: unset; max-width: unset; min-block-size: unset; min-height: unset; min-inline-size: unset; min-width: unset; mix-blend-mode: unset; object-fit: unset; object-position: unset; object-view-box: unset; offset: unset; opacity: unset; order: unset; orphans: unset; outline: unset; outline-offset: unset; overflow-anchor: unset; overflow-block: unset; overflow-clip-margin: unset; overflow-inline: unset; overflow-wrap: unset; overflow: unset; overlay: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; overscroll-behavior: unset; padding-block: unset; padding: unset; padding-inline: unset; page: unset; page-margin-safety: unset; page-orientation: unset; paint-order: unset; perspective: unset; perspective-origin: unset; pointer-events: unset; position-try: unset; position-visibility: unset; print-color-adjust: unset; quotes: unset; r: unset; reading-flow: unset; reading-order: unset; resize: unset; right: unset; rotate: unset; ruby-align: unset; ruby-overhang: unset; ruby-position: unset; rule-overlap: unset; rx: unset; ry: unset; scale: unset; scroll-axis-lock: unset; scroll-behavior: unset; scroll-initial-target: unset; scroll-margin-block: unset; scroll-margin: unset; scroll-margin-inline: unset; scroll-marker-group: unset; scroll-padding-block: unset; scroll-padding: unset; scroll-padding-inline: unset; scroll-snap-align: unset; scroll-snap-stop: unset; scroll-snap-type: unset; scroll-target-group: unset; scroll-timeline: unset; scrollbar-color: unset; scrollbar-gutter: unset; scrollbar-width: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; shape-rendering: unset; size: unset; speak: unset; stop-color: unset; stop-opacity: unset; stroke: unset; stroke-dasharray: unset; stroke-dashoffset: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-width: unset; tab-size: unset; table-layout: unset; text-align: unset; text-align-last: unset; text-anchor: unset; text-autospace: unset; text-box: unset; text-combine-upright: unset; text-decoration: unset; text-decoration-inset: unset; text-decoration-skip-ink: unset; text-emphasis: unset; text-emphasis-position: unset; text-fit: unset; text-indent: unset; text-justify: unset; text-overflow: unset; text-shadow: unset; text-transform: unset; text-underline-offset: unset; text-underline-position: unset; text-wrap: unset; timeline-scope: unset; timeline-trigger: unset; touch-action: unset; transform: unset; transform-box: unset; transform-origin: unset; transform-style: unset; transition: unset; translate: unset; trigger-scope: unset; user-select: unset; vector-effect: unset; vertical-align: unset; view-timeline: unset; view-transition-class: unset; view-transition-group: unset; view-transition-name: unset; view-transition-scope: unset; visibility: unset; border-spacing: unset; -webkit-box-align: unset; -webkit-box-decoration-break: unset; -webkit-box-direction: unset; -webkit-box-flex: unset; -webkit-box-ordinal-group: unset; -webkit-box-orient: unset; -webkit-box-pack: unset; -webkit-box-reflect: unset; -webkit-line-break: unset; -webkit-line-clamp: unset; -webkit-mask-box-image: unset; -webkit-rtl-ordering: unset; -webkit-ruby-position: unset; -webkit-tap-highlight-color: unset; -webkit-text-combine: unset; -webkit-text-decorations-in-effect: unset; -webkit-text-fill-color: unset; -webkit-text-security: unset; -webkit-text-stroke: unset; -webkit-user-drag: unset; white-space-collapse: unset; widows: unset; width: unset; will-change: unset; window-drag: unset; word-break: unset; word-spacing: unset; x: unset; y: unset; z-index: unset; position: absolute; top: 0px; left: 0px;"><div style="color-scheme: unset; forced-color-adjust: unset; math-depth: unset; position-anchor: unset; text-size-adjust: unset; appearance: unset; color: unset; font: unset; font-palette: unset; font-synthesis: unset; position-area: unset; text-orientation: unset; text-rendering: unset; text-spacing-trim: unset; -webkit-font-smoothing: unset; -webkit-locale: unset; -webkit-text-orientation: unset; -webkit-writing-mode: unset; writing-mode: unset; zoom: unset; accent-color: unset; place-content: unset; place-items: unset; place-self: unset; alignment-baseline: unset; anchor-name: unset; anchor-scope: unset; animation-composition: unset; animation: unset; animation-trigger: unset; app-region: unset; aspect-ratio: unset; backdrop-filter: unset; backface-visibility: unset; background: unset; background-blend-mode: unset; baseline-shift: unset; baseline-source: unset; block-size: unset; border-block: unset; border: unset; border-radius: unset; border-collapse: unset; border-end-end-radius: unset; border-end-start-radius: unset; border-inline: unset; border-shape: unset; border-start-end-radius: unset; border-start-start-radius: unset; bottom: unset; box-decoration-break: unset; box-shadow: unset; box-sizing: unset; break-after: unset; break-before: unset; break-inside: unset; buffered-rendering: unset; caption-side: unset; caret-animation: unset; caret-color: unset; caret-shape: unset; clear: unset; clip: unset; clip-path: unset; clip-rule: unset; color-interpolation: unset; color-interpolation-filters: unset; color-rendering: unset; columns: unset; column-fill: unset; gap: unset; rule-break: unset; rule: unset; rule-inset: unset; rule-visibility-items: unset; column-span: unset; contain: unset; contain-intrinsic-block-size: unset; contain-intrinsic-size: unset; contain-intrinsic-inline-size: unset; container: unset; content: unset; content-visibility: unset; corner-shape: unset; corner-block-end-shape: unset; corner-block-start-shape: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; cursor: unset; cx: unset; cy: unset; d: unset; display: unset; dominant-baseline: unset; dynamic-range-limit: unset; empty-cells: unset; field-sizing: unset; fill: unset; fill-opacity: unset; fill-rule: unset; filter: unset; flex: unset; flex-flow: unset; flex-line-count: unset; float: unset; flood-color: unset; flood-opacity: unset; frame-sizing: unset; grid: unset; grid-area: unset; height: unset; hyphenate-character: unset; hyphenate-limit-chars: unset; hyphens: unset; image-orientation: unset; image-rendering: unset; initial-letter: unset; inline-size: unset; inset-block: unset; inset-inline: unset; interactivity: unset; interest-delay: unset; interpolate-size: unset; isolation: unset; letter-spacing: unset; lighting-color: unset; line-break: unset; list-style: unset; margin-block: unset; margin: unset; margin-inline: unset; margin-trim: unset; marker: unset; mask: unset; mask-type: unset; math-shift: unset; math-style: unset; max-block-size: unset; max-height: unset; max-inline-size: unset; max-width: unset; min-block-size: unset; min-height: unset; min-inline-size: unset; min-width: unset; mix-blend-mode: unset; object-fit: unset; object-position: unset; object-view-box: unset; offset: unset; opacity: unset; order: unset; orphans: unset; outline: unset; outline-offset: unset; overflow-anchor: unset; overflow-block: unset; overflow-clip-margin: unset; overflow-inline: unset; overflow-wrap: unset; overflow: unset; overlay: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; overscroll-behavior: unset; padding-block: unset; padding: unset; padding-inline: unset; page: unset; page-margin-safety: unset; page-orientation: unset; paint-order: unset; perspective: unset; perspective-origin: unset; pointer-events: unset; position-try: unset; position-visibility: unset; print-color-adjust: unset; quotes: unset; r: unset; reading-flow: unset; reading-order: unset; resize: unset; right: unset; rotate: unset; ruby-align: unset; ruby-overhang: unset; ruby-position: unset; rule-overlap: unset; rx: unset; ry: unset; scale: unset; scroll-axis-lock: unset; scroll-behavior: unset; scroll-initial-target: unset; scroll-margin-block: unset; scroll-margin: unset; scroll-margin-inline: unset; scroll-marker-group: unset; scroll-padding-block: unset; scroll-padding: unset; scroll-padding-inline: unset; scroll-snap-align: unset; scroll-snap-stop: unset; scroll-snap-type: unset; scroll-target-group: unset; scroll-timeline: unset; scrollbar-color: unset; scrollbar-gutter: unset; scrollbar-width: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; shape-rendering: unset; size: unset; speak: unset; stop-color: unset; stop-opacity: unset; stroke: unset; stroke-dasharray: unset; stroke-dashoffset: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-width: unset; tab-size: unset; table-layout: unset; text-align: unset; text-align-last: unset; text-anchor: unset; text-autospace: unset; text-box: unset; text-combine-upright: unset; text-decoration: unset; text-decoration-inset: unset; text-decoration-skip-ink: unset; text-emphasis: unset; text-emphasis-position: unset; text-fit: unset; text-indent: unset; text-justify: unset; text-overflow: unset; text-shadow: unset; text-transform: unset; text-underline-offset: unset; text-underline-position: unset; text-wrap: unset; timeline-scope: unset; timeline-trigger: unset; touch-action: unset; transform: unset; transform-box: unset; transform-origin: unset; transform-style: unset; transition: unset; translate: unset; trigger-scope: unset; user-select: unset; vector-effect: unset; vertical-align: unset; view-timeline: unset; view-transition-class: unset; view-transition-group: unset; view-transition-name: unset; view-transition-scope: unset; visibility: unset; border-spacing: unset; -webkit-box-align: unset; -webkit-box-decoration-break: unset; -webkit-box-direction: unset; -webkit-box-flex: unset; -webkit-box-ordinal-group: unset; -webkit-box-orient: unset; -webkit-box-pack: unset; -webkit-box-reflect: unset; -webkit-line-break: unset; -webkit-line-clamp: unset; -webkit-mask-box-image: unset; -webkit-rtl-ordering: unset; -webkit-ruby-position: unset; -webkit-tap-highlight-color: unset; -webkit-text-combine: unset; -webkit-text-decorations-in-effect: unset; -webkit-text-fill-color: unset; -webkit-text-security: unset; -webkit-text-stroke: unset; -webkit-user-drag: unset; white-space-collapse: unset; widows: unset; width: unset; will-change: unset; window-drag: unset; word-break: unset; word-spacing: unset; x: unset; y: unset; z-index: unset; position: absolute; top: 0px; left: 0px;"></div></div></body></html>
