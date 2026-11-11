@@ -866,5 +866,59 @@ export function resolveRightSidebarArtistCards<T extends { id: string }>(
   return cards;
 }
 
+export type AppThemeId = 'dark' | 'ps5' | 'light';
 
+export interface AppThemeDescriptor {
+  id: AppThemeId;
+  shortLabel: string;
+  fullLabel: string;
+  description: string;
+  icon: string;
+}
 
+export const APP_THEMES: Record<AppThemeId, AppThemeDescriptor> = {
+  dark: {
+    id: 'dark',
+    shortLabel: 'Тёмная',
+    fullLabel: 'Обычная тёмная',
+    description: 'Классическая фирменная тёмная тема Dark Music',
+    icon: 'fa-moon'
+  },
+  ps5: {
+    id: 'ps5',
+    shortLabel: 'PS5 Неон',
+    fullLabel: 'Новая (PS5 Media)',
+    description: 'Космический неон, свечение и консольный интерфейс Медиа',
+    icon: 'fa-gamepad'
+  },
+  light: {
+    id: 'light',
+    shortLabel: 'Светлая',
+    fullLabel: 'Светлая (Белая)',
+    description: 'Чистая дневная белая тема с высокой контрастностью',
+    icon: 'fa-sun'
+  }
+};
+
+export function resolveEffectiveAppTheme(params: {
+  savedTheme?: string | null;
+  systemPrefersLight: boolean;
+}): AppThemeId {
+  const cleanSaved = String(params.savedTheme || '').trim().toLowerCase();
+  if (cleanSaved === 'dark' || cleanSaved === 'ps5' || cleanSaved === 'light') {
+    return cleanSaved as AppThemeId;
+  }
+  return params.systemPrefersLight ? 'light' : 'dark';
+}
+
+export function resolveThemeOnSystemSchemeChange(
+  systemPrefersLight: boolean
+): AppThemeId {
+  return systemPrefersLight ? 'light' : 'dark';
+}
+
+export function cycleNextAppTheme(currentTheme: AppThemeId): AppThemeId {
+  if (currentTheme === 'dark') return 'ps5';
+  if (currentTheme === 'ps5') return 'light';
+  return 'dark';
+}

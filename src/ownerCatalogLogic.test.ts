@@ -32,7 +32,11 @@ import {
   isValidGitHubTokenFormat,
   resolveFullscreenPlayerBackdropUrl,
   shouldProtectOwnerCatalogFromStaleSync,
-  resolveRightSidebarArtistCards
+  resolveRightSidebarArtistCards,
+  resolveEffectiveAppTheme,
+  resolveThemeOnSystemSchemeChange,
+  cycleNextAppTheme,
+  APP_THEMES
 } from './ownerCatalogLogic';
 
 test('generateArtistId transliterates Russian artist name into clean id', () => {
@@ -485,4 +489,23 @@ test('resolveNextTrackInContext plays album and artist tracks sequentially inste
   assert.equal(prev1.nextTrackId, 'trk_alb_3');
 });
 
+test('resolveEffectiveAppTheme, resolveThemeOnSystemSchemeChange, and cycleNextAppTheme support all 3 themes and OS light/dark sync', () => {
+  // When no manual theme is saved, system light -> 'light', system dark -> 'dark' (original dark theme)
+  assert.equal(resolveEffectiveAppTheme({ savedTheme: null, systemPrefersLight: true }), 'light');
+  assert.equal(resolveEffectiveAppTheme({ savedTheme: '', systemPrefersLight: false }), 'dark');
 
+  // When a valid theme is explicitly selected, it is respected
+  assert.equal(resolveEffectiveAppTheme({ savedTheme: 'ps5', systemPrefersLight: true }), 'ps5');
+  assert.equal(resolveEffectiveAppTheme({ savedTheme: 'light', systemPrefersLight: false }), 'light');
+  assert.equal(resolveEffectiveAppTheme({ savedTheme: 'dark', systemPrefersLight: true }), 'dark');
+
+  // When OS color scheme changes dynamically, light -> 'light', dark -> 'dark'
+  assert.equal(resolveThemeOnSystemSchemeChange(true), 'light');
+  assert.equal(resolveThemeOnSystemSchemeChange(false), 'dark');
+
+  // Cycling through the 3 themes: dark -> ps5 -> light -> dark
+  assert.equal(cycleNextAppTheme('dark'), 'ps5');
+  assert.equal(cycleNextAppTheme('ps5'), 'light');
+  assert.equal(cycleNextAppTheme('light'), 'dark');
+  assert.equal(Object.keys(APP_THEMES).length, 3);
+});

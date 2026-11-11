@@ -514,11 +514,446 @@
                 grid-template-columns: repeat(6, minmax(0, 1fr));
             }
         }
+
+        /* =========================================================================
+           СИСТЕМА 3 ТЕМ DARK MUSIC:
+           1. data-theme="dark"  — Обычная тёмная (классическая по умолчанию)
+           2. data-theme="ps5"   — Новая тема со скриншота (PS5 Media / Космический Неон)
+           3. data-theme="light" — Светлая (Белая дневная тема)
+           ========================================================================= */
+        .ps5-only {
+            display: none !important;
+        }
+        .ps5-only-flex {
+            display: none !important;
+        }
+        .ps5-only-inline {
+            display: none !important;
+        }
+        body[data-theme="ps5"] .ps5-only {
+            display: block !important;
+        }
+        body[data-theme="ps5"] .ps5-only-flex {
+            display: flex !important;
+        }
+        body[data-theme="ps5"] .ps5-only-inline {
+            display: inline-flex !important;
+        }
+        body[data-theme="ps5"] .hide-on-ps5 {
+            display: none !important;
+        }
+        @media (min-width: 1024px) {
+            body[data-theme="ps5"] .lg-hide-on-ps5 {
+                display: none !important;
+            }
+        }
+
+        /* --- ТЕМА 2: НОВАЯ КОСМИЧЕСКАЯ НЕОНОВАЯ ТЕМА (PS5 MEDIA СО СКРИНШОТА) --- */
+        body[data-theme="ps5"] {
+            background-color: #060613 !important;
+            color: #ffffff !important;
+        }
+        body[data-theme="ps5"] #appRootShell {
+            background:
+                radial-gradient(ellipse 80% 55% at 52% 48%, rgba(124, 58, 237, 0.26) 0%, rgba(79, 70, 229, 0.14) 45%, transparent 75%),
+                radial-gradient(circle at 18% 22%, rgba(147, 51, 234, 0.18) 0%, transparent 45%),
+                radial-gradient(circle at 85% 78%, rgba(192, 38, 211, 0.16) 0%, transparent 50%),
+                linear-gradient(165deg, #060714 0%, #0b0820 48%, #070512 100%) !important;
+            box-shadow: none !important;
+        }
+        #ps5CosmicBackdrop {
+            display: none;
+        }
+        body[data-theme="ps5"] #ps5CosmicBackdrop {
+            display: block;
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            background:
+                radial-gradient(1.5px 1.5px at 12% 18%, rgba(255,255,255,0.75) 50%, transparent 100%),
+                radial-gradient(1px 1px at 26% 62%, rgba(255,255,255,0.55) 50%, transparent 100%),
+                radial-gradient(2px 2px at 38% 12%, rgba(216,180,254,0.8) 50%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 64% 28%, rgba(255,255,255,0.65) 50%, transparent 100%),
+                radial-gradient(1px 1px at 78% 14%, rgba(255,255,255,0.5) 50%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 88% 54%, rgba(216,180,254,0.7) 50%, transparent 100%),
+                radial-gradient(1px 1px at 19% 82%, rgba(255,255,255,0.6) 50%, transparent 100%),
+                radial-gradient(2px 2px at 49% 74%, rgba(192,132,252,0.65) 50%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 72% 84%, rgba(255,255,255,0.5) 50%, transparent 100%);
+        }
+        body[data-theme="ps5"] header.lg\:hidden {
+            display: none !important;
+        }
+        body[data-theme="ps5"] .left-sidebar-brand-row {
+            display: none !important;
+        }
+        @media (min-width: 1024px) {
+            body[data-theme="ps5"] #desktopTopHeaderBar:not(.ps5-search-open) {
+                display: none !important;
+            }
+        }
+        body[data-theme="ps5"] #desktopLeftSidebar > .left-sidebar-card,
+        body[data-theme="ps5"] #centerWorkspacePane,
+        body[data-theme="ps5"] #desktopRightSidebar {
+            background: rgba(11, 10, 26, 0.45) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border-color: rgba(168, 85, 247, 0.16) !important;
+        }
+        body[data-theme="ps5"] #desk-nav-home,
+        body[data-theme="ps5"] #desk-nav-charts,
+        body[data-theme="ps5"] #desk-nav-artists,
+        body[data-theme="ps5"] #desk-nav-favorites,
+        body[data-theme="ps5"] #desk-nav-owner {
+            border-radius: 14px !important;
+            padding-top: 11px !important;
+            padding-bottom: 11px !important;
+        }
+        body[data-theme="ps5"] .left-sidebar-wave-btn {
+            background: rgba(24, 24, 38, 0.82) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45) !important;
+            justify-content: flex-start !important;
+            padding-left: 12px !important;
+        }
+        body[data-theme="ps5"] #heroWaveBannerCard {
+            background: linear-gradient(135deg, rgba(58, 16, 108, 0.88) 0%, rgba(28, 12, 62, 0.92) 52%, rgba(12, 10, 28, 0.96) 100%) !important;
+            border: 2px solid rgba(192, 132, 252, 0.85) !important;
+            box-shadow:
+                0 0 32px rgba(168, 85, 247, 0.55),
+                0 0 64px rgba(139, 92, 246, 0.25),
+                inset 0 0 26px rgba(168, 85, 247, 0.25) !important;
+        }
+        body[data-theme="ps5"] #heroWaveBannerCard::before {
+            content: "";
+            position: absolute;
+            inset: 6px;
+            border-radius: 18px;
+            border: 1px solid rgba(216, 180, 254, 0.25);
+            pointer-events: none;
+        }
+        body[data-theme="ps5"] #deskHeroFeaturedCard {
+            background: rgba(16, 12, 34, 0.78) !important;
+            border: 1px solid rgba(192, 132, 252, 0.35) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55), 0 0 20px rgba(168, 85, 247, 0.2) !important;
+        }
+        body[data-theme="ps5"] #homeArtistsGrid > div,
+        body[data-theme="ps5"] #homeChartList > div,
+        body[data-theme="ps5"] #homeAlbumsCarousel > div,
+        body[data-theme="ps5"] [data-track-row] {
+            background: rgba(14, 14, 26, 0.82) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            backdrop-filter: blur(12px);
+        }
+        body[data-theme="ps5"] #homeChartList > div:first-child {
+            border-color: rgba(168, 85, 247, 0.65) !important;
+            box-shadow: 0 0 22px rgba(168, 85, 247, 0.28) !important;
+            background: linear-gradient(90deg, rgba(59, 7, 100, 0.45), rgba(17, 15, 32, 0.88)) !important;
+        }
+        body[data-theme="ps5"] #deskRightCoverCard {
+            border-radius: 22px !important;
+            border: 1px solid rgba(216, 180, 254, 0.32) !important;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 28px rgba(168, 85, 247, 0.28) !important;
+        }
+        body[data-theme="ps5"] #desktopPlayerBar {
+            background: rgba(9, 8, 22, 0.86) !important;
+            backdrop-filter: blur(28px) !important;
+            border-top: 1px solid rgba(168, 85, 247, 0.22) !important;
+        }
+        body[data-theme="ps5"] #mobileBottomBar {
+            background: rgba(9, 8, 22, 0.92) !important;
+            backdrop-filter: blur(24px) !important;
+            border-top: 1px solid rgba(168, 85, 247, 0.3) !important;
+        }
+
+        /* --- ТЕМА 3: СВЕТЛАЯ (БЕЛАЯ ДНЕВНАЯ ТЕМА) --- */
+        body[data-theme="light"] {
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
+        }
+        body[data-theme="light"] #appRootShell {
+            background-color: #f1f5f9 !important;
+            border-color: #e2e8f0 !important;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06) !important;
+        }
+        body[data-theme="light"] header.lg\:hidden,
+        body[data-theme="light"] #desktopTopHeaderBar,
+        body[data-theme="light"] #desktopPlayerBar,
+        body[data-theme="light"] #mobileBottomBar {
+            background-color: rgba(255, 255, 255, 0.94) !important;
+            border-color: #e2e8f0 !important;
+            color: #0f172a !important;
+        }
+        body[data-theme="light"] #desktopLeftSidebar > .left-sidebar-card,
+        body[data-theme="light"] #centerWorkspacePane,
+        body[data-theme="light"] #desktopRightSidebar {
+            background-color: #ffffff !important;
+            border-color: #e2e8f0 !important;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04) !important;
+        }
+        body[data-theme="light"] .bg-zinc-950,
+        body[data-theme="light"] .bg-zinc-950\/90,
+        body[data-theme="light"] .bg-zinc-950\/95,
+        body[data-theme="light"] .bg-zinc-950\/85,
+        body[data-theme="light"] .bg-black,
+        body[data-theme="light"] .bg-black\/85,
+        body[data-theme="light"] .bg-black\/90,
+        body[data-theme="light"] .bg-black\/95 {
+            background-color: #ffffff !important;
+        }
+        body[data-theme="light"] .bg-zinc-900,
+        body[data-theme="light"] .bg-zinc-900\/90,
+        body[data-theme="light"] .bg-zinc-900\/95,
+        body[data-theme="light"] .bg-zinc-900\/80,
+        body[data-theme="light"] .bg-zinc-900\/70,
+        body[data-theme="light"] .bg-zinc-900\/60,
+        body[data-theme="light"] .bg-zinc-900\/50,
+        body[data-theme="light"] .bg-zinc-800,
+        body[data-theme="light"] .bg-zinc-800\/95 {
+            background-color: #f1f5f9 !important;
+        }
+        body[data-theme="light"] [data-track-row],
+        body[data-theme="light"] #homeArtistsGrid > div,
+        body[data-theme="light"] #homeAlbumsCarousel > div {
+            background-color: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+        }
+        body[data-theme="light"] [data-track-row]:hover,
+        body[data-theme="light"] #homeArtistsGrid > div:hover,
+        body[data-theme="light"] #homeAlbumsCarousel > div:hover {
+            background-color: #f1f5f9 !important;
+            border-color: #cbd5e1 !important;
+        }
+        body[data-theme="light"] .border-zinc-900,
+        body[data-theme="light"] .border-zinc-900\/80,
+        body[data-theme="light"] .border-zinc-900\/90,
+        body[data-theme="light"] .border-zinc-800,
+        body[data-theme="light"] .border-zinc-800\/80,
+        body[data-theme="light"] .border-zinc-800\/90,
+        body[data-theme="light"] .border-zinc-800\/70 {
+            border-color: #e2e8f0 !important;
+        }
+        body[data-theme="light"] .text-white,
+        body[data-theme="light"] .text-zinc-100,
+        body[data-theme="light"] .text-zinc-200 {
+            color: #0f172a !important;
+        }
+        body[data-theme="light"] .text-zinc-300,
+        body[data-theme="light"] .text-zinc-400 {
+            color: #475569 !important;
+        }
+        body[data-theme="light"] .text-zinc-500,
+        body[data-theme="light"] .text-zinc-600 {
+            color: #64748b !important;
+        }
+        body[data-theme="light"] .text-purple-300,
+        body[data-theme="light"] .text-purple-400 {
+            color: #7e22ce !important;
+        }
+        /* Сохраняем белый текст на ярких акцентных градиентных кнопках и бейджах в светлой теме */
+        body[data-theme="light"] .bg-purple-600,
+        body[data-theme="light"] .bg-rose-500,
+        body[data-theme="light"] .bg-rose-600,
+        body[data-theme="light"] .bg-emerald-600,
+        body[data-theme="light"] .left-sidebar-wave-btn,
+        body[data-theme="light"] [data-track-playbtn].bg-purple-600 {
+            color: #ffffff !important;
+        }
+        body[data-theme="light"] .bg-purple-600 .text-white,
+        body[data-theme="light"] .left-sidebar-wave-btn .text-white,
+        body[data-theme="light"] .left-sidebar-wave-btn span,
+        body[data-theme="light"] .left-sidebar-wave-btn i {
+            color: #ffffff !important;
+        }
+        /* Высококонтрастный логотип DARK MUSIC и карточка фактов в светлой теме */
+        body[data-theme="light"] .from-white.via-purple-100.to-purple-300 {
+            background-image: linear-gradient(to right, #0f172a, #581c87, #7e22ce) !important;
+        }
+        body[data-theme="light"] #deskRightFactCard {
+            background: linear-gradient(135deg, #f3e8ff 0%, #f8fafc 60%, #ffffff 100%) !important;
+            border-color: #d8b4fe !important;
+        }
+        body[data-theme="light"] #deskRightArtistCard .drop-shadow {
+            color: #ffffff !important;
+        }
+        /* Баннер «Моя волна» в светлой теме — нежный светло-лавандовый/перламутровый с высокой читаемостью */
+        body[data-theme="light"] #heroWaveBannerCard {
+            background: linear-gradient(135deg, #f3e8ff 0%, #ede9fe 52%, #ffffff 100%) !important;
+            border: 1px solid #d8b4fe !important;
+            box-shadow: 0 12px 32px rgba(147, 51, 234, 0.1) !important;
+        }
+        body[data-theme="light"] #deskHeroFeaturedCard {
+            background: rgba(255, 255, 255, 0.88) !important;
+            border: 1px solid #d8b4fe !important;
+            box-shadow: 0 8px 20px rgba(147, 51, 234, 0.08) !important;
+        }
+        body[data-theme="light"] #deskHeroFeaturedCard .bg-purple-600 i {
+            color: #ffffff !important;
+        }
+        body[data-theme="light"] #deskPlayBtn,
+        body[data-theme="light"] #miniBottomPlayBtn {
+            background-color: #0f172a !important;
+            color: #ffffff !important;
+        }
+        body[data-theme="light"] #deskPlayBtn i,
+        body[data-theme="light"] #miniBottomPlayBtn i {
+            color: #ffffff !important;
+        }
+        body[data-theme="light"] #deskLibFilter_all.bg-white {
+            background-color: #0f172a !important;
+            color: #ffffff !important;
+        }
+        body[data-theme="light"] #trackActionsSheet {
+            background-color: #ffffff !important;
+            border-color: #e2e8f0 !important;
+            box-shadow: 0 -12px 40px rgba(15, 23, 42, 0.15) !important;
+        }
+        body[data-theme="light"] #playerModal {
+            background-color: rgba(248, 250, 252, 0.96) !important;
+        }
+        body[data-theme="light"] #playerBackdropBannerWrap div {
+            background: linear-gradient(to top, #f8fafc, rgba(248, 250, 252, 0.72), rgba(248, 250, 252, 0.5)) !important;
+        }
+        body[data-theme="light"] .dark-slider {
+            background: linear-gradient(
+                to right,
+                #9333ea 0%,
+                #db2777 var(--slider-pct, 0%),
+                rgba(148, 163, 184, 0.4) var(--slider-pct, 0%),
+                rgba(148, 163, 184, 0.4) 100%
+            );
+        }
+        body[data-theme="light"] input,
+        body[data-theme="light"] select,
+        body[data-theme="light"] textarea {
+            background-color: #f8fafc !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
     </style>
 <style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.inset-x-0{left:0px;right:0px}.-bottom-8{bottom:-2rem}.-left-8{left:-2rem}.-right-1{right:-0.25rem}.-right-10{right:-2.5rem}.-right-12{right:-3rem}.-top-1{top:-0.25rem}.-top-10{top:-2.5rem}.-top-12{top:-3rem}.left-1\/2{left:50%}.left-3\.5{left:0.875rem}.right-3{right:0.75rem}.top-0{top:0px}.top-1\/2{top:50%}.top-16{top:4rem}.top-4{top:1rem}.bottom-0{bottom:0px}.bottom-2{bottom:0.5rem}.right-2{right:0.5rem}.right-2\.5{right:0.625rem}.top-2{top:0.5rem}.top-2\.5{top:0.625rem}.left-3{left:0.75rem}.-bottom-40{bottom:-10rem}.-left-24{left:-6rem}.-top-24{top:-6rem}.left-0{left:0px}.right-0{right:0px}.z-10{z-index:10}.z-20{z-index:20}.z-50{z-index:50}.z-\[65\]{z-index:65}.z-\[68\]{z-index:68}.z-\[70\]{z-index:70}.z-0{z-index:0}.z-\[1\]{z-index:1}.z-30{z-index:30}.z-40{z-index:40}.z-\[60\]{z-index:60}.z-\[75\]{z-index:75}.z-\[80\]{z-index:80}.z-\[85\]{z-index:85}.mx-auto{margin-left:auto;margin-right:auto}.mx-0\.5{margin-left:0.125rem;margin-right:0.125rem}.-mx-3\.5{margin-left:-0.875rem;margin-right:-0.875rem}.my-1{margin-top:0.25rem;margin-bottom:0.25rem}.my-3{margin-top:0.75rem;margin-bottom:0.75rem}.my-auto{margin-top:auto;margin-bottom:auto}.-mt-0\.5{margin-top:-0.125rem}.ml-0\.5{margin-left:0.125rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mt-1\.5{margin-top:0.375rem}.mb-0\.5{margin-bottom:0.125rem}.mb-1{margin-bottom:0.25rem}.-ml-1{margin-left:-0.25rem}.-mt-3\.5{margin-top:-0.875rem}.mb-2\.5{margin-bottom:0.625rem}.mr-0\.5{margin-right:0.125rem}.mt-auto{margin-top:auto}.-mt-3{margin-top:-0.75rem}.mb-3\.5{margin-bottom:0.875rem}.mt-2{margin-top:0.5rem}.mt-2\.5{margin-top:0.625rem}.mt-3{margin-top:0.75rem}.mt-3\.5{margin-top:0.875rem}.mt-4{margin-top:1rem}.mb-2{margin-bottom:0.5rem}.mr-1{margin-right:0.25rem}.line-clamp-3{overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.aspect-video{aspect-ratio:16 / 9}.aspect-square{aspect-ratio:1 / 1}.h-1{height:0.25rem}.h-1\.5{height:0.375rem}.h-10{height:2.5rem}.h-11{height:2.75rem}.h-12{height:3rem}.h-16{height:4rem}.h-2{height:0.5rem}.h-3{height:0.75rem}.h-32{height:8rem}.h-36{height:9rem}.h-40{height:10rem}.h-6{height:1.5rem}.h-7{height:1.75rem}.h-8{height:2rem}.h-9{height:2.25rem}.h-\[15px\]{height:15px}.h-full{height:100%}.h-14{height:3.5rem}.h-20{height:5rem}.h-4{height:1rem}.h-28{height:7rem}.h-5{height:1.25rem}.h-0\.5{height:0.125rem}.h-3\.5{height:0.875rem}.h-64{height:16rem}.h-96{height:24rem}.h-\[440px\]{height:440px}.h-\[52px\]{height:52px}.h-\[84px\]{height:84px}.h-24{height:6rem}.max-h-\[85vh\]{max-height:85vh}.max-h-96{max-height:24rem}.max-h-56{max-height:14rem}.max-h-60{max-height:15rem}.max-h-\[88vh\]{max-height:88vh}.max-h-\[90vh\]{max-height:90vh}.max-h-48{max-height:12rem}.min-h-0{min-height:0px}.min-h-screen{min-height:100vh}.min-h-\[270px\]{min-height:270px}.min-h-full{min-height:100%}.w-0\.5{width:0.125rem}.w-1\.5{width:0.375rem}.w-10{width:2.5rem}.w-11{width:2.75rem}.w-12{width:3rem}.w-16{width:4rem}.w-2{width:0.5rem}.w-32{width:8rem}.w-36{width:9rem}.w-4{width:1rem}.w-40{width:10rem}.w-6{width:1.5rem}.w-7{width:1.75rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-\[300px\]{width:300px}.w-\[90\%\]{width:90%}.w-\[92\%\]{width:92%}.w-full{width:100%}.w-14{width:3.5rem}.w-20{width:5rem}.w-5{width:1.25rem}.w-0{width:0px}.w-1{width:0.25rem}.w-24{width:6rem}.w-28{width:7rem}.w-3\.5{width:0.875rem}.w-64{width:16rem}.w-96{width:24rem}.w-\[30\%\]{width:30%}.w-\[40\%\]{width:40%}.w-\[440px\]{width:440px}.w-\[52px\]{width:52px}.min-w-0{min-width:0px}.min-w-\[15px\]{min-width:15px}.min-w-\[200px\]{min-width:200px}.min-w-\[220px\]{min-width:220px}.max-w-\[350px\]{max-width:350px}.max-w-\[370px\]{max-width:370px}.max-w-\[390px\]{max-width:390px}.max-w-\[395px\]{max-width:395px}.max-w-\[430px\]{max-width:430px}.max-w-xl{max-width:36rem}.max-w-md{max-width:28rem}.max-w-\[150px\]{max-width:150px}.max-w-\[210px\]{max-width:210px}.max-w-\[330px\]{max-width:330px}.max-w-\[345px\]{max-width:345px}.max-w-\[380px\]{max-width:380px}.max-w-\[460px\]{max-width:460px}.max-w-\[560px\]{max-width:560px}.max-w-full{max-width:100%}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-3{--tw-translate-y:-0.75rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-y-0{--tw-translate-y:0px;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.scale-110{--tw-scale-x:1.1;--tw-scale-y:1.1;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes bounce{0%, 100%{transform:translateY(-25%);animation-timing-function:cubic-bezier(0.8,0,1,1)}50%{transform:none;animation-timing-function:cubic-bezier(0,0,0.2,1)}}.animate-bounce{animation:bounce 1s infinite}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-5{grid-template-columns:repeat(5, minmax(0, 1fr))}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-0\.5{gap:0.125rem}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-3\.5{gap:0.875rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.-space-x-1 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(-0.25rem * var(--tw-space-x-reverse));margin-left:calc(-0.25rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-1\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.375rem * var(--tw-space-y-reverse))}.self-start{align-self:flex-start}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.whitespace-nowrap{white-space:nowrap}.whitespace-pre-line{white-space:pre-line}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.rounded-t-2xl{border-top-left-radius:1rem;border-top-right-radius:1rem}.rounded-t-\[28px\]{border-top-left-radius:28px;border-top-right-radius:28px}.border{border-width:1px}.border-x{border-left-width:1px;border-right-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-amber-500\/40{border-color:rgb(245 158 11 / 0.4)}.border-amber-500\/50{border-color:rgb(245 158 11 / 0.5)}.border-orange-500\/40{border-color:rgb(249 115 22 / 0.4)}.border-purple-400\/30{border-color:rgb(192 132 252 / 0.3)}.border-purple-400\/40{border-color:rgb(192 132 252 / 0.4)}.border-purple-500\/30{border-color:rgb(168 85 247 / 0.3)}.border-purple-500\/35{border-color:rgb(168 85 247 / 0.35)}.border-purple-500\/40{border-color:rgb(168 85 247 / 0.4)}.border-purple-500\/50{border-color:rgb(168 85 247 / 0.5)}.border-rose-500\/30{border-color:rgb(244 63 94 / 0.3)}.border-rose-500\/40{border-color:rgb(244 63 94 / 0.4)}.border-rose-500\/50{border-color:rgb(244 63 94 / 0.5)}.border-transparent{border-color:transparent}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.border-white\/15{border-color:rgb(255 255 255 / 0.15)}.border-white\/30{border-color:rgb(255 255 255 / 0.3)}.border-zinc-400\/40{border-color:rgb(161 161 170 / 0.4)}.border-zinc-800{--tw-border-opacity:1;border-color:rgb(39 39 42 / var(--tw-border-opacity, 1))}.border-zinc-800\/80{border-color:rgb(39 39 42 / 0.8)}.border-zinc-800\/90{border-color:rgb(39 39 42 / 0.9)}.border-zinc-900{--tw-border-opacity:1;border-color:rgb(24 24 27 / var(--tw-border-opacity, 1))}.border-zinc-900\/80{border-color:rgb(24 24 27 / 0.8)}.border-zinc-900\/90{border-color:rgb(24 24 27 / 0.9)}.border-amber-500\/30{border-color:rgb(245 158 11 / 0.3)}.border-purple-500\/25{border-color:rgb(168 85 247 / 0.25)}.border-rose-500\/35{border-color:rgb(244 63 94 / 0.35)}.border-emerald-500\/30{border-color:rgb(16 185 129 / 0.3)}.border-emerald-500\/40{border-color:rgb(16 185 129 / 0.4)}.border-fuchsia-500\/40{border-color:rgb(217 70 239 / 0.4)}.border-sky-500\/30{border-color:rgb(14 165 233 / 0.3)}.border-sky-500\/40{border-color:rgb(14 165 233 / 0.4)}.border-white\/20{border-color:rgb(255 255 255 / 0.2)}.border-purple-300{--tw-border-opacity:1;border-color:rgb(216 180 254 / var(--tw-border-opacity, 1))}.border-white\/\[0\.06\]{border-color:rgb(255 255 255 / 0.06)}.border-white\/\[0\.07\]{border-color:rgb(255 255 255 / 0.07)}.border-white\/\[0\.08\]{border-color:rgb(255 255 255 / 0.08)}.border-zinc-800\/70{border-color:rgb(39 39 42 / 0.7)}.bg-amber-500\/20{background-color:rgb(245 158 11 / 0.2)}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-black\/55{background-color:rgb(0 0 0 / 0.55)}.bg-black\/85{background-color:rgb(0 0 0 / 0.85)}.bg-black\/95{background-color:rgb(0 0 0 / 0.95)}.bg-emerald-400{--tw-bg-opacity:1;background-color:rgb(52 211 153 / var(--tw-bg-opacity, 1))}.bg-fuchsia-400{--tw-bg-opacity:1;background-color:rgb(232 121 249 / var(--tw-bg-opacity, 1))}.bg-fuchsia-600\/15{background-color:rgb(192 38 211 / 0.15)}.bg-orange-500\/20{background-color:rgb(249 115 22 / 0.2)}.bg-purple-400{--tw-bg-opacity:1;background-color:rgb(192 132 252 / var(--tw-bg-opacity, 1))}.bg-purple-500\/15{background-color:rgb(168 85 247 / 0.15)}.bg-purple-500\/20{background-color:rgb(168 85 247 / 0.2)}.bg-purple-600{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.bg-purple-600\/15{background-color:rgb(147 51 234 / 0.15)}.bg-purple-600\/20{background-color:rgb(147 51 234 / 0.2)}.bg-purple-950\/35{background-color:rgb(59 7 100 / 0.35)}.bg-rose-500{--tw-bg-opacity:1;background-color:rgb(244 63 94 / var(--tw-bg-opacity, 1))}.bg-rose-500\/15{background-color:rgb(244 63 94 / 0.15)}.bg-rose-500\/20{background-color:rgb(244 63 94 / 0.2)}.bg-rose-600\/20{background-color:rgb(225 29 72 / 0.2)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-zinc-400\/20{background-color:rgb(161 161 170 / 0.2)}.bg-zinc-900{--tw-bg-opacity:1;background-color:rgb(24 24 27 / var(--tw-bg-opacity, 1))}.bg-zinc-900\/60{background-color:rgb(24 24 27 / 0.6)}.bg-zinc-900\/80{background-color:rgb(24 24 27 / 0.8)}.bg-zinc-900\/90{background-color:rgb(24 24 27 / 0.9)}.bg-zinc-900\/95{background-color:rgb(24 24 27 / 0.95)}.bg-zinc-950{--tw-bg-opacity:1;background-color:rgb(9 9 11 / var(--tw-bg-opacity, 1))}.bg-zinc-950\/85{background-color:rgb(9 9 11 / 0.85)}.bg-zinc-950\/90{background-color:rgb(9 9 11 / 0.9)}.bg-zinc-950\/95{background-color:rgb(9 9 11 / 0.95)}.bg-amber-500{--tw-bg-opacity:1;background-color:rgb(245 158 11 / var(--tw-bg-opacity, 1))}.bg-amber-500\/15{background-color:rgb(245 158 11 / 0.15)}.bg-black\/35{background-color:rgb(0 0 0 / 0.35)}.bg-black\/60{background-color:rgb(0 0 0 / 0.6)}.bg-black\/80{background-color:rgb(0 0 0 / 0.8)}.bg-purple-500\/10{background-color:rgb(168 85 247 / 0.1)}.bg-rose-600{--tw-bg-opacity:1;background-color:rgb(225 29 72 / var(--tw-bg-opacity, 1))}.bg-rose-600\/90{background-color:rgb(225 29 72 / 0.9)}.bg-white\/95{background-color:rgb(255 255 255 / 0.95)}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-emerald-500\/15{background-color:rgb(16 185 129 / 0.15)}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-purple-950\/20{background-color:rgb(59 7 100 / 0.2)}.bg-rose-950\/20{background-color:rgb(76 5 25 / 0.2)}.bg-sky-500{--tw-bg-opacity:1;background-color:rgb(14 165 233 / var(--tw-bg-opacity, 1))}.bg-sky-500\/20{background-color:rgb(14 165 233 / 0.2)}.bg-zinc-800{--tw-bg-opacity:1;background-color:rgb(39 39 42 / var(--tw-bg-opacity, 1))}.bg-black\/30{background-color:rgb(0 0 0 / 0.3)}.bg-fuchsia-600{--tw-bg-opacity:1;background-color:rgb(192 38 211 / var(--tw-bg-opacity, 1))}.bg-purple-500{--tw-bg-opacity:1;background-color:rgb(168 85 247 / var(--tw-bg-opacity, 1))}.bg-zinc-900\/70{background-color:rgb(24 24 27 / 0.7)}.bg-\[\#18181c\]{--tw-bg-opacity:1;background-color:rgb(24 24 28 / var(--tw-bg-opacity, 1))}.bg-black\/65{background-color:rgb(0 0 0 / 0.65)}.bg-black\/90{background-color:rgb(0 0 0 / 0.9)}.bg-fuchsia-700\/15{background-color:rgb(162 28 175 / 0.15)}.bg-purple-700\/20{background-color:rgb(126 34 206 / 0.2)}.bg-zinc-600\/80{background-color:rgb(82 82 91 / 0.8)}.bg-zinc-700\/80{background-color:rgb(63 63 70 / 0.8)}.bg-zinc-800\/95{background-color:rgb(39 39 42 / 0.95)}.bg-zinc-900\/50{background-color:rgb(24 24 27 / 0.5)}.bg-emerald-500\/20{background-color:rgb(16 185 129 / 0.2)}.bg-gradient-to-br{background-image:linear-gradient(to bottom right, var(--tw-gradient-stops))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.bg-gradient-to-t{background-image:linear-gradient(to top, var(--tw-gradient-stops))}.bg-\[radial-gradient\(circle_at_center\2c transparent_15\%\2c rgba\(9\2c 9\2c 11\2c 0\.82\)_100\%\)\]{background-image:radial-gradient(circle at center,transparent 15%,rgba(9,9,11,0.82) 100%)}.from-amber-500{--tw-gradient-from:#f59e0b var(--tw-gradient-from-position);--tw-gradient-to:rgb(245 158 11 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-amber-600{--tw-gradient-from:#d97706 var(--tw-gradient-from-position);--tw-gradient-to:rgb(217 119 6 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-emerald-600{--tw-gradient-from:#059669 var(--tw-gradient-from-position);--tw-gradient-to:rgb(5 150 105 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-fuchsia-600{--tw-gradient-from:#c026d3 var(--tw-gradient-from-position);--tw-gradient-to:rgb(192 38 211 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-purple-600{--tw-gradient-from:#9333ea var(--tw-gradient-from-position);--tw-gradient-to:rgb(147 51 234 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-purple-950\/90{--tw-gradient-from:rgb(59 7 100 / 0.9) var(--tw-gradient-from-position);--tw-gradient-to:rgb(59 7 100 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-rose-500{--tw-gradient-from:#f43f5e var(--tw-gradient-from-position);--tw-gradient-to:rgb(244 63 94 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-rose-600{--tw-gradient-from:#e11d48 var(--tw-gradient-from-position);--tw-gradient-to:rgb(225 29 72 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-sky-600{--tw-gradient-from:#0284c7 var(--tw-gradient-from-position);--tw-gradient-to:rgb(2 132 199 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-white{--tw-gradient-from:#fff var(--tw-gradient-from-position);--tw-gradient-to:rgb(255 255 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-black\/90{--tw-gradient-from:rgb(0 0 0 / 0.9) var(--tw-gradient-from-position);--tw-gradient-to:rgb(0 0 0 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-rose-950\/60{--tw-gradient-from:rgb(76 5 25 / 0.6) var(--tw-gradient-from-position);--tw-gradient-to:rgb(76 5 25 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-rose-950\/75{--tw-gradient-from:rgb(76 5 25 / 0.75) var(--tw-gradient-from-position);--tw-gradient-to:rgb(76 5 25 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-zinc-950\/95{--tw-gradient-from:rgb(9 9 11 / 0.95) var(--tw-gradient-from-position);--tw-gradient-to:rgb(9 9 11 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-emerald-950\/35{--tw-gradient-from:rgb(2 44 34 / 0.35) var(--tw-gradient-from-position);--tw-gradient-to:rgb(2 44 34 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-purple-700{--tw-gradient-from:#7e22ce var(--tw-gradient-from-position);--tw-gradient-to:rgb(126 34 206 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-purple-950\/40{--tw-gradient-from:rgb(59 7 100 / 0.4) var(--tw-gradient-from-position);--tw-gradient-to:rgb(59 7 100 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-zinc-900{--tw-gradient-from:#18181b var(--tw-gradient-from-position);--tw-gradient-to:rgb(24 24 27 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-purple-500{--tw-gradient-from:#a855f7 var(--tw-gradient-from-position);--tw-gradient-to:rgb(168 85 247 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-zinc-800\/95{--tw-gradient-from:rgb(39 39 42 / 0.95) var(--tw-gradient-from-position);--tw-gradient-to:rgb(39 39 42 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-zinc-950{--tw-gradient-from:#09090b var(--tw-gradient-from-position);--tw-gradient-to:rgb(9 9 11 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-blue-950{--tw-gradient-to:rgb(23 37 84 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #172554 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-fuchsia-600{--tw-gradient-to:rgb(192 38 211 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #c026d3 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-fuchsia-950\/70{--tw-gradient-to:rgb(74 4 78 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(74 4 78 / 0.7) var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-orange-950{--tw-gradient-to:rgb(67 20 7 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #431407 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-purple-100{--tw-gradient-to:rgb(243 232 255 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #f3e8ff var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-purple-500{--tw-gradient-to:rgb(168 85 247 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #a855f7 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-purple-600{--tw-gradient-to:rgb(147 51 234 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #9333ea var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-purple-950{--tw-gradient-to:rgb(59 7 100 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #3b0764 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-red-900{--tw-gradient-to:rgb(127 29 29 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #7f1d1d var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-teal-900{--tw-gradient-to:rgb(19 78 74 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #134e4a var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-zinc-100{--tw-gradient-to:rgb(244 244 245 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #f4f4f5 var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-zinc-950{--tw-gradient-to:rgb(9 9 11 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #09090b var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-black\/45{--tw-gradient-to:rgb(0 0 0 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(0 0 0 / 0.45) var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-purple-950\/50{--tw-gradient-to:rgb(59 7 100 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(59 7 100 / 0.5) var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-zinc-950\/60{--tw-gradient-to:rgb(9 9 11 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(9 9 11 / 0.6) var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-zinc-900\/90{--tw-gradient-to:rgb(24 24 27 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(24 24 27 / 0.9) var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-indigo-950{--tw-gradient-to:rgb(30 27 75 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #1e1b4b var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-zinc-900\/35{--tw-gradient-to:rgb(24 24 27 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(24 24 27 / 0.35) var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-zinc-900\/80{--tw-gradient-to:rgb(24 24 27 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(24 24 27 / 0.8) var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-fuchsia-500{--tw-gradient-to:rgb(217 70 239 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #d946ef var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-zinc-700\/80{--tw-gradient-to:rgb(63 63 70 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(63 63 70 / 0.8) var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-zinc-950\/65{--tw-gradient-to:rgb(9 9 11 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(9 9 11 / 0.65) var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-black{--tw-gradient-to:#000 var(--tw-gradient-to-position)}.to-indigo-600{--tw-gradient-to:#4f46e5 var(--tw-gradient-to-position)}.to-indigo-900{--tw-gradient-to:#312e81 var(--tw-gradient-to-position)}.to-purple-200{--tw-gradient-to:#e9d5ff var(--tw-gradient-to-position)}.to-purple-300{--tw-gradient-to:#d8b4fe var(--tw-gradient-to-position)}.to-rose-500{--tw-gradient-to:#f43f5e var(--tw-gradient-to-position)}.to-rose-600{--tw-gradient-to:#e11d48 var(--tw-gradient-to-position)}.to-zinc-950{--tw-gradient-to:#09090b var(--tw-gradient-to-position)}.to-black\/10{--tw-gradient-to:rgb(0 0 0 / 0.1) var(--tw-gradient-to-position)}.to-purple-800{--tw-gradient-to:#6b21a8 var(--tw-gradient-to-position)}.to-transparent{--tw-gradient-to:transparent var(--tw-gradient-to-position)}.to-black\/25{--tw-gradient-to:rgb(0 0 0 / 0.25) var(--tw-gradient-to-position)}.to-indigo-700{--tw-gradient-to:#4338ca var(--tw-gradient-to-position)}.to-indigo-950{--tw-gradient-to:#1e1b4b var(--tw-gradient-to-position)}.to-zinc-800\/95{--tw-gradient-to:rgb(39 39 42 / 0.95) var(--tw-gradient-to-position)}.to-zinc-950\/45{--tw-gradient-to:rgb(9 9 11 / 0.45) var(--tw-gradient-to-position)}.bg-clip-text{-webkit-background-clip:text;background-clip:text}.object-contain{object-fit:contain}.object-cover{object-fit:cover}.object-center{object-position:center}.p-1{padding:0.25rem}.p-2{padding:0.5rem}.p-2\.5{padding:0.625rem}.p-3{padding:0.75rem}.p-3\.5{padding:0.875rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.pb-1{padding-bottom:0.25rem}.pb-2\.5{padding-bottom:0.625rem}.pb-3{padding-bottom:0.75rem}.pb-36{padding-bottom:9rem}.pb-6{padding-bottom:1.5rem}.pl-9{padding-left:2.25rem}.pr-1{padding-right:0.25rem}.pr-9{padding-right:2.25rem}.pt-1{padding-top:0.25rem}.pt-2{padding-top:0.5rem}.pt-2\.5{padding-top:0.625rem}.pt-3{padding-top:0.75rem}.pr-2{padding-right:0.5rem}.pt-0\.5{padding-top:0.125rem}.pb-4{padding-bottom:1rem}.pt-6{padding-top:1.5rem}.pb-2{padding-bottom:0.5rem}.pl-1{padding-left:0.25rem}.pr-3{padding-right:0.75rem}.pt-1\.5{padding-top:0.375rem}.pt-3\.5{padding-top:0.875rem}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-\[15px\]{font-size:15px}.text-\[8px\]{font-size:8px}.text-\[9px\]{font-size:9px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-5xl{font-size:3rem;line-height:1}.text-6xl{font-size:3.75rem;line-height:1}.text-\[13px\]{font-size:13px}.text-\[16px\]{font-size:16px}.font-black{font-weight:900}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-semibold{font-weight:600}.font-medium{font-weight:500}.uppercase{text-transform:uppercase}.tabular-nums{--tw-numeric-spacing:tabular-nums;font-variant-numeric:var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.leading-snug{line-height:1.375}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-amber-300{--tw-text-opacity:1;color:rgb(252 211 77 / var(--tw-text-opacity, 1))}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.text-orange-400{--tw-text-opacity:1;color:rgb(251 146 60 / var(--tw-text-opacity, 1))}.text-purple-300{--tw-text-opacity:1;color:rgb(216 180 254 / var(--tw-text-opacity, 1))}.text-purple-400{--tw-text-opacity:1;color:rgb(192 132 252 / var(--tw-text-opacity, 1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.text-rose-300{--tw-text-opacity:1;color:rgb(253 164 175 / var(--tw-text-opacity, 1))}.text-rose-400{--tw-text-opacity:1;color:rgb(251 113 133 / var(--tw-text-opacity, 1))}.text-sky-400{--tw-text-opacity:1;color:rgb(56 189 248 / var(--tw-text-opacity, 1))}.text-transparent{color:transparent}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-white\/75{color:rgb(255 255 255 / 0.75)}.text-white\/85{color:rgb(255 255 255 / 0.85)}.text-zinc-300{--tw-text-opacity:1;color:rgb(212 212 216 / var(--tw-text-opacity, 1))}.text-zinc-400{--tw-text-opacity:1;color:rgb(161 161 170 / var(--tw-text-opacity, 1))}.text-zinc-500{--tw-text-opacity:1;color:rgb(113 113 122 / var(--tw-text-opacity, 1))}.text-zinc-600{--tw-text-opacity:1;color:rgb(82 82 91 / var(--tw-text-opacity, 1))}.text-zinc-700{--tw-text-opacity:1;color:rgb(63 63 70 / var(--tw-text-opacity, 1))}.text-white\/30{color:rgb(255 255 255 / 0.3)}.text-zinc-200{--tw-text-opacity:1;color:rgb(228 228 231 / var(--tw-text-opacity, 1))}.text-emerald-300{--tw-text-opacity:1;color:rgb(110 231 183 / var(--tw-text-opacity, 1))}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.text-fuchsia-300{--tw-text-opacity:1;color:rgb(240 171 252 / var(--tw-text-opacity, 1))}.text-fuchsia-400{--tw-text-opacity:1;color:rgb(232 121 249 / var(--tw-text-opacity, 1))}.text-sky-300{--tw-text-opacity:1;color:rgb(125 211 252 / var(--tw-text-opacity, 1))}.text-white\/90{color:rgb(255 255 255 / 0.9)}.text-zinc-100{--tw-text-opacity:1;color:rgb(244 244 245 / var(--tw-text-opacity, 1))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.placeholder-zinc-500::placeholder{--tw-placeholder-opacity:1;color:rgb(113 113 122 / var(--tw-placeholder-opacity, 1))}.accent-rose-500{accent-color:#f43f5e}.accent-purple-500{accent-color:#a855f7}.opacity-0{opacity:0}.opacity-35{opacity:0.35}.opacity-100{opacity:1}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-\[0_-16px_50px_rgba\(0\2c 0\2c 0\2c 0\.85\)\]{--tw-shadow:0 -16px 50px rgba(0,0,0,0.85);--tw-shadow-colored:0 -16px 50px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-amber-950\/60{--tw-shadow-color:rgb(69 26 3 / 0.6);--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-600\/25{--tw-shadow-color:rgb(147 51 234 / 0.25);--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-600\/30{--tw-shadow-color:rgb(147 51 234 / 0.3);--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-600\/40{--tw-shadow-color:rgb(147 51 234 / 0.4);--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-950\/20{--tw-shadow-color:rgb(59 7 100 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-950\/30{--tw-shadow-color:rgb(59 7 100 / 0.3);--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-950\/60{--tw-shadow-color:rgb(59 7 100 / 0.6);--tw-shadow:var(--tw-shadow-colored)}.shadow-rose-600\/30{--tw-shadow-color:rgb(225 29 72 / 0.3);--tw-shadow:var(--tw-shadow-colored)}.shadow-rose-950\/50{--tw-shadow-color:rgb(76 5 25 / 0.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-white\/10{--tw-shadow-color:rgb(255 255 255 / 0.1);--tw-shadow:var(--tw-shadow-colored)}.shadow-amber-500\/25{--tw-shadow-color:rgb(245 158 11 / 0.25);--tw-shadow:var(--tw-shadow-colored)}.shadow-black\/60{--tw-shadow-color:rgb(0 0 0 / 0.6);--tw-shadow:var(--tw-shadow-colored)}.shadow-rose-950\/20{--tw-shadow-color:rgb(76 5 25 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.shadow-emerald-600\/25{--tw-shadow-color:rgb(5 150 105 / 0.25);--tw-shadow:var(--tw-shadow-colored)}.shadow-emerald-950\/20{--tw-shadow-color:rgb(2 44 34 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-950\/40{--tw-shadow-color:rgb(59 7 100 / 0.4);--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-500\/50{--tw-shadow-color:rgb(168 85 247 / 0.5);--tw-shadow:var(--tw-shadow-colored)}.shadow-purple-950\/70{--tw-shadow-color:rgb(59 7 100 / 0.7);--tw-shadow:var(--tw-shadow-colored)}.shadow-white\/20{--tw-shadow-color:rgb(255 255 255 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.ring-2{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.ring-white\/25{--tw-ring-color:rgb(255 255 255 / 0.25)}.blur-2xl{--tw-blur:blur(40px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-3xl{--tw-blur:blur(64px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-\[130px\]{--tw-blur:blur(130px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-\[150px\]{--tw-blur:blur(150px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.brightness-\[0\.48\]{--tw-brightness:brightness(0.48);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.drop-shadow{--tw-drop-shadow:drop-shadow(0 1px 2px rgb(0 0 0 / 0.1)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06));filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.drop-shadow-\[0_2px_10px_rgba\(0\2c 0\2c 0\2c 0\.8\)\]{--tw-drop-shadow:drop-shadow(0 2px 10px rgba(0,0,0,0.8));filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.saturate-\[1\.15\]{--tw-saturate:saturate(1.15);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-2xl{--tw-backdrop-blur:blur(40px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-3xl{--tw-backdrop-blur:blur(64px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-xl{--tw-backdrop-blur:blur(24px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-\[3px\]{--tw-backdrop-blur:blur(3px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.duration-500{transition-duration:500ms}.duration-200{transition-duration:200ms}.duration-700{transition-duration:700ms}.selection\:bg-purple-600 *::selection{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.selection\:text-white *::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.selection\:bg-purple-600::selection{--tw-bg-opacity:1;background-color:rgb(147 51 234 / var(--tw-bg-opacity, 1))}.selection\:text-white::selection{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:border-purple-500\/40:hover{border-color:rgb(168 85 247 / 0.4)}.hover\:bg-zinc-100:hover{--tw-bg-opacity:1;background-color:rgb(244 244 245 / var(--tw-bg-opacity, 1))}.hover\:bg-zinc-800:hover{--tw-bg-opacity:1;background-color:rgb(39 39 42 / var(--tw-bg-opacity, 1))}.hover\:bg-zinc-900:hover{--tw-bg-opacity:1;background-color:rgb(24 24 27 / var(--tw-bg-opacity, 1))}.hover\:bg-zinc-900\/70:hover{background-color:rgb(24 24 27 / 0.7)}.hover\:bg-zinc-900\/90:hover{background-color:rgb(24 24 27 / 0.9)}.hover\:bg-black\/80:hover{background-color:rgb(0 0 0 / 0.8)}.hover\:bg-rose-400:hover{--tw-bg-opacity:1;background-color:rgb(251 113 133 / var(--tw-bg-opacity, 1))}.hover\:bg-amber-400:hover{--tw-bg-opacity:1;background-color:rgb(251 191 36 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-400:hover{--tw-bg-opacity:1;background-color:rgb(52 211 153 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-500:hover{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-500\/25:hover{background-color:rgb(16 185 129 / 0.25)}.hover\:bg-purple-500:hover{--tw-bg-opacity:1;background-color:rgb(168 85 247 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-500:hover{--tw-bg-opacity:1;background-color:rgb(244 63 94 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-500\/20:hover{background-color:rgb(244 63 94 / 0.2)}.hover\:bg-sky-400:hover{--tw-bg-opacity:1;background-color:rgb(56 189 248 / var(--tw-bg-opacity, 1))}.hover\:bg-sky-500\/30:hover{background-color:rgb(14 165 233 / 0.3)}.hover\:bg-zinc-700:hover{--tw-bg-opacity:1;background-color:rgb(63 63 70 / var(--tw-bg-opacity, 1))}.hover\:bg-fuchsia-500:hover{--tw-bg-opacity:1;background-color:rgb(217 70 239 / var(--tw-bg-opacity, 1))}.hover\:bg-white\/\[0\.06\]:hover{background-color:rgb(255 255 255 / 0.06)}.hover\:bg-zinc-400:hover{--tw-bg-opacity:1;background-color:rgb(161 161 170 / var(--tw-bg-opacity, 1))}.hover\:bg-zinc-700\/90:hover{background-color:rgb(63 63 70 / 0.9)}.hover\:bg-purple-600\/30:hover{background-color:rgb(147 51 234 / 0.3)}.hover\:from-zinc-700\/95:hover{--tw-gradient-from:rgb(63 63 70 / 0.95) var(--tw-gradient-from-position);--tw-gradient-to:rgb(63 63 70 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.hover\:to-zinc-700\/95:hover{--tw-gradient-to:rgb(63 63 70 / 0.95) var(--tw-gradient-to-position)}.hover\:text-purple-300:hover{--tw-text-opacity:1;color:rgb(216 180 254 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:text-zinc-300:hover{--tw-text-opacity:1;color:rgb(212 212 216 / var(--tw-text-opacity, 1))}.hover\:text-rose-300:hover{--tw-text-opacity:1;color:rgb(253 164 175 / var(--tw-text-opacity, 1))}.hover\:text-purple-400:hover{--tw-text-opacity:1;color:rgb(192 132 252 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.hover\:opacity-95:hover{opacity:0.95}.focus\:border-purple-500:focus{--tw-border-opacity:1;border-color:rgb(168 85 247 / var(--tw-border-opacity, 1))}.focus\:border-amber-500:focus{--tw-border-opacity:1;border-color:rgb(245 158 11 / var(--tw-border-opacity, 1))}.focus\:border-emerald-500:focus{--tw-border-opacity:1;border-color:rgb(16 185 129 / var(--tw-border-opacity, 1))}.focus\:border-fuchsia-500:focus{--tw-border-opacity:1;border-color:rgb(217 70 239 / var(--tw-border-opacity, 1))}.focus\:border-rose-500:focus{--tw-border-opacity:1;border-color:rgb(244 63 94 / var(--tw-border-opacity, 1))}.focus\:border-sky-500:focus{--tw-border-opacity:1;border-color:rgb(14 165 233 / var(--tw-border-opacity, 1))}.focus\:bg-zinc-950:focus{--tw-bg-opacity:1;background-color:rgb(9 9 11 / var(--tw-bg-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.active\:scale-95:active{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.active\:scale-\[0\.98\]:active{--tw-scale-x:0.98;--tw-scale-y:0.98;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.active\:bg-white\/\[0\.1\]:active{background-color:rgb(255 255 255 / 0.1)}.group:hover .group-hover\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:bg-purple-500{--tw-bg-opacity:1;background-color:rgb(168 85 247 / var(--tw-bg-opacity, 1))}.group:hover .group-hover\:bg-black\/20{background-color:rgb(0 0 0 / 0.2)}.group:hover .group-hover\:bg-zinc-700\/90{background-color:rgb(63 63 70 / 0.9)}.group:hover .group-hover\:from-purple-200{--tw-gradient-from:#e9d5ff var(--tw-gradient-from-position);--tw-gradient-to:rgb(233 213 255 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.group:hover .group-hover\:to-white{--tw-gradient-to:#fff var(--tw-gradient-to-position)}.group:hover .group-hover\:text-purple-300{--tw-text-opacity:1;color:rgb(216 180 254 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:text-rose-300{--tw-text-opacity:1;color:rgb(253 164 175 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:text-zinc-300{--tw-text-opacity:1;color:rgb(212 212 216 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:opacity-100{opacity:1}.group:active .group-active\:scale-95{--tw-scale-x:.95;--tw-scale-y:.95;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@media (min-width: 640px){.sm\:mb-3{margin-bottom:0.75rem}.sm\:inline{display:inline}.sm\:flex{display:flex}.sm\:inline-flex{display:inline-flex}.sm\:h-72{height:18rem}.sm\:min-h-\[330px\]{min-height:330px}.sm\:w-auto{width:auto}.sm\:w-72{width:18rem}.sm\:flex-initial{flex:0 1 auto}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-end{align-items:flex-end}.sm\:items-center{align-items:center}.sm\:justify-center{justify-content:center}.sm\:self-auto{align-self:auto}.sm\:rounded-\[28px\]{border-radius:28px}.sm\:border{border-width:1px}.sm\:px-4{padding-left:1rem;padding-right:1rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}}@media (min-width: 768px){.md\:flex{display:flex}.md\:grid{display:grid}.md\:hidden{display:none}.md\:h-10{height:2.5rem}.md\:w-10{width:2.5rem}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-\[32px_minmax\(0\2c 1\.8fr\)_minmax\(0\2c 1fr\)_116px\]{grid-template-columns:32px minmax(0,1.8fr) minmax(0,1fr) 116px}.md\:grid-cols-\[36px_minmax\(0\2c 1\.8fr\)_minmax\(0\2c 1fr\)_116px\]{grid-template-columns:36px minmax(0,1.8fr) minmax(0,1fr) 116px}.md\:grid-cols-\[32px_minmax\(0\2c 1\.8fr\)_minmax\(0\2c 1fr\)_auto\]{grid-template-columns:32px minmax(0,1.8fr) minmax(0,1fr) auto}.md\:gap-3{gap:0.75rem}.md\:px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.md\:py-2{padding-top:0.5rem;padding-bottom:0.5rem}}@media (min-width: 1024px){.lg\:my-0{margin-top:0px;margin-bottom:0px}.lg\:mt-1{margin-top:0.25rem}.lg\:inline{display:inline}.lg\:flex{display:flex}.lg\:grid{display:grid}.lg\:hidden{display:none}.lg\:h-12{height:3rem}.lg\:h-56{height:14rem}.lg\:h-72{height:18rem}.lg\:h-screen{height:100vh}.lg\:h-14{height:3.5rem}.lg\:h-20{height:5rem}.lg\:h-24{height:6rem}.lg\:h-10{height:2.5rem}.lg\:h-6{height:1.5rem}.lg\:h-\[370px\]{height:370px}.lg\:h-32{height:8rem}.lg\:min-h-0{min-height:0px}.lg\:min-h-\[380px\]{min-height:380px}.lg\:w-12{width:3rem}.lg\:w-56{width:14rem}.lg\:w-72{width:18rem}.lg\:w-\[280px\]{width:280px}.lg\:w-full{width:100%}.lg\:w-14{width:3.5rem}.lg\:w-20{width:5rem}.lg\:w-24{width:6rem}.lg\:w-auto{width:auto}.lg\:w-\[300px\]{width:300px}.lg\:w-10{width:2.5rem}.lg\:w-6{width:1.5rem}.lg\:w-\[370px\]{width:370px}.lg\:w-32{width:8rem}.lg\:max-w-3xl{max-width:48rem}.lg\:max-w-\[440px\]{max-width:440px}.lg\:max-w-none{max-width:none}.lg\:max-w-5xl{max-width:64rem}.lg\:max-w-\[360px\]{max-width:360px}.lg\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.lg\:grid-cols-\[minmax\(280px\2c 400px\)_minmax\(320px\2c 480px\)\]{grid-template-columns:minmax(280px,400px) minmax(320px,480px)}.lg\:flex-row{flex-direction:row}.lg\:flex-wrap{flex-wrap:wrap}.lg\:items-center{align-items:center}.lg\:justify-center{justify-content:center}.lg\:justify-between{justify-content:space-between}.lg\:gap-2{gap:0.5rem}.lg\:gap-3{gap:0.75rem}.lg\:gap-3\.5{gap:0.875rem}.lg\:gap-4{gap:1rem}.lg\:gap-12{gap:3rem}.lg\:space-y-0 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0px * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0px * var(--tw-space-y-reverse))}.lg\:space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.lg\:space-y-1\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.375rem * var(--tw-space-y-reverse))}.lg\:space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.lg\:overflow-hidden{overflow:hidden}.lg\:overflow-visible{overflow:visible}.lg\:overflow-y-auto{overflow-y:auto}.lg\:rounded-2xl{border-radius:1rem}.lg\:border{border-width:1px}.lg\:border-x-0{border-left-width:0px;border-right-width:0px}.lg\:border-zinc-900\/90{border-color:rgb(24 24 27 / 0.9)}.lg\:bg-zinc-950\/60{background-color:rgb(9 9 11 / 0.6)}.lg\:p-2{padding:0.5rem}.lg\:p-3{padding:0.75rem}.lg\:p-6{padding:1.5rem}.lg\:p-7{padding:1.75rem}.lg\:p-4{padding:1rem}.lg\:px-6{padding-left:1.5rem;padding-right:1.5rem}.lg\:px-12{padding-left:3rem;padding-right:3rem}.lg\:py-6{padding-top:1.5rem;padding-bottom:1.5rem}.lg\:py-8{padding-top:2rem;padding-bottom:2rem}.lg\:pb-\[84px\]{padding-bottom:84px}.lg\:pt-5{padding-top:1.25rem}.lg\:text-4xl{font-size:2.25rem;line-height:2.5rem}.lg\:text-base{font-size:1rem;line-height:1.5rem}.lg\:text-sm{font-size:0.875rem;line-height:1.25rem}.lg\:text-xs{font-size:0.75rem;line-height:1rem}.lg\:text-2xl{font-size:1.5rem;line-height:2rem}.lg\:text-3xl{font-size:1.875rem;line-height:2.25rem}.lg\:text-lg{font-size:1.125rem;line-height:1.75rem}.lg\:text-\[10px\]{font-size:10px}.lg\:opacity-45{opacity:0.45}}@media (min-width: 1280px){.xl\:flex{display:flex}.xl\:w-\[290px\]{width:290px}.xl\:w-\[320px\]{width:320px}.xl\:w-28{width:7rem}.xl\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.xl\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.xl\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 1536px){.\32xl\:inline-flex{display:inline-flex}.\32xl\:w-\[340px\]{width:340px}.\32xl\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.\32xl\:grid-cols-5{grid-template-columns:repeat(5, minmax(0, 1fr))}}</style></head>
-<body class="bg-black text-white antialiased selection:bg-purple-600 selection:text-white lg:overflow-hidden" data-right-sidebar="open" data-left-sidebar="open">
+<body class="bg-black text-white antialiased selection:bg-purple-600 selection:text-white lg:overflow-hidden" data-right-sidebar="open" data-left-sidebar="open" data-theme="dark">
 
-    <div id="appRootShell" class="max-w-[430px] lg:max-w-none lg:w-full mx-auto min-h-screen lg:h-screen lg:overflow-hidden bg-black border-x border-zinc-900/80 lg:border-x-0 relative flex flex-col pb-36 lg:pb-[84px] lg:p-2 lg:gap-2 shadow-2xl shadow-purple-950/20">
+    <!-- КОСМИЧЕСКИЙ НЕОНОВЫЙ ФОН И СВЕТОВАЯ ВОЛНА ДЛЯ ТЕМЫ 2 (PS5 MEDIA СО СКРИНШОТА) -->
+    <div id="ps5CosmicBackdrop" aria-hidden="true">
+        <div class="absolute -top-32 left-1/4 w-[620px] h-[420px] rounded-full bg-purple-700/20 blur-[150px]"></div>
+        <div class="absolute top-1/3 left-1/3 w-[720px] h-[360px] -translate-x-1/4 rounded-full bg-indigo-600/20 blur-[140px]"></div>
+        <div class="absolute bottom-12 right-1/4 w-[540px] h-[360px] rounded-full bg-fuchsia-600/15 blur-[150px]"></div>
+        <svg class="absolute inset-0 w-full h-full opacity-55" viewBox="0 0 1440 900" preserveAspectRatio="none">
+            <defs>
+                <linearGradient id="ps5WaveGrad1" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.05" />
+                    <stop offset="45%" stop-color="#a855f7" stop-opacity="0.42" />
+                    <stop offset="75%" stop-color="#ec4899" stop-opacity="0.28" />
+                    <stop offset="100%" stop-color="#6366f1" stop-opacity="0.05" />
+                </linearGradient>
+                <linearGradient id="ps5WaveGrad2" x1="0%" y1="80%" x2="100%" y2="20%">
+                    <stop offset="0%" stop-color="#3b82f6" stop-opacity="0" />
+                    <stop offset="50%" stop-color="#c084fc" stop-opacity="0.32" />
+                    <stop offset="100%" stop-color="#9333ea" stop-opacity="0" />
+                </linearGradient>
+            </defs>
+            <path d="M-120,860 C260,740 420,420 790,480 C1120,530 1290,240 1560,120 L1560,920 L-120,920 Z" fill="url(#ps5WaveGrad1)" />
+            <path d="M-80,890 C320,660 520,510 880,440 C1160,385 1340,290 1540,180" fill="none" stroke="url(#ps5WaveGrad2)" stroke-width="5" />
+            <path d="M120,910 C450,690 610,540 960,460 C1210,400 1370,310 1560,220" fill="none" stroke="url(#ps5WaveGrad2)" stroke-width="2" stroke-dasharray="6 6" />
+        </svg>
+    </div>
+
+    <div id="appRootShell" class="max-w-[430px] lg:max-w-none lg:w-full mx-auto min-h-screen lg:h-screen lg:overflow-hidden bg-black border-x border-zinc-900/80 lg:border-x-0 relative z-10 flex flex-col pb-36 lg:pb-[84px] lg:p-2 lg:gap-2 shadow-2xl shadow-purple-950/20">
+
+        <!-- МОДАЛЬНОЕ ОКНО ВЫБОРА ТЕМЫ ОФОРМЛЕНИЯ (3 ТЕМЫ + АВТОМАТИЧЕСКАЯ ПО СИСТЕМЕ ПК / ТЕЛЕФОНА) -->
+        <div id="themeSelectorModal" class="fixed inset-0 z-[80] hidden bg-black/80 backdrop-blur-2xl flex-col items-center justify-center p-4 select-none" onclick="if(event.target===this)closeThemeSelectorModal()">
+            <div class="w-full max-w-[390px] lg:max-w-[460px] rounded-3xl bg-zinc-950 border border-purple-500/40 p-5 lg:p-6 space-y-4 shadow-2xl shadow-purple-950/70 relative overflow-hidden">
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-600 via-fuchsia-600 to-indigo-700 flex items-center justify-center text-white shadow-lg shadow-purple-600/30 border border-white/20 shrink-0">
+                            <i class="fa-solid fa-palette text-sm"></i>
+                        </div>
+                        <div>
+                            <span class="text-[9px] font-black uppercase tracking-widest text-purple-400">ОФОРМЛЕНИЕ ПРИЛОЖЕНИЯ</span>
+                            <h3 class="text-sm lg:text-base font-black text-white">Выберите тему Dark Music</h3>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeThemeSelectorModal()" class="w-8 h-8 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center spring-btn">
+                        <i class="fa-solid fa-xmark text-xs"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-2.5">
+                    <!-- Тема 1: Обычная тёмная -->
+                    <button type="button" onclick="setAppTheme('dark', true)" id="themeOptionBtn_dark" class="w-full p-3.5 rounded-2xl bg-zinc-900/90 hover:bg-zinc-900 border border-zinc-800 flex items-center justify-between gap-3 text-left transition-all spring-btn">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-zinc-900 via-purple-950 to-black border border-purple-500/40 flex items-center justify-center text-purple-400 shrink-0 shadow-md">
+                                <i class="fa-solid fa-moon text-sm"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-xs font-black text-white">1. Обычная тёмная</span>
+                                    <span class="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 text-[8px] font-extrabold uppercase">Классика</span>
+                                </div>
+                                <p class="text-[10px] text-zinc-400 mt-0.5">Фирменный чёрно-фиолетовый дизайн Dark Music по умолчанию</p>
+                            </div>
+                        </div>
+                        <span id="themeOptionCheck_dark" class="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-[10px] shrink-0">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+                    </button>
+
+                    <!-- Тема 2: Новая PS5 Media (со скриншота) -->
+                    <button type="button" onclick="setAppTheme('ps5', true)" id="themeOptionBtn_ps5" class="w-full p-3.5 rounded-2xl bg-zinc-900/90 hover:bg-zinc-900 border border-zinc-800 flex items-center justify-between gap-3 text-left transition-all spring-btn">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-purple-600 via-fuchsia-600 to-indigo-950 border border-purple-300/60 flex items-center justify-center text-white shrink-0 shadow-lg shadow-purple-600/40">
+                                <i class="fa-solid fa-gamepad text-sm"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-xs font-black text-white">2. Новая Неон (PS5 Media)</span>
+                                    <span class="px-1.5 py-0.5 rounded bg-purple-500/20 border border-purple-400/40 text-purple-300 text-[8px] font-black uppercase">NEW</span>
+                                </div>
+                                <p class="text-[10px] text-zinc-400 mt-0.5">Космический неон, верхний бар Игры/Медиа, свечение и геймпад-кнопки</p>
+                            </div>
+                        </div>
+                        <span id="themeOptionCheck_ps5" class="w-6 h-6 rounded-full bg-zinc-800 text-transparent flex items-center justify-center text-[10px] shrink-0">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+                    </button>
+
+                    <!-- Тема 3: Светлая (Белая) -->
+                    <button type="button" onclick="setAppTheme('light', true)" id="themeOptionBtn_light" class="w-full p-3.5 rounded-2xl bg-zinc-900/90 hover:bg-zinc-900 border border-zinc-800 flex items-center justify-between gap-3 text-left transition-all spring-btn">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-white via-slate-100 to-purple-100 border border-slate-300 flex items-center justify-center text-amber-500 shrink-0 shadow-md">
+                                <i class="fa-solid fa-sun text-sm"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="text-xs font-black text-white">3. Светлая (Белая)</span>
+                                    <span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[8px] font-extrabold uppercase">Дневная</span>
+                                </div>
+                                <p class="text-[10px] text-zinc-400 mt-0.5">Чистый светлый интерфейс для комфортного прослушивания днём</p>
+                            </div>
+                        </div>
+                        <span id="themeOptionCheck_light" class="w-6 h-6 rounded-full bg-zinc-800 text-transparent flex items-center justify-center text-[10px] shrink-0">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Автоматическое переключение по теме телефона / ПК -->
+                <div class="p-3 rounded-2xl bg-zinc-900/70 border border-zinc-800/90 flex items-center justify-between gap-3">
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-1.5">
+                            <i class="fa-solid fa-wand-magic-sparkles text-[10px] text-purple-400"></i>
+                            <span class="text-[11px] font-extrabold text-white">Авто-смена по теме ПК / телефона</span>
+                        </div>
+                        <p id="systemThemeStatusLabel" class="text-[10px] text-zinc-400 mt-0.5">Светлая система → Белая тема • Тёмная система → Обычная тёмная</p>
+                    </div>
+                    <button type="button" onclick="applySystemThemeNow()" class="px-3 py-1.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 text-purple-300 text-[10px] font-extrabold shrink-0 spring-btn">
+                        Как в системе
+                    </button>
+                </div>
+            </div>
+        </div>
 
         <!-- ЭКРАН ПРИНУДИТЕЛЬНОГО ОБНОВЛЕНИЯ (БЛОКИРОВКА СТАРОЙ ВЕРСИИ) -->
         <div id="forceUpdateModal" class="fixed inset-0 z-[70] hidden bg-black/98 backdrop-blur-3xl flex-col items-center justify-center p-6 text-center">
@@ -640,6 +1075,32 @@
             </div>
         </div>
 
+        <!-- ВЕРХНИЙ МЕДИА-БАР PS5 (ПОКАЗЫВАЕТСЯ НА ТЕЛЕФОНЕ И ПК В НОВОЙ ТЕМЕ PS5 MEDIA СО СКРИНШОТА) -->
+        <div id="ps5TopMediaBar" class="ps5-only-flex items-center justify-between px-4 lg:px-7 pt-3 pb-2 shrink-0 select-none z-20">
+            <div class="flex items-center gap-5 lg:gap-8">
+                <button type="button" onclick="switchTab('charts')" class="text-base lg:text-2xl font-medium text-zinc-400 hover:text-zinc-200 transition-colors spring-btn">
+                    Игры
+                </button>
+                <button type="button" onclick="switchTab('home')" class="text-base lg:text-2xl font-black text-white tracking-tight spring-btn relative">
+                    <span>Медиа</span>
+                    <span class="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-purple-400 shadow-[0_0_10px_#a855f7]"></span>
+                </button>
+            </div>
+            <div class="flex items-center gap-3.5 lg:gap-6">
+                <button type="button" onclick="triggerPs5SearchButton()" class="w-8 h-8 rounded-full hover:bg-white/10 text-zinc-200 hover:text-white flex items-center justify-center transition-colors spring-btn" title="Поиск треков и артистов">
+                    <i class="fa-solid fa-magnifying-glass text-sm lg:text-base"></i>
+                </button>
+                <button type="button" onclick="openThemeSelectorModal()" id="ps5ThemeGearBtn" class="w-8 h-8 rounded-full hover:bg-white/10 text-zinc-200 hover:text-white flex items-center justify-center transition-colors spring-btn" title="Сменить тему оформления (Тёмная / PS5 Неон / Светлая)">
+                    <i class="fa-solid fa-gear text-sm lg:text-base"></i>
+                </button>
+                <button type="button" onclick="openOwnerTab()" class="relative w-8 h-8 lg:w-9 lg:h-9 rounded-full p-0.5 bg-gradient-to-br from-purple-500 to-fuchsia-600 shadow-md spring-btn" title="Профиль / Панель владельца">
+                    <img id="ps5TopAvatarImg" src="https://raw.githubusercontent.com/EzzO4ka/darkmusic/main/avatars/mc_ezdittttt3.jpg" alt="Profile" class="w-full h-full rounded-full object-cover" onerror="this.style.display='none'">
+                    <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-[#090818]"></span>
+                </button>
+                <span id="ps5LiveClock" class="text-base lg:text-2xl font-light tracking-wider text-white tabular-nums">14:00</span>
+            </div>
+        </div>
+
         <!-- МОБИЛЬНАЯ ШАПКА ПРИЛОЖЕНИЯ (ОТОБРАЖАЕТСЯ НА ТЕЛЕФОНАХ И ПЛАНШЕТАХ < 1024px) -->
         <header class="lg:hidden sticky top-0 z-20 bg-black/85 backdrop-blur-xl px-4 py-3 flex items-center justify-between border-b border-zinc-900/80">
             <button onclick="switchTab('home')" class="flex items-center gap-2.5 text-left spring-btn min-w-0">
@@ -656,6 +1117,9 @@
             </button>
 
             <div class="flex items-center gap-1.5">
+                <button type="button" onclick="openThemeSelectorModal()" id="mobileThemeSwitchBtn" class="w-9 h-9 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 flex items-center justify-center text-purple-300 spring-btn" title="Сменить тему (Тёмная / PS5 Неон / Светлая)">
+                    <i id="mobileThemeSwitchIcon" class="fa-solid fa-palette text-xs"></i>
+                </button>
                 <button onclick="switchTab('favorites')" id="mobileHeaderFavBtn" class="w-9 h-9 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-800 flex items-center justify-center text-rose-400 relative spring-btn" title="Избранное (Любимые треки)">
                     <i class="fa-solid fa-heart text-xs"></i>
                     <span id="mobileHeaderFavBadge" class="hidden absolute -top-1 -right-1 min-w-[15px] h-[15px] px-1 rounded-full bg-rose-500 text-white text-[8px] font-black items-center justify-center">0</span>
@@ -727,6 +1191,7 @@
                     </nav>
 
                     <button onclick="playShuffleAll()" title="Моя волна • Вперемешку" class="left-sidebar-wave-btn w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 hover:opacity-95 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-lg shadow-purple-600/25 spring-btn">
+                        <span class="ps5-only-inline px-1.5 py-0.5 rounded bg-zinc-700/80 border border-white/20 text-[9px] font-black text-zinc-100 leading-none shrink-0">L1</span>
                         <i class="fa-solid fa-shuffle text-xs"></i>
                         <span class="left-sidebar-text">Моя волна • Вперемешку</span>
                     </button>
@@ -914,8 +1379,8 @@
             <!-- ЦЕНТРАЛЬНАЯ РАБОЧАЯ ПАНЕЛЬ (ОСНОВНОЙ КОНТЕНТ) -->
             <div id="centerWorkspacePane" class="flex-1 flex flex-col min-w-0 lg:rounded-2xl lg:bg-zinc-950/60 lg:border lg:border-zinc-900/90 lg:overflow-y-auto custom-desk-scroll relative">
 
-                <!-- ВЕРХНИЙ БАР НА ПК (ПОИСК SPOTIFY + СТАТИСТИКА КАТАЛОГА + ДОСТУП ВЛАДЕЛЬЦА + СВОРАЧИВАНИЕ ПРАВОЙ ПАНЕЛИ) -->
-                <div class="hidden lg:flex sticky top-0 z-20 bg-zinc-950/85 backdrop-blur-2xl px-6 py-3 items-center justify-between gap-4 border-b border-zinc-900/80">
+                <!-- ВЕРХНИЙ БАР НА ПК (ПОИСК SPOTIFY + ВЫБОР ТЕМЫ + СТАТИСТИКА КАТАЛОГА + ДОСТУП ВЛАДЕЛЬЦА + СВОРАЧИВАНИЕ ПРАВОЙ ПАНЕЛИ) -->
+                <div id="desktopTopHeaderBar" class="hidden lg:flex sticky top-0 z-20 bg-zinc-950/85 backdrop-blur-2xl px-6 py-3 items-center justify-between gap-4 border-b border-zinc-900/80">
                     <!-- Постоянная широкая строка поиска в стиле Spotify Desktop -->
                     <div class="flex items-center gap-2.5 flex-1 max-w-xl">
                         <button onclick="switchTab('home')" class="w-9 h-9 rounded-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white flex items-center justify-center shrink-0 spring-btn" title="На главную">
@@ -937,6 +1402,10 @@
                             <span class="text-zinc-700">•</span>
                             <span id="deskTopAlbumsCount">5 релизов</span>
                         </div>
+                        <button type="button" onclick="openThemeSelectorModal()" id="desktopThemeSwitchBtn" class="px-3.5 py-1.5 rounded-full bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 text-purple-300 text-[11px] font-extrabold flex items-center gap-1.5 spring-btn" title="Сменить тему оформления (Обычная тёмная / Новая PS5 Неон / Светлая)">
+                            <i id="desktopThemeSwitchIcon" class="fa-solid fa-palette text-xs"></i>
+                            <span id="desktopThemeSwitchLabel">Тема: Тёмная</span>
+                        </button>
                         <button onclick="switchTab('favorites')" id="deskTopFavBtn" class="px-3 py-1.5 rounded-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-rose-400 text-[11px] font-extrabold flex items-center gap-1.5 spring-btn" title="Любимые треки">
                             <i class="fa-solid fa-heart text-xs"></i>
                             <span id="deskTopFavCount">0</span>
@@ -983,7 +1452,7 @@
                     <!-- ВКЛАДКА: ГЛАВНАЯ -->
                     <section id="view-home" class="space-y-6 lg:space-y-8 view-animate">
                         <!-- ГЛАВНЫЙ БАННЕР: МОЯ ВОЛНА (АДАПТИРОВАН ДЛЯ МОБИЛЬНЫХ И ПК) -->
-                        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-950/90 via-zinc-950 to-black border border-purple-500/30 p-5 lg:p-7 shadow-2xl shadow-purple-950/30">
+                        <div id="heroWaveBannerCard" class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-950/90 via-zinc-950 to-black border border-purple-500/30 p-5 lg:p-7 shadow-2xl shadow-purple-950/30">
                             <div class="absolute -right-10 -top-10 w-40 lg:w-72 h-40 lg:h-72 rounded-full bg-purple-600/20 blur-3xl pointer-events-none"></div>
                             <div class="absolute -left-8 -bottom-8 w-32 lg:w-56 h-32 lg:h-56 rounded-full bg-fuchsia-600/15 blur-2xl pointer-events-none"></div>
 
@@ -6051,7 +6520,7 @@
 
             <!-- ПРАВАЯ ПАНЕЛЬ «СЕЙЧАС ИГРАЕТ» + ОЧЕРЕДЬ И ИНФО ОБ АРТИСТЕ (SPOTIFY DESKTOP RIGHT SIDEBAR, >= 1024px) -->
             <aside id="desktopRightSidebar" class="hidden lg:flex lg:w-[300px] xl:w-[320px] 2xl:w-[340px] shrink-0 flex-col rounded-2xl bg-zinc-950/90 border border-zinc-900/90 overflow-y-auto custom-desk-scroll p-4 space-y-4 select-none transition-all duration-300">
-                <div class="flex items-center justify-between gap-2">
+                <div class="hide-on-ps5 flex items-center justify-between gap-2">
                     <div class="flex items-center gap-2 min-w-0">
                         <span class="w-2 h-2 rounded-full bg-purple-500 animate-pulse shrink-0"></span>
                         <span id="deskRightAlbumBadge" onclick="openCurrentTrackAlbum()" class="text-[11px] font-black uppercase tracking-wider text-zinc-200 hover:text-purple-400 cursor-pointer truncate">Кто пчелок уважает</span>
@@ -6082,8 +6551,23 @@
                     </div>
                 </div>
 
+                <!-- Кнопки Play + Нравится под большой обложкой для новой темы PS5 Media (как на скриншоте) -->
+                <div id="ps5RightActionRow" class="ps5-only-flex items-center gap-2.5 pt-0.5">
+                    <button type="button" onclick="togglePlay()" class="flex-1 py-2.5 px-4 rounded-full bg-white hover:bg-zinc-100 text-black font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-white/15 spring-btn">
+                        <i id="ps5RightPlayIcon" class="fa-solid fa-play text-xs"></i>
+                        <span id="ps5RightPlayText">Play</span>
+                    </button>
+                    <button type="button" id="ps5RightLikeBtn" onclick="toggleLikeCurrent()" class="py-2.5 px-4 rounded-full bg-zinc-900/90 hover:bg-zinc-800 border border-white/15 text-white font-extrabold text-xs flex items-center justify-center gap-2 spring-btn">
+                        <i class="fa-solid fa-heart text-xs"></i>
+                        <span>Нравится</span>
+                    </button>
+                    <button type="button" onclick="shareCurrentTrack(event)" class="w-9 h-9 rounded-full bg-zinc-900/90 hover:bg-zinc-800 border border-white/15 text-zinc-300 hover:text-white flex items-center justify-center shrink-0 spring-btn" title="Поделиться треком">
+                        <i class="fa-solid fa-share-nodes text-xs"></i>
+                    </button>
+                </div>
+
                 <!-- Название трека, артисты и кнопка лайка -->
-                <div class="flex items-start justify-between gap-3">
+                <div class="hide-on-ps5 flex items-start justify-between gap-3">
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-1.5 flex-wrap">
                             <h3 id="deskRightTitle" onclick="openFullPlayer()" class="text-base font-black text-white hover:text-purple-300 cursor-pointer truncate">Кто пчелок уважает</h3>
@@ -6141,7 +6625,7 @@
                     </div>
 
                 <!-- Интересный факт об артисте -->
-                <div class="p-3.5 rounded-2xl bg-gradient-to-br from-purple-950/40 via-zinc-900/80 to-zinc-950 border border-purple-500/30 space-y-1.5">
+                <div id="deskRightFactCard" class="p-3.5 rounded-2xl bg-gradient-to-br from-purple-950/40 via-zinc-900/80 to-zinc-950 border border-purple-500/30 space-y-1.5">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-1.5">
                             <span class="w-5 h-5 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400 text-[10px]">
@@ -6168,7 +6652,7 @@
         </div>
 
         <!-- МОБИЛЬНЫЙ МИНИ-ПЛЕЕР + НИЖНЯЯ НАВИГАЦИЯ (ТОЛЬКО НА ТЕЛЕФОНАХ < 1024px) -->
-        <div class="lg:hidden fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-30 bg-black/95 backdrop-blur-2xl border-t border-zinc-900 px-3 pt-1.5 pb-2 space-y-1.5">
+        <div id="mobileBottomBar" class="lg:hidden fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-30 bg-black/95 backdrop-blur-2xl border-t border-zinc-900 px-3 pt-1.5 pb-2 space-y-1.5">
             <!-- Неоновая полоса прогресса мини-плеера -->
             <div class="w-full h-0.5 bg-zinc-900 rounded-full overflow-hidden">
                 <div id="miniProgressBar" class="h-full bg-gradient-to-r from-purple-500 via-fuchsia-500 to-rose-500 w-0 transition-all duration-200" style="width: 0%;"></div>
@@ -6260,13 +6744,18 @@
                         <p id="deskPlayerArtists" onclick="openCurrentTrackArtist()" class="text-[11px] text-zinc-400 hover:text-white truncate cursor-pointer">МС ДОЛБОЁБ</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-1.5 shrink-0">
+                <div class="hide-on-ps5 flex items-center gap-1.5 shrink-0">
                     <button id="deskPlayerLikeBtn" onclick="toggleLikeCurrent()" class="w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 spring-btn bg-zinc-900/80 border-zinc-800 text-zinc-400 hover:text-white" title="В избранное">
                         <i class="fa-solid fa-heart text-xs"></i>
                     </button>
                     <button onclick="shareCurrentTrack(event)" class="w-8 h-8 rounded-xl bg-zinc-900/80 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white shrink-0 spring-btn" title="Поделиться треком">
                         <i class="fa-solid fa-share-nodes text-xs"></i>
                     </button>
+                </div>
+                <!-- Кнопки триггеров L2 / R2 в стиле PS5 Media (показываются в теме PS5) -->
+                <div class="ps5-only-flex items-center gap-2 shrink-0 pl-2">
+                    <button type="button" onclick="prevTrack()" class="px-2.5 py-1 rounded-t-lg rounded-b-md bg-zinc-800/90 hover:bg-zinc-700 border border-white/20 text-[10px] font-black text-zinc-200 shadow-md spring-btn" title="Предыдущий трек (L2)">L2</button>
+                    <button type="button" onclick="nextTrack()" class="px-2.5 py-1 rounded-t-lg rounded-b-md bg-zinc-800/90 hover:bg-zinc-700 border border-white/20 text-[10px] font-black text-zinc-200 shadow-md spring-btn" title="Следующий трек (R2)">R2</button>
                 </div>
             </div>
 
@@ -6296,21 +6785,39 @@
                 </div>
             </div>
 
-            <!-- Правая зона (30%): Аудио-движок, громкость, правая панель и полноэкранный режим -->
+            <!-- Правая зона (30%): Аудио-движок, громкость, правая панель и полноэкранный режим (или кнопки геймпада PS5) -->
             <div class="w-[30%] min-w-[200px] flex items-center justify-end gap-2.5">
-                <span class="hidden 2xl:inline-flex px-2 py-0.5 rounded-md bg-zinc-900 border border-zinc-800 text-[9px] text-purple-300 font-extrabold tracking-widest">DARK ENGINE</span>
-                <div class="flex items-center gap-2 w-24 xl:w-28">
-                    <button onclick="toggleMuteAudio()" class="text-zinc-400 hover:text-white text-xs w-5 text-center" title="Звук">
-                        <i id="deskVolumeIcon" class="fa-solid fa-volume-low"></i>
+                <div class="hide-on-ps5 flex items-center justify-end gap-2.5 w-full">
+                    <span class="hidden 2xl:inline-flex px-2 py-0.5 rounded-md bg-zinc-900 border border-zinc-800 text-[9px] text-purple-300 font-extrabold tracking-widest">DARK ENGINE</span>
+                    <div class="flex items-center gap-2 w-24 xl:w-28">
+                        <button onclick="toggleMuteAudio()" class="text-zinc-400 hover:text-white text-xs w-5 text-center" title="Звук">
+                            <i id="deskVolumeIcon" class="fa-solid fa-volume-low"></i>
+                        </button>
+                        <input id="deskVolumeSlider" type="range" min="0" max="100" step="0.01" value="100" oninput="setAudioVolume(this.value)" onchange="if(this.blur)this.blur()" class="w-full dark-slider" title="Громкость">
+                    </div>
+                    <button id="deskBottomRightSidebarBtn" onclick="toggleDesktopRightSidebar()" class="hidden lg:flex w-8 h-8 rounded-xl border items-center justify-center spring-btn bg-purple-600/20 border-purple-500/40 text-purple-300 hover:text-white" title="Свернуть панель «Сейчас играет»">
+                        <i class="fa-solid fa-table-columns text-xs"></i>
                     </button>
-                    <input id="deskVolumeSlider" type="range" min="0" max="100" step="0.01" value="100" oninput="setAudioVolume(this.value)" onchange="if(this.blur)this.blur()" class="w-full dark-slider" title="Громкость">
+                    <button onclick="openFullPlayer()" class="w-8 h-8 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white flex items-center justify-center spring-btn" title="Открыть плеер во весь экран">
+                        <i class="fa-solid fa-expand text-xs"></i>
+                    </button>
                 </div>
-                <button id="deskBottomRightSidebarBtn" onclick="toggleDesktopRightSidebar()" class="hidden lg:flex w-8 h-8 rounded-xl border items-center justify-center spring-btn bg-purple-600/20 border-purple-500/40 text-purple-300 hover:text-white" title="Свернуть панель «Сейчас играет»">
-                    <i class="fa-solid fa-table-columns text-xs"></i>
-                </button>
-                <button onclick="openFullPlayer()" class="w-8 h-8 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 hover:text-white flex items-center justify-center spring-btn" title="Открыть плеер во весь экран">
-                    <i class="fa-solid fa-expand text-xs"></i>
-                </button>
+
+                <!-- Правая панель кнопок контроллера PS5 (Выбрать / Назад / Опции — как на скриншоте) -->
+                <div class="ps5-only-flex items-center justify-end gap-4 text-xs font-bold text-zinc-200">
+                    <button type="button" onclick="togglePlay()" class="flex items-center gap-1.5 hover:text-white spring-btn" title="Воспроизвести / Пауза">
+                        <span class="w-5 h-5 rounded-full bg-indigo-950/90 border border-sky-400/60 text-sky-400 flex items-center justify-center text-[10px] font-black shadow-sm">✕</span>
+                        <span>Выбрать</span>
+                    </button>
+                    <button type="button" onclick="switchTab('home')" class="flex items-center gap-1.5 hover:text-white spring-btn" title="На главную">
+                        <span class="w-5 h-5 rounded-full bg-rose-950/90 border border-rose-400/60 text-rose-400 flex items-center justify-center text-[9px] font-black shadow-sm">◯</span>
+                        <span>Назад</span>
+                    </button>
+                    <button type="button" onclick="openThemeSelectorModal()" class="flex items-center gap-1.5 hover:text-white spring-btn" title="Опции и смена темы">
+                        <span class="px-1.5 py-0.5 rounded-full bg-zinc-800 border border-white/25 text-[8px] font-black uppercase tracking-tighter text-zinc-200">Options</span>
+                        <span>Опции</span>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -8619,7 +9126,7 @@
                 const el = docClone.querySelector(`#${id}`);
                 if (el) el.classList.add("hidden");
             });
-            ["pinModal", "editModal", "deleteConfirmModal", "trackActionsModal", "playerModal", "videoPlayerModal", "whatsNewModal", "forceUpdateModal", "tempBroadcastToast"].forEach(id => {
+            ["pinModal", "editModal", "deleteConfirmModal", "trackActionsModal", "playerModal", "videoPlayerModal", "whatsNewModal", "forceUpdateModal", "tempBroadcastToast", "themeSelectorModal"].forEach(id => {
                 const el = docClone.querySelector(`#${id}`);
                 if (el) {
                     el.classList.add("hidden");
@@ -8639,6 +9146,7 @@
             if (bodyClone) {
                 bodyClone.setAttribute("data-left-sidebar", "open");
                 bodyClone.setAttribute("data-right-sidebar", "open");
+                bodyClone.setAttribute("data-theme", "dark");
             }
             ["home", "charts", "artists", "favorites", "owner"].forEach(k => {
                 const isAct = k === "home";
@@ -11775,6 +12283,10 @@
             if (miniPlayIcon) miniPlayIcon.className = `fa-solid ${isPlaying ? 'fa-pause' : 'fa-play ml-0.5'} text-xs`;
             if (playerPlayIcon) playerPlayIcon.className = `fa-solid ${isPlaying ? 'fa-pause' : 'fa-play ml-0.5'} text-xl`;
             if (deskPlayIcon) deskPlayIcon.className = `fa-solid ${isPlaying ? 'fa-pause' : 'fa-play ml-0.5'} text-xs`;
+            const ps5RightPlayIcon = document.getElementById("ps5RightPlayIcon");
+            const ps5RightPlayText = document.getElementById("ps5RightPlayText");
+            if (ps5RightPlayIcon) ps5RightPlayIcon.className = `fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'} text-xs`;
+            if (ps5RightPlayText) ps5RightPlayText.textContent = isPlaying ? "Пауза" : "Play";
 
             if (heroEq) {
                 if (isPlaying) heroEq.classList.remove("eq-paused");
@@ -11857,6 +12369,19 @@
             if (deskLikeBtn) {
                 const liked = likedTrackIds.has(track.id);
                 deskLikeBtn.className = `w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 spring-btn ${liked ? 'bg-rose-500/20 border-rose-500/40 text-rose-400' : 'bg-zinc-900/80 border-zinc-800 text-zinc-400 hover:text-white'}`;
+            }
+            const ps5RightLikeBtn = document.getElementById("ps5RightLikeBtn");
+            if (ps5RightLikeBtn) {
+                const liked = likedTrackIds.has(track.id);
+                ps5RightLikeBtn.className = `py-2.5 px-4 rounded-full border font-extrabold text-xs flex items-center justify-center gap-2 spring-btn ${liked ? 'bg-rose-500/25 border-rose-500/50 text-rose-300' : 'bg-zinc-900/90 hover:bg-zinc-800 border-white/15 text-white'}`;
+            }
+            const ps5TopAvatarImg = document.getElementById("ps5TopAvatarImg");
+            if (ps5TopAvatarImg && artist && artist.avatarFile) {
+                const avatarUrl = getRawUrl(artist.avatarFile);
+                if (ps5TopAvatarImg.getAttribute("src") !== avatarUrl) {
+                    ps5TopAvatarImg.src = avatarUrl;
+                    ps5TopAvatarImg.style.display = "";
+                }
             }
             if (deskDurEl && (!audioEl.duration || isNaN(audioEl.duration))) {
                 deskDurEl.textContent = track.duration || "2:45";
@@ -13778,7 +14303,176 @@
             } catch (e) {}
         }
 
+        // =========================================================================
+        // СИСТЕМА 3 ТЕМ DARK MUSIC (dark | ps5 | light) + АВТО-ОПРЕДЕЛЕНИЕ ТЕМЫ ОС
+        // =========================================================================
+        const APP_THEME_STORAGE_KEY = "dark_music_app_theme_v1";
+        let currentAppTheme = "dark";
+
+        function detectSystemPrefersLight() {
+            try {
+                return Boolean(window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches);
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function resolveInitialAppTheme() {
+            const sysLight = detectSystemPrefersLight();
+            try {
+                const saved = localStorage.getItem(APP_THEME_STORAGE_KEY);
+                if (saved === "dark" || saved === "ps5" || saved === "light") {
+                    return saved;
+                }
+            } catch (e) {}
+            return sysLight ? "light" : "dark";
+        }
+
+        function updatePs5LiveClock() {
+            const clockEl = document.getElementById("ps5LiveClock");
+            if (!clockEl) return;
+            const now = new Date();
+            const hh = String(now.getHours()).padStart(2, "0");
+            const mm = String(now.getMinutes()).padStart(2, "0");
+            clockEl.textContent = `${hh}:${mm}`;
+        }
+
+        function updateThemeControlsUI() {
+            const themeMeta = {
+                dark: { label: "Тема: Тёмная", short: "Тёмная", icon: "fa-moon" },
+                ps5: { label: "Тема: PS5 Неон", short: "PS5 Неон", icon: "fa-gamepad" },
+                light: { label: "Тема: Светлая", short: "Светлая", icon: "fa-sun" }
+            };
+            const meta = themeMeta[currentAppTheme] || themeMeta.dark;
+
+            const deskLabel = document.getElementById("desktopThemeSwitchLabel");
+            const deskIcon = document.getElementById("desktopThemeSwitchIcon");
+            const mobIcon = document.getElementById("mobileThemeSwitchIcon");
+            if (deskLabel) deskLabel.textContent = meta.label;
+            if (deskIcon) deskIcon.className = `fa-solid ${meta.icon} text-xs`;
+            if (mobIcon) mobIcon.className = `fa-solid ${meta.icon} text-xs`;
+
+            ["dark", "ps5", "light"].forEach(id => {
+                const btn = document.getElementById(`themeOptionBtn_${id}`);
+                const chk = document.getElementById(`themeOptionCheck_${id}`);
+                const isSelected = id === currentAppTheme;
+                if (btn) {
+                    btn.className = isSelected
+                        ? "w-full p-3.5 rounded-2xl bg-purple-950/40 border-2 border-purple-500 flex items-center justify-between gap-3 text-left transition-all spring-btn shadow-lg shadow-purple-950/40"
+                        : "w-full p-3.5 rounded-2xl bg-zinc-900/90 hover:bg-zinc-900 border border-zinc-800 flex items-center justify-between gap-3 text-left transition-all spring-btn";
+                }
+                if (chk) {
+                    chk.className = isSelected
+                        ? "w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center text-[10px] shrink-0 shadow"
+                        : "w-6 h-6 rounded-full bg-zinc-800 text-transparent flex items-center justify-center text-[10px] shrink-0";
+                }
+            });
+
+            const sysStatus = document.getElementById("systemThemeStatusLabel");
+            if (sysStatus) {
+                const isSysLight = detectSystemPrefersLight();
+                sysStatus.textContent = `Сейчас на устройстве: ${isSysLight ? "Светлая тема (включит Белую)" : "Тёмная тема (включит Обычную тёмную)"}`;
+            }
+        }
+
+        function setAppTheme(themeId, persistManual = true, silentToast = false) {
+            const validTheme = (themeId === "ps5" || themeId === "light" || themeId === "dark") ? themeId : "dark";
+            currentAppTheme = validTheme;
+            if (document.body) {
+                document.body.setAttribute("data-theme", validTheme);
+            }
+            if (persistManual) {
+                try {
+                    localStorage.setItem(APP_THEME_STORAGE_KEY, validTheme);
+                } catch (e) {}
+            }
+            updateThemeControlsUI();
+            updatePs5LiveClock();
+
+            if (!silentToast && typeof showToast === "function") {
+                const names = {
+                    dark: "Обычная тёмная тема",
+                    ps5: "Новая тема PS5 Media (Неон)",
+                    light: "Светлая (Белая) тема"
+                };
+                showToast("ОФОРМЛЕНИЕ", `Включена: ${names[validTheme]}`);
+            }
+        }
+
+        function cycleAppTheme() {
+            const nextOrder = { dark: "ps5", ps5: "light", light: "dark" };
+            const next = nextOrder[currentAppTheme] || "dark";
+            setAppTheme(next, true, false);
+        }
+
+        function applySystemThemeNow() {
+            try {
+                localStorage.removeItem(APP_THEME_STORAGE_KEY);
+            } catch (e) {}
+            const target = detectSystemPrefersLight() ? "light" : "dark";
+            setAppTheme(target, false, false);
+            closeThemeSelectorModal();
+        }
+
+        function openThemeSelectorModal() {
+            updateThemeControlsUI();
+            const modal = document.getElementById("themeSelectorModal");
+            if (modal) {
+                modal.classList.remove("hidden");
+                modal.classList.add("flex");
+            }
+        }
+
+        function closeThemeSelectorModal() {
+            const modal = document.getElementById("themeSelectorModal");
+            if (modal) {
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
+            }
+        }
+
+        function triggerPs5SearchButton() {
+            if (window.innerWidth < 1024) {
+                toggleSearchBar();
+            } else {
+                const topBar = document.getElementById("desktopTopHeaderBar");
+                if (topBar) {
+                    topBar.classList.toggle("ps5-search-open");
+                }
+                const deskInput = document.getElementById("desktopSearchInput");
+                if (deskInput && (!topBar || topBar.classList.contains("ps5-search-open"))) {
+                    setTimeout(() => deskInput.focus(), 30);
+                }
+            }
+        }
+
+        function initThemeSystem() {
+            const initialTheme = resolveInitialAppTheme();
+            setAppTheme(initialTheme, false, true);
+            updatePs5LiveClock();
+            setInterval(updatePs5LiveClock, 15000);
+
+            try {
+                if (window.matchMedia) {
+                    const lightMedia = window.matchMedia("(prefers-color-scheme: light)");
+                    const handleSystemThemeChange = (e) => {
+                        const targetTheme = e.matches ? "light" : "dark";
+                        try {
+                            localStorage.removeItem(APP_THEME_STORAGE_KEY);
+                        } catch (err) {}
+                        setAppTheme(targetTheme, false, false);
+                    };
+                    if (typeof lightMedia.addEventListener === "function") {
+                        lightMedia.addEventListener("change", handleSystemThemeChange);
+                    } else if (typeof lightMedia.addListener === "function") {
+                        lightMedia.addListener(handleSystemThemeChange);
+                    }
+                }
+            } catch (e) {}
+        }
+
         function initDarkMusicApp() {
+            initThemeSystem();
             registerSystemNotificationServiceWorker();
             loadPersonalFavoritesFromStorage();
             loadLeftSidebarStateFromStorage();
