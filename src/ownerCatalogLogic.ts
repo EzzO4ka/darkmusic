@@ -888,7 +888,7 @@ export const APP_THEMES: Record<AppThemeId, AppThemeDescriptor> = {
     id: 'ps5',
     shortLabel: 'Неон',
     fullLabel: 'Неоновая (Стеклянная)',
-    description: 'Полупрозрачный стеклянный интерфейс и космические обои со свечением',
+    description: 'Полупрозрачный стеклянный интерфейс и плавно пульсирующий фиолетовый фон',
     icon: 'fa-wand-magic-sparkles'
   },
   light: {
