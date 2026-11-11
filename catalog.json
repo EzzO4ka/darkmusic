@@ -147,6 +147,36 @@
   ],
   "customAlbums": [
     {
+      "id": "alb_1794424561744",
+      "title": "67",
+      "artistId": "art_ms_dolboeb_1794211002271",
+      "type": "СИНГЛ",
+      "year": 2026,
+      "coverFile": "covers/alb_release_1794424553674.jpg",
+      "gradient": "from-emerald-600 via-teal-900 to-zinc-950",
+      "isExplicit": true
+    },
+    {
+      "id": "alb_1794424537372",
+      "title": "ты не бойся ночи",
+      "artistId": "art_ms_dolboeb_1794211002271",
+      "type": "СИНГЛ",
+      "year": 2026,
+      "coverFile": "covers/alb_release_1794424524090.jpg",
+      "gradient": "from-emerald-600 via-teal-900 to-zinc-950",
+      "isExplicit": true
+    },
+    {
+      "id": "alb_1794424496638",
+      "title": "ДИНАСТИЯ",
+      "artistId": "art_ms_dolboeb_1794211002271",
+      "type": "СИНГЛ",
+      "year": 2026,
+      "coverFile": "covers/alb_release_1794424477361.jpg",
+      "gradient": "from-emerald-600 via-teal-900 to-zinc-950",
+      "isExplicit": true
+    },
+    {
       "id": "alb_1794065945442",
       "title": "115 причин не ехать в Выборг",
       "artistId": "mc_ezdit",
@@ -200,6 +230,45 @@
     }
   ],
   "customTracks": [
+    {
+      "id": "trk_1794424622223",
+      "title": "67",
+      "artistId": "art_ms_dolboeb_1794211002271",
+      "albumId": "alb_1794424561744",
+      "filePath": "tracks/art_ms_dolboeb_1794211002271/Gazan_-_67_Six_Seven_80858207.mp3",
+      "coverFile": "",
+      "duration": "1:23",
+      "year": 2026,
+      "isNew": true,
+      "isExplicit": false,
+      "createdAt": 1794424622223
+    },
+    {
+      "id": "trk_1794424604552",
+      "title": "ты не бойся ночи",
+      "artistId": "art_ms_dolboeb_1794211002271",
+      "albumId": "alb_1794424537372",
+      "filePath": "tracks/art_ms_dolboeb_1794211002271/ENZRO_-_Ty_ne_bojjsya_nochi_81423717.mp3",
+      "coverFile": "",
+      "duration": "3:38",
+      "year": 2026,
+      "isNew": true,
+      "isExplicit": true,
+      "createdAt": 1794424604552
+    },
+    {
+      "id": "trk_1794424590447",
+      "title": "династия",
+      "artistId": "art_ms_dolboeb_1794211002271",
+      "albumId": "alb_1794424496638",
+      "filePath": "tracks/art_ms_dolboeb_1794211002271/VILLIAN_madk1d_-_DINASTIYA_81965580.mp3",
+      "coverFile": "",
+      "duration": "2:30",
+      "year": 2026,
+      "isNew": true,
+      "isExplicit": true,
+      "createdAt": 1794424590447
+    },
     {
       "id": "trk_1794211260337",
       "title": "Кто пчелок уважает",
@@ -640,5 +709,5 @@
     "active": true,
     "updatedAt": 1794397699559
   },
-  "updatedAt": 1794423916745
+  "updatedAt": 1794424622223
 }
