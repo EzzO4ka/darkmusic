@@ -594,26 +594,28 @@
     "MCTEST"
   ],
   "systemPushBroadcast": {
-    "id": "",
+    "id": "push_1794423916745",
     "title": "🎵 Dark Music — Новый релиз!",
     "message": "Слушайте новый трек резидентов лейбла в высоком качестве!",
     "imageFile": "logo.png",
-    "active": false,
-    "createdAt": 1794423915912
+    "active": true,
+    "createdAt": 1794423916745,
+    "updatedAt": 1794423916745
   },
   "tempBroadcast": {
-    "id": "tmp_1794423824914",
-    "title": "Хуй",
-    "message": "Хуй",
+    "id": "",
+    "title": "Объявление Dark Music",
+    "message": "Некоторые клипы получится посмотреть только с VPN - потому что эти клипы транслируются через YouTube.",
     "active": true,
-    "createdAt": 1794423824914
+    "createdAt": 1793615799053,
+    "updatedAt": 1794423492150
   },
   "pinnedBroadcast": {
-    "id": "pin_1794423858288",
+    "id": "",
     "title": "Ведутся технические работы",
     "message": "Временно возможны перебои в работе приложения.",
-    "active": true,
-    "updatedAt": 1794423858288
+    "active": false,
+    "updatedAt": 1794423489388
   },
   "forceUpdate": {
     "active": true,
@@ -638,5 +640,5 @@
     "active": true,
     "updatedAt": 1794397699559
   },
-  "updatedAt": 1794423915916
+  "updatedAt": 1794423916745
 }
