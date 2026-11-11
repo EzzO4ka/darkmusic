@@ -609,11 +609,11 @@
     "createdAt": 1794423824914
   },
   "pinnedBroadcast": {
-    "id": "",
+    "id": "pin_1794423858288",
     "title": "Ведутся технические работы",
     "message": "Временно возможны перебои в работе приложения.",
-    "active": false,
-    "updatedAt": 1794423489388
+    "active": true,
+    "updatedAt": 1794423858288
   },
   "forceUpdate": {
     "active": true,
@@ -638,5 +638,5 @@
     "active": true,
     "updatedAt": 1794397699559
   },
-  "updatedAt": 1794423845527
+  "updatedAt": 1794423858290
 }
