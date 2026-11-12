@@ -595,12 +595,13 @@
     "trk_1794425548423"
   ],
   "systemPushBroadcast": {
-    "id": "",
-    "title": "Обновите версию приложения",
-    "message": "Скоро новая версия выйдет в GitHub. Старые версии заблокированы.",
+    "id": "push_1794513801218",
+    "title": "🎵 Dark Music — Новый релиз!",
+    "message": "Слушайте новый трек резидентов лейбла в высоком качестве!",
     "imageFile": "logo.png",
-    "active": false,
-    "createdAt": 1794307894633
+    "active": true,
+    "createdAt": 1794513801218,
+    "updatedAt": 1794513801218
   },
   "tempBroadcast": {
     "id": "",
@@ -639,5 +640,5 @@
     "active": true,
     "updatedAt": 1794397699559
   },
-  "updatedAt": 1794426023063
+  "updatedAt": 1794513801218
 }
