@@ -595,13 +595,12 @@
     "trk_1794425548423"
   ],
   "systemPushBroadcast": {
-    "id": "push_1794513801218",
+    "id": "",
     "title": "🎵 Dark Music — Новый релиз!",
     "message": "Слушайте новый трек резидентов лейбла в высоком качестве!",
     "imageFile": "logo.png",
-    "active": true,
-    "createdAt": 1794513801218,
-    "updatedAt": 1794513801218
+    "active": false,
+    "createdAt": 1794552641410
   },
   "tempBroadcast": {
     "id": "",
@@ -640,5 +639,5 @@
     "active": true,
     "updatedAt": 1794397699559
   },
-  "updatedAt": 1794513801218
+  "updatedAt": 1794552641415
 }
