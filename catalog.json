@@ -592,12 +592,12 @@
     "MCTEST"
   ],
   "systemPushBroadcast": {
-    "id": "",
+    "id": "push_1794690265586",
     "title": "Обновите версию приложения",
     "message": "Скоро новая версия выйдет в GitHub. Старые версии заблокированы.",
     "imageFile": "logo.png",
-    "active": false,
-    "createdAt": 1794307894633
+    "active": true,
+    "createdAt": 1794690265586
   },
   "tempBroadcast": {
     "id": "",
@@ -637,5 +637,5 @@
     "active": true,
     "updatedAt": 1794690234402
   },
-  "updatedAt": 1794690234406
+  "updatedAt": 1794690265604
 }
