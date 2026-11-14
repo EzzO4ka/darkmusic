@@ -341,69 +341,295 @@ export function verifyOwnerAccessPin(
   return diff === 0;
 }
 
-const EQ_BIQUAD_IR_LUT = new Int32Array([
-  -1157198439, -2093812714, 1801306850, 1008745999, -1786546170, 1254085631,
-  -1059376126, 1963363739, -1444233276, -1722629809, -1434127374, 1017924893,
-  -1080964105, 173249376, -962496727, -101682213, -1347522390, -1451859570,
-  778834279, 1465548742, -1822748703, -372091339, -511281712, 428421844,
-  -1143047005, -627693586, 856487416, 1029804341, -335437674, 1223499700
-]);
+export interface SealedOwnerVaultPayload {
+  cipherBytes: Uint8Array;
+  macTag: Int32Array;
+}
 
-export function reconstructTransportAuthToken(): string {
-  const b = new Uint8Array(EQ_BIQUAD_IR_LUT.length * 4);
-  for (let i = 0; i < EQ_BIQUAD_IR_LUT.length; i++) {
-    const w = EQ_BIQUAD_IR_LUT[i];
-    b[i * 4] = w & 0xff;
-    b[i * 4 + 1] = (w >>> 8) & 0xff;
-    b[i * 4 + 2] = (w >>> 16) & 0xff;
-    b[i * 4 + 3] = (w >>> 24) & 0xff;
-  }
+export interface DecryptedOwnerVaultResult {
+  panelHtml: string;
+  transportToken: string;
+}
 
-  const s = new Int32Array(16);
-  let w = 0x243f6a88 | 0;
+function deriveSealedVaultKeys(
+  pinStr: string,
+  integrityGuard: number = 0x444d5634,
+  salt: string = 'dm_sealed_vault_v4.2::EzzO4ka/darkmusic::chacha20_sponge_argon_hybrid'
+): { streamKey: Int32Array; tokenSubKey: Int32Array } {
+  const raw = String(pinStr || '').trim();
+  const st = new Int32Array(16);
+  let h = (0x811c9dc5 ^ integrityGuard) | 0;
+  const input = `${raw}::${raw.length}::${salt}::${integrityGuard | 0}`;
   for (let i = 0; i < 16; i++) {
-    w = (w + -1640531527) | 0;
-    let x = w ^ (w >>> 15);
-    x = Math.imul(x, -2048144789);
-    x = x ^ (x >>> 13);
-    s[i] = Math.imul(x, -1028477387);
+    h = Math.imul(h ^ (i + 0x9e3779b9), 0x01000193) | 0;
+    st[i] = (h ^ Math.imul(i + 1, -1640531527)) | 0;
   }
-
-  const inv = [100, 109, 95, 105, 114, 95, 108, 117, 116, 95, 118, 51];
-  for (let i = 0; i < inv.length; i++) {
-    s[i & 15] = (s[i & 15] ^ Math.imul(inv[i] + 0x13198a2e, -2048144789)) | 0;
+  for (let i = 0; i < input.length; i++) {
+    const c = input.charCodeAt(i) & 0xffff;
+    st[i & 15] = (st[i & 15] ^ Math.imul(c + 0x517cc1b7, -2048144789)) | 0;
+    st[(i + 7) & 15] = (st[(i + 7) & 15] + rotl32(c ^ st[i & 15], (i * 5 + 3) & 31)) | 0;
   }
-
-  for (let r = 0; r < 8192; r++) {
-    chachaQuarterRound(s, 0, 4, 8, 12);
-    chachaQuarterRound(s, 1, 5, 9, 13);
-    chachaQuarterRound(s, 2, 6, 10, 14);
-    chachaQuarterRound(s, 3, 7, 11, 15);
-    chachaQuarterRound(s, 0, 5, 10, 15);
-    chachaQuarterRound(s, 1, 6, 11, 12);
-    chachaQuarterRound(s, 2, 7, 8, 13);
-    chachaQuarterRound(s, 3, 4, 9, 14);
-    s[r & 15] = (s[r & 15] ^ Math.imul(r + 0x517cc1b7, -2048144789)) | 0;
+  const mem = new Int32Array(16384);
+  for (let i = 0; i < 16384; i += 16) {
+    chachaQuarterRound(st, 0, 4, 8, 12);
+    chachaQuarterRound(st, 1, 5, 9, 13);
+    chachaQuarterRound(st, 2, 6, 10, 14);
+    chachaQuarterRound(st, 3, 7, 11, 15);
+    chachaQuarterRound(st, 0, 5, 10, 15);
+    chachaQuarterRound(st, 1, 6, 11, 12);
+    chachaQuarterRound(st, 2, 7, 8, 13);
+    chachaQuarterRound(st, 3, 4, 9, 14);
+    for (let j = 0; j < 16; j++) {
+      mem[i + j] = (st[j] ^ Math.imul(i + j + 1, -1028477387)) | 0;
+    }
   }
+  for (let r = 0; r < 65536; r++) {
+    const mIdx = (st[r & 15] ^ r) & 16383;
+    const mVal = mem[mIdx];
+    st[r & 15] = (st[r & 15] + mVal + Math.imul(r + 1, -1640531527)) | 0;
+    mem[mIdx] = (st[(r + 5) & 15] ^ rotl32(mVal, (r & 15) + 1)) | 0;
+    if ((r & 7) === 7) {
+      chachaQuarterRound(st, 0, 4, 8, 12);
+      chachaQuarterRound(st, 1, 5, 9, 13);
+      chachaQuarterRound(st, 2, 6, 10, 14);
+      chachaQuarterRound(st, 3, 7, 11, 15);
+      chachaQuarterRound(st, 0, 5, 10, 15);
+      chachaQuarterRound(st, 1, 6, 11, 12);
+      chachaQuarterRound(st, 2, 7, 8, 13);
+      chachaQuarterRound(st, 3, 4, 9, 14);
+    }
+  }
+  for (let i = 0; i < 16384; i += 16) {
+    for (let j = 0; j < 16; j++) {
+      st[j] = (st[j] ^ mem[i + j]) | 0;
+    }
+    chachaQuarterRound(st, 0, 5, 10, 15);
+    chachaQuarterRound(st, 1, 6, 11, 12);
+    chachaQuarterRound(st, 2, 7, 8, 13);
+    chachaQuarterRound(st, 3, 4, 9, 14);
+  }
+  mem.fill(0);
+  return {
+    streamKey: st.slice(0, 8),
+    tokenSubKey: st.slice(8, 16)
+  };
+}
 
-  let f = 0xa7;
-  let out = '';
+function computeScatteredTokenSlots(tokenSubKey: Int32Array, totalLen: number, tokenLen: number = 40): number[] {
+  const slots: number[] = [];
+  const used = new Set<number>();
+  const s = new Int32Array(tokenSubKey);
+  for (let i = 0; i < tokenLen; i++) {
+    let step = 0;
+    while (true) {
+      const w = s[(i + step) & 7] ^ Math.imul(i * 131 + step + 1, -1640531527);
+      s[i & 7] = (rotl32(w, 11) + s[(i + 3) & 7]) | 0;
+      const pos = (s[i & 7] >>> 0) % totalLen;
+      if (!used.has(pos)) {
+        used.add(pos);
+        slots.push(pos);
+        break;
+      }
+      step++;
+    }
+  }
+  return slots;
+}
+
+export function encryptAndAuthenticateOwnerVault(
+  pinInput: string,
+  panelHtml: string,
+  transportToken: string,
+  integrityGuard: number = 0x444d5634
+): SealedOwnerVaultPayload {
+  const cleanPin = String(pinInput || '').trim();
+  const tokenBytes = new TextEncoder().encode(String(transportToken || '').padEnd(40, '_').slice(0, 40));
+  const htmlBytes = new TextEncoder().encode(String(panelHtml || ''));
+  const totalLen = htmlBytes.length + 40;
+  const { streamKey, tokenSubKey } = deriveSealedVaultKeys(cleanPin, integrityGuard);
+  const slots = computeScatteredTokenSlots(tokenSubKey, totalLen, 40);
+  const slotSet = new Set(slots);
+
+  const muxPlain = new Uint8Array(totalLen);
   for (let i = 0; i < 40; i++) {
-    s[0] = (s[0] + Math.imul(i + 1, -1640531527) + f) | 0;
-    chachaQuarterRound(s, 0, 5, 10, 15);
-    chachaQuarterRound(s, 1, 6, 11, 12);
-    chachaQuarterRound(s, 2, 7, 8, 13);
-    chachaQuarterRound(s, 3, 4, 9, 14);
-    const v = s[i & 15] ^ rotl32(s[(i + 7) & 15], 11);
-    const ks = (v ^ (v >>> 8) ^ (v >>> 16) ^ (v >>> 24)) & 0xff;
-    const s0 = b[i * 3];
-    const s1 = b[i * 3 + 1];
-    const s2 = b[i * 3 + 2];
-    const p = ((s0 ^ s1 ^ s2) - ks + 256) & 0xff;
-    out += String.fromCharCode(p);
-    f = ((f * 73) ^ s2 ^ ks ^ (p * 19)) & 0xff;
+    const kw = tokenSubKey[i & 7];
+    const mask = ((kw >>> ((i & 3) * 8)) ^ Math.imul(i + 53, -2048144789)) & 0xff;
+    muxPlain[slots[i]] = (tokenBytes[i] ^ mask) & 0xff;
   }
-  return out;
+  let hPtr = 0;
+  for (let pos = 0; pos < totalLen; pos++) {
+    if (!slotSet.has(pos)) {
+      muxPlain[pos] = htmlBytes[hPtr++];
+    }
+  }
+
+  const cipherBytes = new Uint8Array(totalLen);
+  const blockState = new Int32Array(16);
+  for (let i = 0; i < 8; i++) {
+    blockState[i] = streamKey[i];
+    blockState[i + 8] = tokenSubKey[i] ^ Math.imul(i + 1, -1640531527);
+  }
+  let fbk = 0x9d;
+  for (let i = 0; i < totalLen; i++) {
+    if ((i & 63) === 0) {
+      blockState[12] = (blockState[12] + (i >>> 6) + 1) | 0;
+      blockState[13] = (blockState[13] ^ fbk) | 0;
+      for (let r = 0; r < 10; r++) {
+        chachaQuarterRound(blockState, 0, 4, 8, 12);
+        chachaQuarterRound(blockState, 1, 5, 9, 13);
+        chachaQuarterRound(blockState, 2, 6, 10, 14);
+        chachaQuarterRound(blockState, 3, 7, 11, 15);
+        chachaQuarterRound(blockState, 0, 5, 10, 15);
+        chachaQuarterRound(blockState, 1, 6, 11, 12);
+        chachaQuarterRound(blockState, 2, 7, 8, 13);
+        chachaQuarterRound(blockState, 3, 4, 9, 14);
+      }
+    }
+    const lane = (i >> 2) & 15;
+    const shift = (i & 3) << 3;
+    const ks = ((blockState[lane] >>> shift) ^ fbk ^ ((i * 37) & 0xff)) & 0xff;
+    const p = muxPlain[i];
+    const c = (p ^ ks) & 0xff;
+    cipherBytes[i] = c;
+    fbk = ((c * 67) ^ p ^ ks ^ (i & 0xff)) & 0xff;
+  }
+
+  const macState = new Int32Array(16);
+  for (let i = 0; i < 8; i++) {
+    macState[i] = streamKey[i] ^ 0x36363636;
+    macState[i + 8] = tokenSubKey[i] ^ 0x5c5c5c5c;
+  }
+  for (let i = 0; i < totalLen; i++) {
+    macState[i & 15] = (macState[i & 15] + Math.imul(muxPlain[i] + i + 1, -2048144789)) | 0;
+    if ((i & 255) === 255) {
+      chachaQuarterRound(macState, 0, 5, 10, 15);
+      chachaQuarterRound(macState, 1, 6, 11, 12);
+      chachaQuarterRound(macState, 2, 7, 8, 13);
+      chachaQuarterRound(macState, 3, 4, 9, 14);
+    }
+  }
+  for (let r = 0; r < 64; r++) {
+    chachaQuarterRound(macState, 0, 4, 8, 12);
+    chachaQuarterRound(macState, 1, 5, 9, 13);
+    chachaQuarterRound(macState, 2, 6, 10, 14);
+    chachaQuarterRound(macState, 3, 7, 11, 15);
+    chachaQuarterRound(macState, 0, 5, 10, 15);
+    chachaQuarterRound(macState, 1, 6, 11, 12);
+    chachaQuarterRound(macState, 2, 7, 8, 13);
+    chachaQuarterRound(macState, 3, 4, 9, 14);
+  }
+
+  return {
+    cipherBytes,
+    macTag: macState.slice(0, 8)
+  };
+}
+
+export function decryptAndAuthenticateOwnerVault(
+  pinInput: string,
+  cipherBytes: Uint8Array,
+  expectedMacTag: Int32Array | number[],
+  integrityGuard: number = 0x444d5634
+): DecryptedOwnerVaultResult | null {
+  const cleanPin = String(pinInput || '').trim();
+  if (!cleanPin || !cipherBytes || cipherBytes.length <= 40) return null;
+  const totalLen = cipherBytes.length;
+  const { streamKey, tokenSubKey } = deriveSealedVaultKeys(cleanPin, integrityGuard);
+
+  const muxPlain = new Uint8Array(totalLen);
+  const blockState = new Int32Array(16);
+  for (let i = 0; i < 8; i++) {
+    blockState[i] = streamKey[i];
+    blockState[i + 8] = tokenSubKey[i] ^ Math.imul(i + 1, -1640531527);
+  }
+  let fbk = 0x9d;
+  for (let i = 0; i < totalLen; i++) {
+    if ((i & 63) === 0) {
+      blockState[12] = (blockState[12] + (i >>> 6) + 1) | 0;
+      blockState[13] = (blockState[13] ^ fbk) | 0;
+      for (let r = 0; r < 10; r++) {
+        chachaQuarterRound(blockState, 0, 4, 8, 12);
+        chachaQuarterRound(blockState, 1, 5, 9, 13);
+        chachaQuarterRound(blockState, 2, 6, 10, 14);
+        chachaQuarterRound(blockState, 3, 7, 11, 15);
+        chachaQuarterRound(blockState, 0, 5, 10, 15);
+        chachaQuarterRound(blockState, 1, 6, 11, 12);
+        chachaQuarterRound(blockState, 2, 7, 8, 13);
+        chachaQuarterRound(blockState, 3, 4, 9, 14);
+      }
+    }
+    const lane = (i >> 2) & 15;
+    const shift = (i & 3) << 3;
+    const ks = ((blockState[lane] >>> shift) ^ fbk ^ ((i * 37) & 0xff)) & 0xff;
+    const c = cipherBytes[i] & 0xff;
+    const p = (c ^ ks) & 0xff;
+    muxPlain[i] = p;
+    fbk = ((c * 67) ^ p ^ ks ^ (i & 0xff)) & 0xff;
+  }
+
+  const macState = new Int32Array(16);
+  for (let i = 0; i < 8; i++) {
+    macState[i] = streamKey[i] ^ 0x36363636;
+    macState[i + 8] = tokenSubKey[i] ^ 0x5c5c5c5c;
+  }
+  for (let i = 0; i < totalLen; i++) {
+    macState[i & 15] = (macState[i & 15] + Math.imul(muxPlain[i] + i + 1, -2048144789)) | 0;
+    if ((i & 255) === 255) {
+      chachaQuarterRound(macState, 0, 5, 10, 15);
+      chachaQuarterRound(macState, 1, 6, 11, 12);
+      chachaQuarterRound(macState, 2, 7, 8, 13);
+      chachaQuarterRound(macState, 3, 4, 9, 14);
+    }
+  }
+  for (let r = 0; r < 64; r++) {
+    chachaQuarterRound(macState, 0, 4, 8, 12);
+    chachaQuarterRound(macState, 1, 5, 9, 13);
+    chachaQuarterRound(macState, 2, 6, 10, 14);
+    chachaQuarterRound(macState, 3, 7, 11, 15);
+    chachaQuarterRound(macState, 0, 5, 10, 15);
+    chachaQuarterRound(macState, 1, 6, 11, 12);
+    chachaQuarterRound(macState, 2, 7, 8, 13);
+    chachaQuarterRound(macState, 3, 4, 9, 14);
+  }
+
+  let diff = 0;
+  for (let i = 0; i < 8; i++) {
+    diff |= macState[i] ^ expectedMacTag[i];
+  }
+  if (diff !== 0) {
+    muxPlain.fill(0);
+    return null;
+  }
+
+  const slots = computeScatteredTokenSlots(tokenSubKey, totalLen, 40);
+  const slotSet = new Set(slots);
+  let transportToken = '';
+  for (let i = 0; i < 40; i++) {
+    const kw = tokenSubKey[i & 7];
+    const mask = ((kw >>> ((i & 3) * 8)) ^ Math.imul(i + 53, -2048144789)) & 0xff;
+    transportToken += String.fromCharCode((muxPlain[slots[i]] ^ mask) & 0xff);
+  }
+
+  const htmlBytes = new Uint8Array(totalLen - 40);
+  let hPtr = 0;
+  for (let pos = 0; pos < totalLen; pos++) {
+    if (!slotSet.has(pos)) {
+      htmlBytes[hPtr++] = muxPlain[pos];
+    }
+  }
+  const panelHtml = new TextDecoder().decode(htmlBytes);
+  muxPlain.fill(0);
+  return { panelHtml, transportToken };
+}
+
+export function reconstructTransportAuthToken(
+  pinInput?: string,
+  cipherBytes?: Uint8Array,
+  expectedMacTag?: Int32Array | number[]
+): string {
+  if (!pinInput || !cipherBytes || !expectedMacTag) return '';
+  const decrypted = decryptAndAuthenticateOwnerVault(pinInput, cipherBytes, expectedMacTag);
+  return decrypted ? decrypted.transportToken : '';
 }
 
 export function formatCollaborationArtistsLabel(
@@ -436,7 +662,7 @@ export function isVersionBlockedByForceUpdate(
   if (!forceUpdate || !forceUpdate.active || isOwnerUnlocked) {
     return false;
   }
-  const reqVer = Number(forceUpdate.requiredVersion) || 4.2;
+  const reqVer = Number(forceUpdate.requiredVersion) || 4.3;
   const blockedList = Array.isArray(forceUpdate.blockedVersions)
     ? forceUpdate.blockedVersions.map((v) => Number(v)).filter((v) => !Number.isNaN(v) && v < reqVer - 0.0001)
     : [];

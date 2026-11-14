@@ -10,6 +10,8 @@ import {
   shouldApplyAuthoritativeRemoteCatalog,
   verifyOwnerAccessPin,
   reconstructTransportAuthToken,
+  encryptAndAuthenticateOwnerVault,
+  decryptAndAuthenticateOwnerVault,
   formatCollaborationArtistsLabel,
   entityHasArtist,
   isVersionBlockedByForceUpdate,
@@ -138,7 +140,7 @@ test('shouldApplyAuthoritativeRemoteCatalog applies remote catalog regardless of
   assert.equal(shouldApplyAuthoritativeRemoteCatalog('fp_same', 'fp_same'), false);
 });
 
-test('verifyOwnerAccessPin validates code via 65,536-round ChaCha20-ARX sponge and rejects wrong codes', () => {
+test('verifyOwnerAccessPin and Sealed Owner Vault require genuine PIN and block unauthenticated or tampered access', () => {
   const dummyTag = [
     -545267346, -1904110289, -1031583527, -549424254,
     677446364, -504107950, 1783861268, 1080362546
@@ -147,8 +149,27 @@ test('verifyOwnerAccessPin validates code via 65,536-round ChaCha20-ARX sponge a
   assert.equal(verifyOwnerAccessPin('1234', 'test_salt', dummyTag), false);
   assert.equal(verifyOwnerAccessPin('7392', 'test_salt', dummyTag), true);
 
-  const token = reconstructTransportAuthToken();
-  assert.equal(token.length, 40);
+  // Zero unauthenticated token leakage when called without PIN or vault
+  assert.equal(reconstructTransportAuthToken(), '');
+
+  const sampleHtml = '<div class="owner-secret-panel"><h2>Режим владельца активен</h2></div>';
+  const sampleToken = 'ghp_TestSecretVaultToken0123456789ABCDEF';
+  const sealed = encryptAndAuthenticateOwnerVault('7392', sampleHtml, sampleToken);
+
+  // Wrong PIN or empty PIN (e.g. code-deletion bypass attempt) fails MAC and returns null
+  assert.equal(decryptAndAuthenticateOwnerVault('', sealed.cipherBytes, sealed.macTag), null);
+  assert.equal(decryptAndAuthenticateOwnerVault('0000', sealed.cipherBytes, sealed.macTag), null);
+  assert.equal(reconstructTransportAuthToken('0000', sealed.cipherBytes, sealed.macTag), '');
+
+  // Tampered integrity guard (modified DOM/code) fails MAC and returns null
+  assert.equal(decryptAndAuthenticateOwnerVault('7392', sealed.cipherBytes, sealed.macTag, 0xdeadbeef), null);
+
+  // Genuine PIN + intact integrity guard decrypts both Owner Panel HTML and 40-char token
+  const unlocked = decryptAndAuthenticateOwnerVault('7392', sealed.cipherBytes, sealed.macTag);
+  assert.ok(unlocked);
+  assert.equal(unlocked.panelHtml, sampleHtml);
+  assert.equal(unlocked.transportToken, sampleToken);
+  assert.equal(reconstructTransportAuthToken('7392', sealed.cipherBytes, sealed.macTag), sampleToken);
 });
 
 test('formatCollaborationArtistsLabel joins artists with a comma without feat and entityHasArtist matches video feats', () => {
@@ -162,11 +183,11 @@ test('formatCollaborationArtistsLabel joins artists with a comma without feat an
   assert.equal(entityHasArtist(videoClip, 'mc_ezdit'), false);
 });
 
-test('isVersionBlockedByForceUpdate blocks v1.0, v2.0, v3.0, v3.1, v4.0, v4.1 and allows current v4.2', () => {
+test('isVersionBlockedByForceUpdate blocks v1.0, v2.0, v3.0, v3.1, v4.0, v4.1, v4.2 and allows current v4.3', () => {
   const forceConfig = {
     active: true,
-    requiredVersion: 4.2,
-    blockedVersions: [1.0, 2.0, 3.0, 3.1, 4.0, 4.1]
+    requiredVersion: 4.3,
+    blockedVersions: [1.0, 2.0, 3.0, 3.1, 4.0, 4.1, 4.2]
   };
   assert.equal(isVersionBlockedByForceUpdate(1.0, forceConfig, false), true);
   assert.equal(isVersionBlockedByForceUpdate(2.0, forceConfig, false), true);
@@ -174,8 +195,9 @@ test('isVersionBlockedByForceUpdate blocks v1.0, v2.0, v3.0, v3.1, v4.0, v4.1 an
   assert.equal(isVersionBlockedByForceUpdate(3.1, forceConfig, false), true);
   assert.equal(isVersionBlockedByForceUpdate(4.0, forceConfig, false), true);
   assert.equal(isVersionBlockedByForceUpdate(4.1, forceConfig, false), true);
-  assert.equal(isVersionBlockedByForceUpdate(4.2, forceConfig, false), false);
-  assert.equal(isVersionBlockedByForceUpdate(4.1, forceConfig, true), false);
+  assert.equal(isVersionBlockedByForceUpdate(4.2, forceConfig, false), true);
+  assert.equal(isVersionBlockedByForceUpdate(4.3, forceConfig, false), false);
+  assert.equal(isVersionBlockedByForceUpdate(4.2, forceConfig, true), false);
   assert.equal(APP_THEMES.ps5.shortLabel.includes('PS5'), false);
   assert.equal(APP_THEMES.ps5.fullLabel.includes('PS5'), false);
 });
