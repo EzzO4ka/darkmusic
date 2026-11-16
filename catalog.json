@@ -242,7 +242,7 @@
       "title": "СМАҐАЗОВЕ НЕБО",
       "artistId": "mc_tymashenka",
       "albumId": "alb_1794870540900",
-      "filePath": "tracks/mc_tymashenka/СМАҐАЗОВЕ НЕБО.mp3",
+      "filePath": "tracks/mc_tymashenka/SMAGASOVENEBO.mp3",
       "coverFile": "",
       "duration": "3:14",
       "year": 2026,
@@ -689,5 +689,5 @@
     "active": true,
     "updatedAt": 1794736942140
   },
-  "updatedAt": 1794871824634
+  "updatedAt": 1794872013279
 }
