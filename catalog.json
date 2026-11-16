@@ -179,7 +179,7 @@
       "artistId": "mc_tymashenka",
       "type": "СИНГЛ",
       "year": 2026,
-      "coverFile": "covers/alb_release_1794870523795.jpg",
+      "coverFile": "covers/alb________________1794871592747.jpg",
       "gradient": "from-amber-600 via-orange-950 to-zinc-950",
       "isExplicit": true
     },
@@ -689,5 +689,5 @@
     "active": true,
     "updatedAt": 1794736942140
   },
-  "updatedAt": 1794871207018
+  "updatedAt": 1794871595247
 }
