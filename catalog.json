@@ -5,41 +5,41 @@
     "mc_geich": "avatars/mc_geich.jpg",
     "mc_makaka": "avatars/mc_makaka.jpg",
     "mc_ezdit": "avatars/mc_ezdittttt3.jpg",
+    "mc_ms_evvlampiya": "avatars/mc_ms_evvlampiya.jpg",
     "mc_tymashenka": "avatars/mc_tymashenka.jpg",
-    "art_ms_dolboeb_1794211002271": "avatars/dolboeb.jpg",
-    "mc_ms_evvlampiya": "avatars/mc_ms_evvlampiya.jpg"
+    "art_ms_dolboeb_1794211002271": "avatars/dolboeb.jpg"
   },
   "artistBanners": {
     "mc_geich": "banners/mc_geich2.jpg",
     "mc_makaka": "banners/mc_makaka2.jpg",
     "mc_ezdit": "banners/mc_ezdit4.jpg",
+    "mc_ms_evvlampiya": "banners/mc_ms_evvlampiya2.jpg",
     "mc_tymashenka": "banners/mc_tymashenka2.jpg",
-    "art_ms_dolboeb_1794211002271": "banners/dolboeb2.jpg",
-    "mc_ms_evvlampiya": "banners/mc_ms_evvlampiya2.jpg"
+    "art_ms_dolboeb_1794211002271": "banners/dolboeb2.jpg"
   },
   "artistNames": {
     "mc_geich": "МС ГЕИЧ",
     "mc_makaka": "МС МАКАКА",
     "mc_ezdit": "МС ЕЗДИТЬ",
+    "mc_ms_evvlampiya": "МС ЕВВЛАМПИЯ",
     "mc_tymashenka": "TYMASHENKA",
-    "art_ms_dolboeb_1794211002271": "МС ДОЛБОЁБ",
-    "mc_ms_evvlampiya": "МС ЕВВЛАМПИЯ"
+    "art_ms_dolboeb_1794211002271": "МС ДОЛБОЁБ"
   },
   "artistBios": {
     "mc_geich": "Российский рэп исполнитель, продюсер, контентмейкер. Стал популярен благодаря \"Элиты\" Татьяны Леонидовны. Писал рофленные текста про Ахмада и себя. Продюсировал МС МАКАКУ.",
     "mc_makaka": "МС МАКАКА — самая взрывная энергия объединения Dark Music. Король школьного и дворового русского рэпа. Стал популярен в школе благодаря его продюсерам Максиму и Алексею. Обрёл известность в 2023 году после выхода первого альбома \"ЗАГЕЕВ\".",
     "mc_ezdit": "Питерский рэп-исполнитель. Его главная фишка - записать вокал, одновременно выдумывая текст из головы. Все треки не имеют определённого смысла - и так нормально.",
-    "mc_tymashenka": "",
-    "art_ms_dolboeb_1794211002271": "Какой то конченый долбоеб записывает полную хуйню",
-    "mc_ms_evvlampiya": "Лендарная гадалка из Питера которой 85848 лет решила стать артисткой и выпускать свои треки и стать божеством под названием Евлишну"
+    "mc_ms_evvlampiya": "Лендарная гадалка из Питера которой 85848 лет решила стать артисткой и выпускать свои треки и стать божеством под названием Евлишну",
+    "mc_tymashenka": "TYMASHENKA — резидент каталога Dark Music.",
+    "art_ms_dolboeb_1794211002271": "Какой то конченый долбоеб записывает полную хуйню"
   },
   "artistRoles": {
     "mc_geich": "Рэп",
     "mc_makaka": "Рэп",
     "mc_ezdit": "Рэп",
+    "mc_ms_evvlampiya": "Рэп",
     "mc_tymashenka": "Рэп",
-    "art_ms_dolboeb_1794211002271": "Хуйня",
-    "mc_ms_evvlampiya": "Рэп"
+    "art_ms_dolboeb_1794211002271": "Хуйня"
   },
   "artistFacts": {
     "mc_geich": [
@@ -63,6 +63,10 @@
       "Впервые за 2 года детально поработал в новом релизе \"Лирика Житухи\" над текстом, записью вокала и сведением с битом – а раньше сразу во время записи выдумывал с головы.",
       "Песня \"115 причин не ехать в Выборг\" была основана на реальных событиях"
     ],
+    "mc_ms_evvlampiya": [
+      "Ей 85848 лет",
+      "Первая песня Евлампии - \"Христианская душа\" , больно на что-то похожа..."
+    ],
     "mc_tymashenka": [
       "Говорят что в офисе у Тимошенки какие-то манипуляции",
       "Юля - Тигрюля",
@@ -70,27 +74,23 @@
     ],
     "art_ms_dolboeb_1794211002271": [
       "Какой то конченый долбоеб записывает полную хуйню"
-    ],
-    "mc_ms_evvlampiya": [
-      "Ей 85848 лет",
-      "Первая песня Евлампии - \"Христианская душа\" , больно на что-то похожа..."
     ]
   },
   "artistGradients": {
     "mc_geich": "from-amber-600 via-orange-950 to-zinc-950",
     "mc_makaka": "from-sky-600 via-blue-950 to-zinc-950",
     "mc_ezdit": "from-amber-600 via-orange-950 to-zinc-950",
+    "mc_ms_evvlampiya": "from-rose-600 via-red-900 to-zinc-950",
     "mc_tymashenka": "from-rose-600 via-red-900 to-zinc-950",
-    "art_ms_dolboeb_1794211002271": "from-emerald-600 via-teal-900 to-zinc-950",
-    "mc_ms_evvlampiya": "from-rose-600 via-red-900 to-zinc-950"
+    "art_ms_dolboeb_1794211002271": "from-emerald-600 via-teal-900 to-zinc-950"
   },
   "artistIcons": {
     "mc_geich": "fa-user-astronaut",
     "mc_makaka": "fa-crown",
     "mc_ezdit": "fa-gauge-high",
+    "mc_ms_evvlampiya": "fa-skull",
     "mc_tymashenka": "fa-star",
-    "art_ms_dolboeb_1794211002271": "fa-fire",
-    "mc_ms_evvlampiya": "fa-skull"
+    "art_ms_dolboeb_1794211002271": "fa-fire"
   },
   "customArtists": [
     {
@@ -719,13 +719,12 @@
     "MCTEST"
   ],
   "systemPushBroadcast": {
-    "id": "push_1795089286880",
+    "id": "",
     "title": "🎵 Dark Music — Новый релиз!",
     "message": "Слушайте новый трек резидентов лейбла в высоком качестве!",
     "imageFile": "logo.png",
-    "active": true,
-    "createdAt": 1795089286880,
-    "updatedAt": 1795089286880
+    "active": false,
+    "createdAt": 1795114598034
   },
   "tempBroadcast": {
     "id": "",
@@ -753,17 +752,17 @@
       4.1,
       4.2
     ],
-    "downloadUrl": "https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.3",
+    "downloadUrl": "https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.4",
     "message": "Данная версия больше не работает. Установите новую по кнопке ниже.",
     "updatedAt": 1794500000000
   },
   "whatsNew": {
-    "id": "wn_1794736942140",
-    "title": "Что нового в v4.3?",
-    "content": "Улучшена безопасность приложения;\nИсправлены мелкие баги.",
-    "version": 4.3,
+    "id": "wn_1794600000000",
+    "title": "Что нового в v4.4?",
+    "content": "🚀 НОВАЯ ВЕРСИЯ DARK MUSIC v4.4!\n• Новые темы: GTA VI • Vice City (с отдельными обоями для телефона и ПК) и Чёрная с мягким белым контуром.\n• Бит-реактивное свечение «Моей волны» в цветах обложки под реальный ритм трека.\n• Полноэкранный плеер с приглушённым свечением вокруг обложки и умным фоном без баннера.\n• 18 цветовых палитр для карточек артистов и альбомов.\n• Заблокированы устаревшие версии ниже 4.3 и исправлена кнопка загрузки обновлений.",
+    "version": 4.4,
     "active": true,
-    "updatedAt": 1794736942140
+    "updatedAt": 1794600000000
   },
-  "updatedAt": 1795089306300
+  "updatedAt": 1795114598042
 }
