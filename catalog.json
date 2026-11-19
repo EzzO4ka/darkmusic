@@ -286,19 +286,6 @@
   ],
   "customTracks": [
     {
-      "id": "trk_1794872432327",
-      "title": "МЄГАКАРУПЦИЯ",
-      "artistId": "mc_tymashenka",
-      "albumId": "alb_1794872394628",
-      "filePath": "tracks/mc_tymashenka/megacorupciya.mp3",
-      "coverFile": "",
-      "duration": "5:16",
-      "year": 2026,
-      "isNew": true,
-      "isExplicit": true,
-      "createdAt": 1794872432327
-    },
-    {
       "id": "trk_1794870590238",
       "title": "СМАҐАЗОВЕ НЕБО",
       "artistId": "mc_tymashenka",
@@ -307,9 +294,35 @@
       "coverFile": "",
       "duration": "3:14",
       "year": 2026,
-      "isNew": true,
+      "isNew": false,
       "isExplicit": true,
       "createdAt": 1794870590238
+    },
+    {
+      "id": "trk_1794062482767",
+      "title": "115 причин не ехать в Выборг",
+      "artistId": "mc_ezdit",
+      "albumId": "alb_1794065945442",
+      "filePath": "tracks/mc_ezdit/Untitled-Bounce.mp3",
+      "coverFile": "covers/Ночная операция отклонена.png",
+      "duration": "2:27",
+      "year": 2026,
+      "isNew": true,
+      "isExplicit": true,
+      "createdAt": 1794062482768
+    },
+    {
+      "id": "trk_1794872432327",
+      "title": "МЄГАКАРУПЦИЯ",
+      "artistId": "mc_tymashenka",
+      "albumId": "alb_1794872394628",
+      "filePath": "tracks/mc_tymashenka/megacorupciya.mp3",
+      "coverFile": "",
+      "duration": "5:16",
+      "year": 2026,
+      "isNew": false,
+      "isExplicit": true,
+      "createdAt": 1794872432327
     },
     {
       "id": "trk_1794211260337",
@@ -324,19 +337,6 @@
       "isNew": true,
       "isExplicit": false,
       "createdAt": 1794211260337
-    },
-    {
-      "id": "trk_1794062482767",
-      "title": "115 причин не ехать в Выборг",
-      "artistId": "mc_ezdit",
-      "albumId": "alb_1794065945442",
-      "filePath": "tracks/mc_ezdit/Untitled-Bounce.mp3",
-      "coverFile": "covers/Ночная операция отклонена.png",
-      "duration": "2:27",
-      "year": 2026,
-      "isNew": true,
-      "isExplicit": true,
-      "createdAt": 1794062482768
     },
     {
       "id": "trk_1793566754812",
@@ -750,5 +750,5 @@
     "active": true,
     "updatedAt": 1794736942140
   },
-  "updatedAt": 1795088364552
+  "updatedAt": 1795088673325
 }
