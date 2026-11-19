@@ -286,6 +286,20 @@
   ],
   "customTracks": [
     {
+      "id": "trk_1795088733117",
+      "title": "Христианская душа",
+      "artistId": "mc_ms_evvlampiya",
+      "featArtistId": "mc_ezdit",
+      "albumId": "alb_1795088364552",
+      "filePath": "tracks/mc_ms_evvlampiya/Еввлампия - Христианская душа.MP3",
+      "coverFile": "",
+      "duration": "5:28",
+      "year": 2026,
+      "isNew": true,
+      "isExplicit": true,
+      "createdAt": 1795088733118
+    },
+    {
       "id": "trk_1794870590238",
       "title": "СМАҐАЗОВЕ НЕБО",
       "artistId": "mc_tymashenka",
@@ -750,5 +764,5 @@
     "active": true,
     "updatedAt": 1794736942140
   },
-  "updatedAt": 1795088673325
+  "updatedAt": 1795088733118
 }
