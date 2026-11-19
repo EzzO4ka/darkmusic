@@ -307,9 +307,34 @@
       "isExplicit": false,
       "coverFile": "covers/alb_pchelka.jpg",
       "gradient": "from-emerald-600 via-teal-900 to-zinc-950"
+    },
+    {
+      "id": "alb_1795132626449",
+      "title": "Новый пират",
+      "artistId": "art_aleksandr_pistoletov_1795132365908",
+      "featArtistId": "",
+      "type": "СИНГЛ",
+      "year": 2010,
+      "isExplicit": false,
+      "coverFile": "covers/IMG_20261120_022457_261.jpg",
+      "gradient": "from-slate-500 via-zinc-800 to-black"
     }
   ],
   "customTracks": [
+    {
+      "id": "trk_1795132626451",
+      "title": "Новый пират",
+      "artistId": "art_aleksandr_pistoletov_1795132365908",
+      "featArtistId": "",
+      "albumId": "alb_1795132626449",
+      "filePath": "tracks/Александр_Пистолетов_ПИРАТ__ФУЛЛ_ВЕРСИЯ.mp3",
+      "coverFile": "",
+      "duration": "3:40",
+      "year": 2010,
+      "isNew": false,
+      "isExplicit": false,
+      "createdAt": 1795132626451
+    },
     {
       "id": "trk_1795088733117",
       "title": "Христианская душа",
@@ -789,5 +814,5 @@
     "active": true,
     "updatedAt": 1795130314557
   },
-  "updatedAt": 1795132365929
+  "updatedAt": 1795132626566
 }
