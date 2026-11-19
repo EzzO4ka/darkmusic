@@ -318,9 +318,34 @@
       "isExplicit": false,
       "coverFile": "covers/IMG_20261120_022457_261.jpg",
       "gradient": "from-slate-500 via-zinc-800 to-black"
+    },
+    {
+      "id": "alb_1795132716658",
+      "title": "Наш самолёт",
+      "artistId": "art_aleksandr_pistoletov_1795132365908",
+      "featArtistId": "",
+      "type": "СИНГЛ",
+      "year": 2016,
+      "isExplicit": false,
+      "coverFile": "covers/IMG_20261120_024348_279.jpg",
+      "gradient": "from-slate-500 via-zinc-800 to-black"
     }
   ],
   "customTracks": [
+    {
+      "id": "trk_1795132716658",
+      "title": "Наш самолёт",
+      "artistId": "art_aleksandr_pistoletov_1795132365908",
+      "featArtistId": "",
+      "albumId": "alb_1795132716658",
+      "filePath": "tracks/Александр_Пистолетов_Наш_самолёт.mp3",
+      "coverFile": "",
+      "duration": "4:15",
+      "year": 2016,
+      "isNew": false,
+      "isExplicit": false,
+      "createdAt": 1795132716658
+    },
     {
       "id": "trk_1795132626451",
       "title": "Новый пират",
@@ -814,5 +839,5 @@
     "active": true,
     "updatedAt": 1795130314557
   },
-  "updatedAt": 1795132626566
+  "updatedAt": 1795132716713
 }
