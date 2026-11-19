@@ -6,35 +6,40 @@
     "mc_makaka": "avatars/mc_makaka.jpg",
     "mc_ezdit": "avatars/mc_ezdittttt3.jpg",
     "mc_tymashenka": "avatars/mc_tymashenka.jpg",
-    "art_ms_dolboeb_1794211002271": "avatars/dolboeb.jpg"
+    "art_ms_dolboeb_1794211002271": "avatars/dolboeb.jpg",
+    "mc_ms_evvlampiya": "avatars/mc_ms_evvlampiya.jpg"
   },
   "artistBanners": {
     "mc_geich": "banners/mc_geich2.jpg",
     "mc_makaka": "banners/mc_makaka2.jpg",
     "mc_ezdit": "banners/mc_ezdit4.jpg",
     "mc_tymashenka": "banners/mc_tymashenka2.jpg",
-    "art_ms_dolboeb_1794211002271": "banners/dolboeb2.jpg"
+    "art_ms_dolboeb_1794211002271": "banners/dolboeb2.jpg",
+    "mc_ms_evvlampiya": "banners/mc_ms_evvlampiya2.jpg"
   },
   "artistNames": {
     "mc_geich": "МС ГЕИЧ",
     "mc_makaka": "МС МАКАКА",
     "mc_ezdit": "МС ЕЗДИТЬ",
     "mc_tymashenka": "TYMASHENKA",
-    "art_ms_dolboeb_1794211002271": "МС ДОЛБОЁБ"
+    "art_ms_dolboeb_1794211002271": "МС ДОЛБОЁБ",
+    "mc_ms_evvlampiya": "МС ЕВВЛАМПИЯ"
   },
   "artistBios": {
     "mc_geich": "Российский рэп исполнитель, продюсер, контентмейкер. Стал популярен благодаря \"Элиты\" Татьяны Леонидовны. Писал рофленные текста про Ахмада и себя. Продюсировал МС МАКАКУ.",
     "mc_makaka": "МС МАКАКА — самая взрывная энергия объединения Dark Music. Король школьного и дворового русского рэпа. Стал популярен в школе благодаря его продюсерам Максиму и Алексею. Обрёл известность в 2023 году после выхода первого альбома \"ЗАГЕЕВ\".",
     "mc_ezdit": "Питерский рэп-исполнитель. Его главная фишка - записать вокал, одновременно выдумывая текст из головы. Все треки не имеют определённого смысла - и так нормально.",
-    "mc_tymashenka": "TYMASHENKA — резидент каталога Dark Music.",
-    "art_ms_dolboeb_1794211002271": "Какой то конченый долбоеб записывает полную хуйню"
+    "mc_tymashenka": "",
+    "art_ms_dolboeb_1794211002271": "Какой то конченый долбоеб записывает полную хуйню",
+    "mc_ms_evvlampiya": "Лендарная гадалка из Питера которой 85848 лет решила стать артисткой и выпускать свои треки и стать божеством под названием Евлишну"
   },
   "artistRoles": {
     "mc_geich": "Рэп",
     "mc_makaka": "Рэп",
     "mc_ezdit": "Рэп",
     "mc_tymashenka": "Рэп",
-    "art_ms_dolboeb_1794211002271": "Хуйня"
+    "art_ms_dolboeb_1794211002271": "Хуйня",
+    "mc_ms_evvlampiya": "Рэп"
   },
   "artistFacts": {
     "mc_geich": [
@@ -65,6 +70,10 @@
     ],
     "art_ms_dolboeb_1794211002271": [
       "Какой то конченый долбоеб записывает полную хуйню"
+    ],
+    "mc_ms_evvlampiya": [
+      "Ей 85848 лет",
+      "Первая песня Евлампии - \"Христианская душа\" , больно на что-то похожа..."
     ]
   },
   "artistGradients": {
@@ -72,16 +81,34 @@
     "mc_makaka": "from-sky-600 via-blue-950 to-zinc-950",
     "mc_ezdit": "from-amber-600 via-orange-950 to-zinc-950",
     "mc_tymashenka": "from-rose-600 via-red-900 to-zinc-950",
-    "art_ms_dolboeb_1794211002271": "from-emerald-600 via-teal-900 to-zinc-950"
+    "art_ms_dolboeb_1794211002271": "from-emerald-600 via-teal-900 to-zinc-950",
+    "mc_ms_evvlampiya": "from-rose-600 via-red-900 to-zinc-950"
   },
   "artistIcons": {
     "mc_geich": "fa-user-astronaut",
     "mc_makaka": "fa-crown",
     "mc_ezdit": "fa-gauge-high",
     "mc_tymashenka": "fa-star",
-    "art_ms_dolboeb_1794211002271": "fa-fire"
+    "art_ms_dolboeb_1794211002271": "fa-fire",
+    "mc_ms_evvlampiya": "fa-skull"
   },
   "customArtists": [
+    {
+      "id": "mc_ms_evvlampiya",
+      "name": "МС ЕВВЛАМПИЯ",
+      "role": "Рэп",
+      "gradient": "from-rose-600 via-red-900 to-zinc-950",
+      "icon": "fa-skull",
+      "avatarFile": "avatars/mc_ms_evvlampiya.jpg",
+      "bannerFile": "banners/mc_ms_evvlampiya2.jpg",
+      "bio": "Лендарная гадалка из Питера которой 85848 лет решила стать артисткой и выпускать свои треки и стать божеством под названием Евлишну",
+      "facts": [
+        "Ей 85848 лет",
+        "Первая песня Евлампии - \"Христианская душа\" , больно на что-то похожа..."
+      ],
+      "isCustom": true,
+      "createdAt": 1795088052910
+    },
     {
       "id": "mc_tymashenka",
       "name": "TYMASHENKA",
@@ -712,5 +739,5 @@
     "active": true,
     "updatedAt": 1794736942140
   },
-  "updatedAt": 1794897283972
+  "updatedAt": 1795088052911
 }
