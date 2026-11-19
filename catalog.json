@@ -7,7 +7,8 @@
     "mc_ezdit": "avatars/mc_ezdittttt3.jpg",
     "mc_ms_evvlampiya": "avatars/mc_ms_evvlampiya.jpg",
     "mc_tymashenka": "avatars/mc_tymashenka.jpg",
-    "art_ms_dolboeb_1794211002271": "avatars/dolboeb.jpg"
+    "art_ms_dolboeb_1794211002271": "avatars/dolboeb.jpg",
+    "art_aleksandr_pistoletov_1795132365908": "avatars/pistoletov.jpg"
   },
   "artistBanners": {
     "mc_geich": "banners/mc_geich2.jpg",
@@ -15,7 +16,8 @@
     "mc_ezdit": "banners/mc_ezdit4.jpg",
     "mc_ms_evvlampiya": "banners/mc_ms_evvlampiya2.jpg",
     "mc_tymashenka": "banners/mc_tymashenka2.jpg",
-    "art_ms_dolboeb_1794211002271": "banners/dolboeb2.jpg"
+    "art_ms_dolboeb_1794211002271": "banners/dolboeb2.jpg",
+    "art_aleksandr_pistoletov_1795132365908": ""
   },
   "artistNames": {
     "mc_geich": "МС ГЕИЧ",
@@ -23,7 +25,8 @@
     "mc_ezdit": "МС ЕЗДИТЬ",
     "mc_ms_evvlampiya": "МС ЕВВЛАМПИЯ",
     "mc_tymashenka": "TYMASHENKA",
-    "art_ms_dolboeb_1794211002271": "МС ДОЛБОЁБ"
+    "art_ms_dolboeb_1794211002271": "МС ДОЛБОЁБ",
+    "art_aleksandr_pistoletov_1795132365908": "Александр Пистолетов"
   },
   "artistBios": {
     "mc_geich": "Российский рэп исполнитель, продюсер, контентмейкер. Стал популярен благодаря \"Элиты\" Татьяны Леонидовны. Писал рофленные текста про Ахмада и себя. Продюсировал МС МАКАКУ.",
@@ -31,7 +34,8 @@
     "mc_ezdit": "Питерский рэп-исполнитель. Его главная фишка - записать вокал, одновременно выдумывая текст из головы. Все треки не имеют определённого смысла - и так нормально.",
     "mc_ms_evvlampiya": "Лендарная гадалка из Питера которой 85848 лет решила стать артисткой и выпускать свои треки и стать божеством под названием Евлишну",
     "mc_tymashenka": "TYMASHENKA — резидент каталога Dark Music.",
-    "art_ms_dolboeb_1794211002271": "Какой то конченый долбоеб записывает полную хуйню"
+    "art_ms_dolboeb_1794211002271": "Какой то конченый долбоеб записывает полную хуйню",
+    "art_aleksandr_pistoletov_1795132365908": "Легенда своего времени"
   },
   "artistRoles": {
     "mc_geich": "Рэп",
@@ -39,7 +43,8 @@
     "mc_ezdit": "Рэп",
     "mc_ms_evvlampiya": "Рэп",
     "mc_tymashenka": "Рэп",
-    "art_ms_dolboeb_1794211002271": "Хуйня"
+    "art_ms_dolboeb_1794211002271": "Хуйня",
+    "art_aleksandr_pistoletov_1795132365908": "Разное"
   },
   "artistFacts": {
     "mc_geich": [
@@ -74,6 +79,9 @@
     ],
     "art_ms_dolboeb_1794211002271": [
       "Какой то конченый долбоеб записывает полную хуйню"
+    ],
+    "art_aleksandr_pistoletov_1795132365908": [
+      "Легенда своего времени"
     ]
   },
   "artistGradients": {
@@ -82,7 +90,8 @@
     "mc_ezdit": "from-amber-600 via-orange-950 to-zinc-950",
     "mc_ms_evvlampiya": "from-rose-600 via-red-900 to-zinc-950",
     "mc_tymashenka": "from-rose-600 via-red-900 to-zinc-950",
-    "art_ms_dolboeb_1794211002271": "from-emerald-600 via-teal-900 to-zinc-950"
+    "art_ms_dolboeb_1794211002271": "from-emerald-600 via-teal-900 to-zinc-950",
+    "art_aleksandr_pistoletov_1795132365908": "from-slate-500 via-zinc-800 to-black"
   },
   "artistIcons": {
     "mc_geich": "fa-user-astronaut",
@@ -90,7 +99,8 @@
     "mc_ezdit": "fa-gauge-high",
     "mc_ms_evvlampiya": "fa-skull",
     "mc_tymashenka": "fa-star",
-    "art_ms_dolboeb_1794211002271": "fa-fire"
+    "art_ms_dolboeb_1794211002271": "fa-fire",
+    "art_aleksandr_pistoletov_1795132365908": "fa-microphone-lines"
   },
   "customArtists": [
     {
@@ -197,6 +207,21 @@
       ],
       "isCustom": true,
       "createdAt": 1794211002271
+    },
+    {
+      "id": "art_aleksandr_pistoletov_1795132365908",
+      "name": "Александр Пистолетов",
+      "role": "Разное",
+      "gradient": "from-slate-500 via-zinc-800 to-black",
+      "icon": "fa-microphone-lines",
+      "avatarFile": "avatars/pistoletov.jpg",
+      "bannerFile": "",
+      "bio": "Легенда своего времени",
+      "facts": [
+        "Легенда своего времени"
+      ],
+      "isCustom": true,
+      "createdAt": 1795132365908
     }
   ],
   "customAlbums": [
@@ -764,5 +789,5 @@
     "active": true,
     "updatedAt": 1795130314557
   },
-  "updatedAt": 1795130314560
+  "updatedAt": 1795132365929
 }
