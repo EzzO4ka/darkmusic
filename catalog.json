@@ -719,12 +719,12 @@
     "MCTEST"
   ],
   "systemPushBroadcast": {
-    "id": "",
-    "title": "🎵 Dark Music — Новый релиз!",
-    "message": "Слушайте новый трек резидентов лейбла в высоком качестве!",
+    "id": "push_1795130263856",
+    "title": "🎵 Новый релиз!",
+    "message": "МС ЕВЛАМПИЯ – Христианская душа",
     "imageFile": "logo.png",
-    "active": false,
-    "createdAt": 1795114598034
+    "active": true,
+    "createdAt": 1795130263856
   },
   "tempBroadcast": {
     "id": "",
@@ -764,5 +764,5 @@
     "active": true,
     "updatedAt": 1794600000000
   },
-  "updatedAt": 1795114598042
+  "updatedAt": 1795130263872
 }
