@@ -300,19 +300,6 @@
       "createdAt": 1795088733118
     },
     {
-      "id": "trk_1794870590238",
-      "title": "СМАҐАЗОВЕ НЕБО",
-      "artistId": "mc_tymashenka",
-      "albumId": "alb_1794870540900",
-      "filePath": "tracks/mc_tymashenka/SMAGASOVENEBO.mp3",
-      "coverFile": "",
-      "duration": "3:14",
-      "year": 2026,
-      "isNew": false,
-      "isExplicit": true,
-      "createdAt": 1794870590238
-    },
-    {
       "id": "trk_1794062482767",
       "title": "115 причин не ехать в Выборг",
       "artistId": "mc_ezdit",
@@ -391,6 +378,19 @@
       "title": "Ахмад",
       "albumId": "",
       "duration": "0:55"
+    },
+    {
+      "id": "trk_1794870590238",
+      "title": "СМАҐАЗОВЕ НЕБО",
+      "artistId": "mc_tymashenka",
+      "albumId": "alb_1794870540900",
+      "filePath": "tracks/mc_tymashenka/SMAGASOVENEBO.mp3",
+      "coverFile": "",
+      "duration": "3:14",
+      "year": 2026,
+      "isNew": false,
+      "isExplicit": true,
+      "createdAt": 1794870590238
     },
     {
       "year": 2023,
@@ -765,5 +765,5 @@
     "active": true,
     "updatedAt": 1794736942140
   },
-  "updatedAt": 1795089286880
+  "updatedAt": 1795089306300
 }
