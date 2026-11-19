@@ -1044,17 +1044,75 @@ export function resolveFullscreenPlayerBackdropUrl(params: {
   mainArtistAvatar?: string | null;
   trackCover?: string | null;
 }): string {
-  const candidates = [
-    params.mainArtistBanner,
-    params.mainArtistAvatar,
-    params.trackCover
-  ];
-  for (const c of candidates) {
-    if (typeof c === 'string' && c.trim().length > 0) {
-      return c.trim();
-    }
+  if (typeof params.mainArtistBanner === 'string' && params.mainArtistBanner.trim().length > 0) {
+    return params.mainArtistBanner.trim();
   }
   return '';
+}
+
+export function resolveForceUpdateDownloadUrl(params: {
+  downloadUrl?: string | null;
+  repoPath?: string | null;
+  requiredVersion?: number | null;
+}): string {
+  const cleanRepo = String(params.repoPath || 'EzzO4ka/darkmusic').replace(/^\/+|\/+$/g, '') || 'EzzO4ka/darkmusic';
+  const targetVer = Math.max(Number(params.requiredVersion) || 4.4, 4.4);
+  const raw = String(params.downloadUrl || '').trim();
+  if (/^https?:\/\//i.test(raw)) {
+    if (targetVer >= 4.4 && /v\.4\.[0-3]\b/i.test(raw)) {
+      return raw.replace(/v\.4\.[0-3]\b/gi, `v.${targetVer.toFixed(1)}`);
+    }
+    return raw;
+  }
+  return `https://github.com/${cleanRepo}/releases/tag/v.${targetVer.toFixed(1)}`;
+}
+
+export interface CardColorPreset {
+  id: string;
+  label: string;
+  gradient: string;
+  swatchHex: string;
+  primaryRgb: [number, number, number];
+  secondaryRgb: [number, number, number];
+}
+
+export const CARD_COLOR_PRESETS: CardColorPreset[] = [
+  { id: 'purple_neon', label: 'Фиолетовый Неон', gradient: 'from-purple-600 via-indigo-900 to-zinc-950', swatchHex: '#9333ea', primaryRgb: [147, 51, 234], secondaryRgb: [79, 70, 229] },
+  { id: 'emerald_bass', label: 'Изумрудный Бас', gradient: 'from-emerald-600 via-teal-900 to-zinc-950', swatchHex: '#059669', primaryRgb: [16, 185, 129], secondaryRgb: [13, 148, 136] },
+  { id: 'rose_drift', label: 'Кровавый Дрифт', gradient: 'from-rose-600 via-red-900 to-zinc-950', swatchHex: '#e11d48', primaryRgb: [225, 29, 72], secondaryRgb: [185, 28, 28] },
+  { id: 'amber_bunker', label: 'Янтарный Бункер', gradient: 'from-amber-600 via-orange-950 to-zinc-950', swatchHex: '#d97706', primaryRgb: [217, 119, 6], secondaryRgb: [234, 88, 12] },
+  { id: 'sky_ice', label: 'Кибер Лёд', gradient: 'from-sky-600 via-blue-950 to-zinc-950', swatchHex: '#0284c7', primaryRgb: [14, 165, 233], secondaryRgb: [37, 99, 235] },
+  { id: 'ultra_fuchsia', label: 'Ультра Фуксия', gradient: 'from-fuchsia-600 via-purple-950 to-zinc-950', swatchHex: '#c026d3', primaryRgb: [192, 38, 211], secondaryRgb: [147, 51, 234] },
+  { id: 'vice_sunset', label: 'Vice City Закат', gradient: 'from-pink-600 via-purple-900 to-indigo-950', swatchHex: '#ec4899', primaryRgb: [236, 72, 153], secondaryRgb: [99, 102, 241] },
+  { id: 'neon_ocean', label: 'Неоновый Океан', gradient: 'from-cyan-500 via-blue-900 to-slate-950', swatchHex: '#06b6d4', primaryRgb: [6, 182, 212], secondaryRgb: [29, 78, 216] },
+  { id: 'toxic_lime', label: 'Токсичный Лайм', gradient: 'from-lime-500 via-emerald-900 to-zinc-950', swatchHex: '#84cc16', primaryRgb: [132, 204, 22], secondaryRgb: [5, 150, 105] },
+  { id: 'magma_fire', label: 'Огненная Магма', gradient: 'from-orange-500 via-red-900 to-zinc-950', swatchHex: '#f97316', primaryRgb: [249, 115, 22], secondaryRgb: [220, 38, 38] },
+  { id: 'cosmic_amethyst', label: 'Космический Аметист', gradient: 'from-violet-600 via-fuchsia-900 to-slate-950', swatchHex: '#7c3aed', primaryRgb: [124, 58, 237], secondaryRgb: [162, 28, 175] },
+  { id: 'pure_gold', label: 'Чистое Золото', gradient: 'from-yellow-500 via-amber-900 to-zinc-950', swatchHex: '#eab308', primaryRgb: [234, 179, 8], secondaryRgb: [180, 83, 9] },
+  { id: 'deep_teal', label: 'Глубокий Бирюзовый', gradient: 'from-teal-500 via-cyan-950 to-zinc-950', swatchHex: '#14b8a6', primaryRgb: [20, 184, 166], secondaryRgb: [8, 145, 178] },
+  { id: 'midnight_indigo', label: 'Полуночный Индиго', gradient: 'from-indigo-600 via-blue-950 to-black', swatchHex: '#4f46e5', primaryRgb: [79, 70, 229], secondaryRgb: [30, 58, 138] },
+  { id: 'ruby_underground', label: 'Рубиновый Андеграунд', gradient: 'from-red-600 via-rose-950 to-black', swatchHex: '#dc2626', primaryRgb: [220, 38, 38], secondaryRgb: [159, 18, 57] },
+  { id: 'titanium_chrome', label: 'Титановый Хром', gradient: 'from-slate-500 via-zinc-800 to-black', swatchHex: '#64748b', primaryRgb: [148, 163, 184], secondaryRgb: [71, 85, 105] },
+  { id: 'graphite_mono', label: 'Графитовый Монохром', gradient: 'from-zinc-500 via-neutral-800 to-black', swatchHex: '#a1a1aa', primaryRgb: [212, 212, 216], secondaryRgb: [113, 113, 122] },
+  { id: 'retrowave_signal', label: 'Ретровейв Сигнал', gradient: 'from-pink-500 via-violet-800 to-cyan-950', swatchHex: '#f43f5e', primaryRgb: [236, 72, 153], secondaryRgb: [6, 182, 212] }
+];
+
+export function resolveGradientRgbFallback(gradient?: string | null): {
+  primary: [number, number, number];
+  secondary: [number, number, number];
+} {
+  const g = String(gradient || '').toLowerCase();
+  const exact = CARD_COLOR_PRESETS.find((p) => p.gradient.toLowerCase() === g);
+  if (exact) {
+    return { primary: exact.primaryRgb, secondary: exact.secondaryRgb };
+  }
+  for (const p of CARD_COLOR_PRESETS) {
+    const firstToken = p.gradient.split(' ')[0]?.replace('from-', '') || '';
+    if (firstToken && g.includes(firstToken.split('-')[0])) {
+      return { primary: p.primaryRgb, secondary: p.secondaryRgb };
+    }
+  }
+  return { primary: [147, 51, 234], secondary: [192, 38, 211] };
 }
 
 export function shouldProtectOwnerCatalogFromStaleSync(params: {
@@ -1092,7 +1150,7 @@ export function resolveRightSidebarArtistCards<T extends { id: string }>(
   return cards;
 }
 
-export type AppThemeId = 'dark' | 'ps5' | 'light';
+export type AppThemeId = 'dark' | 'ps5' | 'light' | 'gta6' | 'mono';
 
 export interface AppThemeDescriptor {
   id: AppThemeId;
@@ -1123,6 +1181,20 @@ export const APP_THEMES: Record<AppThemeId, AppThemeDescriptor> = {
     fullLabel: 'Светлая (Белая)',
     description: 'Чистая дневная белая тема с высокой контрастностью',
     icon: 'fa-sun'
+  },
+  gta6: {
+    id: 'gta6',
+    shortLabel: 'GTA VI',
+    fullLabel: 'GTA VI • Vice City',
+    description: 'Неоновый закат Вайс-Сити с фирменными обоями для ПК и телефона',
+    icon: 'fa-palm-tree'
+  },
+  mono: {
+    id: 'mono',
+    shortLabel: 'Контур',
+    fullLabel: 'Чёрная (Белый контур)',
+    description: 'Абсолютно чёрный фон с чёткой белой обводкой всех блоков',
+    icon: 'fa-circle-half-stroke'
   }
 };
 
@@ -1136,7 +1208,13 @@ export function resolveEffectiveAppTheme(params: {
     return currentOsScheme;
   }
   const cleanSaved = String(params.savedTheme || '').trim().toLowerCase();
-  if (cleanSaved === 'dark' || cleanSaved === 'ps5' || cleanSaved === 'light') {
+  if (
+    cleanSaved === 'dark' ||
+    cleanSaved === 'ps5' ||
+    cleanSaved === 'light' ||
+    cleanSaved === 'gta6' ||
+    cleanSaved === 'mono'
+  ) {
     return cleanSaved as AppThemeId;
   }
   return currentOsScheme;
@@ -1150,6 +1228,8 @@ export function resolveThemeOnSystemSchemeChange(
 
 export function cycleNextAppTheme(currentTheme: AppThemeId): AppThemeId {
   if (currentTheme === 'dark') return 'ps5';
-  if (currentTheme === 'ps5') return 'light';
+  if (currentTheme === 'ps5') return 'gta6';
+  if (currentTheme === 'gta6') return 'mono';
+  if (currentTheme === 'mono') return 'light';
   return 'dark';
 }

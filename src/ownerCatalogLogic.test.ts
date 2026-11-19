@@ -33,6 +33,9 @@ import {
   resolveNextTrackInContext,
   isValidGitHubTokenFormat,
   resolveFullscreenPlayerBackdropUrl,
+  resolveForceUpdateDownloadUrl,
+  CARD_COLOR_PRESETS,
+  resolveGradientRgbFallback,
   shouldProtectOwnerCatalogFromStaleSync,
   resolveRightSidebarArtistCards,
   resolveEffectiveAppTheme,
@@ -183,7 +186,7 @@ test('formatCollaborationArtistsLabel joins artists with a comma without feat an
   assert.equal(entityHasArtist(videoClip, 'mc_ezdit'), false);
 });
 
-test('isVersionBlockedByForceUpdate blocks v1.0, v2.0, v3.0, v3.1, v4.0, v4.1, v4.2 and allows current v4.3', () => {
+test('isVersionBlockedByForceUpdate blocks v1.0, v2.0, v3.0, v3.1, v4.0, v4.1, v4.2 and allows v4.3 and v4.4', () => {
   const forceConfig = {
     active: true,
     requiredVersion: 4.3,
@@ -197,6 +200,7 @@ test('isVersionBlockedByForceUpdate blocks v1.0, v2.0, v3.0, v3.1, v4.0, v4.1, v
   assert.equal(isVersionBlockedByForceUpdate(4.1, forceConfig, false), true);
   assert.equal(isVersionBlockedByForceUpdate(4.2, forceConfig, false), true);
   assert.equal(isVersionBlockedByForceUpdate(4.3, forceConfig, false), false);
+  assert.equal(isVersionBlockedByForceUpdate(4.4, forceConfig, false), false);
   assert.equal(isVersionBlockedByForceUpdate(4.2, forceConfig, true), false);
   assert.equal(APP_THEMES.ps5.shortLabel.includes('PS5'), false);
   assert.equal(APP_THEMES.ps5.fullLabel.includes('PS5'), false);
@@ -356,21 +360,23 @@ test('buildTrackActionsDescriptor and resolveDesktopRightSidebarLayout return ac
     }),
     'banners/mc_geich2.jpg'
   );
+  // When main artist has no banner, return empty string so avatar is NOT stretched fullscreen
   assert.equal(
     resolveFullscreenPlayerBackdropUrl({
       mainArtistBanner: '',
       featArtistBanner: 'banners/mc_geich2.jpg',
-      mainArtistAvatar: 'avatars/mc_ezdit.jpg'
+      mainArtistAvatar: 'avatars/mc_ezdit.jpg',
+      trackCover: 'covers/trk.jpg'
     }),
-    'avatars/mc_ezdit.jpg'
+    ''
   );
   assert.equal(
     resolveFullscreenPlayerBackdropUrl({
-      mainArtistBanner: '',
+      mainArtistBanner: '   ',
       featArtistBanner: '',
       mainArtistAvatar: 'avatars/mc_geich.jpg'
     }),
-    'avatars/mc_geich.jpg'
+    ''
   );
 
   assert.equal(
@@ -515,17 +521,16 @@ test('resolveNextTrackInContext plays album and artist tracks sequentially inste
   assert.equal(prev1.nextTrackId, 'trk_alb_3');
 });
 
-test('resolveEffectiveAppTheme, resolveThemeOnSystemSchemeChange, and cycleNextAppTheme support all 3 themes and OS light/dark sync', () => {
-  // When no manual theme is saved, system light -> 'light', system dark -> 'dark' (original dark theme)
+test('resolveEffectiveAppTheme, resolveThemeOnSystemSchemeChange, and cycleNextAppTheme support all 5 themes including GTA VI and Mono', () => {
   assert.equal(resolveEffectiveAppTheme({ savedTheme: null, systemPrefersLight: true }), 'light');
   assert.equal(resolveEffectiveAppTheme({ savedTheme: '', systemPrefersLight: false }), 'dark');
 
-  // When a valid theme is explicitly selected, it is respected
   assert.equal(resolveEffectiveAppTheme({ savedTheme: 'ps5', systemPrefersLight: true }), 'ps5');
+  assert.equal(resolveEffectiveAppTheme({ savedTheme: 'gta6', systemPrefersLight: false }), 'gta6');
+  assert.equal(resolveEffectiveAppTheme({ savedTheme: 'mono', systemPrefersLight: true }), 'mono');
   assert.equal(resolveEffectiveAppTheme({ savedTheme: 'light', systemPrefersLight: false }), 'light');
   assert.equal(resolveEffectiveAppTheme({ savedTheme: 'dark', systemPrefersLight: true }), 'dark');
 
-  // When OS color scheme changes between sessions or reloads, it automatically switches to the new OS theme
   assert.equal(
     resolveEffectiveAppTheme({ savedTheme: 'dark', systemPrefersLight: true, previousOsScheme: 'dark' }),
     'light'
@@ -535,13 +540,44 @@ test('resolveEffectiveAppTheme, resolveThemeOnSystemSchemeChange, and cycleNextA
     'dark'
   );
 
-  // When OS color scheme changes dynamically, light -> 'light', dark -> 'dark'
   assert.equal(resolveThemeOnSystemSchemeChange(true), 'light');
   assert.equal(resolveThemeOnSystemSchemeChange(false), 'dark');
 
-  // Cycling through the 3 themes: dark -> ps5 -> light -> dark
   assert.equal(cycleNextAppTheme('dark'), 'ps5');
-  assert.equal(cycleNextAppTheme('ps5'), 'light');
+  assert.equal(cycleNextAppTheme('ps5'), 'gta6');
+  assert.equal(cycleNextAppTheme('gta6'), 'mono');
+  assert.equal(cycleNextAppTheme('mono'), 'light');
   assert.equal(cycleNextAppTheme('light'), 'dark');
-  assert.equal(Object.keys(APP_THEMES).length, 3);
+  assert.equal(Object.keys(APP_THEMES).length, 5);
+});
+
+test('resolveForceUpdateDownloadUrl and CARD_COLOR_PRESETS / resolveGradientRgbFallback work reliably', () => {
+  assert.equal(
+    resolveForceUpdateDownloadUrl({ downloadUrl: '', repoPath: 'EzzO4ka/darkmusic', requiredVersion: 4.3 }),
+    'https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.4'
+  );
+  assert.equal(
+    resolveForceUpdateDownloadUrl({
+      downloadUrl: 'https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.2',
+      repoPath: 'EzzO4ka/darkmusic',
+      requiredVersion: 4.3
+    }),
+    'https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.4'
+  );
+  assert.equal(
+    resolveForceUpdateDownloadUrl({
+      downloadUrl: 'https://example.com/DarkMusic-Setup-4.4.exe',
+      requiredVersion: 4.3
+    }),
+    'https://example.com/DarkMusic-Setup-4.4.exe'
+  );
+
+  assert.ok(CARD_COLOR_PRESETS.length >= 18);
+  const uniqueGradients = new Set(CARD_COLOR_PRESETS.map((p) => p.gradient));
+  assert.equal(uniqueGradients.size, CARD_COLOR_PRESETS.length);
+
+  const viceRgb = resolveGradientRgbFallback('from-pink-600 via-purple-900 to-indigo-950');
+  assert.deepEqual(viceRgb.primary, [236, 72, 153]);
+  const fallbackRgb = resolveGradientRgbFallback('unknown');
+  assert.deepEqual(fallbackRgb.primary, [147, 51, 234]);
 });
