@@ -352,7 +352,7 @@
       "artistId": "art_aleksandr_pistoletov_1795132365908",
       "featArtistId": "",
       "albumId": "alb_1795132626449",
-      "filePath": "tracks/Александр_Пистолетов_ПИРАТ__ФУЛЛ_ВЕРСИЯ.mp3",
+      "filePath": "tracks/pistoletov/Александр_Пистолетов_ПИРАТ__ФУЛЛ_ВЕРСИЯ.mp3",
       "coverFile": "",
       "duration": "3:40",
       "year": 2010,
@@ -839,5 +839,5 @@
     "active": true,
     "updatedAt": 1795130314557
   },
-  "updatedAt": 1795132716713
+  "updatedAt": 1795132810067
 }
