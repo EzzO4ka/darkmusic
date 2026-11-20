@@ -375,17 +375,18 @@
       "createdAt": 1795088733118
     },
     {
-      "id": "trk_1794062482767",
-      "title": "115 причин не ехать в Выборг",
+      "id": "trk_1793566754812",
+      "title": "Лирика Житухи",
       "artistId": "mc_ezdit",
-      "albumId": "alb_1794065945442",
-      "filePath": "tracks/mc_ezdit/Untitled-Bounce.mp3",
-      "coverFile": "covers/Ночная операция отклонена.png",
-      "duration": "2:27",
+      "featArtistId": "mc_geich",
+      "albumId": "alb_1793566754812",
+      "filePath": "tracks/mc_ezdit/ЛИРИКА ЖИТУХИ.MP3",
+      "coverFile": "",
+      "duration": "2:57",
       "year": 2026,
-      "isNew": true,
+      "isNew": false,
       "isExplicit": true,
-      "createdAt": 1794062482768
+      "createdAt": 1793566754812
     },
     {
       "id": "trk_1794872432327",
@@ -415,18 +416,17 @@
       "createdAt": 1794211260337
     },
     {
-      "id": "trk_1793566754812",
-      "title": "Лирика Житухи",
+      "id": "trk_1794062482767",
+      "title": "115 причин не ехать в Выборг",
       "artistId": "mc_ezdit",
-      "featArtistId": "mc_geich",
-      "albumId": "alb_1793566754812",
-      "filePath": "tracks/mc_ezdit/ЛИРИКА ЖИТУХИ.MP3",
-      "coverFile": "",
-      "duration": "2:57",
+      "albumId": "alb_1794065945442",
+      "filePath": "tracks/mc_ezdit/Untitled-Bounce.mp3",
+      "coverFile": "covers/Ночная операция отклонена.png",
+      "duration": "2:27",
       "year": 2026,
-      "isNew": false,
+      "isNew": true,
       "isExplicit": true,
-      "createdAt": 1793566754812
+      "createdAt": 1794062482768
     },
     {
       "id": "trk_1792613045145",
@@ -839,5 +839,5 @@
     "active": true,
     "updatedAt": 1795130314557
   },
-  "updatedAt": 1795132822862
+  "updatedAt": 1795132918002
 }
