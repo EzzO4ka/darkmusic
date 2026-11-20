@@ -794,12 +794,12 @@
     "MCTEST"
   ],
   "systemPushBroadcast": {
-    "id": "push_1795130263856",
+    "id": "push_1795211137132",
     "title": "🎵 Новый релиз!",
     "message": "МС ЕВЛАМПИЯ – Христианская душа",
     "imageFile": "logo.png",
     "active": true,
-    "createdAt": 1795130263856
+    "createdAt": 1795211137132
   },
   "tempBroadcast": {
     "id": "",
@@ -839,5 +839,5 @@
     "active": true,
     "updatedAt": 1795130314557
   },
-  "updatedAt": 1795132918002
+  "updatedAt": 1795211137147
 }
