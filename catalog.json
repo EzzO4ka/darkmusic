@@ -338,7 +338,7 @@
       "artistId": "art_aleksandr_pistoletov_1795132365908",
       "featArtistId": "",
       "albumId": "alb_1795132716658",
-      "filePath": "tracks/Александр_Пистолетов_Наш_самолёт.mp3",
+      "filePath": "tracks/pistoletov/Александр_Пистолетов_Наш_самолёт.mp3",
       "coverFile": "",
       "duration": "4:15",
       "year": 2016,
@@ -839,5 +839,5 @@
     "active": true,
     "updatedAt": 1795130314557
   },
-  "updatedAt": 1795132810067
+  "updatedAt": 1795132822862
 }
