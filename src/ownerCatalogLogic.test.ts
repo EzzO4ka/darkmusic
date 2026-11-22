@@ -186,11 +186,11 @@ test('formatCollaborationArtistsLabel joins artists with a comma without feat an
   assert.equal(entityHasArtist(videoClip, 'mc_ezdit'), false);
 });
 
-test('isVersionBlockedByForceUpdate blocks v1.0, v2.0, v3.0, v3.1, v4.0, v4.1, v4.2 and allows v4.3 and v4.4', () => {
+test('isVersionBlockedByForceUpdate blocks v1.0 through v4.4 without Owner bypass and allows v4.5 and v4.6', () => {
   const forceConfig = {
     active: true,
-    requiredVersion: 4.3,
-    blockedVersions: [1.0, 2.0, 3.0, 3.1, 4.0, 4.1, 4.2]
+    requiredVersion: 4.5,
+    blockedVersions: [1.0, 2.0, 3.0, 3.1, 4.0, 4.1, 4.2, 4.3, 4.4]
   };
   assert.equal(isVersionBlockedByForceUpdate(1.0, forceConfig, false), true);
   assert.equal(isVersionBlockedByForceUpdate(2.0, forceConfig, false), true);
@@ -199,9 +199,15 @@ test('isVersionBlockedByForceUpdate blocks v1.0, v2.0, v3.0, v3.1, v4.0, v4.1, v
   assert.equal(isVersionBlockedByForceUpdate(4.0, forceConfig, false), true);
   assert.equal(isVersionBlockedByForceUpdate(4.1, forceConfig, false), true);
   assert.equal(isVersionBlockedByForceUpdate(4.2, forceConfig, false), true);
-  assert.equal(isVersionBlockedByForceUpdate(4.3, forceConfig, false), false);
-  assert.equal(isVersionBlockedByForceUpdate(4.4, forceConfig, false), false);
-  assert.equal(isVersionBlockedByForceUpdate(4.2, forceConfig, true), false);
+  assert.equal(isVersionBlockedByForceUpdate(4.3, forceConfig, false), true);
+  assert.equal(isVersionBlockedByForceUpdate(4.4, forceConfig, false), true);
+  assert.equal(isVersionBlockedByForceUpdate(4.5, forceConfig, false), false);
+  assert.equal(isVersionBlockedByForceUpdate(4.6, forceConfig, false), false);
+  // Owner PIN / unlock must NEVER bypass force update on outdated versions
+  assert.equal(isVersionBlockedByForceUpdate(4.2, forceConfig, true), true);
+  assert.equal(isVersionBlockedByForceUpdate(4.3, forceConfig, true), true);
+  assert.equal(isVersionBlockedByForceUpdate(4.4, forceConfig, true), true);
+  assert.equal(isVersionBlockedByForceUpdate(4.5, forceConfig, true), false);
   assert.equal(APP_THEMES.ps5.shortLabel.includes('PS5'), false);
   assert.equal(APP_THEMES.ps5.fullLabel.includes('PS5'), false);
 });
@@ -521,13 +527,14 @@ test('resolveNextTrackInContext plays album and artist tracks sequentially inste
   assert.equal(prev1.nextTrackId, 'trk_alb_3');
 });
 
-test('resolveEffectiveAppTheme, resolveThemeOnSystemSchemeChange, and cycleNextAppTheme support all 5 themes including GTA VI and Mono', () => {
+test('resolveEffectiveAppTheme, resolveThemeOnSystemSchemeChange, and cycleNextAppTheme support all 6 themes including GTA VI, Mono, and New Year', () => {
   assert.equal(resolveEffectiveAppTheme({ savedTheme: null, systemPrefersLight: true }), 'light');
   assert.equal(resolveEffectiveAppTheme({ savedTheme: '', systemPrefersLight: false }), 'dark');
 
   assert.equal(resolveEffectiveAppTheme({ savedTheme: 'ps5', systemPrefersLight: true }), 'ps5');
   assert.equal(resolveEffectiveAppTheme({ savedTheme: 'gta6', systemPrefersLight: false }), 'gta6');
   assert.equal(resolveEffectiveAppTheme({ savedTheme: 'mono', systemPrefersLight: true }), 'mono');
+  assert.equal(resolveEffectiveAppTheme({ savedTheme: 'newyear', systemPrefersLight: true }), 'newyear');
   assert.equal(resolveEffectiveAppTheme({ savedTheme: 'light', systemPrefersLight: false }), 'light');
   assert.equal(resolveEffectiveAppTheme({ savedTheme: 'dark', systemPrefersLight: true }), 'dark');
 
@@ -546,30 +553,31 @@ test('resolveEffectiveAppTheme, resolveThemeOnSystemSchemeChange, and cycleNextA
   assert.equal(cycleNextAppTheme('dark'), 'ps5');
   assert.equal(cycleNextAppTheme('ps5'), 'gta6');
   assert.equal(cycleNextAppTheme('gta6'), 'mono');
-  assert.equal(cycleNextAppTheme('mono'), 'light');
+  assert.equal(cycleNextAppTheme('mono'), 'newyear');
+  assert.equal(cycleNextAppTheme('newyear'), 'light');
   assert.equal(cycleNextAppTheme('light'), 'dark');
-  assert.equal(Object.keys(APP_THEMES).length, 5);
+  assert.equal(Object.keys(APP_THEMES).length, 6);
 });
 
 test('resolveForceUpdateDownloadUrl and CARD_COLOR_PRESETS / resolveGradientRgbFallback work reliably', () => {
   assert.equal(
-    resolveForceUpdateDownloadUrl({ downloadUrl: '', repoPath: 'EzzO4ka/darkmusic', requiredVersion: 4.3 }),
-    'https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.4'
+    resolveForceUpdateDownloadUrl({ downloadUrl: '', repoPath: 'EzzO4ka/darkmusic', requiredVersion: 4.5 }),
+    'https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.5'
   );
   assert.equal(
     resolveForceUpdateDownloadUrl({
-      downloadUrl: 'https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.2',
+      downloadUrl: 'https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.4',
       repoPath: 'EzzO4ka/darkmusic',
-      requiredVersion: 4.3
+      requiredVersion: 4.5
     }),
-    'https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.4'
+    'https://github.com/EzzO4ka/darkmusic/releases/tag/v.4.5'
   );
   assert.equal(
     resolveForceUpdateDownloadUrl({
-      downloadUrl: 'https://example.com/DarkMusic-Setup-4.4.exe',
-      requiredVersion: 4.3
+      downloadUrl: 'https://example.com/DarkMusic-Setup-4.5.exe',
+      requiredVersion: 4.5
     }),
-    'https://example.com/DarkMusic-Setup-4.4.exe'
+    'https://example.com/DarkMusic-Setup-4.5.exe'
   );
 
   assert.ok(CARD_COLOR_PRESETS.length >= 18);

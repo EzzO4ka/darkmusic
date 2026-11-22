@@ -657,12 +657,13 @@ export function isVersionBlockedByForceUpdate(
     requiredVersion?: number;
     blockedVersions?: number[];
   } | null | undefined,
-  isOwnerUnlocked: boolean = false
+  _isOwnerUnlocked: boolean = false
 ): boolean {
-  if (!forceUpdate || !forceUpdate.active || isOwnerUnlocked) {
+  void _isOwnerUnlocked;
+  if (!forceUpdate || !forceUpdate.active) {
     return false;
   }
-  const reqVer = Number(forceUpdate.requiredVersion) || 4.3;
+  const reqVer = Number(forceUpdate.requiredVersion) || 4.5;
   const blockedList = Array.isArray(forceUpdate.blockedVersions)
     ? forceUpdate.blockedVersions.map((v) => Number(v)).filter((v) => !Number.isNaN(v) && v < reqVer - 0.0001)
     : [];
@@ -1056,11 +1057,11 @@ export function resolveForceUpdateDownloadUrl(params: {
   requiredVersion?: number | null;
 }): string {
   const cleanRepo = String(params.repoPath || 'EzzO4ka/darkmusic').replace(/^\/+|\/+$/g, '') || 'EzzO4ka/darkmusic';
-  const targetVer = Math.max(Number(params.requiredVersion) || 4.4, 4.4);
+  const targetVer = Math.max(Number(params.requiredVersion) || 4.5, 4.5);
   const raw = String(params.downloadUrl || '').trim();
   if (/^https?:\/\//i.test(raw)) {
-    if (targetVer >= 4.4 && /v\.4\.[0-3]\b/i.test(raw)) {
-      return raw.replace(/v\.4\.[0-3]\b/gi, `v.${targetVer.toFixed(1)}`);
+    if (targetVer >= 4.5 && /v\.4\.[0-4]\b/i.test(raw)) {
+      return raw.replace(/v\.4\.[0-4]\b/gi, `v.${targetVer.toFixed(1)}`);
     }
     return raw;
   }
@@ -1150,7 +1151,7 @@ export function resolveRightSidebarArtistCards<T extends { id: string }>(
   return cards;
 }
 
-export type AppThemeId = 'dark' | 'ps5' | 'light' | 'gta6' | 'mono';
+export type AppThemeId = 'dark' | 'ps5' | 'light' | 'gta6' | 'mono' | 'newyear';
 
 export interface AppThemeDescriptor {
   id: AppThemeId;
@@ -1195,6 +1196,13 @@ export const APP_THEMES: Record<AppThemeId, AppThemeDescriptor> = {
     fullLabel: 'Чёрная (Белый контур)',
     description: 'Абсолютно чёрный фон с чёткой белой обводкой всех блоков',
     icon: 'fa-circle-half-stroke'
+  },
+  newyear: {
+    id: 'newyear',
+    shortLabel: 'Новый год',
+    fullLabel: 'Новогодняя (Зимняя сказка)',
+    description: 'Хвойная ночь, тёплое золото огней, морозное стекло и лёгкие падающие снежинки',
+    icon: 'fa-snowflake'
   }
 };
 
@@ -1213,7 +1221,8 @@ export function resolveEffectiveAppTheme(params: {
     cleanSaved === 'ps5' ||
     cleanSaved === 'light' ||
     cleanSaved === 'gta6' ||
-    cleanSaved === 'mono'
+    cleanSaved === 'mono' ||
+    cleanSaved === 'newyear'
   ) {
     return cleanSaved as AppThemeId;
   }
@@ -1230,6 +1239,7 @@ export function cycleNextAppTheme(currentTheme: AppThemeId): AppThemeId {
   if (currentTheme === 'dark') return 'ps5';
   if (currentTheme === 'ps5') return 'gta6';
   if (currentTheme === 'gta6') return 'mono';
-  if (currentTheme === 'mono') return 'light';
+  if (currentTheme === 'mono') return 'newyear';
+  if (currentTheme === 'newyear') return 'light';
   return 'dark';
 }
