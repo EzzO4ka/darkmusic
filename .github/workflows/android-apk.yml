@@ -44,6 +44,7 @@ jobs:
           cp index.html android-project/app/src/main/assets/index.html
           [ -f catalog.json ] && cp catalog.json android-project/app/src/main/assets/catalog.json || true
           [ -f logo.png ] && cp logo.png android-project/app/src/main/assets/logo.png || true
+          [ -d public ] && cp -r public android-project/app/src/main/assets/public || true
           [ -f logo.png ] && cp logo.png android-project/app/src/main/res/drawable/app_logo.png || true
           [ -f avatars/logo.png ] && cp avatars/logo.png android-project/app/src/main/res/drawable/app_logo.png || true
 
@@ -86,8 +87,8 @@ jobs:
                   applicationId "com.darkmusic.app"
                   minSdk 24
                   targetSdk 34
-                  versionCode 42
-                  versionName "4.2"
+                  versionCode 45
+                  versionName "4.5"
               }
 
               buildTypes {
@@ -526,6 +527,22 @@ jobs:
                           return new JSONObject(sb.toString());
                       }
                   } catch (Exception ignored) {}
+
+                  try {
+                      String cdnUrl = "https://cdn.jsdelivr.net/gh/" + repo + "@" + branch + "/catalog.json?_cb=" + System.currentTimeMillis();
+                      HttpURLConnection conn = (HttpURLConnection) new URL(cdnUrl).openConnection();
+                      conn.setConnectTimeout(6000);
+                      conn.setReadTimeout(6000);
+                      conn.setUseCaches(false);
+                      if (conn.getResponseCode() == 200) {
+                          BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+                          StringBuilder sb = new StringBuilder();
+                          String line;
+                          while ((line = br.readLine()) != null) sb.append(line);
+                          br.close();
+                          return new JSONObject(sb.toString());
+                      }
+                  } catch (Exception ignored) {}
                   return null;
               }
 
@@ -882,16 +899,18 @@ jobs:
                   settings.setAllowFileAccessFromFileURLs(true);
                   settings.setAllowUniversalAccessFromFileURLs(true);
                   settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-                  settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-                  webView.clearCache(true);
+                  settings.setCacheMode(WebSettings.LOAD_DEFAULT);
 
                   webView.addJavascriptInterface(new AndroidMediaBridge(this), "AndroidMediaBridge");
                   webView.setWebChromeClient(new WebChromeClient());
                   webView.setWebViewClient(new WebViewClient() {
                       @Override
                       public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                          if (!request.isForMainFrame()) {
+                              return false;
+                          }
                           String url = request.getUrl().toString();
-                          if (url.startsWith("file://") || url.contains("raw.githubusercontent.com") || url.contains("api.github.com")) {
+                          if (url.startsWith("file://") || url.contains("raw.githubusercontent.com") || url.contains("api.github.com") || url.contains("cdn.jsdelivr.net")) {
                               return false;
                           }
                           try {
@@ -916,12 +935,12 @@ jobs:
                       }
                   });
 
-                  String initialUrl = "file:///android_asset/index.html?v=4.2";
+                  String initialUrl = "file:///android_asset/index.html?v=4.5";
                   try {
                       if (getIntent() != null && getIntent().getData() != null) {
                           String q = getIntent().getData().getEncodedQuery();
                           if (q != null && !q.isEmpty()) {
-                              initialUrl = "file:///android_asset/index.html?v=4.2&" + q;
+                              initialUrl = "file:///android_asset/index.html?v=4.5&" + q;
                           }
                       }
                   } catch (Exception ignored) {}
@@ -1062,6 +1081,16 @@ jobs:
                       if (token != null && !token.isEmpty()) ed.putString("gh_token", token);
                       ed.apply();
                   }
+
+                  @JavascriptInterface
+                  public void openExternalUrl(final String url) {
+                      if (url == null || url.isEmpty()) return;
+                      try {
+                          Intent ext = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                          ext.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                          context.startActivity(ext);
+                      } catch (Exception ignored) {}
+                  }
               }
 
               @Override
@@ -1088,5 +1117,5 @@ jobs:
       - name: Upload Dark Music APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: DarkMusic-v4.2-APK
+          name: DarkMusic-v4.5-APK
           path: android-project/app/build/outputs/apk/debug/app-debug.apk

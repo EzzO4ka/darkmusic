@@ -144,8 +144,29 @@ function swBase64ToUtf8(b64) {
   }
 }
 
+function swResolveLocalUrl(relPath) {
+  try {
+    return new URL(relPath, self.location.href).href;
+  } catch (e) {
+    return relPath;
+  }
+}
+
+async function swFetchWithTimeout(url, options = {}, timeoutMs = 5500) {
+  if (typeof AbortController === 'undefined') {
+    return fetch(url, options);
+  }
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: ctrl.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 function resolveSwAssetUrl(pathOrUrl) {
-  if (!pathOrUrl) return '/logo.png';
+  if (!pathOrUrl) return swResolveLocalUrl('./logo.png');
   const trimmed = String(pathOrUrl).trim();
   if (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('data:')) {
     return trimmed;
@@ -184,25 +205,25 @@ async function fetchLatestCatalogInSw() {
     if (token) {
       headers.Authorization = `token ${token}`;
     }
-    let resp = await fetch(apiUrl, { headers, cache: 'no-store' });
+    let resp = await swFetchWithTimeout(apiUrl, { headers, cache: 'no-store' }, 5500);
     if ((resp.status === 401 || resp.status === 403) && validCustomToken && builtInToken) {
-      resp = await fetch(apiUrl, {
+      resp = await swFetchWithTimeout(apiUrl, {
         headers: {
           Accept: 'application/vnd.github.v3+json',
           Authorization: `token ${builtInToken}`,
           'If-None-Match': `"${Date.now()}-${Math.random()}"`
         },
         cache: 'no-store'
-      });
+      }, 5500);
     }
     if ((resp.status === 401 || resp.status === 403) && token) {
-      resp = await fetch(apiUrl, {
+      resp = await swFetchWithTimeout(apiUrl, {
         headers: {
           Accept: 'application/vnd.github.v3+json',
           'If-None-Match': `"${Date.now()}-${Math.random()}"`
         },
         cache: 'no-store'
-      });
+      }, 5500);
     }
     if (resp.ok) {
       const meta = await resp.json();
@@ -215,9 +236,10 @@ async function fetchLatestCatalogInSw() {
 
   // 2. Fallback to raw.githubusercontent.com
   try {
-    const rawResp = await fetch(
+    const rawResp = await swFetchWithTimeout(
       `https://raw.githubusercontent.com/${repo}/${branch}/catalog.json?_cb=${Date.now()}`,
-      { cache: 'no-store' }
+      { cache: 'no-store' },
+      5500
     );
     if (rawResp.ok) {
       const parsed = await rawResp.json();
@@ -225,9 +247,22 @@ async function fetchLatestCatalogInSw() {
     }
   } catch (e) {}
 
-  // 3. Fallback to same-origin catalog.json
+  // 3. Fallback to jsDelivr mirror
   try {
-    const localResp = await fetch(`/catalog.json?_cb=${Date.now()}`, { cache: 'no-store' });
+    const cdnResp = await swFetchWithTimeout(
+      `https://cdn.jsdelivr.net/gh/${repo}@${encodeURIComponent(branch)}/catalog.json?_cb=${Date.now()}`,
+      { cache: 'no-store' },
+      5500
+    );
+    if (cdnResp.ok) {
+      const parsed = await cdnResp.json();
+      if (parsed && typeof parsed === 'object') return parsed;
+    }
+  } catch (e) {}
+
+  // 4. Fallback to same-origin catalog.json (subpath-safe)
+  try {
+    const localResp = await swFetchWithTimeout(swResolveLocalUrl(`./catalog.json?_cb=${Date.now()}`), { cache: 'no-store' }, 4500);
     if (localResp.ok) {
       const parsed = await localResp.json();
       if (parsed && typeof parsed === 'object') return parsed;
@@ -287,7 +322,7 @@ async function checkAndDispatchBackgroundNotifications(forceCheck = false) {
           renotify: true,
           requireInteraction: true,
           vibrate: [250, 120, 250],
-          data: { url: '/', pushId: sysPush.id }
+          data: { url: swResolveLocalUrl('./'), pushId: sysPush.id }
         });
       }
     }
@@ -308,7 +343,7 @@ async function checkAndDispatchBackgroundNotifications(forceCheck = false) {
             tag: tempB.id,
             renotify: true,
             vibrate: [200, 100, 200],
-            data: { url: '/', pushId: tempB.id }
+            data: { url: swResolveLocalUrl('./'), pushId: tempB.id }
           });
         }
       }
@@ -328,7 +363,7 @@ async function checkAndDispatchBackgroundNotifications(forceCheck = false) {
             tag: pinId,
             renotify: true,
             vibrate: [200, 100, 200],
-            data: { url: '/', pushId: pinId }
+            data: { url: swResolveLocalUrl('./'), pushId: pinId }
           });
         }
       }
@@ -411,15 +446,15 @@ self.addEventListener('message', (event) => {
     const tag = data.tag || 'dark-music-push-' + Date.now();
     const options = {
       body: data.message || '',
-      icon: data.icon || '/logo.png',
-      badge: data.badge || '/logo.png',
+      icon: data.icon || swResolveLocalUrl('./logo.png'),
+      badge: data.badge || swResolveLocalUrl('./logo.png'),
       image: data.image || undefined,
       tag,
       renotify: true,
       requireInteraction: true,
       vibrate: [250, 120, 250],
       data: {
-        url: data.url || '/'
+        url: data.url || swResolveLocalUrl('./')
       }
     };
 
@@ -462,8 +497,8 @@ self.addEventListener('push', (event) => {
   const title = payload.title || 'Dark Music';
   const options = {
     body: payload.message || payload.body || '',
-    icon: payload.icon || '/logo.png',
-    badge: '/logo.png',
+    icon: payload.icon || swResolveLocalUrl('./logo.png'),
+    badge: swResolveLocalUrl('./logo.png'),
     tag: payload.id || 'dark-music-push',
     renotify: true,
     requireInteraction: true,
@@ -475,6 +510,7 @@ self.addEventListener('push', (event) => {
 
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
+  const targetUrl = (event.notification && event.notification.data && event.notification.data.url) || swResolveLocalUrl('./');
   event.waitUntil(
     self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
       for (const client of clientList) {
@@ -483,7 +519,7 @@ self.addEventListener('notificationclick', (event) => {
         }
       }
       if (self.clients.openWindow) {
-        return self.clients.openWindow('/');
+        return self.clients.openWindow(targetUrl);
       }
     })
   );
