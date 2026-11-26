@@ -343,6 +343,19 @@
   ],
   "customTracks": [
     {
+      "year": 2026,
+      "title": "МАМА ПАПА",
+      "isExplicit": true,
+      "duration": "2:55",
+      "albumId": "",
+      "isNew": false,
+      "id": "trk_1792597878782",
+      "artistId": "mc_ezdit",
+      "coverFile": "covers/alb_mamapapa.jpg",
+      "filePath": "tracks/mc_ezdit/МС ЕЗДИТЬ - МАМА ПАПА.MP3",
+      "createdAt": 1792597878782
+    },
+    {
       "id": "trk_1795088733117",
       "title": "Христианская душа",
       "artistId": "mc_ms_evvlampiya",
@@ -686,19 +699,6 @@
       "title": "Кто в говнище"
     },
     {
-      "year": 2026,
-      "title": "МАМА ПАПА",
-      "isExplicit": true,
-      "duration": "2:55",
-      "albumId": "",
-      "isNew": false,
-      "id": "trk_1792597878782",
-      "artistId": "mc_ezdit",
-      "coverFile": "covers/alb_mamapapa.jpg",
-      "filePath": "tracks/mc_ezdit/МС ЕЗДИТЬ - МАМА ПАПА.MP3",
-      "createdAt": 1792597878782
-    },
-    {
       "title": "Шляпка гриба",
       "filePath": "tracks/mc_makaka/МС Макака - Шляпка гриба.mp3",
       "createdAt": 1792612000839,
@@ -864,5 +864,5 @@
     "active": true,
     "updatedAt": 1795211200000
   },
-  "updatedAt": 1795723875735
+  "updatedAt": 1795726244479
 }
