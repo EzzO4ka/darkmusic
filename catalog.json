@@ -226,6 +226,16 @@
   ],
   "customAlbums": [
     {
+      "id": "alb_1795722936102",
+      "title": "Прибрать НАБУ",
+      "artistId": "mc_tymashenka",
+      "type": "АЛЬБОМ",
+      "year": 2026,
+      "coverFile": "covers/alb_release_1795722858500.jpg",
+      "gradient": "from-amber-600 via-orange-950 to-zinc-950",
+      "isExplicit": true
+    },
+    {
       "id": "alb_1795088364552",
       "title": "Христианская душа",
       "artistId": "mc_ms_evvlampiya",
@@ -332,6 +342,19 @@
     }
   ],
   "customTracks": [
+    {
+      "id": "trk_1795722959297",
+      "title": "Прибрать НАБУ",
+      "artistId": "mc_tymashenka",
+      "albumId": "alb_1795722936102",
+      "filePath": "tracks/mc_tymashenka/Прибрать НАБУ Юля Тимошенко.mp3",
+      "coverFile": "",
+      "duration": "2:28",
+      "year": 2026,
+      "isNew": true,
+      "isExplicit": true,
+      "createdAt": 1795722959297
+    },
     {
       "id": "trk_1795132716658",
       "title": "Наш самолёт",
@@ -841,5 +864,5 @@
     "active": true,
     "updatedAt": 1795211200000
   },
-  "updatedAt": 1795427251272
+  "updatedAt": 1795722959297
 }
